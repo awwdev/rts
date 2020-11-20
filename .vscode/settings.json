@@ -1,0 +1,259 @@
+{
+    //meta
+    "telemetry.enableCrashReporter": false,
+    "telemetry.enableTelemetry": false,
+    "workbench.iconTheme": "simple-icons",
+    "update.enableWindowsBackgroundUpdates": false,
+    "update.showReleaseNotes": false,
+
+    //font
+    "editor.fontFamily": "Cousine",
+    //"editor.fontFamily": "Consolas",
+    "editor.fontSize": 12,
+    "editor.fontWeight": "100",
+    "editor.fontLigatures": "false",
+    "editor.lineHeight": 20,
+    "editor.tabSize": 4,
+    "editor.letterSpacing": -0.1,
+
+    //editor
+    "editor.lineNumbers": "on",
+    "editor.renderIndentGuides": false,
+    "editor.renderWhitespace": "none",
+    "breadcrumbs.enabled": false,
+    "editor.renderControlCharacters": false,
+    "editor.minimap.enabled": false,
+
+    //mouse
+    "editor.smoothScrolling": true,
+    "editor.mouseWheelScrollSensitivity": 2,
+    "editor.scrollBeyondLastLine": true,
+    "editor.cursorStyle": "line",
+    "editor.cursorBlinking": "blink",
+    "editor.cursorSmoothCaretAnimation": true,
+    "editor.cursorWidth": 2,
+    
+    //explorer
+    "explorer.openEditors.visible": 0,
+    "explorer.confirmDelete": false,
+    "explorer.decorations.badges": false,
+    "problems.decorations.enabled": false,
+    "workbench.sideBar.location": "left",
+    "workbench.tree.indent": 16,
+
+    // UI Settings
+    "window.zoomLevel": 0,
+    "window.menuBarVisibility": "toggle",
+    "workbench.statusBar.visible": false,
+    "workbench.activityBar.visible": true,
+    
+    // Terminal
+    "terminal.integrated.fontFamily": "",
+    "terminal.integrated.fontSize": 12,
+    "terminal.integrated.lineHeight": 1,
+    "terminal.integrated.cursorStyle": "block",
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.fontWeight": "100",
+    "code-runner.runInTerminal": true,
+    "editor.formatOnSave": false,
+    "workbench.startupEditor": "none",
+    "editor.detectIndentation": true,
+    "editor.insertSpaces": true,
+    "terminal.integrated.rendererType": "dom",
+    "files.autoSave": "onWindowChange",
+
+    "C_Cpp.suggestSnippets": false,
+    "C_Cpp.preferredPathSeparator": "Forward Slash",,
+
+    "[cpp]":{
+        "editor.wordBasedSuggestions": true,
+        "editor.suggest.insertMode": "insert",
+        "editor.semanticHighlighting.enabled": true
+    },
+
+    "window.title": "${dirty}${activeEditorShort}${separator}${rootName}",
+    
+    
+    // VS Colors
+    "workbench.colorCustomizations": {
+        "editor.background": "#33363d",
+        "activityBar.background": "#33363d",
+        
+        "titleBar.activeForeground": "#aaa",
+        "titleBar.activeBackground": "#111",
+        
+        "tab.activeBackground": "#33363d",
+        "tab.inactiveBackground": "#111",
+        "tab.border": "#111",
+        
+        "editorOverviewRuler.border": "#00000000",
+        
+        "editorLineNumber.foreground": "#555561",
+        "editorLineNumber.activeForeground": "#e4c727",
+        "editor.lineHighlightBackground": "#00000000",
+        "editor.lineHighlightBorder": "#00000000",
+        
+        "scrollbar.shadow": "#000000aa",
+        "scrollbarSlider.hoverBackground": "#eee",
+        "scrollbarSlider.activeBackground": "#eee",
+        "scrollbarSlider.background": "#111",
+
+        "editorGroup.border": "#00000000",
+        "contrastBorder": "#00000000",
+        "editorGroupHeader.tabsBackground": "#111",
+        "panel.border": "#111",
+        "sideBar.background": "#111",
+        "panel.background": "#111",
+        "terminal.background": "#111",        
+    },
+    "editor.scrollbar.horizontal": "visible",
+    "editor.renderLineHighlight": "gutter",
+    "editor.hover.delay": 300,
+    "editor.hover.sticky": true,
+    
+    "editor.showFoldingControls": "mouseover",  
+    "editor.folding": true,
+    "editor.foldingStrategy": "auto",
+    "editor.foldingHighlight": false,
+    "editor.mouseWheelZoom": true,
+
+    "scm.diffDecorationsGutterVisibility": "hover",
+    "git.decorations.enabled": false,
+    "scm.diffDecorations": "none",
+    "scm.diffDecorationsGutterWidth": 1,
+    
+    //? color coding
+    "editor.tokenColorCustomizations": { "textMateRules": [
+        
+        //? common
+        {
+            "scope": [ "punctuation", "keyword", "meta", "variable", "entity.name.type", "entity.name.type.class.templated" ],
+            "settings": { "foreground": "#d6d6d6", }
+        },
+        //?function
+        {
+            "scope": [ "entity.name.function", "entity.name.function.templated", "entity.name.function.preprocessor" ],
+            "settings": { "foreground": "#71a8e6", "fontStyle": "bold" }
+        },
+        //?type and constants
+        {
+            "scope": [ 
+                "entity.name.type.class.templated",
+                "entity.name.type",
+                "entity.name.type.class.templated",
+                "keyword.operator", 
+                "string", 
+                "punctuation.definition.string.begin", 
+                "punctuation.definition.string.end", 
+                "constant", 
+                "constant.numeric", 
+                "punctuation.separator", 
+                "entity.name.namespace",
+                "variable.other.enummember"
+            ],
+            "settings": { "foreground": "#e6b371", "fontStyle": "bold" }
+        },
+        
+        //?storage
+        {
+            "scope": [ "storage", "storage.modifier", "storage.type" ],
+            "settings": { "foreground": "#9496aa", "fontStyle": "bold" }
+        },
+        //?control
+        {
+            "scope": [	"keyword.control",  ],
+            "settings": { "foreground": "#e46262" }
+        },
+        //?comment
+        {
+            "scope": [ "comment", "comment.block", "comment.block.documentation" ],
+            "settings": { "foreground": "#777777",	}
+        },
+
+    ]  },  
+
+    //?HIGHLIGHT
+    "highlight.regexes":
+    {
+        "(//\\?.*)": {
+            "regexFlags": "g", 
+            "decorations": [
+                { 
+                    "color": "#aaf",
+                    "backgroundColor": "#aaf1", 
+                },
+            ]
+        },
+
+        "(//TODO.*)": {
+            "regexFlags": "g", 
+            "decorations": [
+                { 
+                    "color": "#00aa00",
+                },
+            ]
+        },
+
+        "(//!.*)": {
+            "regexFlags": "g", 
+            "decorations": [
+                { 
+                    "color": "#ff0000",
+                    "backgroundColor": "#ff000020", 
+                },
+            ]
+        },
+},
+"files.associations": {
+    "atomic": "cpp",
+    "memory": "cpp",
+    "system_error": "cpp",
+    "type_traits": "cpp",
+    "xmemory": "cpp",
+    "xstddef": "cpp",
+    "xstring": "cpp",
+    "chrono": "cpp",
+    "cmath": "cpp",
+    "compare": "cpp",
+    "concepts": "cpp",
+    "cstddef": "cpp",
+    "cstdint": "cpp",
+    "cstdio": "cpp",
+    "cstdlib": "cpp",
+    "cstring": "cpp",
+    "cwchar": "cpp",
+    "exception": "cpp",
+    "fstream": "cpp",
+    "initializer_list": "cpp",
+    "ios": "cpp",
+    "iosfwd": "cpp",
+    "iostream": "cpp",
+    "istream": "cpp",
+    "iterator": "cpp",
+    "limits": "cpp",
+    "new": "cpp",
+    "ostream": "cpp",
+    "ratio": "cpp",
+    "stdexcept": "cpp",
+    "streambuf": "cpp",
+    "thread": "cpp",
+    "tuple": "cpp",
+    "typeinfo": "cpp",
+    "utility": "cpp",
+    "xfacet": "cpp",
+    "xiosbase": "cpp",
+    "xlocale": "cpp",
+    "xlocinfo": "cpp",
+    "xlocnum": "cpp",
+    "xtr1common": "cpp",
+    "xutility": "cpp",
+    "vector": "cpp",
+    "cctype": "cpp",
+    "mutex": "cpp",
+    "string": "cpp",
+    "array": "cpp",
+    "string_view": "cpp",
+    "ranges": "cpp",
+    "*.tcc": "cpp"
+},
+}   

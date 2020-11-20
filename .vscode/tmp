@@ -1,0 +1,125 @@
+/*
+
+/////////configs
+
+//? windows mingw clang
+{
+"name": "windows mingw clang",
+"compilerPath": "I:\\programs\\msys64\\mingw64\\bin\\clang++.exe",
+"includePath": [ 
+"${workspaceFolder}\\**",
+"I:\\programs\\msys64\\mingw64\\include\\**"
+],
+"windowsSdkVersion": "10.0.18362.0",
+"cStandard": "c17",
+"cppStandard": "c++20",
+"intelliSenseMode": "clang-x64"
+},
+
+//? windows cl
+{
+"name": "windows cl",
+"compilerPath": "I:\\programs\\msvc\\VC\\Tools\\MSVC\\14.28.29333\\bin\\Hostx64\\x64\\cl.exe",
+"includePath": [ 
+"${workspaceFolder}\\**",
+"I:\\programs\\msvc\\VC\\Tools\\MSVC\\14.28.29333\\include\\**"
+],
+"windowsSdkVersion": "10.0.18362.0",
+"cStandard": "c17",
+"cppStandard": "c++20",
+"intelliSenseMode": "msvc-x64"
+},
+
+//? windows clang-cl
+{
+"name": "windows clang-cl",
+"compilerPath": "I:\\programs\\msvc\\VC\\Tools\\Llvm\\x64\\bin\\clang-cl.exe",
+"includePath": [ 
+"${workspaceFolder}\\**",
+"I:\\programs\\msvc\\VC\\Tools\\MSVC\\14.28.29333\\include\\**"
+],
+"windowsSdkVersion": "10.0.18362.0",
+"cStandard": "c17",
+"cppStandard": "c++20",
+"intelliSenseMode": "clang-x64"        
+}
+
+/////////launch
+
+//? windows cl debug
+{
+"name": "windows cl debug",
+"preLaunchTask": "cl_debug",
+"type": "cppvsdbg",
+"request": "launch",
+"program": "${workspaceFolder}\\build\\cl\\mini-d.exe",
+"cwd": "${workspaceFolder}\\build",
+"externalConsole": true,
+},
+
+//? windows clang-cl debug
+{
+"name": "windows clang-cl debug",
+"preLaunchTask": "clang_cl_debug",
+"type": "cppvsdbg",
+"request": "launch",
+"program": "${workspaceFolder}\\build\\clang-cl\\mini-d.exe",
+"cwd": "${workspaceFolder}\\build",
+"externalConsole": true,
+},
+
+//? linux gcc
+{
+"name": "linux gcc debug",
+"preLaunchTask": "gcc_debug",
+"type": "cppdbg",
+"request": "launch",
+"program": "${workspaceFolder}\\build\\gcc\\mini-d",
+"cwd": "${workspaceFolder}\\build",
+"externalConsole": true,
+}
+
+/////////tasks
+
+//? windows mingw clang debug
+{
+"label": "mingw_clang_debug",
+"command": "${workspaceFolder}\\build-scripts\\mingw_clang_debug.bat",
+"type": "shell",
+"options": {
+"env": {
+    "compiler_path": "I:\\programs\\msys64\\mingw64\\bin\\",
+}
+},
+},
+
+//? windows cl debug
+{
+"label": "cl_debug",
+"command": "${workspaceFolder}\\build-scripts\\cl_debug.bat",
+"type": "shell",
+"options": {
+"env": {
+    "compiler_path": "I:\\programs\\msvc\\VC\\Tools\\MSVC\\14.28.29333\\bin\\Hostx64\\x64\\",
+    "vcvars": "I:\\programs\\msvc\\VC\\Auxiliary\\Build\\vcvars64",
+    "exe_path": "${workspaceFolder}\\build\\cl\\",
+}
+},
+},
+
+//? windows clang-cl debug
+{
+"label": "clang_cl_debug",
+"command": "${workspaceFolder}\\build-scripts\\clang_cl_debug.bat",
+"type": "shell",
+"options": {
+"env": {
+    "compiler_path": "I:\\programs\\msvc\\VC\\Tools\\Llvm\\x64\\bin\\",
+    "vcvars": "I:\\programs\\msvc\\VC\\Auxiliary\\Build\\vcvars64",
+    "exe_path": "${workspaceFolder}\\build\\clang-cl\\",
+}
+},
+}
+
+]
+*/

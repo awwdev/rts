@@ -1,0 +1,33 @@
+{
+"version": "0.2.0",
+"configurations": [
+
+///////////////////////////////////////////////////////////////////////////
+// WINDOWS MINGW GCC
+///////////////////////////////////////////////////////////////////////////
+{
+    "name":            "[Windows] mingw-gcc [debug]",
+    "miDebuggerPath":  "I:\\programs\\msys64\\mingw64\\bin\\gdb.exe",
+    "type":            "cppdbg",
+    "request":         "launch",
+    "program":         "${workspaceFolder}\\build\\mini-d.exe",
+    "cwd":             "${workspaceFolder}\\build",
+    "MIMode":          "gdb",
+    "externalConsole": true,
+},
+
+///////////////////////////////////////////////////////////////////////////
+// LINUX GCC
+///////////////////////////////////////////////////////////////////////////
+{
+    "name":             "[Linux] gcc [debug]",
+    "type":             "cppdbg",
+    "request":          "launch",
+    "program":          "${workspaceFolder}\\build\\mini.exe",
+    "cwd":              "${workspaceFolder}\\build",
+    "MIMode":           "gdb",
+    "externalConsole":  true,
+}
+
+]
+}

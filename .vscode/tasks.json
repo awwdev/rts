@@ -1,0 +1,43 @@
+{
+"version": "2.0.0",
+"tasks": [
+
+///////////////////////////////////////////////////////////////////////////
+// WINDOWS MINGW GCC
+///////////////////////////////////////////////////////////////////////////
+{
+"label": "mingw_gcc_debug",
+"command": "${workspaceFolder}\\build-scripts\\windows\\mingw_gcc_debug.bat",
+"type": "shell",
+"options": {
+    "env": {
+        "compiler_dir":     "I:\\programs\\msys64\\mingw64\\bin\\",
+        "src_cpp":          "${workspaceFolder}\\src\\main.cpp",
+        "src_hpp" :         "${workspaceFolder}\\src",
+        "build_dir":        "${workspaceFolder}\\build\\",
+        "build_name":       "mini-d.exe",
+        "ext_hpp":          "${workspaceFolder}\\ext\\",
+        "ext_lib":          "${workspaceFolder}\\ext\\",
+    }
+},
+},
+
+///////////////////////////////////////////////////////////////////////////
+// LINUX GCC
+///////////////////////////////////////////////////////////////////////////
+{
+"label": "gcc_debug",
+"command": "${workspaceFolder}/build-scripts/linux/gcc_debug.sh",
+"type": "shell",
+"options": {
+    "env": {
+        "src_cpp":          "${workspaceFolder}\\src\\main.cpp",
+        "src_hpp" :         "${workspaceFolder}\\src",
+        "build_dir":        "${workspaceFolder}\\build\\",
+        "build_name":       "mini-d",
+    }
+},
+}
+
+]
+}
