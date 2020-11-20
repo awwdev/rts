@@ -22,7 +22,7 @@
 // LINUX GCC
 ///////////////////////////////////////////////////////////////////////////
 {
-    "name": "[Linux]] gcc",
+    "name": "[Linux] gcc",
     "includePath": 
     [ 
         "${workspaceFolder}\\src\\**"
