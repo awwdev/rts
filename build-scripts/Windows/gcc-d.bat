@@ -6,6 +6,7 @@ Pushd %compiler_dir%
 g++ --version
 g++ ^
 -g ^
+-mwindows ^
 -std=c++2a ^
 -Wall -Wextra -Wpedantic ^
 %src_cpp% ^

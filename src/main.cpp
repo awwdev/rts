@@ -1,16 +1,28 @@
 #include "wnd/Window.hpp"
-#include "com/Console.hpp"
 
 using namespace mini;
 
-int main()
+///////////////////////////////////////////////////////////
+
+#ifdef _WIN32
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-    com::SetupConsole();
-    com::MoveConsole(64, 400 + 64, 600, 400);
-    wnd::Window window { "mini window", 600, 400, 64, 64 };
+    wnd::Console console { 600, 400, 64, 400 + 64 };
+    wnd::Window  window  { "mini window", 600, 400, 64, 64 };
+
+    com::PrintWarning("Hello");
 
     while(true)
     {
         window.PollEvents();
     }
 }
+#endif
+
+///////////////////////////////////////////////////////////
+
+#ifdef __linux__
+
+#endif
+
+///////////////////////////////////////////////////////////

@@ -2,8 +2,9 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include "com/UndefWin32.hpp"
+#include "wnd/Win32/Win32_Undef.hpp"
 #include "wnd/Win32/Win32_WindowProc.hpp"
+#include "wnd/Win32/Win32_WinAssert.hpp"
 #include "com/Types.hpp"
 #include "com/Print.hpp"
 
@@ -17,18 +18,18 @@ struct Win32_Window {
 
 ///////////////////////////////////////////////////////////
 
-HWND hWnd = 0;
-HINSTANCE hInstance = GetModuleHandle(0);
-chars_t wndClassName = "wnd";
+PRIVATE HWND hWnd = 0;
+PRIVATE HINSTANCE hInstance = GetModuleHandle(0);
+PRIVATE chars_t wndClassName = "wnd";
 
 ///////////////////////////////////////////////////////////
 
-PUBLIC Win32_Window( 
-chars_t title  = "Window",
-i32 width  = CW_USEDEFAULT,
-i32 height = CW_USEDEFAULT,
-i32 xpos   = CW_USEDEFAULT,
-i32 ypos   = CW_USEDEFAULT)
+PUBLIC Win32_Window(
+    chars_t title  = "Window",
+    i32 width  = CW_USEDEFAULT,
+    i32 height = CW_USEDEFAULT,
+    i32 xpos   = CW_USEDEFAULT,
+    i32 ypos   = CW_USEDEFAULT)
 {
     mRegisterClass();
     mCreateWindow(xpos, ypos, width, height, title);
@@ -82,17 +83,6 @@ PRIVATE void mCreateWindow(i32 xpos, i32 ypos, i32 width, i32 height, chars_t ti
         0                                 //lpParam
     );
     WinAssert(hWnd);  
-}
-
-///////////////////////////////////////////////////////////
-
-PRIVATE void WinAssert(auto expr)
-{
-    if (expr == 0)
-    {
-        auto err = GetLastError();
-        com::PrintError("WinAssert failed", err);
-    }
 }
 
 ///////////////////////////////////////////////////////////

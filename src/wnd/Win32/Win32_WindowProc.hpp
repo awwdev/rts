@@ -2,7 +2,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include "com/UndefWin32.hpp"
+#include "wnd/Win32/Win32_Undef.hpp"
 
 ///////////////////////////////////////////////////////////
 

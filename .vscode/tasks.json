@@ -7,7 +7,7 @@
 ///////////////////////////////////////////////////////////////////////////
 {
 "label": "mingw_gcc_debug",
-"command": "${workspaceFolder}\\build-scripts\\windows\\mingw_gcc_debug.bat",
+"command": "${workspaceFolder}\\build-scripts\\Windows\\gcc-d.bat",
 "type": "shell",
 "options": {
     "env": {
@@ -27,7 +27,7 @@
 ///////////////////////////////////////////////////////////////////////////
 {
 "label": "gcc_debug",
-"command": "${workspaceFolder}/build-scripts/linux/gcc_debug.sh",
+"command": "${workspaceFolder}/build-scripts/Linux/gcc-d.sh",
 "type": "shell",
 "options": {
     "env": {
