@@ -20,7 +20,8 @@ struct Win32_Console {
 Win32_Console(i32 width, i32 height, i32 xpos, i32 ypos)
 {
     WinAssert(AllocConsole());
-    freopen("CONOUT$", "w", stdout);
+    FILE* fp;
+    freopen_s(&fp, "CONOUT$", "w", stdout);
 
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD dwMode = 0;

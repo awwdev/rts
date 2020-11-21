@@ -3,6 +3,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include "wnd/Win32/Win32_Undef.hpp"
+#include "app/Global.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -21,7 +22,8 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_DESTROY:
         case WM_CLOSE:
         case WM_QUIT:
-        {            
+        {          
+            app::isAppRunning = false;  
         } break;
 
         case WM_KEYDOWN:
