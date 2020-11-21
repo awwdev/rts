@@ -1,17 +1,20 @@
 #pragma once
 
-#include "com/Types.hpp"
+#include "vulkan.h"
 
 ///////////////////////////////////////////////////////////
 
-namespace mini::app {
+namespace mini::vuk {
+struct Context {
 
 ///////////////////////////////////////////////////////////
 
-static bool isAppRunning = true;
-//static i32  windowWidth  = 1;
-//static i32  windowHeight = 1;
+vkInstance instance;
+VkPhysicalDevice physical;
+VkDevice logical;
 
 ///////////////////////////////////////////////////////////
+
+};
 
 }//ns
