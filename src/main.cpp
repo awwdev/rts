@@ -26,7 +26,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 int main()
 {
     mini::wnd::Window window;
-   
+    while(app::isAppRunning)
+    {
+        window.PollEvents();
+    }   
 }
 #endif
 

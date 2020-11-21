@@ -2,6 +2,7 @@
 #include <X11/Xlib.h>
 #include "com/Types.hpp"
 #include "com/Print.hpp"
+#include "app/Global.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -43,16 +44,24 @@ PUBLIC X11_Window(
 
     XSelectInput(display, windowId, ExposureMask | KeyPressMask);
     XMapWindow(display, windowId);
+}
 
-    XEvent e;
-    while(1) {
-        XNextEvent(display, &e);
-        if (e.type == KeyPress)
-            break;
-    }
+///////////////////////////////////////////////////////////
 
+PUBLIC ~X11_Window()
+{
     XCloseDisplay(display);
+}
 
+///////////////////////////////////////////////////////////
+
+PUBLIC void PollEvents()
+{
+    for (XEvent e; XNextEvent(display, &e);)
+    {
+        if (e.type == KeyPress)
+            app::isAppRunning = false;
+    } 
 }
 
 ///////////////////////////////////////////////////////////
