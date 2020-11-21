@@ -17,17 +17,16 @@ struct X11_Window {
 PRIVATE ::Window windowId;
 PRIVATE ::Display* display;
 PRIVATE int screen;
-PRIVATE Atom wm_protocols;
 PRIVATE Atom wm_delete_window;
 
 ///////////////////////////////////////////////////////////
 
 PUBLIC X11_Window(
-    chars_t title  = "Window",
-    i32 width  = 600,
-    i32 height = 400,
-    i32 xpos   = 64,
-    i32 ypos   = 64)
+chars_t title  = "Window",
+i32 width  = 600,
+i32 height = 400,
+i32 xpos   = 64,
+i32 ypos   = 64)
 {
     display  = XOpenDisplay(NULL);
     screen   = DefaultScreen(display);
@@ -47,7 +46,6 @@ PUBLIC X11_Window(
     XSelectInput(display, windowId, ExposureMask | KeyPressMask);
     XMapWindow(display, windowId);
 
-    wm_protocols = XInternAtom(display, "WM_PROTOCOLS", false);
     wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", false);
     XSetWMProtocols(display, windowId, &wm_delete_window, 1);
 }

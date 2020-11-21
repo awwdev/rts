@@ -25,11 +25,11 @@ PRIVATE chars_t wndClassName = "wnd";
 ///////////////////////////////////////////////////////////
 
 PUBLIC Win32_Window(
-    chars_t title  = "Window",
-    i32 width  = CW_USEDEFAULT,
-    i32 height = CW_USEDEFAULT,
-    i32 xpos   = CW_USEDEFAULT,
-    i32 ypos   = CW_USEDEFAULT)
+chars_t title  = "Window",
+i32 width  = CW_USEDEFAULT,
+i32 height = CW_USEDEFAULT,
+i32 xpos   = CW_USEDEFAULT,
+i32 ypos   = CW_USEDEFAULT)
 {
     mRegisterClass();
     mCreateWindow(xpos, ypos, width, height, title);

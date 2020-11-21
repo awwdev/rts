@@ -18,7 +18,6 @@ using Console = Win32_Console;
 #include "wnd/Linux/X11_Console.hpp"
 namespace mini::wnd {
 using Window  = X11_Window;
-using Console = X11_Console;
 }//ns
 #endif
 
