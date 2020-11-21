@@ -14,6 +14,8 @@ struct X11_Window {
 ///////////////////////////////////////////////////////////
     
 PRIVATE ::Window windowId;
+PRIVATE ::Display* display;
+PRIVATE int screen;
 
 ///////////////////////////////////////////////////////////
 
@@ -24,39 +26,19 @@ PUBLIC X11_Window(
     i32 xpos   = 64,
     i32 ypos   = 64)
 {
-    
+    display  = XOpenDisplay(NULL);
+    screen   = DefaultScreen(display);
 
-    /*
-    windowId = XCreateWindow(
-        display,    //display
-        0,          //parent
-        xpos,       //xpos
-        ypos,       //ypos
-        width,      //width
-        height,     //height
-        1,          //border
-        1,          //depth
-        0,          //clazz
-        0,          //visual
-        0,          //mask
-        0           //attributes
-    );
-    */
-
-    Display* display = XOpenDisplay(NULL);
-    if (display == NULL)
-        com::PrintError("NULL");
-    auto defaultScreen = DefaultScreen(display);
     windowId = XCreateSimpleWindow(
         display,
-        RootWindow(display, defaultScreen),
+        RootWindow(display, screen),
         xpos,
         ypos,
         width,
         height,
         1,
-        BlackPixel(display, defaultScreen),
-        WhitePixel(display, defaultScreen)
+        BlackPixel(display, screen),
+        WhitePixel(display, screen)
     );
 
     XSelectInput(display, windowId, ExposureMask | KeyPressMask);
@@ -65,11 +47,6 @@ PUBLIC X11_Window(
     XEvent e;
     while(1) {
         XNextEvent(display, &e);
-        if (e.type == Expose) 
-        {
-            XFillRectangle(display, windowId, DefaultGC(display, defaultScreen), 20, 20, 10, 10);
-            XDrawString(display, windowId, DefaultGC(display, defaultScreen), 10, 50, "string", 6);
-        }
         if (e.type == KeyPress)
             break;
     }
