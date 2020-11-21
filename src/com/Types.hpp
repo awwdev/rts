@@ -3,7 +3,11 @@
 #include <concepts>
 #include <cstdint>
 
-namespace min {
+///////////////////////////////////////////////////////////
+
+namespace mini {
+
+///////////////////////////////////////////////////////////
 
 using i8  = std::int8_t;
 using i16 = std::int16_t;
@@ -15,5 +19,12 @@ using u32 = std::uint32_t;
 
 using f32 = float;
 using f64 = double;
+
+using chars_t = char const * const;
+
+#define PUBLIC public:
+#define PRIVATE private:
+
+///////////////////////////////////////////////////////////
 
 }//ns

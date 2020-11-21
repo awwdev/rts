@@ -6,9 +6,13 @@
 #include "UndefWin32.hpp"
 #endif
 
-namespace min::com {
+///////////////////////////////////////////////////////////
 
-inline void SetupConsole()
+namespace mini::com {
+
+///////////////////////////////////////////////////////////
+
+static void SetupConsole()
 {
    #ifdef _WIN32
    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -19,7 +23,9 @@ inline void SetupConsole()
    #endif
 }
 
-inline void MoveConsole(int xpos, int ypos, int width, int height)
+///////////////////////////////////////////////////////////
+
+static void MoveConsole(int xpos, int ypos, int width, int height)
 {
     #ifdef _WIN32
     RECT rect = { xpos, ypos, xpos + width, ypos + height };
@@ -27,5 +33,7 @@ inline void MoveConsole(int xpos, int ypos, int width, int height)
     MoveWindow(hWnd, rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top, true);
     #endif
 }
+
+///////////////////////////////////////////////////////////
 
 }//ns

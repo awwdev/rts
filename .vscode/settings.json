@@ -7,14 +7,13 @@
     "update.showReleaseNotes": false,
 
     //font
-    "editor.fontFamily": "Cousine",
-    //"editor.fontFamily": "Consolas",
+    "editor.fontFamily": "Liberation Mono",
     "editor.fontSize": 12,
     "editor.fontWeight": "100",
     "editor.fontLigatures": "false",
     "editor.lineHeight": 20,
     "editor.tabSize": 4,
-    "editor.letterSpacing": -0.1,
+    //"editor.letterSpacing": -0.1,
 
     //editor
     "editor.lineNumbers": "on",

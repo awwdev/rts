@@ -1,7 +1,12 @@
 #pragma once
+
 #include <iostream>
 
-namespace min::com {
+///////////////////////////////////////////////////////////
+
+namespace mini::com {
+
+///////////////////////////////////////////////////////////
 
 enum class ConsoleColor
 {
@@ -13,6 +18,8 @@ enum class ConsoleColor
     Blue,
     Magenta,
 };
+
+///////////////////////////////////////////////////////////
 
 inline void PrintColored(ConsoleColor col, auto... args)
 {
@@ -40,28 +47,34 @@ inline void PrintColored(ConsoleColor col, auto... args)
     std::cout << '\n';
 }
 
-//? basic
+///////////////////////////////////////////////////////////
 
 inline void Print(auto... args)
 {
     PrintColored(ConsoleColor::White, args...);
 }
 
+///////////////////////////////////////////////////////////
+
 inline void PrintError(auto... args)
 {
     PrintColored(ConsoleColor::Red, args...);
 }
+
+///////////////////////////////////////////////////////////
 
 inline void PrintWarning(auto... args)
 {
     PrintColored(ConsoleColor::Yellow, args...);
 }
 
-//? specialized
+///////////////////////////////////////////////////////////
 
 inline void PrintBool(bool expr, const char* msg, auto... args)
 {
     PrintColored(expr ? ConsoleColor::Green : ConsoleColor::Red, msg, args...);
 }
+
+///////////////////////////////////////////////////////////
 
 }//ns

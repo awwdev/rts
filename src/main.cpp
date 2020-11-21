@@ -1,15 +1,15 @@
 #include "wnd/Window.hpp"
 #include "com/Console.hpp"
 
+using namespace mini;
+
 int main()
 {
-    min::com::SetupConsole();
-    min::com::MoveConsole(64, 400 + 64, 600, 400);
+    com::SetupConsole();
+    com::MoveConsole(64, 400 + 64, 600, 400);
+    wnd::Window window { "mini window", 600, 400, 64, 64 };
 
-    min::wnd::Window window { "mini window", 600, 400, 64, 64 };
-    window.Display();
-
-    while(min::wnd::running)
+    while(true)
     {
         window.PollEvents();
     }
