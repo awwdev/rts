@@ -17,6 +17,8 @@ struct X11_Window {
 PRIVATE ::Window windowId;
 PRIVATE ::Display* display;
 PRIVATE int screen;
+PRIVATE Atom wm_protocols;
+PRIVATE Atom wm_delete_window;
 
 ///////////////////////////////////////////////////////////
 
@@ -45,8 +47,9 @@ PUBLIC X11_Window(
     XSelectInput(display, windowId, ExposureMask | KeyPressMask);
     XMapWindow(display, windowId);
 
-    Atom wmDelete = XInternAtom(display, "WM_DELETE_WINDOW", true);
-    XSetWMProtocols(display, windowId, &wmDelete, 1);
+    wm_protocols = XInternAtom(display, "WM_PROTOCOLS", false);
+    wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", false);
+    XSetWMProtocols(display, windowId, &wm_delete_window, 1);
 }
 
 ///////////////////////////////////////////////////////////
@@ -61,21 +64,26 @@ PUBLIC ~X11_Window()
 PUBLIC void PollEvents()
 {
     XEvent e;
-    XNextEvent(display, &e);
-
-    switch(e.type)
+    while(XCheckWindowEvent(display, windowId, 0xFFFFFFFF, &e))
     {
-        case KeyPress:
+        switch(e.type)
         {
-            app::isAppRunning = false;
-        } 
-        break;
+            case KeyPress:
+            {
+                app::isAppRunning = false;
+            } 
+            break;
+        }
+    }
 
-        case ClientMessage:
+    if (XCheckTypedWindowEvent(display, windowId, ClientMessage, &e))
+    {
+        if (e.xclient.message_type == wm_protocols &&
+            e.xclient.data.l[0]    == wm_delete_window)
         {
+            com::Print("Close");
             app::isAppRunning = false;
         }
-        break;
     }
 }
 
