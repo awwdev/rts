@@ -6,7 +6,7 @@ namespace mini::wnd {
 
 ///////////////////////////////////////////////////////////
 
-struct Window_X11
+struct X11_Window
 {
 
 };  
