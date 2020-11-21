@@ -25,7 +25,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #ifdef __linux__
 int main()
 {
-    com::Print("test");
+    mini::wnd::Window window;
+   
 }
 #endif
 

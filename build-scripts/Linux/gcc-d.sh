@@ -8,4 +8,5 @@ g++ \
 -Wall -Wextra -Wpedantic \
 -I $src_hpp \
 $src_cpp \
--o $build_dir$build_name
+-o $build_dir$build_name \
+-lX11
