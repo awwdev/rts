@@ -46,7 +46,7 @@ PUBLIC X11_Window(
     XMapWindow(display, windowId);
 
     Atom wmDelete = XInternAtom(display, "WM_DELETE_WINDOW", true);
-    XSetWMProtocols(display, wnd, &wmDelete, 1);
+    XSetWMProtocols(display, windowId, &wmDelete, 1);
 }
 
 ///////////////////////////////////////////////////////////
@@ -73,7 +73,6 @@ PUBLIC void PollEvents()
 
         case ClientMessage:
         {
-            com::Print("close");
             app::isAppRunning = false;
         }
         break;

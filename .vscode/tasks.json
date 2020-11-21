@@ -6,7 +6,7 @@
 // WINDOWS MINGW GCC
 ///////////////////////////////////////////////////////////////////////////
 {
-"label": "mingw_gcc_debug",
+"label": "mingw-gcc-d",
 "command": "${workspaceFolder}\\build-scripts\\Windows\\gcc-d.bat",
 "type": "shell",
 "options": {
@@ -26,14 +26,14 @@
 // LINUX GCC
 ///////////////////////////////////////////////////////////////////////////
 {
-"label": "gcc_debug",
+"label": "gcc-d",
 "command": "${workspaceFolder}/build-scripts/Linux/gcc-d.sh",
 "type": "shell",
 "options": {
     "env": {
-        "src_cpp":          "${workspaceFolder}\\src\\main.cpp",
-        "src_hpp" :         "${workspaceFolder}\\src",
-        "build_dir":        "${workspaceFolder}\\build\\",
+        "src_cpp":          "${workspaceFolder}/src/main.cpp",
+        "src_hpp" :         "${workspaceFolder}/src",
+        "build_dir":        "${workspaceFolder}/build/",
         "build_name":       "mini-d",
     }
 },

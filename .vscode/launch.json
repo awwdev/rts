@@ -14,6 +14,7 @@
     "cwd":             "${workspaceFolder}\\build",
     "MIMode":          "gdb",
     "externalConsole": true,
+    
 },
 
 ///////////////////////////////////////////////////////////////////////////
@@ -23,10 +24,11 @@
     "name":             "[Linux] gcc [debug]",
     "type":             "cppdbg",
     "request":          "launch",
-    "program":          "${workspaceFolder}\\build\\mini.exe",
-    "cwd":              "${workspaceFolder}\\build",
+    "program":          "${workspaceFolder}/build/mini-d",
+    "cwd":              "${workspaceFolder}/build",
     "MIMode":           "gdb",
     "externalConsole":  true,
+    "preLaunchTask":    "gcc-d"
 }
 
 ]
