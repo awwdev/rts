@@ -1,6 +1,12 @@
 #pragma once
 
-#include "vulkan.h"
+#include "vuk/Vulkan.hpp"
+
+#include "vuk/Context/Instance.hpp"
+#include "vuk/Context/Physical.hpp"
+#include "vuk/Context/Device.hpp"
+#include "vuk/Context/Surface.hpp"
+#include "vuk/Context/Swapchain.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -9,12 +15,35 @@ struct Context {
 
 ///////////////////////////////////////////////////////////
 
-vkInstance instance;
+VkInstance instance;
 VkPhysicalDevice physical;
-VkDevice logical;
+VkDevice device;
+VkSurfaceKHR surface;
+VkSwapchainKHR swapchain;
+
+///////////////////////////////////////////////////////////
+
+Context()
+{
+    CreateInstance(instance);
+    CreatePhysical(physical);
+    CreateDevice(device);
+    CreateSurface(surface);
+    CreateSwapchain(swapchain);
+}
+
+///////////////////////////////////////////////////////////
+
+~Context()
+{
+    DestroySwapchain(swapchain);
+    DestroySurface(surface);
+    DestroyDevice(device);
+    DestroyPhysical(physical);
+    DestroyInstance(instance);
+}
 
 ///////////////////////////////////////////////////////////
 
 };
-
 }//ns
