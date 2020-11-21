@@ -44,24 +44,40 @@ PUBLIC X11_Window(
 
     XSelectInput(display, windowId, ExposureMask | KeyPressMask);
     XMapWindow(display, windowId);
+
+    Atom wmDelete = XInternAtom(display, "WM_DELETE_WINDOW", true);
+    XSetWMProtocols(display, wnd, &wmDelete, 1);
 }
 
 ///////////////////////////////////////////////////////////
 
 PUBLIC ~X11_Window()
 {
-    XCloseDisplay(display);
+    //XCloseDisplay(display);
 }
 
 ///////////////////////////////////////////////////////////
 
 PUBLIC void PollEvents()
 {
-    for (XEvent e; XNextEvent(display, &e);)
+    XEvent e;
+    XNextEvent(display, &e);
+
+    switch(e.type)
     {
-        if (e.type == KeyPress)
+        case KeyPress:
+        {
             app::isAppRunning = false;
-    } 
+        } 
+        break;
+
+        case ClientMessage:
+        {
+            com::Print("close");
+            app::isAppRunning = false;
+        }
+        break;
+    }
 }
 
 ///////////////////////////////////////////////////////////
