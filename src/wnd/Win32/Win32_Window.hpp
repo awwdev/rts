@@ -18,13 +18,13 @@ struct Win32_Window {
 
 ///////////////////////////////////////////////////////////
 
-PRIVATE HWND hWnd = 0;
-PRIVATE HINSTANCE hInstance = GetModuleHandle(0);
-PRIVATE chars_t wndClassName = "wnd";
+HWND      hWnd = 0;
+HINSTANCE hInstance = GetModuleHandle(0);
+chars_t   wndClassName = "wnd";
 
 ///////////////////////////////////////////////////////////
 
-PUBLIC Win32_Window(
+Win32_Window(
 chars_t title  = "Window",
 i32 width  = CW_USEDEFAULT,
 i32 height = CW_USEDEFAULT,
@@ -37,14 +37,14 @@ i32 ypos   = CW_USEDEFAULT)
 
 ///////////////////////////////////////////////////////////
 
-PUBLIC ~Win32_Window()
+~Win32_Window()
 {
     WinAssert(UnregisterClass(wndClassName, hInstance));
 }
 
 ///////////////////////////////////////////////////////////
 
-PRIVATE void mRegisterClass()
+void mRegisterClass()
 {
     const WNDCLASSEX wndClass 
     {
@@ -66,7 +66,7 @@ PRIVATE void mRegisterClass()
 
 ///////////////////////////////////////////////////////////
 
-PRIVATE void mCreateWindow(i32 xpos, i32 ypos, i32 width, i32 height, chars_t title)
+void mCreateWindow(i32 xpos, i32 ypos, i32 width, i32 height, chars_t title)
 {
     hWnd = CreateWindowEx(
         0,                                //dwExStyle                  
@@ -87,7 +87,7 @@ PRIVATE void mCreateWindow(i32 xpos, i32 ypos, i32 width, i32 height, chars_t ti
 
 ///////////////////////////////////////////////////////////
 
-PUBLIC void PollEvents()
+void PollEvents()
 {
     for (MSG message; PeekMessage(&message, NULL, 0, 0, PM_REMOVE);)
     {
@@ -98,7 +98,7 @@ PUBLIC void PollEvents()
 
 ///////////////////////////////////////////////////////////
 
-PUBLIC void Display()
+void Display()
 {
 
 }

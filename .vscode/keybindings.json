@@ -1,0 +1,14 @@
+[
+    {
+        "key": "f4",
+        "command": "workbench.action.tasks.runTask",
+        "args": "mingw-gcc-d"
+    },
+    {
+        "key": "f2",
+        "command": "editor.action.rename",
+        "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
+    }
+    //NEEDS TO BE COPIED INTO USER FOLDER, DOES NOT WORK INSIDE .VSCODE FOLDER! 
+    //%appdata%  Code/User
+]

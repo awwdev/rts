@@ -1,43 +1,39 @@
 {
 "version": "2.0.0",
 "tasks": [
-
-///////////////////////////////////////////////////////////////////////////
-// WINDOWS MINGW GCC
-///////////////////////////////////////////////////////////////////////////
-{
-"label": "mingw-gcc-d",
-"command": "${workspaceFolder}\\build-scripts\\Windows\\gcc-d.bat",
-"type": "shell",
-"options": {
-    "env": {
-        "compiler_dir":     "I:\\programs\\msys64\\mingw64\\bin\\",
-        "src_cpp":          "${workspaceFolder}\\src\\main.cpp",
-        "src_hpp" :         "${workspaceFolder}\\src",
-        "build_dir":        "${workspaceFolder}\\build\\",
-        "build_name":       "mini-d.exe",
-        "ext_hpp":          "${workspaceFolder}\\ext\\",
-        "ext_lib":          "${workspaceFolder}\\ext\\",
+    {
+        "label": "mingw-gcc-d",
+        "command": "${workspaceFolder}\\build-scripts\\Windows\\gcc-d.bat",
+        "type": "shell",
+        "options": {
+            "env": {
+                "compiler_dir": "I:\\programs\\msys64\\mingw64\\bin\\",
+                "src_cpp": "${workspaceFolder}\\src\\main.cpp",
+                "src_hpp": "${workspaceFolder}\\src",
+                "build_dir": "${workspaceFolder}\\build\\",
+                "build_name": "mini-d.exe",
+                "ext_hpp": "${workspaceFolder}\\ext\\",
+                "ext_lib": "${workspaceFolder}\\ext\\"
+            }
+        },
+        "problemMatcher": [],
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        }
+    },
+    {
+        "label": "gcc-d",
+        "command": "${workspaceFolder}/build-scripts/Linux/gcc-d.sh",
+        "type": "shell",
+        "options": {
+            "env": {
+                "src_cpp": "${workspaceFolder}/src/main.cpp",
+                "src_hpp": "${workspaceFolder}/src",
+                "build_dir": "${workspaceFolder}/build/",
+                "build_name": "mini-d"
+            }
+        }
     }
-},
-},
-
-///////////////////////////////////////////////////////////////////////////
-// LINUX GCC
-///////////////////////////////////////////////////////////////////////////
-{
-"label": "gcc-d",
-"command": "${workspaceFolder}/build-scripts/Linux/gcc-d.sh",
-"type": "shell",
-"options": {
-    "env": {
-        "src_cpp":          "${workspaceFolder}/src/main.cpp",
-        "src_hpp" :         "${workspaceFolder}/src",
-        "build_dir":        "${workspaceFolder}/build/",
-        "build_name":       "mini-d",
-    }
-},
-}
-
 ]
 }

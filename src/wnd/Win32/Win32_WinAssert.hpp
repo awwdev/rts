@@ -9,6 +9,8 @@
 
 namespace mini::wnd {
 
+///////////////////////////////////////////////////////////
+
 inline void WinAssert(auto expr)
 {
     if (expr == 0)

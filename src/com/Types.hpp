@@ -22,9 +22,6 @@ using f64 = double;
 
 using chars_t = char const * const;
 
-#define PUBLIC public:
-#define PRIVATE private:
-
 ///////////////////////////////////////////////////////////
 
 }//ns

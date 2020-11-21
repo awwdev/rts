@@ -14,14 +14,14 @@ struct X11_Window {
 
 ///////////////////////////////////////////////////////////
     
-PRIVATE ::Window windowId;
-PRIVATE ::Display* display;
-PRIVATE int screen;
-PRIVATE Atom wm_delete_window;
+::Window   window;
+::Display* display;
+int        screen;
+Atom       wmDeleteWindow;
 
 ///////////////////////////////////////////////////////////
 
-PUBLIC X11_Window(
+X11_Window(
 chars_t title  = "Window",
 i32 width  = 600,
 i32 height = 400,
@@ -31,7 +31,7 @@ i32 ypos   = 64)
     display  = XOpenDisplay(NULL);
     screen   = DefaultScreen(display);
 
-    windowId = XCreateSimpleWindow(
+    window = XCreateSimpleWindow(
         display,
         RootWindow(display, screen),
         xpos,
@@ -43,26 +43,26 @@ i32 ypos   = 64)
         WhitePixel(display, screen)
     );
 
-    XSelectInput(display, windowId, ExposureMask | KeyPressMask);
-    XMapWindow(display, windowId);
+    XSelectInput(display, window, ExposureMask | KeyPressMask);
+    XMapWindow(display, window);
 
-    wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", false);
-    XSetWMProtocols(display, windowId, &wm_delete_window, 1);
+    wmDeleteWindow = XInternAtom(display, "WM_DELETE_WINDOW", false);
+    XSetWMProtocols(display, window, &wmDeleteWindow, 1);
 }
 
 ///////////////////////////////////////////////////////////
 
-PUBLIC ~X11_Window()
+~X11_Window()
 {
     //XCloseDisplay(display);
 }
 
 ///////////////////////////////////////////////////////////
 
-PUBLIC void PollEvents()
+void PollEvents()
 {
     XEvent e;
-    while(XCheckWindowEvent(display, windowId, 0xFFFFFFFF, &e))
+    while(XCheckWindowEvent(display, window, 0xFFFFFFFF, &e))
     {
         switch(e.type)
         {
@@ -74,10 +74,10 @@ PUBLIC void PollEvents()
         }
     }
 
-    if (XCheckTypedWindowEvent(display, windowId, ClientMessage, &e))
+    if (XCheckTypedWindowEvent(display, window, ClientMessage, &e))
     {
         if (e.xclient.message_type == wm_protocols &&
-            e.xclient.data.l[0]    == wm_delete_window)
+            e.xclient.data.l[0]    == wmDeleteWindow)
         {
             com::Print("Close");
             app::isAppRunning = false;
