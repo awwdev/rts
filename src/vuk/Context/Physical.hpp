@@ -127,7 +127,7 @@ VkPhysicalDeviceMemoryProperties& memoryProps)
     Print_VK_VERSION(physicalProps);
     //Print_VkPhysicalDeviceProperties(physicalProps);
     //Print_VkPhysicalDeviceMemoryProperties(memoryProps);
-    Print_VkPhysicalDeviceFeatures(physical);
+    //Print_VkPhysicalDeviceFeatures(physical);
 }
 
 ///////////////////////////////////////////////////////////

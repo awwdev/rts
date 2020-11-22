@@ -36,6 +36,7 @@ i32 ypos   = CW_USEDEFAULT)
 
 ~Win32_Window()
 {
+    WinAssert(DestroyWindow(hWnd));
     WinAssert(UnregisterClass(wndClassName, hInstance));
 }
 

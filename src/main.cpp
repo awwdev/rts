@@ -11,11 +11,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
     wnd::Console console { 600, 400, 64, 400 + 64 };
     wnd::Window  window  { "mini window", 600, 400, 64, 64 };
-    vuk::Context context;
+    vuk::Context context { { window.hInstance, window.hWnd } };
 
     while(app::isAppRunning)
     {
-        window.PollEvents();
+        window.PollEvents(); 
     }
 
     return EXIT_SUCCESS;
@@ -28,7 +28,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 int main()
 {
     wnd::Window  window;
-    vuk::Context context;
+    vuk::Context context { { window.display, window.window } };
 
     while(app::isAppRunning)
     {

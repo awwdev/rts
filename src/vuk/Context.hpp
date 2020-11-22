@@ -25,15 +25,16 @@ VkSwapchainKHR swapchain;
 VkDebugUtilsMessengerEXT debugMessenger;
 VkPhysicalDeviceProperties physicalProps;
 VkPhysicalDeviceMemoryProperties memoryProps;
+VkSurfaceCapabilitiesKHR surfaceCapabilities;
 
 ///////////////////////////////////////////////////////////
 
-Context()
+Context(WindowHandle const& wndHandle)
 {
     CreateInstance      (instance, debugMessenger, VK_API_VERSION_1_0);
     CreatePhysical      (instance, physical, queueIndex, physicalProps, memoryProps);
     CreateLogicalDevice (device, queueIndex, physical, queue);
-    CreateSurface       (surface);
+    CreateSurface       (surface, instance, physical, queueIndex, surfaceCapabilities, wndHandle);
     CreateSwapchain     (swapchain);
 }
 
@@ -42,7 +43,7 @@ Context()
 ~Context()
 {
     DestroySwapchain(swapchain);
-    DestroySurface(surface);
+    DestroySurface(instance, surface);
     DestroyLogicalDevice(device);
     DestroyInstance(instance, debugMessenger);
 }
