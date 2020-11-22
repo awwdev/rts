@@ -88,6 +88,20 @@ inline void Print_VkPhysicalDeviceProperties(VkPhysicalDeviceProperties& physica
 
 ////////////////////////////////////////////////////////////
 
+inline void Print_VkPhysicalDeviceFeatures(VkPhysicalDevice& physical)
+{
+    VkPhysicalDeviceFeatures features;
+    vkGetPhysicalDeviceFeatures(physical, &features);
+    com::Print(com::ConsoleColor::Yellow, "device features");
+    com::PrintBool(features.wideLines, "wideLines");
+    com::PrintBool(features.shaderInt16, "shaderInt16");
+    com::PrintBool(features.largePoints, "largePoints");
+    com::PrintBool(features.geometryShader, "geometryShader");
+    com::PrintBool(features.alphaToOne, "alphaToOne");
+}
+
+///////////////////////////////////////////////////////////
+
 inline void Print_VkPhysicalDeviceMemoryProperties(VkPhysicalDeviceMemoryProperties& memoryProps)
 {
     com::Print(com::ConsoleColor::Yellow, "memory");
@@ -113,6 +127,7 @@ VkPhysicalDeviceMemoryProperties& memoryProps)
     Print_VK_VERSION(physicalProps);
     //Print_VkPhysicalDeviceProperties(physicalProps);
     //Print_VkPhysicalDeviceMemoryProperties(memoryProps);
+    Print_VkPhysicalDeviceFeatures(physical);
 }
 
 ///////////////////////////////////////////////////////////
