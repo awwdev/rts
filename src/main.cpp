@@ -11,7 +11,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
     wnd::Console console { 600, 400, 64, 400 + 64 };
     wnd::Window  window  { "mini window", 600, 400, 64, 64 };
-    vuk::Context context {};
+    vuk::Context context;
 
     while(app::isAppRunning)
     {
@@ -27,7 +27,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #ifdef __linux__
 int main()
 {
-    mini::wnd::Window window;
+    wnd::Window  window;
+    vuk::Context context;
+
     while(app::isAppRunning)
     {
         window.PollEvents();

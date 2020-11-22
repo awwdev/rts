@@ -73,8 +73,7 @@ void PollEvents()
 
     if (XCheckTypedWindowEvent(display, window, ClientMessage, &e))
     {
-        if (e.xclient.message_type == wm_protocols &&
-            e.xclient.data.l[0]    == wmDeleteWindow)
+        if (e.xclient.data.l[0] == wmDeleteWindow)
         {
             com::Print("Close");
             app::isAppRunning = false;

@@ -25,7 +25,8 @@
     "name": "[Linux] gcc",
     "includePath": 
     [ 
-        "${workspaceFolder}\\src\\**"
+        "${workspaceFolder}/src/**",
+        "${workspaceFolder}/ext/**"
     ],
     "cppStandard": "c++20",
     "intelliSenseMode": "gcc-x64"

@@ -9,10 +9,10 @@ g++ ^
 -mwindows ^
 -std=c++2a ^
 -Wall -Wextra -Wpedantic ^
-%src_cpp% ^
 -I %src_hpp% ^
 -I %ext_hpp% ^
 -L %ext_lib% ^
+%src_cpp% ^
 -o %build_dir%%build_name% ^
 -static ^
 -lvulkan-1 -lgdi32 -lws2_32 -lwinmm

@@ -26,6 +26,7 @@ inline void VkCheck(VkResult result)
     if (result != VK_SUCCESS)
     {
         com::PrintError("VkResult", result);
+        __builtin_trap();
     }   
 }
 

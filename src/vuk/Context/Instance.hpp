@@ -47,7 +47,12 @@ uint32_t engineVersion = 0)
 
     chars_t layers[] 
     {
+        #ifdef _WIN32
         "VK_LAYER_KHRONOS_validation"
+        #endif
+        #ifdef __linux__
+        "VK_LAYER_LUNARG_standard_validation"
+        #endif
     };
     
     chars_t extensions[] 
@@ -97,6 +102,15 @@ uint32_t engineVersion = 0)
 
     ((PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT"))
     (instance, &debugCreateInfo, nullptr, &debugMessenger);
+
+    //uint32_t count;
+    //VkLayerProperties* layerProps;
+    //vkEnumerateInstanceLayerProperties(&count, nullptr);
+    //layerProps = new VkLayerProperties [count];
+    //vkEnumerateInstanceLayerProperties(&count, layerProps);
+    //for(uint32_t i = 0; i < count; ++i)
+    //    com::Print(layerProps[i].layerName);
+    //delete[] layerProps;
 }
 
 ///////////////////////////////////////////////////////////
