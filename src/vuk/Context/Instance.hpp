@@ -16,9 +16,15 @@ const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 void*)
 {
     if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
+    {
         com::PrintWarning(pCallbackData->pMessage);
+    }
+        
     if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
+    {
         com::PrintError(pCallbackData->pMessage);
+        __builtin_trap();
+    }
 
     return VK_FALSE;
 }
@@ -127,8 +133,10 @@ uint32_t engineVersion = 0)
 
 ///////////////////////////////////////////////////////////
 
-static void DestroyInstance(VkInstance instance)
+static void DestroyInstance(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger)
 {
+    ((PFN_vkDestroyDebugUtilsMessengerEXT) 
+    vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT"))(instance, debugMessenger, nullptr);
     vkDestroyInstance(instance, nullptr);
 }
 

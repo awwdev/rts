@@ -18,6 +18,7 @@ struct Context {
 VkInstance instance;
 VkPhysicalDevice physical;
 uint32_t queueIndex;
+VkQueue queue;
 VkDevice device;
 VkSurfaceKHR surface;
 VkSwapchainKHR swapchain;
@@ -29,11 +30,11 @@ VkPhysicalDeviceMemoryProperties memoryProps;
 
 Context()
 {
-    CreateInstance  (instance, debugMessenger, VK_API_VERSION_1_0);
-    CreatePhysical  (instance, physical, queueIndex, physicalProps, memoryProps);
-    CreateDevice    (device);
-    CreateSurface   (surface);
-    CreateSwapchain (swapchain);
+    CreateInstance      (instance, debugMessenger, VK_API_VERSION_1_0);
+    CreatePhysical      (instance, physical, queueIndex, physicalProps, memoryProps);
+    CreateLogicalDevice (device, queueIndex, physical, queue);
+    CreateSurface       (surface);
+    CreateSwapchain     (swapchain);
 }
 
 ///////////////////////////////////////////////////////////
@@ -42,8 +43,8 @@ Context()
 {
     DestroySwapchain(swapchain);
     DestroySurface(surface);
-    DestroyDevice(device);
-    DestroyInstance(instance);
+    DestroyLogicalDevice(device);
+    DestroyInstance(instance, debugMessenger);
 }
 
 ///////////////////////////////////////////////////////////

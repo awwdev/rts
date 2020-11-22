@@ -21,12 +21,13 @@ inline auto Get_VkPhysicalDevice(VkInstance instance)
     VkCheck(vkEnumeratePhysicalDevices(instance, &count, physicals));
     physical = physicals[0];
     delete[] physicals;
+    //com::Print("physicals count", count);
     return physical;
 }
 
 ///////////////////////////////////////////////////////////
 
-inline auto Get_Queue(VkPhysicalDevice& physical)
+inline auto Get_QueueIndex(VkPhysicalDevice& physical)
 {
     uint32_t count;
     VkQueueFamilyProperties* famProps;
@@ -43,6 +44,7 @@ inline auto Get_Queue(VkPhysicalDevice& physical)
         }
     }
 
+    //com::Print("queues count", count);
     delete[] famProps;
     return queueIndex;
 }
@@ -103,14 +105,14 @@ VkPhysicalDeviceProperties& physicalProps,
 VkPhysicalDeviceMemoryProperties& memoryProps)
 {
     physical   = Get_VkPhysicalDevice(instance);
-    queueIndex = Get_Queue(physical);
+    queueIndex = Get_QueueIndex(physical);
 
     vkGetPhysicalDeviceProperties(physical, &physicalProps);
     vkGetPhysicalDeviceMemoryProperties(physical, &memoryProps);
 
     Print_VK_VERSION(physicalProps);
-    Print_VkPhysicalDeviceProperties(physicalProps);
-    Print_VkPhysicalDeviceMemoryProperties(memoryProps);
+    //Print_VkPhysicalDeviceProperties(physicalProps);
+    //Print_VkPhysicalDeviceMemoryProperties(memoryProps);
 }
 
 ///////////////////////////////////////////////////////////
