@@ -71,10 +71,10 @@ WindowHandle const& wndHandle)
 
     VkBool32 supported;
     VkCheck(vkGetPhysicalDeviceSurfaceSupportKHR(physical, queueIndex, surface, &supported));
-    com::PrintBool(supported, "vkGetPhysicalDeviceSurfaceSupportKHR");
+    //com::PrintBool(supported, "vkGetPhysicalDeviceSurfaceSupportKHR");
 
     VkCheck(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical, surface, &surfaceCapabilities)); 
-    Print_SurfaceCapabilities(surfaceCapabilities);
+    //Print_SurfaceCapabilities(surfaceCapabilities);
 }
 
 ///////////////////////////////////////////////////////////
