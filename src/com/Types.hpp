@@ -24,4 +24,10 @@ using chars_t = char const * const;
 
 ///////////////////////////////////////////////////////////
 
+template<std::size_t N>
+constexpr auto array_1d_extent(auto const (&)[N])
+{
+    return N;
+}
+
 }//ns
