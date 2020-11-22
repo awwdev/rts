@@ -101,6 +101,13 @@ inline void Print(auto... args)
     PrintColored(ConsoleColor::White, args...);
 }
 
+////////////////////////////////////////////////////////////
+
+inline void Print(com::ConsoleColor color, auto... args)
+{
+    PrintColored(color, args...);
+}
+
 ///////////////////////////////////////////////////////////
 
 inline void PrintError(auto... args)
