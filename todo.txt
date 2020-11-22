@@ -1,0 +1,3 @@
+- renderpass, pipeline, shader, commands
+- refactor swapchain object
+- linux window title
