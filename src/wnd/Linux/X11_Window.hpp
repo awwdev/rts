@@ -40,6 +40,8 @@ i32 ypos   = 64)
         WhitePixel(display, screen)
     );
 
+    XStoreName(display, window, title);
+
     XSelectInput(display, window, ExposureMask | KeyPressMask);
     XMapWindow(display, window);
 
@@ -73,7 +75,7 @@ void PollEvents()
 
     if (XCheckTypedWindowEvent(display, window, ClientMessage, &e))
     {
-        if (e.xclient.data.l[0] == wmDeleteWindow)
+        if ((unsigned long)e.xclient.data.l[0] == wmDeleteWindow)
         {
             com::Print("Close");
             app::isAppRunning = false;

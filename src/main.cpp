@@ -28,7 +28,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #ifdef __linux__
 int main()
 {
-    wnd::Window   window;
+    wnd::Window   window { "mini window", 600, 400, 64, 64 };
     vuk::Renderer renderer { { window.display, window.window } };
 
     while(app::isAppRunning)
