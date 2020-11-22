@@ -8,7 +8,7 @@ namespace mini::vuk {
 
 ///////////////////////////////////////////////////////////
 
-static void CreateLogicalDevice(VkDevice& device, uint32_t queueIndex, VkPhysicalDevice& physical, VkQueue& queue)
+static void CreateDevice(VkDevice& device, uint32_t queueIndex, VkPhysicalDevice& physical, VkQueue& queue)
 {
     float priorities { 1.f };
     VkDeviceQueueCreateInfo const queueInfo
@@ -44,6 +44,8 @@ static void CreateLogicalDevice(VkDevice& device, uint32_t queueIndex, VkPhysica
 
     VkCheck(vkCreateDevice(physical, &deviceInfo, nullptr, &device));
     vkGetDeviceQueue(device, queueIndex, 0, &queue);
+
+    g_devicePtr = device;
 }
 
 ///////////////////////////////////////////////////////////

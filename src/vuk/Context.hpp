@@ -33,7 +33,7 @@ Context(WindowHandle const& wndHandle)
 {
     CreateInstance      (instance, debugMessenger, VK_API_VERSION_1_0);
     CreatePhysical      (instance, physical, queueIndex, physicalProps, memoryProps);
-    CreateLogicalDevice (device, queueIndex, physical, queue);
+    CreateDevice (device, queueIndex, physical, queue);
     CreateSurface       (surface, instance, physical, queueIndex, surfaceCapabilities, wndHandle);
     CreateSwapchain     (swapchain);
 }
@@ -46,6 +46,7 @@ Context(WindowHandle const& wndHandle)
     DestroySurface(instance, surface);
     DestroyLogicalDevice(device);
     DestroyInstance(instance, debugMessenger);
+    g_devicePtr = nullptr;
 }
 
 ///////////////////////////////////////////////////////////
