@@ -27,6 +27,11 @@ VkPhysicalDeviceProperties physicalProps;
 VkPhysicalDeviceMemoryProperties memoryProps;
 VkSurfaceCapabilitiesKHR surfaceCapabilities;
 
+uint32_t swapImagesCount;
+VkImage* swapImages;
+uint32_t swapImageViewsCount;
+VkImageView* swapImageViews;
+
 ///////////////////////////////////////////////////////////
 
 Context(WindowHandle const& wndHandle)
@@ -35,17 +40,20 @@ Context(WindowHandle const& wndHandle)
     CreatePhysical  (instance, physical, queueIndex, physicalProps, memoryProps);
     CreateDevice    (device, queueIndex, physical, queue);
     CreateSurface   (surface, instance, physical, queueIndex, surfaceCapabilities, wndHandle);
-    CreateSwapchain (swapchain);
+    CreateSwapchain (device, surface, swapchain, surfaceCapabilities, 
+    swapImages, swapImagesCount, swapImageViews, swapImageViewsCount,
+    VK_FORMAT_B8G8R8A8_SRGB, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR, VK_PRESENT_MODE_FIFO_KHR);
+    //VK_PRESENT_MODE_IMMEDIATE_KHR
 }
 
 ///////////////////////////////////////////////////////////
 
 ~Context()
 {
-    DestroySwapchain(swapchain);
-    DestroySurface(instance, surface);
-    DestroyLogicalDevice(device);
-    DestroyInstance(instance, debugMessenger);
+    DestroySwapchain(device, swapchain, swapImageViews, swapImageViewsCount, swapImages);
+    DestroySurface  (instance, surface);
+    DestroyDevice   (device);
+    DestroyInstance (instance, debugMessenger);
     g_devicePtr = nullptr;
 }
 

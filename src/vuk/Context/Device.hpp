@@ -50,7 +50,7 @@ static void CreateDevice(VkDevice& device, uint32_t queueIndex, VkPhysicalDevice
 
 ///////////////////////////////////////////////////////////
 
-static void DestroyLogicalDevice(VkDevice device)
+static void DestroyDevice(VkDevice device)
 {
     vkDestroyDevice(device, nullptr);
 }
