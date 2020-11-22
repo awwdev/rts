@@ -31,11 +31,11 @@ VkSurfaceCapabilitiesKHR surfaceCapabilities;
 
 Context(WindowHandle const& wndHandle)
 {
-    CreateInstance      (instance, debugMessenger, VK_API_VERSION_1_0);
-    CreatePhysical      (instance, physical, queueIndex, physicalProps, memoryProps);
-    CreateDevice (device, queueIndex, physical, queue);
-    CreateSurface       (surface, instance, physical, queueIndex, surfaceCapabilities, wndHandle);
-    CreateSwapchain     (swapchain);
+    CreateInstance  (instance, debugMessenger, VK_API_VERSION_1_0);
+    CreatePhysical  (instance, physical, queueIndex, physicalProps, memoryProps);
+    CreateDevice    (device, queueIndex, physical, queue);
+    CreateSurface   (surface, instance, physical, queueIndex, surfaceCapabilities, wndHandle);
+    CreateSwapchain (swapchain);
 }
 
 ///////////////////////////////////////////////////////////

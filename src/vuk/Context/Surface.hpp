@@ -21,8 +21,8 @@ struct WindowHandle
 #ifdef __linux__
 struct WindowHandle
 {
-    Display* display;
-    Window window;
+    ::Display* display;
+    ::Window window;
 };
 #endif
 
@@ -64,7 +64,7 @@ WindowHandle const& wndHandle)
         .pNext  = nullptr, 
         .flags  = 0,
         .dpy    = wndHandle.display,
-        .window = wndHanlde.window
+        .window = wndHandle.window
     };
     VkCheck(vkCreateXlibSurfaceKHR(instance, &surfInfo, nullptr, &surface));
     #endif
