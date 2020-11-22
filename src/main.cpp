@@ -28,8 +28,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 #ifdef __linux__
 int main()
 {
-    wnd::Window  window;
-    vuk::Context context { { window.display, window.window } };
+    wnd::Window   window;
+    vuk::Renderer renderer { { window.display, window.window } };
 
     while(app::isAppRunning)
     {
