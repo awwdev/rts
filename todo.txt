@@ -1,2 +1,2 @@
 - renderpass, pipeline, shader, commands
-- refactor swapchain object
+- input events (thread?)

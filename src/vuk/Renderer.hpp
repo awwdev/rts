@@ -24,11 +24,9 @@ struct Renderer
 
 Renderer::Renderer(WindowHandle const& wndHandle)
 {
-    //std::thread { [&] {
-        context.Create(wndHandle);
-        presentation.Create();
-        states.Create();
-    //}}.detach();    
+    context.Create(wndHandle);
+    presentation.Create();
+    states.Create(); 
 }
 
 ///////////////////////////////////////////////////////////

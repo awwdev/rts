@@ -1,9 +1,9 @@
 #pragma once
 
-#include "vuk/Objects/Buffer.hpp"
-#include "vuk/Objects/Pipeline.hpp"
-#include "vuk/Objects/RenderPass.hpp"
-#include "vuk/Objects/Shader.hpp"
+#include "vuk/Wrappers/Buffer.hpp"
+#include "vuk/Wrappers/Pipeline.hpp"
+#include "vuk/Wrappers/RenderPass.hpp"
+#include "vuk/Wrappers/Shader.hpp"
 
 namespace mini::vuk {
 
@@ -24,7 +24,7 @@ struct DefaultState
 
 void DefaultState::Create()
 {
-    shader.Create();
+    shader.Create("res/Shaders/default.vert", "res/Shaders/default.frag");
     renderPass.Create();
     pipeline.Create();
 }

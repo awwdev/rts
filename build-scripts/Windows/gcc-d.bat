@@ -1,9 +1,14 @@
 cls
 @echo off
 mkdir %build_dir%
+mkdir %build_dir%res
+xcopy /s /y /d %res_dir%* %build_dir%res\\*
+echo.
 
 Pushd %compiler_dir%
 g++ --version
+echo.
+
 g++ ^
 -g ^
 -mwindows ^
@@ -16,4 +21,5 @@ g++ ^
 -o %build_dir%%build_name% ^
 -static ^
 -lvulkan-1 -lgdi32 -lws2_32 -lwinmm
+
 popd
