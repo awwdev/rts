@@ -2,6 +2,8 @@
 
 #include "vuk/Vulkan.hpp"
 #include "vuk/Context.hpp"
+#include "vuk/States.hpp"
+#include "vuk/Commands.hpp"
 
 namespace mini::vuk {
 
@@ -13,7 +15,7 @@ struct Presentation
 
     void Create(Context&);
     void Destroy();
-    void Present(Context&);
+    void Present(Context&, Commands&, States&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -37,7 +39,7 @@ void Presentation::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void Presentation::Present(Context& context)
+void Presentation::Present(Context& context, Commands& commands, States& states)
 {
     uint32_t imageIndex = 0;
     VkCheck(vkAcquireNextImageKHR(
@@ -49,6 +51,13 @@ void Presentation::Present(Context& context)
         &imageIndex
     ));
 
+    VkCheck(vkBeginCommandBuffer(commands.buffer, &commands.beginInfo));
+    vkCmdBeginRenderPass(commands.buffer, &states.defaultState.renderPass.beginInfos[0], VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdBindPipeline(commands.buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, states.defaultState.pipeline.pipeline);
+    vkCmdDraw(commands.buffer, 3, 1, 0, 0);
+    vkCmdEndRenderPass(commands.buffer);
+    VkCheck(vkEndCommandBuffer(commands.buffer));
+
     const VkPipelineStageFlags waitStages = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
     VkSubmitInfo const submitInfo 
     {
@@ -57,8 +66,8 @@ void Presentation::Present(Context& context)
         .waitSemaphoreCount     = 1,
         .pWaitSemaphores        = &semaphore,
         .pWaitDstStageMask      = &waitStages,
-        .commandBufferCount     = 0,
-        .pCommandBuffers        = nullptr,
+        .commandBufferCount     = 1,
+        .pCommandBuffers        = &commands.buffer,
         .signalSemaphoreCount   = 0,
         .pSignalSemaphores      = nullptr,
     };

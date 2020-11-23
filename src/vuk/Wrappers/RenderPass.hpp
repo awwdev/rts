@@ -120,6 +120,7 @@ void RenderPass::Create(Swapchain& swapchain)
         };
         VkCheck(vkCreateFramebuffer(g_devicePtr, &framebufferInfo, nullptr, &framebuffers[i]));
 
+        VkClearValue clear = { .color { 0.1, 0.1, 0.1, 1 } };
         beginInfos[i] = 
         {
             .sType          = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
@@ -130,8 +131,8 @@ void RenderPass::Create(Swapchain& swapchain)
                 .offset     = VkOffset2D {0, 0},
                 .extent     = { width, height }
             },
-            .clearValueCount= 0,
-            .pClearValues   = nullptr
+            .clearValueCount= 1,
+            .pClearValues   = &clear
         };
     }
 }
