@@ -5,22 +5,22 @@
 #include "vuk/Context/Instance.hpp"
 #include "vuk/Context/Physical.hpp"
 
-///////////////////////////////////////////////////////////
-
 namespace mini::vuk {
 
 ////////////////////////////////////////////////////////////
 
-struct Surface {
+struct Surface 
+{
+    VkSurfaceKHR surface;
+    VkSurfaceCapabilitiesKHR capabilities;
+
+    void Create(Instance&, Physical&, WindowHandle const&);
+    void Destroy(Instance&);
+};
 
 ///////////////////////////////////////////////////////////
 
-VkSurfaceKHR surface;
-VkSurfaceCapabilitiesKHR capabilities;
-
-///////////////////////////////////////////////////////////
-
-void Create(Instance& instance, Physical& physical, WindowHandle const& wndHandle)
+void Surface::Create(Instance& instance, Physical& physical, WindowHandle const& wndHandle)
 {
     #ifdef _WIN32
     VkWin32SurfaceCreateInfoKHR const surfInfo 
@@ -56,14 +56,10 @@ void Create(Instance& instance, Physical& physical, WindowHandle const& wndHandl
 
 ///////////////////////////////////////////////////////////
 
-void Destroy(Instance& instance)
+void Surface::Destroy(Instance& instance)
 {
     vkDestroySurfaceKHR(instance.instance, surface, nullptr);
 }
-
-///////////////////////////////////////////////////////////
-
-};
 
 ///////////////////////////////////////////////////////////
 

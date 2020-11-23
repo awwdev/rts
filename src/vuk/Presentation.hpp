@@ -3,21 +3,22 @@
 #include "vuk/Vulkan.hpp"
 #include "vuk/Context.hpp"
 
-///////////////////////////////////////////////////////////
-
 namespace mini::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct Presentation {
+struct Presentation
+{
+    VkSemaphore semaphore;
+
+    void Create();
+    void Destroy();
+    void Present(Context&);
+};
 
 ///////////////////////////////////////////////////////////
 
-VkSemaphore semaphore;
-
-///////////////////////////////////////////////////////////
-
-void Create()
+void Presentation::Create()
 {
     VkSemaphoreCreateInfo const semaphoreInfo {
         .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
@@ -29,14 +30,14 @@ void Create()
 
 ///////////////////////////////////////////////////////////
 
-void Destroy()
+void Presentation::Destroy()
 {
     vkDestroySemaphore(g_devicePtr, semaphore, nullptr);
 }
 
 ///////////////////////////////////////////////////////////
 
-void Present(Context& context)
+void Presentation::Present(Context& context)
 {
     uint32_t imageIndex = 0;
     VkCheck(vkAcquireNextImageKHR(
@@ -78,10 +79,6 @@ void Present(Context& context)
 
     VkCheck(vkDeviceWaitIdle(g_devicePtr));
 }
-
-///////////////////////////////////////////////////////////
-
-};
 
 ///////////////////////////////////////////////////////////
 

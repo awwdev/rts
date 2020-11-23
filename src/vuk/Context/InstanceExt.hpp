@@ -2,8 +2,6 @@
 
 #include "vuk/Vulkan.hpp"
 
-///////////////////////////////////////////////////////////
-
 namespace mini::vuk {
 
 ////////////////////////////////////////////////////////////
@@ -30,7 +28,7 @@ void*)
 
 ///////////////////////////////////////////////////////////
 
-inline auto Create_VkDebugUtilsMessengerCreateInfoEXT()
+auto Create_VkDebugUtilsMessengerCreateInfoEXT()
 {
     return VkDebugUtilsMessengerCreateInfoEXT
     {

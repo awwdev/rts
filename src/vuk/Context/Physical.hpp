@@ -1,26 +1,26 @@
 #pragma once
 
 #include "vuk/Vulkan.hpp"
+#include "vuk/Context/PhysicalExt.hpp"
 #include "vuk/Context/Instance.hpp"
-
-///////////////////////////////////////////////////////////
 
 namespace mini::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct Physical {
+struct Physical 
+{
+    VkPhysicalDevice physical;
+    VkPhysicalDeviceProperties physicalProps;
+    VkPhysicalDeviceMemoryProperties memoryProps;
+    uint32_t queueIndex;
+
+    void Create(Instance&);
+};
 
 ///////////////////////////////////////////////////////////
 
-VkPhysicalDevice physical;
-VkPhysicalDeviceProperties physicalProps;
-VkPhysicalDeviceMemoryProperties memoryProps;
-uint32_t queueIndex;
-
-////////////////////////////////////////////////////////////
-
-void Create(Instance& instance)
+void Physical::Create(Instance& instance)
 {
     uint32_t physicalsCount;
     VkPhysicalDevice* physicals;
@@ -48,10 +48,6 @@ void Create(Instance& instance)
     vkGetPhysicalDeviceProperties(physical, &physicalProps);
     vkGetPhysicalDeviceMemoryProperties(physical, &memoryProps);
 }
-
-///////////////////////////////////////////////////////////
-
-};
 
 ///////////////////////////////////////////////////////////
 

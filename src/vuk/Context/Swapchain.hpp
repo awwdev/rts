@@ -10,25 +10,24 @@ namespace mini::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct Swapchain {
-
-///////////////////////////////////////////////////////////
-
-VkSwapchainKHR swapchain;
-uint32_t swapImagesCount;
-VkImage* swapImages;
-uint32_t swapImageViewsCount;
-VkImageView* swapImageViews;
-
-///////////////////////////////////////////////////////////
-
-void Create(
-Device& device, 
-Surface& surface, 
-VkPresentModeKHR presentMode,
-VkFormat format = VK_FORMAT_B8G8R8A8_SRGB,
-VkColorSpaceKHR colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+struct Swapchain
 {
+    VkSwapchainKHR swapchain;
+    uint32_t swapImagesCount;
+    VkImage* swapImages;
+    uint32_t swapImageViewsCount;
+    VkImageView* swapImageViews;
+
+    void Create(Device&, Surface&, VkPresentModeKHR);
+    void Destroy();
+};
+
+///////////////////////////////////////////////////////////
+
+void Swapchain::Create(Device& device, Surface& surface, VkPresentModeKHR presentMode)
+{
+    constexpr VkFormat format = VK_FORMAT_B8G8R8A8_SRGB;
+
     VkSwapchainCreateInfoKHR const swapInfo
     {
         .sType                  = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
@@ -37,7 +36,7 @@ VkColorSpaceKHR colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
         .surface                = surface.surface,
         .minImageCount          = surface.capabilities.minImageCount + 1,
         .imageFormat            = format,
-        .imageColorSpace        = colorSpace,
+        .imageColorSpace        = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR,
         .imageExtent            = surface.capabilities.currentExtent,
         .imageArrayLayers       = 1,
         .imageUsage             = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
@@ -92,7 +91,7 @@ VkColorSpaceKHR colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
 
 ///////////////////////////////////////////////////////////
 
-void Destroy()
+void Swapchain::Destroy()
 {
     vkDestroySwapchainKHR(g_devicePtr, swapchain, nullptr);
     for(uint32_t i = 0; i < swapImageViewsCount; ++i)
@@ -100,10 +99,6 @@ void Destroy()
     delete[] swapImageViews;
     delete[] swapImages;
 }
-
-///////////////////////////////////////////////////////////
-
-};
 
 ///////////////////////////////////////////////////////////
 
