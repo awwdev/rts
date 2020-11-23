@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vuk/Vulkan.hpp"
+#include "vuk/Context/Physical.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -28,6 +29,14 @@ struct WindowHandle
 
 ///////////////////////////////////////////////////////////
 
+struct Surface
+{
+    VkSurfaceKHR surface;
+    VkSurfaceCapabilitiesKHR capabilities;
+};
+
+////////////////////////////////////////////////////////////
+
 inline void Print_SurfaceCapabilities(VkSurfaceCapabilitiesKHR& surfaceCapabilities)
 {
     com::Print(com::ConsoleColor::Yellow, "surfaceCapabilities");
@@ -38,11 +47,9 @@ inline void Print_SurfaceCapabilities(VkSurfaceCapabilitiesKHR& surfaceCapabilit
 ///////////////////////////////////////////////////////////
 
 static void CreateSurface(
-VkSurfaceKHR& surface, 
+Surface& surface, 
 VkInstance instance, 
-VkPhysicalDevice& physical, 
-uint32_t queueIndex, 
-VkSurfaceCapabilitiesKHR& surfaceCapabilities, 
+Physical& physical, 
 WindowHandle const& wndHandle)
 {
     #ifdef _WIN32
@@ -54,7 +61,7 @@ WindowHandle const& wndHandle)
         .hinstance  = wndHandle.hInstance,
         .hwnd       = wndHandle.hWnd,
     };
-    VkCheck(vkCreateWin32SurfaceKHR(instance, &surfInfo, nullptr, &surface));
+    VkCheck(vkCreateWin32SurfaceKHR(instance, &surfInfo, nullptr, &surface.surface));
     #endif
 
     #ifdef __linux__
@@ -70,18 +77,18 @@ WindowHandle const& wndHandle)
     #endif
 
     VkBool32 supported;
-    VkCheck(vkGetPhysicalDeviceSurfaceSupportKHR(physical, queueIndex, surface, &supported));
+    VkCheck(vkGetPhysicalDeviceSurfaceSupportKHR(physical.physical, physical.queueIndex, surface.surface, &supported));
     //com::PrintBool(supported, "vkGetPhysicalDeviceSurfaceSupportKHR");
 
-    VkCheck(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical, surface, &surfaceCapabilities)); 
+    VkCheck(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical.physical, surface.surface, &surface.capabilities)); 
     //Print_SurfaceCapabilities(surfaceCapabilities);
 }
 
 ///////////////////////////////////////////////////////////
 
-static void DestroySurface(VkInstance instance, VkSurfaceKHR surface)
+static void DestroySurface(VkInstance instance, Surface& surface)
 {
-    vkDestroySurfaceKHR(instance, surface, nullptr);
+    vkDestroySurfaceKHR(instance, surface.surface, nullptr);
 }
 
 ///////////////////////////////////////////////////////////

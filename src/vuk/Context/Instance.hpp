@@ -9,6 +9,14 @@ namespace mini::vuk {
 
 ///////////////////////////////////////////////////////////
 
+struct Instance
+{
+    VkInstance instance;
+    VkDebugUtilsMessengerEXT debugMessenger;
+};
+
+///////////////////////////////////////////////////////////
+
 static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 VkDebugUtilsMessageTypeFlagsEXT,
@@ -69,13 +77,12 @@ inline auto Create_VkDebugUtilsMessengerCreateInfoEXT()
 ///////////////////////////////////////////////////////////
 
 static void CreateInstance(
-VkInstance& instance, 
-VkDebugUtilsMessengerEXT& debugMessenger,
-uint32_t apiVersion = VK_API_VERSION_1_0,
-chars_t  appName = "mini", 
-uint32_t appVersion = 0,
-chars_t  engineName = "mini",
-uint32_t engineVersion = 0)
+Instance& instance, 
+uint32_t  apiVersion = VK_API_VERSION_1_0,
+chars_t   appName = "mini", 
+uint32_t  appVersion = 0,
+chars_t   engineName = "mini",
+uint32_t  engineVersion = 0)
 {
     VkApplicationInfo const appInfo 
     {
@@ -125,19 +132,19 @@ uint32_t engineVersion = 0)
         .ppEnabledExtensionNames = extensions
     };
 
-    VkCheck(vkCreateInstance(&instInfo, nullptr, &instance));
+    VkCheck(vkCreateInstance(&instInfo, nullptr, &instance.instance));
 
-    ((PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT"))
-    (instance, &debugCreateInfo, nullptr, &debugMessenger);
+    ((PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance.instance, "vkCreateDebugUtilsMessengerEXT"))
+    (instance.instance, &debugCreateInfo, nullptr, &instance.debugMessenger);
 }
 
 ///////////////////////////////////////////////////////////
 
-static void DestroyInstance(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger)
+static void DestroyInstance(Instance& instance)
 {
     ((PFN_vkDestroyDebugUtilsMessengerEXT) 
-    vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT"))(instance, debugMessenger, nullptr);
-    vkDestroyInstance(instance, nullptr);
+    vkGetInstanceProcAddr(instance.instance, "vkDestroyDebugUtilsMessengerEXT"))(instance.instance, instance.debugMessenger, nullptr);
+    vkDestroyInstance(instance.instance, nullptr);
 }
 
 ///////////////////////////////////////////////////////////

@@ -30,8 +30,8 @@ void Present(Context& context)
 {
     uint32_t imageIndex = 0;
     VkCheck(vkAcquireNextImageKHR(
-        context.device, 
-        context.swapchain, 
+        context.device.device, 
+        context.swapchain.swapchain, 
         0, 
         semaphore, 
         VK_NULL_HANDLE, 
@@ -51,7 +51,7 @@ void Present(Context& context)
         .signalSemaphoreCount   = 0,
         .pSignalSemaphores      = nullptr,
     };
-    VkCheck(vkQueueSubmit(context.queue, 1, &submitInfo, VK_NULL_HANDLE));
+    VkCheck(vkQueueSubmit(context.device.queue, 1, &submitInfo, VK_NULL_HANDLE));
 
     VkPresentInfoKHR const presentInfo 
     {
@@ -60,11 +60,11 @@ void Present(Context& context)
         .waitSemaphoreCount     = 0,
         .pWaitSemaphores        = nullptr,
         .swapchainCount         = 1,
-        .pSwapchains            = &context.swapchain,
+        .pSwapchains            = &context.swapchain.swapchain,
         .pImageIndices          = &imageIndex,
         .pResults               = nullptr
     };
-    VkCheck(vkQueuePresentKHR(context.queue, &presentInfo));
+    VkCheck(vkQueuePresentKHR(context.device.queue, &presentInfo));
 
     VkCheck(vkDeviceWaitIdle(g_devicePtr));
 }

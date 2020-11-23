@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vuk/Vulkan.hpp"
+#include "vuk/Context/Surface.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -8,15 +9,21 @@ namespace mini::vuk {
 
 ///////////////////////////////////////////////////////////
 
+struct Swapchain
+{
+    VkSwapchainKHR swapchain;
+    uint32_t swapImagesCount;
+    VkImage* swapImages;
+    uint32_t swapImageViewsCount;
+    VkImageView* swapImageViews;
+};
+
+///////////////////////////////////////////////////////////
+
 static void CreateSwapchain(
 VkDevice device, 
-VkSurfaceKHR surface, 
-VkSwapchainKHR& swapchain, 
-VkSurfaceCapabilitiesKHR& surfaceCapabilities, 
-VkImage*& swapImages,
-uint32_t& swapImagesCount,
-VkImageView*& swapImageViews,
-uint32_t& swapImageViewsCount,
+Swapchain& swapchain,
+Surface& surface, 
 VkFormat format,
 VkColorSpaceKHR colorSpace,
 VkPresentModeKHR presentMode)
@@ -27,42 +34,42 @@ VkPresentModeKHR presentMode)
         .sType                  = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
         .pNext                  = nullptr,
         .flags                  = 0,
-        .surface                = surface,
-        .minImageCount          = surfaceCapabilities.minImageCount + 1,
+        .surface                = surface.surface,
+        .minImageCount          = surface.capabilities.minImageCount + 1,
         .imageFormat            = format,
         .imageColorSpace        = colorSpace,
-        .imageExtent            = surfaceCapabilities.currentExtent,
+        .imageExtent            = surface.capabilities.currentExtent,
         .imageArrayLayers       = 1,
         .imageUsage             = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
         .imageSharingMode       = VK_SHARING_MODE_EXCLUSIVE,
         .queueFamilyIndexCount  = 0,
         .pQueueFamilyIndices    = nullptr,
-        .preTransform           = surfaceCapabilities.currentTransform,
+        .preTransform           = surface.capabilities.currentTransform,
         .compositeAlpha         = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
         .presentMode            = presentMode,
         .clipped                = VK_FALSE,
         .oldSwapchain           = nullptr
     };
 
-    VkCheck(vkCreateSwapchainKHR(device, &swapInfo, nullptr, &swapchain));
+    VkCheck(vkCreateSwapchainKHR(device, &swapInfo, nullptr, &swapchain.swapchain));
 
 
-    VkCheck(vkGetSwapchainImagesKHR(device, swapchain, &swapImagesCount, nullptr));
-    swapImages = new VkImage[swapImagesCount];
-    VkCheck(vkGetSwapchainImagesKHR(device, swapchain, &swapImagesCount, swapImages));
+    VkCheck(vkGetSwapchainImagesKHR(device, swapchain.swapchain, &swapchain.swapImagesCount, nullptr));
+    swapchain.swapImages = new VkImage[swapchain.swapImagesCount];
+    VkCheck(vkGetSwapchainImagesKHR(device, swapchain.swapchain, &swapchain.swapImagesCount, swapchain.swapImages));
 
-    swapImageViewsCount = swapImagesCount;
-    swapImageViews = new VkImageView[swapImageViewsCount];
-    com::Print("swapImagesCount", swapImagesCount);
+    swapchain.swapImageViewsCount = swapchain.swapImagesCount;
+    swapchain.swapImageViews = new VkImageView[swapchain.swapImageViewsCount];
+    com::Print("swapImagesCount", swapchain.swapImagesCount);
 
-    for (u32 i = 0; i < swapImagesCount; ++i) 
+    for (u32 i = 0; i < swapchain.swapImagesCount; ++i) 
     {
         VkImageViewCreateInfo const viewInfo 
         {
             .sType      = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
             .pNext      = nullptr,
             .flags      = 0,
-            .image      = swapImages[i],
+            .image      = swapchain.swapImages[i],
             .viewType   = VK_IMAGE_VIEW_TYPE_2D,
             .format     = format,
             .components = {
@@ -79,19 +86,19 @@ VkPresentModeKHR presentMode)
                 .layerCount     = 1
             }
         };
-        VkCheck(vkCreateImageView(device, &viewInfo, nullptr, &swapImageViews[i]));
+        VkCheck(vkCreateImageView(device, &viewInfo, nullptr, &swapchain.swapImageViews[i]));
     }
 }
 
 ///////////////////////////////////////////////////////////
 
-static void DestroySwapchain(VkDevice device, VkSwapchainKHR swapchain, VkImageView* swapImageViews, uint32_t swapImageViewsCount, VkImage* swapImages)
+static void DestroySwapchain(VkDevice device, Swapchain swapchain)
 {
-    vkDestroySwapchainKHR(device, swapchain, nullptr);
-    for(uint32_t i = 0; i < swapImageViewsCount; ++i)
-        vkDestroyImageView(device, swapImageViews[i], nullptr);
-    delete[] swapImageViews;
-    delete[] swapImages;
+    vkDestroySwapchainKHR(device, swapchain.swapchain, nullptr);
+    for(uint32_t i = 0; i < swapchain.swapImageViewsCount; ++i)
+        vkDestroyImageView(device, swapchain.swapImageViews[i], nullptr);
+    delete[] swapchain.swapImageViews;
+    delete[] swapchain.swapImages;
 }
 
 ///////////////////////////////////////////////////////////

@@ -1,14 +1,23 @@
 #pragma once
 
 #include "vuk/Vulkan.hpp"
+#include "vuk/Context/Physical.hpp"
 
 ///////////////////////////////////////////////////////////
 
 namespace mini::vuk {
 
+////////////////////////////////////////////////////////////
+
+struct Device
+{
+    VkDevice device;
+    VkQueue  queue;
+};
+
 ///////////////////////////////////////////////////////////
 
-static void CreateDevice(VkDevice& device, uint32_t queueIndex, VkPhysicalDevice& physical, VkQueue& queue)
+static void CreateDevice(Device& device, Physical& physical)
 {
     float priorities { 1.f };
     VkDeviceQueueCreateInfo const queueInfo
@@ -16,7 +25,7 @@ static void CreateDevice(VkDevice& device, uint32_t queueIndex, VkPhysicalDevice
         .sType             = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
         .pNext             = nullptr,
         .flags             = 0,
-        .queueFamilyIndex  = queueIndex,
+        .queueFamilyIndex  = physical.queueIndex,
         .queueCount        = 1,
         .pQueuePriorities  = &priorities
     };
@@ -42,17 +51,17 @@ static void CreateDevice(VkDevice& device, uint32_t queueIndex, VkPhysicalDevice
         .pEnabledFeatures           = &deviceFeatures
     };
 
-    VkCheck(vkCreateDevice(physical, &deviceInfo, nullptr, &device));
-    vkGetDeviceQueue(device, queueIndex, 0, &queue);
+    VkCheck(vkCreateDevice(physical.physical, &deviceInfo, nullptr, &device.device));
+    vkGetDeviceQueue(device.device, physical.queueIndex, 0, &device.queue);
 
-    g_devicePtr = device;
+    g_devicePtr = device.device;
 }
 
 ///////////////////////////////////////////////////////////
 
-static void DestroyDevice(VkDevice device)
+static void DestroyDevice(Device& device)
 {
-    vkDestroyDevice(device, nullptr);
+    vkDestroyDevice(device.device, nullptr);
 }
 
 ///////////////////////////////////////////////////////////
