@@ -16,6 +16,10 @@ struct Swapchain
     uint32_t swapImageViewsCount;
     VkImageView* swapImageViews;
 
+    uint32_t width;
+    uint32_t height;
+    VkFormat format = VK_FORMAT_B8G8R8A8_SRGB;
+
     void Create(Device&, Surface&, VkPresentModeKHR);
     void Destroy();
 };
@@ -24,7 +28,10 @@ struct Swapchain
 
 void Swapchain::Create(Device& device, Surface& surface, VkPresentModeKHR presentMode)
 {
-    constexpr VkFormat format = VK_FORMAT_B8G8R8A8_SRGB;
+    
+
+    width  = surface.capabilities.currentExtent.width;
+    height = surface.capabilities.currentExtent.height;
 
     VkSwapchainCreateInfoKHR const swapInfo
     {

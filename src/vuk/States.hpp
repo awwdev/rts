@@ -11,15 +11,15 @@ struct States
 {
     DefaultState defaultState;
 
-    void Create();
+    void Create(Context&);
     void Destroy();
 };
 
 ////////////////////////////////////////////////////////////
 
-void States::Create()
+void States::Create(Context& context)
 {
-    defaultState.Create();
+    defaultState.Create(context);
 }
 
 ////////////////////////////////////////////////////////////

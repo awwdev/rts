@@ -1,5 +1,6 @@
 #pragma once
 
+#include "vuk/Context/Swapchain.hpp"
 #include "vuk/Wrappers/Buffer.hpp"
 #include "vuk/Wrappers/Pipeline.hpp"
 #include "vuk/Wrappers/RenderPass.hpp"
@@ -16,17 +17,17 @@ struct DefaultState
     RenderPass renderPass;
     Shader shader;
 
-    void Create();
+    void Create(Context&);
     void Destroy();
 };
 
 ////////////////////////////////////////////////////////////
 
-void DefaultState::Create()
+void DefaultState::Create(Context& context)
 {
-    shader.Create("res/Shaders/default.vert", "res/Shaders/default.frag");
-    renderPass.Create();
-    pipeline.Create();
+    shader.Create("res/Shaders/default.vert.spv", "res/Shaders/default.frag.spv");
+    renderPass.Create(context.swapchain);
+    pipeline.Create(shader, renderPass);
 }
 
 ////////////////////////////////////////////////////////////

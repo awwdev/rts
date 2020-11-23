@@ -11,14 +11,14 @@ struct Presentation
 {
     VkSemaphore semaphore;
 
-    void Create();
+    void Create(Context&);
     void Destroy();
     void Present(Context&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void Presentation::Create()
+void Presentation::Create(Context&)
 {
     VkSemaphoreCreateInfo const semaphoreInfo {
         .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,

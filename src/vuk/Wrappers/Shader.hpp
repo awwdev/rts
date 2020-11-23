@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vuk/Context.hpp"
+#include "vuk/Vulkan.hpp"
 #include "com/Types.hpp"
 #include "com/Assert.hpp"
 #include <fstream>
@@ -14,10 +14,8 @@ inline VkPipelineShaderStageCreateInfo CreateShaderInfo(VkShaderStageFlagBits, V
 
 struct Shader
 {
-    VkShaderModule moduleVert;
-    VkShaderModule moduleFrag;
-    VkPipelineShaderStageCreateInfo infoVert;
-    VkPipelineShaderStageCreateInfo infoFrag;
+    VkShaderModule modules [2];
+    VkPipelineShaderStageCreateInfo stageInfos [2];
 
     void Create(chars_t, chars_t);
     void Destroy();
@@ -27,18 +25,18 @@ struct Shader
 
 void Shader::Create(chars_t pathVert, chars_t pathFrag)
 {
-    moduleVert = LoadShaderModule(pathVert);
-    moduleFrag = LoadShaderModule(pathFrag);
-    infoVert = CreateShaderInfo(VK_SHADER_STAGE_VERTEX_BIT, moduleVert);
-    infoFrag = CreateShaderInfo(VK_SHADER_STAGE_FRAGMENT_BIT, moduleVert);
+    modules[0] = LoadShaderModule(pathVert);
+    modules[1] = LoadShaderModule(pathFrag);
+    stageInfos[0]   = CreateShaderInfo(VK_SHADER_STAGE_VERTEX_BIT, modules[0]);
+    stageInfos[1]   = CreateShaderInfo(VK_SHADER_STAGE_FRAGMENT_BIT, modules[1]);
 }
 
 ////////////////////////////////////////////////////////////
 
 void Shader::Destroy()
 {
-    vkDestroyShaderModule(g_devicePtr, moduleVert, nullptr);    
-    vkDestroyShaderModule(g_devicePtr, moduleFrag, nullptr);    
+    vkDestroyShaderModule(g_devicePtr, modules[0], nullptr);    
+    vkDestroyShaderModule(g_devicePtr, modules[1], nullptr);    
 }
 
 ////////////////////////////////////////////////////////////
@@ -60,7 +58,7 @@ inline VkShaderModule LoadShaderModule(chars_t path)
         .sType      = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
         .pNext      = nullptr,
         .flags      = 0,
-        .codeSize   = size,
+        .codeSize   = (uint32_t)size,
         .pCode      = reinterpret_cast<uint32_t const*>(buffer)
     };
     VkCheck(vkCreateShaderModule(g_devicePtr, &moduleInfo, nullptr, &mod));

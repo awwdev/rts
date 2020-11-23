@@ -18,6 +18,7 @@ struct Renderer
 
     Renderer(WindowHandle const&);
     ~Renderer(); 
+    void Update();
 };
 
 ///////////////////////////////////////////////////////////
@@ -25,8 +26,8 @@ struct Renderer
 Renderer::Renderer(WindowHandle const& wndHandle)
 {
     context.Create(wndHandle);
-    presentation.Create();
-    states.Create(); 
+    presentation.Create(context);
+    states.Create(context); 
 }
 
 ///////////////////////////////////////////////////////////
@@ -39,5 +40,12 @@ Renderer::~Renderer()
 }
 
 ////////////////////////////////////////////////////////////
+
+void Renderer::Update()
+{
+    //presentation.Present(context);
+}
+
+///////////////////////////////////////////////////////////
 
 }//ns

@@ -16,7 +16,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     while(app::isAppRunning)
     {
         window.PollEvents(); 
-        //presentation.Present(context);
+        renderer.Update();
     }
 
     return EXIT_SUCCESS;
