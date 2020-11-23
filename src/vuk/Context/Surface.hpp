@@ -22,7 +22,7 @@ struct Surface
 
 void Surface::Create(Instance& instance, Physical& physical, WindowHandle const& wndHandle)
 {
-    #ifdef _WIN32
+#ifdef _WIN32
     VkWin32SurfaceCreateInfoKHR const surfInfo 
     {
         .sType      = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR,
@@ -32,9 +32,9 @@ void Surface::Create(Instance& instance, Physical& physical, WindowHandle const&
         .hwnd       = wndHandle.hWnd,
     };
     VkCheck(vkCreateWin32SurfaceKHR(instance.instance, &surfInfo, nullptr, &surface));
-    #endif
+#endif
 
-    #ifdef __linux__
+#ifdef __linux__
     VkXlibSurfaceCreateInfoKHR const surfInfo 
     {
         .sType  = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR,
@@ -44,7 +44,7 @@ void Surface::Create(Instance& instance, Physical& physical, WindowHandle const&
         .window = wndHandle.window
     };
     VkCheck(vkCreateXlibSurfaceKHR(instance.instance, &surfInfo, nullptr, &surface));
-    #endif
+#endif
 
     VkBool32 supported;
     VkCheck(vkGetPhysicalDeviceSurfaceSupportKHR(physical.physical, physical.queueIndex, surface, &supported));
