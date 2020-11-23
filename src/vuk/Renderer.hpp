@@ -4,6 +4,8 @@
 #include "vuk/Presentation.hpp"
 #include "vuk/States.hpp"
 
+#include <thread>
+
 namespace mini::vuk {
 
 ///////////////////////////////////////////////////////////
@@ -22,9 +24,11 @@ struct Renderer
 
 Renderer::Renderer(WindowHandle const& wndHandle)
 {
-    context.Create(wndHandle);
-    presentation.Create();
-    states.Create();
+    //std::thread { [&] {
+        context.Create(wndHandle);
+        presentation.Create();
+        states.Create();
+    //}}.detach();    
 }
 
 ///////////////////////////////////////////////////////////

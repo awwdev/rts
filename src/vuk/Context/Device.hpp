@@ -3,19 +3,22 @@
 #include "vuk/Vulkan.hpp"
 #include "vuk/Context/Physical.hpp"
 
-///////////////////////////////////////////////////////////
-
 namespace mini::vuk {
-struct Device {
-
-////////////////////////////////////////////////////////////
-
-VkDevice device;
-VkQueue  queue;
 
 ///////////////////////////////////////////////////////////
 
-void Create(Physical& physical)
+struct Device 
+{
+    VkDevice device;
+    VkQueue  queue;
+
+    void Create(Physical&);
+    void Destroy();
+};
+
+///////////////////////////////////////////////////////////
+
+void Device::Create(Physical& physical)
 {
     float priorities { 1.f };
     VkDeviceQueueCreateInfo const queueInfo
@@ -57,7 +60,7 @@ void Create(Physical& physical)
 
 ///////////////////////////////////////////////////////////
 
-void Destroy()
+void Device::Destroy()
 {
     vkDestroyDevice(device, nullptr);
     g_devicePtr = nullptr;
@@ -65,5 +68,4 @@ void Destroy()
 
 ///////////////////////////////////////////////////////////
 
-};
 }//ns

@@ -1,8 +1,7 @@
 #pragma once
 
 #include "vuk/Context.hpp"
-#include "vuk/Presentation.hpp"
-#include "vuk/States.hpp"
+#include "vuk/States/DefaultState.hpp"
 
 namespace mini::vuk {
 
@@ -10,6 +9,8 @@ namespace mini::vuk {
 
 struct States
 {
+    DefaultState defaultState;
+
     void Create();
     void Destroy();
 };
@@ -18,14 +19,14 @@ struct States
 
 void States::Create()
 {
-
+    defaultState.Create();
 }
 
 ////////////////////////////////////////////////////////////
 
 void States::Destroy()
 {
-
+    defaultState.Destroy();
 }
 
 ////////////////////////////////////////////////////////////
