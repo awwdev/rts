@@ -25,9 +25,9 @@ VkImageView* swapImageViews;
 void Create(
 Device& device, 
 Surface& surface, 
-VkFormat format,
-VkColorSpaceKHR colorSpace,
-VkPresentModeKHR presentMode)
+VkPresentModeKHR presentMode,
+VkFormat format = VK_FORMAT_B8G8R8A8_SRGB,
+VkColorSpaceKHR colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
 {
     VkSwapchainCreateInfoKHR const swapInfo
     {
@@ -60,7 +60,7 @@ VkPresentModeKHR presentMode)
 
     swapImageViewsCount = swapImagesCount;
     swapImageViews = new VkImageView[swapImageViewsCount];
-    com::Print("swapImagesCount", swapImagesCount);
+    //com::Print("swapImagesCount", swapImagesCount);
 
     for (u32 i = 0; i < swapImagesCount; ++i) 
     {
@@ -104,4 +104,7 @@ void Destroy()
 ///////////////////////////////////////////////////////////
 
 };
+
+///////////////////////////////////////////////////////////
+
 }//ns
