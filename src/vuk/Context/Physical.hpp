@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vuk/Vulkan.hpp"
+#include "vuk/Context/Instance.hpp"
 #include "com/Types.hpp"
 #include "com/Print.hpp"
 
@@ -9,16 +10,6 @@
 namespace mini::vuk {
 
 ///////////////////////////////////////////////////////////
-
-struct Physical
-{
-    VkPhysicalDevice physical;
-    VkPhysicalDeviceProperties physicalProps;
-    VkPhysicalDeviceMemoryProperties memoryProps;
-    uint32_t queueIndex;
-};
-
-////////////////////////////////////////////////////////////
 
 inline auto Get_VkPhysicalDevice(VkInstance instance)
 {
@@ -70,7 +61,7 @@ inline void Print_VK_VERSION(VkPhysicalDeviceProperties& physicalProps)
     );
 }
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 inline void Print_VkPhysicalDeviceProperties(VkPhysicalDeviceProperties& physicalProps)
 {
@@ -121,15 +112,26 @@ inline void Print_VkPhysicalDeviceMemoryProperties(VkPhysicalDeviceMemoryPropert
 
 ///////////////////////////////////////////////////////////
 
-static void CreatePhysical(VkInstance instance, Physical& physical)
+struct Physical {
+
+///////////////////////////////////////////////////////////
+
+VkPhysicalDevice physical;
+VkPhysicalDeviceProperties physicalProps;
+VkPhysicalDeviceMemoryProperties memoryProps;
+uint32_t queueIndex;
+
+////////////////////////////////////////////////////////////
+
+void Create(Instance& instance)
 {
-    physical.physical   = Get_VkPhysicalDevice(instance);
-    physical.queueIndex = Get_QueueIndex(physical.physical);
+    physical   = Get_VkPhysicalDevice(instance.instance);
+    queueIndex = Get_QueueIndex(physical);
 
-    vkGetPhysicalDeviceProperties(physical.physical, &physical.physicalProps);
-    vkGetPhysicalDeviceMemoryProperties(physical.physical, &physical.memoryProps);
+    vkGetPhysicalDeviceProperties(physical, &physicalProps);
+    vkGetPhysicalDeviceMemoryProperties(physical, &memoryProps);
 
-    Print_VK_VERSION(physical.physicalProps);
+    Print_VK_VERSION(physicalProps);
     //Print_VkPhysicalDeviceProperties(physicalProps);
     //Print_VkPhysicalDeviceMemoryProperties(memoryProps);
     //Print_VkPhysicalDeviceFeatures(physical);
@@ -137,4 +139,5 @@ static void CreatePhysical(VkInstance instance, Physical& physical)
 
 ///////////////////////////////////////////////////////////
 
+};
 }//ns

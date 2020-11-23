@@ -6,18 +6,16 @@
 ///////////////////////////////////////////////////////////
 
 namespace mini::vuk {
+struct Device {
 
 ////////////////////////////////////////////////////////////
 
-struct Device
-{
-    VkDevice device;
-    VkQueue  queue;
-};
+VkDevice device;
+VkQueue  queue;
 
 ///////////////////////////////////////////////////////////
 
-static void CreateDevice(Device& device, Physical& physical)
+void Create(Physical& physical)
 {
     float priorities { 1.f };
     VkDeviceQueueCreateInfo const queueInfo
@@ -51,19 +49,21 @@ static void CreateDevice(Device& device, Physical& physical)
         .pEnabledFeatures           = &deviceFeatures
     };
 
-    VkCheck(vkCreateDevice(physical.physical, &deviceInfo, nullptr, &device.device));
-    vkGetDeviceQueue(device.device, physical.queueIndex, 0, &device.queue);
+    VkCheck(vkCreateDevice(physical.physical, &deviceInfo, nullptr, &device));
+    vkGetDeviceQueue(device, physical.queueIndex, 0, &queue);
 
-    g_devicePtr = device.device;
+    g_devicePtr = device;
 }
 
 ///////////////////////////////////////////////////////////
 
-static void DestroyDevice(Device& device)
+void Destroy()
 {
-    vkDestroyDevice(device.device, nullptr);
+    vkDestroyDevice(device, nullptr);
+    g_devicePtr = nullptr;
 }
 
 ///////////////////////////////////////////////////////////
 
+};
 }//ns

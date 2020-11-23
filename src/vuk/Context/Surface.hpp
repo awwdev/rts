@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vuk/Vulkan.hpp"
+#include "vuk/Context/Instance.hpp"
 #include "vuk/Context/Physical.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -29,14 +30,6 @@ struct WindowHandle
 
 ///////////////////////////////////////////////////////////
 
-struct Surface
-{
-    VkSurfaceKHR surface;
-    VkSurfaceCapabilitiesKHR capabilities;
-};
-
-////////////////////////////////////////////////////////////
-
 inline void Print_SurfaceCapabilities(VkSurfaceCapabilitiesKHR& surfaceCapabilities)
 {
     com::Print(com::ConsoleColor::Yellow, "surfaceCapabilities");
@@ -44,13 +37,18 @@ inline void Print_SurfaceCapabilities(VkSurfaceCapabilitiesKHR& surfaceCapabilit
     com::Print("maxImageExtent", surfaceCapabilities.maxImageExtent.width, surfaceCapabilities.maxImageExtent.height);
 }
 
+////////////////////////////////////////////////////////////
+
+struct Surface {
+
 ///////////////////////////////////////////////////////////
 
-static void CreateSurface(
-Surface& surface, 
-VkInstance instance, 
-Physical& physical, 
-WindowHandle const& wndHandle)
+VkSurfaceKHR surface;
+VkSurfaceCapabilitiesKHR capabilities;
+
+///////////////////////////////////////////////////////////
+
+void Create(Instance& instance, Physical& physical, WindowHandle const& wndHandle)
 {
     #ifdef _WIN32
     VkWin32SurfaceCreateInfoKHR const surfInfo 
@@ -61,7 +59,7 @@ WindowHandle const& wndHandle)
         .hinstance  = wndHandle.hInstance,
         .hwnd       = wndHandle.hWnd,
     };
-    VkCheck(vkCreateWin32SurfaceKHR(instance, &surfInfo, nullptr, &surface.surface));
+    VkCheck(vkCreateWin32SurfaceKHR(instance.instance, &surfInfo, nullptr, &surface));
     #endif
 
     #ifdef __linux__
@@ -73,24 +71,25 @@ WindowHandle const& wndHandle)
         .dpy    = wndHandle.display,
         .window = wndHandle.window
     };
-    VkCheck(vkCreateXlibSurfaceKHR(instance, &surfInfo, nullptr, &surface));
+    VkCheck(vkCreateXlibSurfaceKHR(instance.instance, &surfInfo, nullptr, &surface));
     #endif
 
     VkBool32 supported;
-    VkCheck(vkGetPhysicalDeviceSurfaceSupportKHR(physical.physical, physical.queueIndex, surface.surface, &supported));
+    VkCheck(vkGetPhysicalDeviceSurfaceSupportKHR(physical.physical, physical.queueIndex, surface, &supported));
     //com::PrintBool(supported, "vkGetPhysicalDeviceSurfaceSupportKHR");
 
-    VkCheck(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical.physical, surface.surface, &surface.capabilities)); 
+    VkCheck(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical.physical, surface, &capabilities)); 
     //Print_SurfaceCapabilities(surfaceCapabilities);
 }
 
 ///////////////////////////////////////////////////////////
 
-static void DestroySurface(VkInstance instance, Surface& surface)
+void Destroy(Instance& instance)
 {
-    vkDestroySurfaceKHR(instance, surface.surface, nullptr);
+    vkDestroySurfaceKHR(instance.instance, surface, nullptr);
 }
 
 ///////////////////////////////////////////////////////////
 
+};
 }//ns

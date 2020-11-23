@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vuk/Vulkan.hpp"
+#include "vuk/Context/Device.hpp"
 #include "vuk/Context/Surface.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -9,28 +10,27 @@ namespace mini::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct Swapchain
-{
-    VkSwapchainKHR swapchain;
-    uint32_t swapImagesCount;
-    VkImage* swapImages;
-    uint32_t swapImageViewsCount;
-    VkImageView* swapImageViews;
-};
+struct Swapchain {
 
 ///////////////////////////////////////////////////////////
 
-static void CreateSwapchain(
-VkDevice device, 
-Swapchain& swapchain,
+VkSwapchainKHR swapchain;
+uint32_t swapImagesCount;
+VkImage* swapImages;
+uint32_t swapImageViewsCount;
+VkImageView* swapImageViews;
+
+///////////////////////////////////////////////////////////
+
+void Create(
+Device& device, 
 Surface& surface, 
 VkFormat format,
 VkColorSpaceKHR colorSpace,
 VkPresentModeKHR presentMode)
 {
-
     VkSwapchainCreateInfoKHR const swapInfo
-        {
+    {
         .sType                  = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
         .pNext                  = nullptr,
         .flags                  = 0,
@@ -51,25 +51,25 @@ VkPresentModeKHR presentMode)
         .oldSwapchain           = nullptr
     };
 
-    VkCheck(vkCreateSwapchainKHR(device, &swapInfo, nullptr, &swapchain.swapchain));
+    VkCheck(vkCreateSwapchainKHR(device.device, &swapInfo, nullptr, &swapchain));
 
 
-    VkCheck(vkGetSwapchainImagesKHR(device, swapchain.swapchain, &swapchain.swapImagesCount, nullptr));
-    swapchain.swapImages = new VkImage[swapchain.swapImagesCount];
-    VkCheck(vkGetSwapchainImagesKHR(device, swapchain.swapchain, &swapchain.swapImagesCount, swapchain.swapImages));
+    VkCheck(vkGetSwapchainImagesKHR(device.device, swapchain, &swapImagesCount, nullptr));
+    swapImages = new VkImage[swapImagesCount];
+    VkCheck(vkGetSwapchainImagesKHR(device.device, swapchain, &swapImagesCount, swapImages));
 
-    swapchain.swapImageViewsCount = swapchain.swapImagesCount;
-    swapchain.swapImageViews = new VkImageView[swapchain.swapImageViewsCount];
-    com::Print("swapImagesCount", swapchain.swapImagesCount);
+    swapImageViewsCount = swapImagesCount;
+    swapImageViews = new VkImageView[swapImageViewsCount];
+    com::Print("swapImagesCount", swapImagesCount);
 
-    for (u32 i = 0; i < swapchain.swapImagesCount; ++i) 
+    for (u32 i = 0; i < swapImagesCount; ++i) 
     {
         VkImageViewCreateInfo const viewInfo 
         {
             .sType      = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
             .pNext      = nullptr,
             .flags      = 0,
-            .image      = swapchain.swapImages[i],
+            .image      = swapImages[i],
             .viewType   = VK_IMAGE_VIEW_TYPE_2D,
             .format     = format,
             .components = {
@@ -86,21 +86,22 @@ VkPresentModeKHR presentMode)
                 .layerCount     = 1
             }
         };
-        VkCheck(vkCreateImageView(device, &viewInfo, nullptr, &swapchain.swapImageViews[i]));
+        VkCheck(vkCreateImageView(device.device, &viewInfo, nullptr, &swapImageViews[i]));
     }
 }
 
 ///////////////////////////////////////////////////////////
 
-static void DestroySwapchain(VkDevice device, Swapchain swapchain)
+void Destroy()
 {
-    vkDestroySwapchainKHR(device, swapchain.swapchain, nullptr);
-    for(uint32_t i = 0; i < swapchain.swapImageViewsCount; ++i)
-        vkDestroyImageView(device, swapchain.swapImageViews[i], nullptr);
-    delete[] swapchain.swapImageViews;
-    delete[] swapchain.swapImages;
+    vkDestroySwapchainKHR(g_devicePtr, swapchain, nullptr);
+    for(uint32_t i = 0; i < swapImageViewsCount; ++i)
+        vkDestroyImageView(g_devicePtr, swapImageViews[i], nullptr);
+    delete[] swapImageViews;
+    delete[] swapImages;
 }
 
 ///////////////////////////////////////////////////////////
 
+};
 }//ns

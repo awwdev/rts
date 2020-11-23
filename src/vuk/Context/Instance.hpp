@@ -9,14 +9,6 @@ namespace mini::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct Instance
-{
-    VkInstance instance;
-    VkDebugUtilsMessengerEXT debugMessenger;
-};
-
-///////////////////////////////////////////////////////////
-
 static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 VkDebugUtilsMessageTypeFlagsEXT,
@@ -38,20 +30,6 @@ void*)
 }
 
 ///////////////////////////////////////////////////////////
-
-inline void Print_VkLayerProperties()
-{
-    uint32_t count;
-    VkLayerProperties* layerProps;
-    vkEnumerateInstanceLayerProperties(&count, nullptr);
-    layerProps = new VkLayerProperties [count];
-    vkEnumerateInstanceLayerProperties(&count, layerProps);
-    for(uint32_t i = 0; i < count; ++i)
-        com::Print(layerProps[i].layerName);
-    delete[] layerProps;
-}
-
-////////////////////////////////////////////////////////////
 
 inline auto Create_VkDebugUtilsMessengerCreateInfoEXT()
 {
@@ -76,15 +54,37 @@ inline auto Create_VkDebugUtilsMessengerCreateInfoEXT()
 
 ///////////////////////////////////////////////////////////
 
-static void CreateInstance(
-Instance& instance, 
+inline void Print_VkLayerProperties()
+{
+    uint32_t count;
+    VkLayerProperties* layerProps;
+    vkEnumerateInstanceLayerProperties(&count, nullptr);
+    layerProps = new VkLayerProperties [count];
+    vkEnumerateInstanceLayerProperties(&count, layerProps);
+    for(uint32_t i = 0; i < count; ++i)
+        com::Print(layerProps[i].layerName);
+    delete[] layerProps;
+}
+
+////////////////////////////////////////////////////////////
+
+struct Instance {
+
+///////////////////////////////////////////////////////////
+
+VkInstance instance;
+VkDebugUtilsMessengerEXT debugMessenger;
+
+///////////////////////////////////////////////////////////
+
+void Create(
 uint32_t  apiVersion = VK_API_VERSION_1_0,
 chars_t   appName = "mini", 
 uint32_t  appVersion = 0,
 chars_t   engineName = "mini",
 uint32_t  engineVersion = 0)
 {
-    VkApplicationInfo const appInfo 
+     VkApplicationInfo const appInfo 
     {
         .sType                  = VK_STRUCTURE_TYPE_APPLICATION_INFO,
         .pNext                  = nullptr,
@@ -132,21 +132,22 @@ uint32_t  engineVersion = 0)
         .ppEnabledExtensionNames = extensions
     };
 
-    VkCheck(vkCreateInstance(&instInfo, nullptr, &instance.instance));
+    VkCheck(vkCreateInstance(&instInfo, nullptr, &instance));
 
-    ((PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance.instance, "vkCreateDebugUtilsMessengerEXT"))
-    (instance.instance, &debugCreateInfo, nullptr, &instance.debugMessenger);
+    ((PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT"))
+    (instance, &debugCreateInfo, nullptr, &debugMessenger);
 }
 
 ///////////////////////////////////////////////////////////
 
-static void DestroyInstance(Instance& instance)
+void Destroy()
 {
     ((PFN_vkDestroyDebugUtilsMessengerEXT) 
-    vkGetInstanceProcAddr(instance.instance, "vkDestroyDebugUtilsMessengerEXT"))(instance.instance, instance.debugMessenger, nullptr);
-    vkDestroyInstance(instance.instance, nullptr);
+    vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT"))(instance, debugMessenger, nullptr);
+    vkDestroyInstance(instance, nullptr);
 }
 
 ///////////////////////////////////////////////////////////
 
+};
 }//ns

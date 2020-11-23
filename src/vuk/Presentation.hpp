@@ -26,6 +26,13 @@ Presentation()
 
 ///////////////////////////////////////////////////////////
 
+~Presentation()
+{
+    vkDestroySemaphore(g_devicePtr, semaphore, nullptr);
+}
+
+///////////////////////////////////////////////////////////
+
 void Present(Context& context)
 {
     uint32_t imageIndex = 0;
