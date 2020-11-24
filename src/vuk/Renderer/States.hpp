@@ -14,6 +14,7 @@ struct States
 
     void Create(Context&);
     void Destroy();
+    void Record(Commands&, uint32_t);
 };
 
 ////////////////////////////////////////////////////////////
@@ -31,5 +32,12 @@ void States::Destroy()
 }
 
 ////////////////////////////////////////////////////////////
+
+void States::Record(Commands& commands, uint32_t imageIndex)
+{
+    defaultState.Record(commands, imageIndex);
+}
+
+///////////////////////////////////////////////////////////
 
 }//ns

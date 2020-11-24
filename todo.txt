@@ -1,3 +1,2 @@
-- renderpass, pipeline, shader, commands
 - input events (thread?)
 - recreate vk resources
