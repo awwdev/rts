@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vuk/Vulkan.hpp"
+#include "com/SimpleArray.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -30,9 +31,10 @@ void*)
 
 ///////////////////////////////////////////////////////////
 
-auto Create_VkDebugUtilsMessengerCreateInfoEXT()
+VkDebugUtilsMessengerCreateInfoEXT 
+Instance::DebugInfo()
 {
-    return VkDebugUtilsMessengerCreateInfoEXT
+    return 
     {
         .sType                  = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
         .pNext                  = nullptr,
@@ -48,22 +50,18 @@ auto Create_VkDebugUtilsMessengerCreateInfoEXT()
             VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
         .pfnUserCallback        = DebugCallback,
         .pUserData              = nullptr
-
     };
 }
 
 ///////////////////////////////////////////////////////////
 
-inline void Print_VkLayerProperties()
+void Instance::PrintLayers()
 {
-    uint32_t count;
-    VkLayerProperties* layerProps;
-    vkEnumerateInstanceLayerProperties(&count, nullptr);
-    layerProps = new VkLayerProperties [count];
-    vkEnumerateInstanceLayerProperties(&count, layerProps);
-    for(uint32_t i = 0; i < count; ++i)
-        com::Print(layerProps[i].layerName);
-    delete[] layerProps;
+    com::SimpleArray<VkLayerProperties, 20> layers;
+    vkEnumerateInstanceLayerProperties(&layers.count, nullptr);
+    vkEnumerateInstanceLayerProperties(&layers.count, layers.data);
+    for(uint32_t i = 0; i < layers.count; ++i)
+        com::Print(layers[i].layerName);
 }
 
 ///////////////////////////////////////////////////////////

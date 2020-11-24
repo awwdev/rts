@@ -2,6 +2,7 @@
 
 #include "vuk/Vulkan.hpp"
 #include "vuk/Context/Swapchain.hpp"
+#include "com/SimpleArray.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -16,10 +17,8 @@ struct RenderPass
     uint32_t height;
     VkFormat format;
 
-    uint32_t framebufferCount;
-    VkFramebuffer* framebuffers;
-    VkRenderPassBeginInfo* beginInfos;
-    VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT;
+    com::SimpleArray<VkFramebuffer, 4> framebuffers;
+    com::SimpleArray<VkRenderPassBeginInfo, 4> beginInfos;
 
     void Create(Swapchain&);
     void Destroy();
@@ -37,7 +36,7 @@ void RenderPass::Create(Swapchain& swapchain)
     {
         .flags          = 0,
         .format         = format, 
-        .samples        = sampleCount,
+        .samples        = VK_SAMPLE_COUNT_1_BIT,
         .loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR,
         .storeOp        = VK_ATTACHMENT_STORE_OP_STORE,
         .stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE,
@@ -52,7 +51,7 @@ void RenderPass::Create(Swapchain& swapchain)
         .layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
     };
 
-    VkSubpassDescription subpassDesc 
+    VkSubpassDescription subpass 
     {
         .flags                   = 0,
         .pipelineBindPoint       = VK_PIPELINE_BIND_POINT_GRAPHICS,
@@ -66,26 +65,15 @@ void RenderPass::Create(Swapchain& swapchain)
         .pPreserveAttachments    = nullptr
     };
 
-    const VkSubpassDependency dependencies []
+    VkSubpassDependency dependency 
     {
-        {
-            .srcSubpass         = VK_SUBPASS_EXTERNAL,
-            .dstSubpass         = 0,
-            .srcStageMask       = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-            .dstStageMask       = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            .srcAccessMask      = VK_ACCESS_MEMORY_READ_BIT,
-            .dstAccessMask      = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-            .dependencyFlags    = VK_DEPENDENCY_BY_REGION_BIT,
-        },
-        {
-            .srcSubpass         = 0,
-            .dstSubpass         = VK_SUBPASS_EXTERNAL,
-            .srcStageMask       = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-            .dstStageMask       = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-            .srcAccessMask      = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-            .dstAccessMask      = VK_ACCESS_MEMORY_READ_BIT,
-            .dependencyFlags    = VK_DEPENDENCY_BY_REGION_BIT,
-        }
+        .srcSubpass = VK_SUBPASS_EXTERNAL,
+        .dstSubpass = 0,
+        .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+        .dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+        .srcAccessMask = 0,
+        .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+        .dependencyFlags = 0
     };
 
     VkRenderPassCreateInfo renderPassInfo 
@@ -96,17 +84,16 @@ void RenderPass::Create(Swapchain& swapchain)
         .attachmentCount = 1,
         .pAttachments    = &colorDesc,
         .subpassCount    = 1,
-        .pSubpasses      = &subpassDesc,
-        .dependencyCount = array_extent(dependencies),
-        .pDependencies   = dependencies
+        .pSubpasses      = &subpass,
+        .dependencyCount = 1,
+        .pDependencies   = &dependency
     };
     VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, nullptr, &renderPass));
 
-    framebufferCount = swapchain.swapImagesCount;
-    framebuffers = new VkFramebuffer[framebufferCount];
-    beginInfos = new VkRenderPassBeginInfo[framebufferCount];
+    framebuffers.count = swapchain.swapImagesCount;
+    beginInfos.count = swapchain.swapImagesCount;
 
-    for(uint32_t i = 0; i < framebufferCount; ++i)
+    for(uint32_t i = 0; i < swapchain.swapImagesCount; ++i)
     {
         VkFramebufferCreateInfo framebufferInfo 
         {
@@ -144,11 +131,17 @@ void RenderPass::Create(Swapchain& swapchain)
 void RenderPass::Destroy()
 {
     vkDestroyRenderPass(g_devicePtr, renderPass, nullptr);
-    for(uint32_t i = 0; i < framebufferCount; ++i)
+    FOR_SIMPLE_ARRAY(framebuffers, i)
     {
         vkDestroyFramebuffer(g_devicePtr, framebuffers[i], nullptr);
+        framebuffers[i] = nullptr;
     }
-    delete[] framebuffers;
+    framebuffers.count = 0;
+    FOR_SIMPLE_ARRAY(beginInfos, i)
+    {
+        beginInfos[i] = {};
+    }
+    beginInfos.count = 0;
 }
 
 ////////////////////////////////////////////////////////////

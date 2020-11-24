@@ -24,6 +24,9 @@ struct Pipeline
 
 void Pipeline::Create(Shader& shader, RenderPass& renderPass)
 {
+    auto layoutInfo = PipelineLayout();
+    VkCheck(vkCreatePipelineLayout(g_devicePtr, &layoutInfo, nullptr, &layout));
+
     auto vertexInput = VertexInput();
     auto inputAssembly = InputAssembly();
     auto viewportState = ViewportState(renderPass.width, renderPass.height);
@@ -31,9 +34,6 @@ void Pipeline::Create(Shader& shader, RenderPass& renderPass)
     auto rasterization = Rasterization();
     auto depthStencil = DepthStencil();
     auto blendState = BlendStateInfo();
-    auto layoutInfo = PipelineLayout();
-   
-    VkCheck(vkCreatePipelineLayout(g_devicePtr, &layoutInfo, nullptr, &layout));
 
     VkGraphicsPipelineCreateInfo pipelineInfo
     {

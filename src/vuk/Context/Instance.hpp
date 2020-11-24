@@ -1,7 +1,6 @@
 #pragma once
 
 #include "vuk/Vulkan.hpp"
-#include "vuk/Context/InstanceExt.hpp"
 #include "com/Types.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -17,6 +16,9 @@ struct Instance
 
     void Create();
     void Destroy();
+
+    static VkDebugUtilsMessengerCreateInfoEXT DebugInfo();
+    static void PrintLayers();
 };
 
 ///////////////////////////////////////////////////////////
@@ -59,12 +61,12 @@ void Instance::Create()
         #endif
     };
 
-    auto debugCreateInfo = Create_VkDebugUtilsMessengerCreateInfoEXT();
+    auto debugInfo = DebugInfo();
 
     VkInstanceCreateInfo instInfo 
     {
         .sType                   = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-        .pNext                   = &debugCreateInfo, //so instance creation messages are handled
+        .pNext                   = &debugInfo, //so instance creation messages are handled
         .flags                   = 0,
         .pApplicationInfo        = &appInfo,
         .enabledLayerCount       = array_extent(layers), 
@@ -76,7 +78,7 @@ void Instance::Create()
     VkCheck(vkCreateInstance(&instInfo, nullptr, &instance));
 
     ((PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT"))
-    (instance, &debugCreateInfo, nullptr, &debugMessenger);
+    (instance, &debugInfo, nullptr, &debugMessenger);
 }
 
 ///////////////////////////////////////////////////////////
@@ -91,3 +93,5 @@ void Instance::Destroy()
 ///////////////////////////////////////////////////////////
 
 }//ns
+
+#include "vuk/Context/InstanceExt.hpp"

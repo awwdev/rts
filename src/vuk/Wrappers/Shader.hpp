@@ -9,9 +9,6 @@
 
 namespace mini::vuk {
 
-inline VkShaderModule LoadShaderModule(chars_t);
-inline VkPipelineShaderStageCreateInfo CreateShaderInfo(VkShaderStageFlagBits, VkShaderModule);
-
 ///////////////////////////////////////////////////////////
 
 struct Shader
@@ -21,6 +18,9 @@ struct Shader
 
     void Create(chars_t, chars_t);
     void Destroy();
+
+    static VkShaderModule LoadShaderModule(chars_t);
+    static VkPipelineShaderStageCreateInfo CreateShaderInfo(VkShaderStageFlagBits, VkShaderModule);
 };
 
 ////////////////////////////////////////////////////////////
@@ -29,8 +29,8 @@ void Shader::Create(chars_t pathVert, chars_t pathFrag)
 {
     modules[0] = LoadShaderModule(pathVert);
     modules[1] = LoadShaderModule(pathFrag);
-    stageInfos[0]   = CreateShaderInfo(VK_SHADER_STAGE_VERTEX_BIT, modules[0]);
-    stageInfos[1]   = CreateShaderInfo(VK_SHADER_STAGE_FRAGMENT_BIT, modules[1]);
+    stageInfos[0] = CreateShaderInfo(VK_SHADER_STAGE_VERTEX_BIT, modules[0]);
+    stageInfos[1] = CreateShaderInfo(VK_SHADER_STAGE_FRAGMENT_BIT, modules[1]);
 }
 
 ////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ void Shader::Destroy()
 
 ////////////////////////////////////////////////////////////
 
-inline VkShaderModule LoadShaderModule(chars_t path)
+VkShaderModule Shader::LoadShaderModule(chars_t path)
 {
     VkShaderModule mod;
 
@@ -71,7 +71,7 @@ inline VkShaderModule LoadShaderModule(chars_t path)
 
 ////////////////////////////////////////////////////////////
 
-inline VkPipelineShaderStageCreateInfo CreateShaderInfo(VkShaderStageFlagBits stage, VkShaderModule mod)
+VkPipelineShaderStageCreateInfo Shader::CreateShaderInfo(VkShaderStageFlagBits stage, VkShaderModule mod)
 {
     return {
         .sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,

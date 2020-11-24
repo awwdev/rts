@@ -50,7 +50,9 @@ struct ViewportStateInfo
 
 inline auto ViewportState(uint32_t width, uint32_t height)
 {
-    VkViewport viewport
+    ViewportStateInfo stateInfo;
+
+    stateInfo.viewport =
     {
         .x        = 0.f,
         .y        = 0.f,
@@ -60,27 +62,24 @@ inline auto ViewportState(uint32_t width, uint32_t height)
         .maxDepth = 1.f
     };
 
-    VkRect2D scissor 
+    stateInfo.scissor  =
     {
         .offset = VkOffset2D { 0, 0 },
-        .extent = VkExtent2D { 
-            width,
-            height 
-        }
+        .extent = VkExtent2D { width, height }
     };
 
-    VkPipelineViewportStateCreateInfo stateInfo
+    stateInfo.stateInfo = 
     {
         .sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
         .pNext         = nullptr,
         .flags         = 0,
         .viewportCount = 1, 
-        .pViewports    = &viewport,
+        .pViewports    = &stateInfo.viewport,
         .scissorCount  = 1,
-        .pScissors     = &scissor
+        .pScissors     = &stateInfo.scissor
     };
 
-    return ViewportStateInfo { viewport, scissor, stateInfo };
+    return stateInfo;
 }
 
 ///////////////////////////////////////////////////////////
@@ -156,23 +155,25 @@ struct BlendState
 
 inline auto BlendStateInfo()
 {
-    VkPipelineColorBlendAttachmentState blendAttachment
+    BlendState blendState;
+
+    blendState.attachment =
     {
-        .blendEnable                = VK_TRUE,
-        .srcColorBlendFactor        = VK_BLEND_FACTOR_SRC_ALPHA,
-        .dstColorBlendFactor        = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, 
-        .colorBlendOp               = VK_BLEND_OP_ADD,
-        .srcAlphaBlendFactor        = VK_BLEND_FACTOR_ONE,
-        .dstAlphaBlendFactor        = VK_BLEND_FACTOR_ZERO,
-        .alphaBlendOp               = VK_BLEND_OP_ADD,
-        .colorWriteMask             = 
+        .blendEnable          = VK_TRUE,
+        .srcColorBlendFactor  = VK_BLEND_FACTOR_SRC_ALPHA,
+        .dstColorBlendFactor  = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA, 
+        .colorBlendOp         = VK_BLEND_OP_ADD,
+        .srcAlphaBlendFactor  = VK_BLEND_FACTOR_ONE,
+        .dstAlphaBlendFactor  = VK_BLEND_FACTOR_ZERO,
+        .alphaBlendOp         = VK_BLEND_OP_ADD,
+        .colorWriteMask       = 
             VK_COLOR_COMPONENT_R_BIT | 
             VK_COLOR_COMPONENT_G_BIT | 
             VK_COLOR_COMPONENT_B_BIT | 
             VK_COLOR_COMPONENT_A_BIT
     };
     
-    VkPipelineColorBlendStateCreateInfo blendState
+    blendState.stateInfo =
     {
         .sType           = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
         .pNext           = nullptr,
@@ -180,11 +181,11 @@ inline auto BlendStateInfo()
         .logicOpEnable   = VK_FALSE,
         .logicOp         = VK_LOGIC_OP_COPY,
         .attachmentCount = 1,
-        .pAttachments    = &blendAttachment,
+        .pAttachments    = &blendState.attachment,
         .blendConstants  = { 0.f, 0.f, 0.f, 0.f }
     };
 
-    return BlendState { blendAttachment, blendState };
+    return blendState;
 }
 
 ////////////////////////////////////////////////////////////
