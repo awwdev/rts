@@ -1,12 +1,11 @@
 #pragma once
 
 #include "vuk/Vulkan.hpp"
+#include "vuk/Renderer/CommandsExt.hpp"
 
 ///////////////////////////////////////////////////////////
 
 namespace mini::vuk {
-
-inline VkCommandBufferBeginInfo CreateCmdBeginInfo(VkCommandBufferUsageFlags flags = 0);
 
 ////////////////////////////////////////////////////////////
 
@@ -50,18 +49,6 @@ void Commands::Destroy()
 {
     vkFreeCommandBuffers(g_devicePtr, pool, 1, &buffer);
     vkDestroyCommandPool(g_devicePtr, pool, nullptr);
-}
-
-///////////////////////////////////////////////////////////
-
-inline VkCommandBufferBeginInfo CreateCmdBeginInfo(VkCommandBufferUsageFlags flags)
-{
-    return {
-        .sType            = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-        .pNext            = nullptr,
-        .flags            = flags,
-        .pInheritanceInfo = nullptr
-    };
 }
 
 ///////////////////////////////////////////////////////////

@@ -20,7 +20,7 @@ struct Context
     Surface   surface;
     Swapchain swapchain;
 
-    void Create(WindowHandle const& wndHandle);
+    void Create(WindowHandle const&);
     void Destroy();
 };
 

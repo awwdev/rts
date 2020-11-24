@@ -53,7 +53,7 @@ void Presentation::Present(Context& context, Commands& commands, States& states)
     ));
 
     VkCheck(vkBeginCommandBuffer(commands.buffer, &commands.beginInfo));
-    vkCmdBeginRenderPass(commands.buffer, &states.defaultState.renderPass.beginInfos[0], VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdBeginRenderPass(commands.buffer, &states.defaultState.renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline(commands.buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, states.defaultState.pipeline.pipeline);
     vkCmdDraw(commands.buffer, 3, 1, 0, 0);
     vkCmdEndRenderPass(commands.buffer);

@@ -10,7 +10,7 @@ namespace mini::vuk {
 
 inline void DefaultShader(Shader& shader)
 {
-    shader.Create("res/Shaders/default.vert.spv", "res/Shaders/default.frag.spv");
+    shader.Create("res/Shaders/spv/default.vert.spv", "res/Shaders/spv/default.frag.spv");
 }
 
 ///////////////////////////////////////////////////////////

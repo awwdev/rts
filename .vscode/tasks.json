@@ -40,7 +40,7 @@
     "type": "shell",
     "options": {
         "env": {
-            "src":   "${workspaceFolder}\\res\\Shaders\\",
+            "res":   "${workspaceFolder}\\res\\Shaders\\",
             "glslc": "I:\\programs\\Vulkan 1.2.154.1\\Bin32\\"
         }
     }

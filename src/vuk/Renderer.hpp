@@ -47,7 +47,7 @@ Renderer::~Renderer()
 
 void Renderer::Update()
 {
-    //presentation.Present(context, commands, states);
+    presentation.Present(context, commands, states);
 }
 
 ///////////////////////////////////////////////////////////
