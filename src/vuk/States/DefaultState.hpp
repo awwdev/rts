@@ -1,10 +1,8 @@
 #pragma once
 
-#include "vuk/Context/Swapchain.hpp"
-#include "vuk/Wrappers/Buffer.hpp"
-#include "vuk/Wrappers/Pipeline.hpp"
-#include "vuk/Wrappers/RenderPass.hpp"
-#include "vuk/Wrappers/Shader.hpp"
+#include "vuk/States/DefaultShader.hpp"
+#include "vuk/States/DefaultPipeline.hpp"
+#include "vuk/States/DefaultRenderPass.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -14,7 +12,6 @@ namespace mini::vuk {
 
 struct DefaultState
 {
-    Buffer buffer;
     Pipeline pipeline;
     RenderPass renderPass;
     Shader shader;
@@ -27,9 +24,9 @@ struct DefaultState
 
 void DefaultState::Create(Context& context)
 {
-    shader.Create("res/Shaders/default.vert.spv", "res/Shaders/default.frag.spv");
-    renderPass.Create(context.swapchain);
-    pipeline.Create(shader, renderPass);
+    DefaultShader(shader);
+    DefaultRenderPass(renderPass, context.swapchain);
+    DefaultPipeline(pipeline, shader, renderPass);
 }
 
 ////////////////////////////////////////////////////////////

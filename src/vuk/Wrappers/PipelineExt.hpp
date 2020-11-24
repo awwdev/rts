@@ -206,4 +206,18 @@ inline auto PipelineLayout()
 
 ///////////////////////////////////////////////////////////
 
+struct PipelineInfo
+{
+    VkPipelineVertexInputStateCreateInfo vertexInput;
+    VkPipelineInputAssemblyStateCreateInfo inputAssembly;
+    ViewportStateInfo viewportState;
+    VkPipelineMultisampleStateCreateInfo multisampling;
+    VkPipelineRasterizationStateCreateInfo rasterization;
+    VkPipelineDepthStencilStateCreateInfo depthStencil;
+    BlendState blendState;
+    VkPipelineLayoutCreateInfo layoutInfo;
+};
+
+///////////////////////////////////////////////////////////
+
 }//ns
