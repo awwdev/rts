@@ -21,7 +21,7 @@ using f32 = float;
 using f64 = double;
 
 using chars_t = char const * const;
-using idx_t = u32; //because of STL and Vulkan
+using idx_t = u32; //unsigned because of STL and Vulkan
 
 ///////////////////////////////////////////////////////////
 
@@ -30,5 +30,7 @@ constexpr auto array_extent(auto const (&)[N])
 {
     return N;
 }
+
+///////////////////////////////////////////////////////////
 
 }//ns

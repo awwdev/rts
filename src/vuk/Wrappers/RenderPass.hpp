@@ -90,10 +90,11 @@ void RenderPass::Create(Swapchain& swapchain)
     };
     VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, nullptr, &renderPass));
 
-    framebuffers.count = swapchain.swapImagesCount;
-    beginInfos.count = swapchain.swapImagesCount;
+    auto count = swapchain.images.count;
+    framebuffers.count = count;
+    beginInfos.count = count;
 
-    for(uint32_t i = 0; i < swapchain.swapImagesCount; ++i)
+    for(uint32_t i = 0; i < count; ++i)
     {
         VkFramebufferCreateInfo framebufferInfo 
         {
@@ -102,7 +103,7 @@ void RenderPass::Create(Swapchain& swapchain)
             .flags           = 0,
             .renderPass      = renderPass,
             .attachmentCount = 1,
-            .pAttachments    = &swapchain.swapImageViews[i],
+            .pAttachments    = &swapchain.views[i],
             .width           = width,
             .height          = height,
             .layers          = 1

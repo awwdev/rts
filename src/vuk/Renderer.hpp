@@ -1,11 +1,9 @@
 #pragma once
 
-#include "vuk/Context.hpp"
-#include "vuk/Presentation.hpp"
-#include "vuk/States.hpp"
-#include "vuk/Commands.hpp"
-
-#include <thread>
+#include "vuk/Renderer/Context.hpp"
+#include "vuk/Renderer/Presentation.hpp"
+#include "vuk/Renderer/States.hpp"
+#include "vuk/Renderer/Commands.hpp"
 
 ///////////////////////////////////////////////////////////
 

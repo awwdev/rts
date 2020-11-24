@@ -1,6 +1,5 @@
 #pragma once
 
-#include "vuk/Context.hpp"
 #include "vuk/States/DefaultState.hpp"
 
 ///////////////////////////////////////////////////////////

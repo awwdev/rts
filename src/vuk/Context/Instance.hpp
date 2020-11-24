@@ -2,6 +2,7 @@
 
 #include "vuk/Vulkan.hpp"
 #include "com/Types.hpp"
+#include "vuk/Context/InstanceExt.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -13,12 +14,8 @@ struct Instance
 {
     VkInstance instance;
     VkDebugUtilsMessengerEXT debugMessenger;
-
     void Create();
     void Destroy();
-
-    static VkDebugUtilsMessengerCreateInfoEXT DebugInfo();
-    static void PrintLayers();
 };
 
 ///////////////////////////////////////////////////////////
@@ -61,7 +58,7 @@ void Instance::Create()
         #endif
     };
 
-    auto debugInfo = DebugInfo();
+    auto debugInfo = DebugMessengerInfo();
 
     VkInstanceCreateInfo instInfo 
     {
@@ -93,5 +90,3 @@ void Instance::Destroy()
 ///////////////////////////////////////////////////////////
 
 }//ns
-
-#include "vuk/Context/InstanceExt.hpp"

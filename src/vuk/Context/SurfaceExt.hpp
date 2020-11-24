@@ -28,7 +28,7 @@ struct WindowHandle
 
 ///////////////////////////////////////////////////////////
 
-inline void Print_SurfaceCapabilities(VkSurfaceCapabilitiesKHR& surfaceCapabilities)
+inline void PrintSurfaceCapabilities(VkSurfaceCapabilitiesKHR& surfaceCapabilities)
 {
     com::Print(com::ConsoleColor::Yellow, "surfaceCapabilities");
     com::Print("minImageExtent", surfaceCapabilities.minImageExtent.width, surfaceCapabilities.minImageExtent.height);

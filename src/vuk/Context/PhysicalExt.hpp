@@ -9,7 +9,7 @@ namespace mini::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void Print_VK_VERSION(VkPhysicalDeviceProperties& physicalProps)
+inline void PrintPhysicalAPI(VkPhysicalDeviceProperties& physicalProps)
 {
     com::PrintColored(com::ConsoleColor::Cyan, "Vulkan physical API version", 
         VK_VERSION_MAJOR(physicalProps.apiVersion),
@@ -20,7 +20,10 @@ inline void Print_VK_VERSION(VkPhysicalDeviceProperties& physicalProps)
 
 ///////////////////////////////////////////////////////////
 
-inline void Print_VkPhysicalDeviceProperties(VkPhysicalDeviceProperties& physicalProps)
+inline void PrintPhysical(
+VkPhysicalDevice& physical, 
+VkPhysicalDeviceProperties& physicalProps, 
+VkPhysicalDeviceMemoryProperties& memoryProps)
 {
     com::Print(com::ConsoleColor::Yellow, "device");
     com::Print("deviceName", physicalProps.deviceName);
@@ -42,12 +45,12 @@ inline void Print_VkPhysicalDeviceProperties(VkPhysicalDeviceProperties& physica
     com::Print("maxStorageBufferRange", limits.maxStorageBufferRange);
     com::Print("maxUniformBufferRange", limits.maxUniformBufferRange);
     com::Print("minMemoryMapAlignment", limits.minMemoryMapAlignment);
-}
 
-////////////////////////////////////////////////////////////
+    com::Print(com::ConsoleColor::Yellow, "memory");
+    com::Print("memoryHeapCount", memoryProps.memoryHeapCount);
+    com::Print("memoryTypeCount", memoryProps.memoryTypeCount);
 
-inline void Print_VkPhysicalDeviceFeatures(VkPhysicalDevice& physical)
-{
+    com::Print(com::ConsoleColor::Yellow, "features");
     VkPhysicalDeviceFeatures features;
     vkGetPhysicalDeviceFeatures(physical, &features);
     com::Print(com::ConsoleColor::Yellow, "device features");
@@ -56,15 +59,6 @@ inline void Print_VkPhysicalDeviceFeatures(VkPhysicalDevice& physical)
     com::PrintBool(features.largePoints, "largePoints");
     com::PrintBool(features.geometryShader, "geometryShader");
     com::PrintBool(features.alphaToOne, "alphaToOne");
-}
-
-///////////////////////////////////////////////////////////
-
-inline void Print_VkPhysicalDeviceMemoryProperties(VkPhysicalDeviceMemoryProperties& memoryProps)
-{
-    com::Print(com::ConsoleColor::Yellow, "memory");
-    com::Print("memoryHeapCount", memoryProps.memoryHeapCount);
-    com::Print("memoryTypeCount", memoryProps.memoryTypeCount);
 }
 
 ///////////////////////////////////////////////////////////

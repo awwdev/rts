@@ -1,9 +1,8 @@
 #pragma once
 
-#include "vuk/Vulkan.hpp"
-#include "vuk/Context.hpp"
-#include "vuk/States.hpp"
-#include "vuk/Commands.hpp"
+#include "vuk/Renderer/Context.hpp"
+#include "vuk/Renderer/States.hpp"
+#include "vuk/Renderer/Commands.hpp"
 
 ///////////////////////////////////////////////////////////
 

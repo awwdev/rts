@@ -31,10 +31,9 @@ void*)
 
 ///////////////////////////////////////////////////////////
 
-VkDebugUtilsMessengerCreateInfoEXT 
-Instance::DebugInfo()
+inline auto DebugMessengerInfo()
 {
-    return 
+    return VkDebugUtilsMessengerCreateInfoEXT
     {
         .sType                  = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
         .pNext                  = nullptr,
@@ -55,7 +54,7 @@ Instance::DebugInfo()
 
 ///////////////////////////////////////////////////////////
 
-void Instance::PrintLayers()
+inline void PrintInstanceLayers()
 {
     com::SimpleArray<VkLayerProperties, 20> layers;
     vkEnumerateInstanceLayerProperties(&layers.count, nullptr);

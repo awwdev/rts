@@ -11,30 +11,59 @@ namespace mini::wnd {
 
 ///////////////////////////////////////////////////////////
 
+inline void WmClose()
+{
+    app::isAppRunning = false;  
+}
+
+////////////////////////////////////////////////////////////
+
+inline void WmKeyDown(WPARAM wParam, LPARAM)
+{
+    if (wParam == VK_ESCAPE)
+        app::isAppRunning = false;  
+}
+
+///////////////////////////////////////////////////////////
+
+inline void WmKeyUp(WPARAM wParam, LPARAM)
+{
+    if (wParam == VK_ESCAPE)
+        app::isAppRunning = false;  
+}
+
+///////////////////////////////////////////////////////////
+
+inline void WmActivateApp()
+{
+
+}
+
+///////////////////////////////////////////////////////////
+
 static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
     {
         case WM_ACTIVATEAPP:
-        {            
-        } break;
+        WmActivateApp();
+        break;
 
         case WM_DESTROY:
         case WM_CLOSE:
         case WM_QUIT:
-        {          
-            app::isAppRunning = false;  
-        } break;
+        WmClose();
+        break;
 
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
-        {
-        } break;
+        WmKeyDown(wParam, lParam);
+        break;
 
         case WM_KEYUP:
         case WM_SYSKEYUP:
-        {
-        } break;
+        WmKeyUp(wParam, lParam);
+        break;
 
         default: 
         return DefWindowProc(hWnd, uMsg, wParam, lParam);

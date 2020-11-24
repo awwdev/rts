@@ -33,7 +33,7 @@ void Context::Create(WindowHandle const& wndHandle)
     device.Create(physical);
     surface.Create(instance, physical, wndHandle);
     swapchain.Create(device, surface, VK_PRESENT_MODE_FIFO_KHR); //VK_PRESENT_MODE_IMMEDIATE_KHR
-    Print_VK_VERSION(physical.physicalProps);
+    PrintPhysicalAPI(physical.physicalProps);
 }
 
 ///////////////////////////////////////////////////////////
