@@ -1,4 +1,5 @@
 #pragma once
+
 #include <X11/Xlib.h>
 #include "com/Types.hpp"
 #include "com/Print.hpp"
@@ -7,18 +8,24 @@
 ///////////////////////////////////////////////////////////
 
 namespace mini::wnd {
-struct X11_Window {
+
+///////////////////////////////////////////////////////////
+
+struct X11_Window
+{
+    ::Window window;
+    ::Display* display;
+    int screen;
+    Atom wmDeleteWindow;
+
+    X11_Window(chars_t, i32, i32, i32, i32);
+    ~X11_Window();
+    void PollEvents();
+};
 
 ///////////////////////////////////////////////////////////
     
-::Window   window;
-::Display* display;
-int        screen;
-Atom       wmDeleteWindow;
-
-///////////////////////////////////////////////////////////
-
-X11_Window(
+X11_Window::X11_Window(
 chars_t title  = "Window",
 i32 width  = 600,
 i32 height = 400,
@@ -51,14 +58,14 @@ i32 ypos   = 64)
 
 ///////////////////////////////////////////////////////////
 
-~X11_Window()
+X11_Window::~X11_Window()
 {
     //XCloseDisplay(display);
 }
 
 ///////////////////////////////////////////////////////////
 
-void PollEvents()
+void X11_Window::PollEvents()
 {
     XEvent e;
     while(XCheckWindowEvent(display, window, 0xFFFFFFFF, &e))
@@ -85,5 +92,4 @@ void PollEvents()
 
 ///////////////////////////////////////////////////////////
 
-};  
 }//ns

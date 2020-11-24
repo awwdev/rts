@@ -5,6 +5,8 @@
 #include "com/Assert.hpp"
 #include <fstream>
 
+///////////////////////////////////////////////////////////
+
 namespace mini::vuk {
 
 inline VkShaderModule LoadShaderModule(chars_t);

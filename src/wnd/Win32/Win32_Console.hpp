@@ -10,11 +10,18 @@
 ///////////////////////////////////////////////////////////
 
 namespace mini::wnd {
-struct Win32_Console {
+
+///////////////////////////////////////////////////////////
+
+struct Win32_Console
+{
+    Win32_Console(i32, i32, i32, i32);
+    ~Win32_Console();
+};
 
 ////////////////////////////////////////////////////////////
 
-Win32_Console(i32 width, i32 height, i32 xpos, i32 ypos)
+Win32_Console::Win32_Console(i32 width, i32 height, i32 xpos, i32 ypos)
 {
     WinAssert(AllocConsole());
     FILE* fp;
@@ -33,12 +40,11 @@ Win32_Console(i32 width, i32 height, i32 xpos, i32 ypos)
 
 ////////////////////////////////////////////////////////////
 
-~Win32_Console()
+Win32_Console::~Win32_Console()
 {
     WinAssert(FreeConsole());
 }
 
 ////////////////////////////////////////////////////////////
 
-};
 }//ns

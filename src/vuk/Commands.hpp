@@ -2,6 +2,8 @@
 
 #include "vuk/Vulkan.hpp"
 
+///////////////////////////////////////////////////////////
+
 namespace mini::vuk {
 
 inline VkCommandBufferBeginInfo CreateCmdBeginInfo(VkCommandBufferUsageFlags flags = 0);

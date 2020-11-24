@@ -11,38 +11,28 @@
 ///////////////////////////////////////////////////////////
 
 namespace mini::wnd {
-struct Win32_Window {
 
 ///////////////////////////////////////////////////////////
 
-HWND      hWnd = 0;
-HINSTANCE hInstance = GetModuleHandle(0);
-chars_t   wndClassName = "wnd";
+struct Win32_Window
+{
+    HWND hWnd = 0;
+    HINSTANCE hInstance = GetModuleHandle(0);
+    chars_t wndClassName = "wnd";
+
+    Win32_Window(chars_t, i32, i32, i32, i32);
+    ~Win32_Window();
+    void PollEvents();
+};
 
 ///////////////////////////////////////////////////////////
 
-Win32_Window(
+Win32_Window::Win32_Window(
 chars_t title  = "Window",
 i32 width  = CW_USEDEFAULT,
 i32 height = CW_USEDEFAULT,
 i32 xpos   = CW_USEDEFAULT,
 i32 ypos   = CW_USEDEFAULT)
-{
-    mRegisterClass();
-    mCreateWindow(xpos, ypos, width, height, title);
-}
-
-///////////////////////////////////////////////////////////
-
-~Win32_Window()
-{
-    WinAssert(DestroyWindow(hWnd));
-    WinAssert(UnregisterClass(wndClassName, hInstance));
-}
-
-///////////////////////////////////////////////////////////
-
-void mRegisterClass()
 {
     const WNDCLASSEX wndClass 
     {
@@ -60,12 +50,7 @@ void mRegisterClass()
         .hIconSm        = LoadIcon(NULL, IDI_APPLICATION),
     };
     WinAssert(RegisterClassEx(&wndClass));
-}
 
-///////////////////////////////////////////////////////////
-
-void mCreateWindow(i32 xpos, i32 ypos, i32 width, i32 height, chars_t title)
-{
     hWnd = CreateWindowEx(
         0,                                //dwExStyle                  
         wndClassName,                     //lpClassName                  
@@ -85,7 +70,15 @@ void mCreateWindow(i32 xpos, i32 ypos, i32 width, i32 height, chars_t title)
 
 ///////////////////////////////////////////////////////////
 
-void PollEvents()
+Win32_Window::~Win32_Window()
+{
+    WinAssert(DestroyWindow(hWnd));
+    WinAssert(UnregisterClass(wndClassName, hInstance));
+}
+
+///////////////////////////////////////////////////////////
+
+void Win32_Window::PollEvents()
 {
     for (MSG message; PeekMessage(&message, NULL, 0, 0, PM_REMOVE);)
     {
@@ -96,12 +89,4 @@ void PollEvents()
 
 ///////////////////////////////////////////////////////////
 
-void Display()
-{
-
-}
-
-///////////////////////////////////////////////////////////
-
-};
 }//ns

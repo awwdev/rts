@@ -8,9 +8,9 @@ namespace mini::app {
 
 ///////////////////////////////////////////////////////////
 
-static bool isAppRunning = true;
-//static i32  windowWidth  = 1;
-//static i32  windowHeight = 1;
+    static bool isAppRunning = true;
+    //static i32  windowWidth  = 1;
+    //static i32  windowHeight = 1;
 
 ///////////////////////////////////////////////////////////
 
