@@ -44,6 +44,20 @@ struct ViewportStateInfo
     VkViewport viewport;
     VkRect2D scissor;
     VkPipelineViewportStateCreateInfo stateInfo;
+
+    ViewportStateInfo() = default;
+    ViewportStateInfo(ViewportStateInfo const& other)
+    {
+        this->operator=(other);
+    }
+    void operator=(ViewportStateInfo const& other)
+    {
+        this->viewport = other.viewport;
+        this->scissor = other.scissor;
+        this->stateInfo = other.stateInfo;
+        stateInfo.pViewports = &this->viewport;
+        stateInfo.pScissors = &this->scissor;
+    }
 };
 
 ///////////////////////////////////////////////////////////
@@ -149,6 +163,18 @@ struct BlendState
 {
     VkPipelineColorBlendAttachmentState attachment;
     VkPipelineColorBlendStateCreateInfo stateInfo;
+
+    BlendState() = default;
+    BlendState(BlendState const& other)
+    {
+        this->operator=(other);
+    }
+    void operator=(BlendState const& other)
+    {
+        this->attachment = other.attachment;
+        this->stateInfo = other.stateInfo;
+        stateInfo.pAttachments = &this->attachment;
+    }
 };
 
 ///////////////////////////////////////////////////////////
