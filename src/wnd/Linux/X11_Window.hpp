@@ -1,6 +1,8 @@
 #pragma once
 
 #include <X11/Xlib.h>
+#include <X11/keysymdef.h>
+#include <X11/keysym.h>
 #include "com/Types.hpp"
 #include "com/Print.hpp"
 #include "app/Global.hpp"
@@ -77,7 +79,8 @@ void X11_Window::PollEvents()
         {
             case KeyPress:
             {
-                app::glo::isAppRunning = false;
+                if (e.xkey.keycode == 0x9) //ascii
+                    app::glo::isAppRunning = false;
             } 
             break;
         }
