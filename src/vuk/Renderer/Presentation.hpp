@@ -28,29 +28,37 @@ void Presentation::Create(Context&)
         .pNext = nullptr,
         .flags = 0,
     };
-    VkCheck(vkCreateSemaphore(g_devicePtr, &semaphoreInfo, GetAlloc(), &semaphore));
+    VkCheck(vkCreateSemaphore(g_devicePtr, &semaphoreInfo,  GetAlloc(), &semaphore));
 }
 
 ///////////////////////////////////////////////////////////
 
 void Presentation::Destroy()
 {
-    vkDestroySemaphore(g_devicePtr, semaphore, GetAlloc());
+    vkDestroySemaphore(g_devicePtr, semaphore,  GetAlloc());
 }
 
 ///////////////////////////////////////////////////////////
 
 void Presentation::Present(Context& context, Commands& commands, States& states)
 {
+    VkCheck(vkDeviceWaitIdle(g_devicePtr));
+
     uint32_t imageIndex = 0;
-    VkCheck(vkAcquireNextImageKHR(
+    auto result = vkAcquireNextImageKHR(
         context.device.device, 
         context.swapchain.swapchain, 
         0, 
         semaphore, 
         VK_NULL_HANDLE, 
         &imageIndex
-    ));
+    );
+
+    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
+    {
+        com::PrintWarning("VK_ERROR_OUT_OF_DATE_KHR");
+        return;
+    }
 
     ///////////////////////////////////////////////////////////
     states.Record(commands, imageIndex);
@@ -83,8 +91,6 @@ void Presentation::Present(Context& context, Commands& commands, States& states)
         .pResults               = nullptr
     };
     VkCheck(vkQueuePresentKHR(context.device.queue, &presentInfo));
-
-    VkCheck(vkDeviceWaitIdle(g_devicePtr));
 }
 
 ///////////////////////////////////////////////////////////

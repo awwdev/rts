@@ -23,7 +23,16 @@ struct Event
     i32 ypos;
     i32 width;
     i32 height;
+
+    bool operator==(Event const& other) const;
 };
+
+////////////////////////////////////////////////////////////
+
+bool Event::operator==(Event const& other) const
+{
+    return this->eventEnum == other.eventEnum;
+}
 
 ///////////////////////////////////////////////////////////
 

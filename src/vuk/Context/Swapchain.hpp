@@ -20,13 +20,13 @@ struct Swapchain
     uint32_t height;
     VkFormat format = VK_FORMAT_B8G8R8A8_SRGB;
 
-    void Create(Device&, Surface&, VkPresentModeKHR);
+    void Create(Device&, Surface&);
     void Destroy();
 };
 
 ///////////////////////////////////////////////////////////
 
-void Swapchain::Create(Device& device, Surface& surface, VkPresentModeKHR presentMode)
+void Swapchain::Create(Device& device, Surface& surface)
 {
     width  = surface.capabilities.currentExtent.width;
     height = surface.capabilities.currentExtent.height;
@@ -48,7 +48,7 @@ void Swapchain::Create(Device& device, Surface& surface, VkPresentModeKHR presen
         .pQueueFamilyIndices    = nullptr,
         .preTransform           = surface.capabilities.currentTransform,
         .compositeAlpha         = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
-        .presentMode            = presentMode,
+        .presentMode            = VK_PRESENT_MODE_FIFO_KHR,
         .clipped                = VK_FALSE,
         .oldSwapchain           = nullptr
     };

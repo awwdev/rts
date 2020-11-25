@@ -16,7 +16,7 @@ namespace mini::wnd {
 inline void WmClose();
 inline void WmKeyDown(WPARAM);
 inline void WmKeyUp(WPARAM);
-inline void WmSize(LPARAM);
+inline void WmSize(WPARAM, LPARAM);
 inline void WmSizeMoveExit();
 
 ///////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
         case WM_SIZE:
-        WmSize(lParam);
+        WmSize(wParam, lParam);
         break;
 
         case WM_EXITSIZEMOVE:
@@ -86,10 +86,18 @@ inline void WmKeyUp(WPARAM)
 
 ///////////////////////////////////////////////////////////
 
-inline void WmSize(LPARAM lParam)
+inline void WmSize(WPARAM wParam, LPARAM lParam)
 {
     app::glo::windowWidth  = LOWORD(lParam);
     app::glo::windowHeight = HIWORD(lParam);    
+
+    switch(wParam)
+    {
+        case SIZE_MAXIMIZED: WmSizeMoveExit(); break;
+        case SIZE_MINIMIZED: WmSizeMoveExit(); break;
+        case SIZE_RESTORED:  WmSizeMoveExit(); break;
+        default: break;
+    }
 }
 
 ///////////////////////////////////////////////////////////
@@ -101,7 +109,9 @@ inline void WmSizeMoveExit()
     event.eventEnum = eventEnum;
     event.width = app::glo::windowWidth;
     event.height = app::glo::windowHeight;
-    app::glo::events.Append(event);
+
+    if (app::glo::events.Contains(event) == nullptr)
+        app::glo::events.Append(event);
 
     com::dt::t1 = com::dt::clock_t::now();
 }

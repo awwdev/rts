@@ -27,6 +27,7 @@ TEMPLATE struct SimpleArray
     auto& operator[](idx_t) const;
 
     void Append(auto... args);
+    T* Contains(T const&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -67,6 +68,19 @@ TEMPLATE SimpleArray<T, N>::SimpleArray(auto... elements)
 
 template<typename T, class... Ts>
 SimpleArray(T, Ts...) -> SimpleArray<T, sizeof...(Ts) + 1>;
+
+////////////////////////////////////////////////////////////
+
+TEMPLATE T* SimpleArray<T, N>::Contains(T const& other)
+{
+    FOR_SIMPLE_ARRAY((*this), i)
+    {
+        auto& element = this->operator[](i);
+        if (element == other)
+            return &element;
+    }
+    return nullptr;
+}
 
 ////////////////////////////////////////////////////////////
 

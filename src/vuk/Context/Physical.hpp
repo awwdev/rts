@@ -24,20 +24,15 @@ struct Physical
 
 void Physical::Create(Instance& instance)
 {
-    uint32_t physicalsCount;
-    VkPhysicalDevice* physicals;
-    VkCheck(vkEnumeratePhysicalDevices(instance.instance, &physicalsCount, nullptr));
-    physicals = new VkPhysicalDevice[physicalsCount];
-    VkCheck(vkEnumeratePhysicalDevices(instance.instance, &physicalsCount, physicals));
+    com::SimpleArray<VkPhysicalDevice, 10> physicals;
+    VkCheck(vkEnumeratePhysicalDevices(instance.instance, &physicals.count, nullptr));
+    VkCheck(vkEnumeratePhysicalDevices(instance.instance, &physicals.count, physicals.data));
     physical = physicals[0];
-    delete[] physicals;
 
-    uint32_t famPropsCount;
-    VkQueueFamilyProperties* famProps;
-    vkGetPhysicalDeviceQueueFamilyProperties(physical, &famPropsCount, nullptr);
-    famProps = new VkQueueFamilyProperties[famPropsCount];
-    vkGetPhysicalDeviceQueueFamilyProperties(physical, &famPropsCount, famProps);
-    for (uint32_t i = 0; i < famPropsCount; ++i) 
+    com::SimpleArray<VkQueueFamilyProperties, 10> famProps;
+    vkGetPhysicalDeviceQueueFamilyProperties(physical, &famProps.count, nullptr);
+    vkGetPhysicalDeviceQueueFamilyProperties(physical, &famProps.count, famProps.data);
+    FOR_SIMPLE_ARRAY(famProps, i)
     {
         if (famProps[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
             queueIndex = i;
@@ -45,7 +40,6 @@ void Physical::Create(Instance& instance)
         }
     }
     //com::Print("queues count", count);
-    delete[] famProps;
 
     vkGetPhysicalDeviceProperties(physical, &physicalProps);
     vkGetPhysicalDeviceMemoryProperties(physical, &memoryProps);

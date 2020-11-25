@@ -1,3 +1,2 @@
-- input events (thread?)
 - recreate vk resources, presentation sync
 - linux test

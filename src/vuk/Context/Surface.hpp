@@ -18,6 +18,7 @@ struct Surface
 
     void Create(Instance&, Physical&, WindowHandle const&);
     void Destroy(Instance&);
+    void UpdateSurfaceCapabilities(Physical&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -48,12 +49,7 @@ void Surface::Create(Instance& instance, Physical& physical, WindowHandle const&
     VkCheck(vkCreateXlibSurfaceKHR(instance.instance, &surfInfo, nullptr, &surface));
 #endif
 
-    VkBool32 supported;
-    VkCheck(vkGetPhysicalDeviceSurfaceSupportKHR(physical.physical, physical.queueIndex, surface, &supported));
-    //com::PrintBool(supported, "vkGetPhysicalDeviceSurfaceSupportKHR");
-
-    VkCheck(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical.physical, surface, &capabilities)); 
-    //Print_SurfaceCapabilities(surfaceCapabilities);
+    UpdateSurfaceCapabilities(physical);
 }
 
 ///////////////////////////////////////////////////////////
@@ -64,5 +60,16 @@ void Surface::Destroy(Instance& instance)
 }
 
 ///////////////////////////////////////////////////////////
+
+void Surface::UpdateSurfaceCapabilities(Physical& physical)
+{
+    VkBool32 supported;
+    VkCheck(vkGetPhysicalDeviceSurfaceSupportKHR(physical.physical, physical.queueIndex, surface, &supported));
+    //com::PrintBool(supported, "vkGetPhysicalDeviceSurfaceSupportKHR");
+    VkCheck(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical.physical, surface, &capabilities)); 
+    //Print_SurfaceCapabilities(surfaceCapabilities);
+}
+
+////////////////////////////////////////////////////////////
 
 }//ns
