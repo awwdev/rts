@@ -20,4 +20,17 @@ inline com::SimpleArray<Event, 10> events;
 
 ///////////////////////////////////////////////////////////
 
+inline bool HasEvent(app::EventEnum eventEnum)
+{
+    FOR_SIMPLE_ARRAY(events, i)
+    {
+        auto& ev = events[i];
+        if (ev.eventEnum == eventEnum)
+            return true;
+    }
+    return false;
+}
+
+////////////////////////////////////////////////////////////
+
 }//ns

@@ -10,50 +10,8 @@ namespace mini::app {
 
 enum class EventEnum
 {
-    ExitSizeMove,
-    KeyDown,
-    KeyUp,
-    ButtonDown,
-    ButtonUp,
-};
-
-////////////////////////////////////////////////////////////
-
-enum class KeyboardEnum
-{
-    Escape,
-};
-
-////////////////////////////////////////////////////////////
-
-enum class MouseEnum
-{
-    Left,
-    Right,
-};
-
-///////////////////////////////////////////////////////////
-
-struct WindowData
-{
-    i32 width;
-    i32 height;
-};
-
-////////////////////////////////////////////////////////////
-
-struct KeyboardData
-{
-    KeyboardEnum type;
-};
-
-////////////////////////////////////////////////////////////
-
-struct MouseData
-{
-    MouseEnum type;
-    i32 xpos;
-    i32 ypos;
+    WND_MOVE_SIZE,
+    KEY_DOWN_ESCAPE,
 };
 
 ///////////////////////////////////////////////////////////
@@ -61,12 +19,10 @@ struct MouseData
 struct Event
 {
     EventEnum eventEnum;
-    union
-    {
-        WindowData window;
-        KeyboardData keyboard;
-        MouseData mouse;
-    };
+    i32 xpos;
+    i32 ypos;
+    i32 width;
+    i32 height;
 };
 
 ///////////////////////////////////////////////////////////
