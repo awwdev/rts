@@ -35,7 +35,11 @@ void States::Destroy()
 
 void States::Record(Commands& commands, uint32_t imageIndex)
 {
-    defaultState.Record(commands, imageIndex);
+    auto cmdBuffer = commands.buffers[imageIndex];
+    const auto beginInfo = CreateCmdBeginInfo();
+    VkCheck(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
+    defaultState.Record(cmdBuffer, imageIndex);
+    VkCheck(vkEndCommandBuffer(cmdBuffer));
 }
 
 ///////////////////////////////////////////////////////////

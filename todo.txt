@@ -1,2 +1,1 @@
-- recreate vk resources, presentation sync
 - linux test

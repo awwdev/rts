@@ -2,6 +2,8 @@
 
 #include "vuk/Vulkan.hpp"
 #include "vuk/Renderer/CommandsExt.hpp"
+#include "vuk/Context/Swapchain.hpp"
+#include "com/SimpleArray.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -12,16 +14,14 @@ namespace mini::vuk {
 struct Commands 
 {
     VkCommandPool pool;
-    VkCommandBuffer buffer;
-    VkCommandBufferBeginInfo beginInfo = CreateCmdBeginInfo();
-
-    void Create(uint32_t);
+    com::SimpleArray<VkCommandBuffer, 4> buffers;
+    void Create(uint32_t, Swapchain&);
     void Destroy();
 };
 
 ///////////////////////////////////////////////////////////
 
-void Commands::Create(uint32_t queueIdx)
+void Commands::Create(uint32_t queueIdx, Swapchain& swapchain)
 {
     VkCommandPoolCreateInfo poolInfo
     {
@@ -38,17 +38,19 @@ void Commands::Create(uint32_t queueIdx)
         .pNext              = nullptr,
         .commandPool        = pool,
         .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-        .commandBufferCount = 1
+        .commandBufferCount = swapchain.images.count
     };
-    VkCheck(vkAllocateCommandBuffers(g_devicePtr, &allocInfo, &buffer));
+    buffers.count = swapchain.images.count;
+    VkCheck(vkAllocateCommandBuffers(g_devicePtr, &allocInfo, buffers.data));
 }
 
 ///////////////////////////////////////////////////////////
 
 void Commands::Destroy()
 {
-    vkFreeCommandBuffers(g_devicePtr, pool, 1, &buffer);
+    vkFreeCommandBuffers(g_devicePtr, pool, buffers.count, buffers.data);
     vkDestroyCommandPool(g_devicePtr, pool,  GetAlloc());
+    buffers.count = 0;
 }
 
 ///////////////////////////////////////////////////////////

@@ -19,7 +19,7 @@ struct DefaultState
 
     void Create(Context&);
     void Destroy();
-    void Record(Commands&, uint32_t);
+    void Record(VkCommandBuffer, uint32_t);
 };
 
 ////////////////////////////////////////////////////////////
@@ -42,14 +42,12 @@ void DefaultState::Destroy()
 
 ////////////////////////////////////////////////////////////
 
-void DefaultState::Record(Commands& commands, uint32_t imageIndex)
+void DefaultState::Record(VkCommandBuffer cmdBUffer, uint32_t imageIndex)
 {
-    VkCheck(vkBeginCommandBuffer(commands.buffer, &commands.beginInfo));
-    vkCmdBeginRenderPass(commands.buffer, &renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdBindPipeline(commands.buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
-    vkCmdDraw(commands.buffer, 3, 1, 0, 0);
-    vkCmdEndRenderPass(commands.buffer);
-    VkCheck(vkEndCommandBuffer(commands.buffer));
+    vkCmdBeginRenderPass    (cmdBUffer, &renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdBindPipeline       (cmdBUffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
+    vkCmdDraw               (cmdBUffer, 3, 1, 0, 0);
+    vkCmdEndRenderPass      (cmdBUffer);
 }
 
 ///////////////////////////////////////////////////////////

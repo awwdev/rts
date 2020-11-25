@@ -48,7 +48,7 @@ void Swapchain::Create(Device& device, Surface& surface)
         .pQueueFamilyIndices    = nullptr,
         .preTransform           = surface.capabilities.currentTransform,
         .compositeAlpha         = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
-        .presentMode            = VK_PRESENT_MODE_FIFO_KHR,
+        .presentMode            = VK_PRESENT_MODE_IMMEDIATE_KHR, //VK_PRESENT_MODE_FIFO_KHR
         .clipped                = VK_FALSE,
         .oldSwapchain           = nullptr
     };
