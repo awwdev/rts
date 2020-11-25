@@ -21,6 +21,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     {
         window.Update(); 
         renderer.Update();
+        
         com::dt::UpdateTime();
         com::dt::PrintFps();
 
@@ -47,6 +48,9 @@ int main()
 
         com::dt::UpdateTime();
         com::dt::PrintFps();
+
+        if (app::glo::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
+            app::glo::isAppRunning = false;
     }   
 }
 #endif

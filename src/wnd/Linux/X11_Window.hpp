@@ -80,7 +80,11 @@ void X11_Window::PollEvents()
             case KeyPress:
             {
                 if (e.xkey.keycode == 0x9) //ascii
-                    app::glo::isAppRunning = false;
+                {
+                    app::Event event {};
+                    event.eventEnum = app::EventEnum::KEY_DOWN_ESCAPE;
+                    app::glo::events.Append(event);
+                }
             } 
             break;
         }
