@@ -22,7 +22,7 @@ struct Win32_Window
 
     Win32_Window(chars_t, i32, i32, i32, i32);
     ~Win32_Window();
-    void PollEvents();
+    void Update();
 };
 
 ///////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ Win32_Window::~Win32_Window()
 
 ///////////////////////////////////////////////////////////
 
-void Win32_Window::PollEvents()
+void Win32_Window::Update()
 {
     for (MSG message; PeekMessage(&message, NULL, 0, 0, PM_REMOVE);)
     {

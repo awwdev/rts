@@ -1,6 +1,7 @@
 #include "wnd/Window.hpp"
 #include "app/Global.hpp"
 #include "vuk/Renderer.hpp"
+#include "com/Time.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -14,11 +15,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     wnd::Console  console  { 600, 400, 64, 400 + 64 };
     wnd::Window   window   { "mini window", 600, 400, 64, 64 };
     vuk::Renderer renderer { { window.hInstance, window.hWnd } };
-
-    while(app::isAppRunning)
+   
+    while(app::glo::isAppRunning)
     {
-        window.PollEvents(); 
+        window.Update(); 
         renderer.Update();
+        com::dt::UpdateTime();
+        com::dt::PrintFps();
     }
 
     return EXIT_SUCCESS;
@@ -33,7 +36,7 @@ int main()
     wnd::Window   window { "mini window", 600, 400, 64, 64 };
     vuk::Renderer renderer { { window.display, window.window } };
 
-    while(app::isAppRunning)
+    while(app::glo::isAppRunning)
     {
         window.PollEvents();
     }   

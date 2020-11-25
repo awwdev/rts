@@ -4,6 +4,7 @@
 #include <windows.h>
 #include "wnd/Win32/Win32_Undef.hpp"
 #include "app/Global.hpp"
+#include "com/Print.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -13,7 +14,7 @@ namespace mini::wnd {
 
 inline void WmClose()
 {
-    app::isAppRunning = false;  
+    app::glo::isAppRunning = false;  
 }
 
 ////////////////////////////////////////////////////////////
@@ -21,22 +22,21 @@ inline void WmClose()
 inline void WmKeyDown(WPARAM wParam, LPARAM)
 {
     if (wParam == VK_ESCAPE)
-        app::isAppRunning = false;  
+        app::glo::isAppRunning = false;  
 }
 
 ///////////////////////////////////////////////////////////
 
-inline void WmKeyUp(WPARAM wParam, LPARAM)
+inline void WmKeyUp(WPARAM, LPARAM)
 {
-    if (wParam == VK_ESCAPE)
-        app::isAppRunning = false;  
+ 
 }
 
 ///////////////////////////////////////////////////////////
 
 inline void WmActivateApp()
 {
-
+    com::Print("wm activate app");
 }
 
 ///////////////////////////////////////////////////////////

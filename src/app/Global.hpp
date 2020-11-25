@@ -4,13 +4,16 @@
 
 ///////////////////////////////////////////////////////////
 
-namespace mini::app {
+namespace mini::app::glo {
 
 ///////////////////////////////////////////////////////////
 
-    static bool isAppRunning = true;
-    //static i32  windowWidth  = 1;
-    //static i32  windowHeight = 1;
+inline bool isAppRunning = true;
+inline f64  dt;
+inline i32  fps;
+inline bool hasSecondPassed;
+inline i32  windowWidth  = 1;
+inline i32  windowHeight = 1;
 
 ///////////////////////////////////////////////////////////
 
