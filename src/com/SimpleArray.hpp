@@ -17,8 +17,11 @@ namespace mini::com {
 
 TEMPLATE struct SimpleArray
 {
-    T data [N];
     idx_t count = 0;
+    T data [N];
+
+    SimpleArray() = default;
+    SimpleArray(auto... elements);
 
     auto& operator[](idx_t);
     auto& operator[](idx_t) const;
@@ -52,6 +55,20 @@ TEMPLATE void SimpleArray<T, N>::Append(auto... args)
 }
 
 ///////////////////////////////////////////////////////////
+
+TEMPLATE SimpleArray<T, N>::SimpleArray(auto... elements)
+    : count { sizeof...(elements) }
+    , data  { elements... }
+{
+    com::Assert(count <= N, "array exhausted");
+}
+
+////////////////////////////////////////////////////////////
+
+template<typename T, class... Ts>
+SimpleArray(T, Ts...) -> SimpleArray<T, sizeof...(Ts) + 1>;
+
+////////////////////////////////////////////////////////////
 
 #undef TEMPLATE
 

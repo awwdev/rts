@@ -34,18 +34,17 @@ void Instance::Create()
         .apiVersion             = VK_API_VERSION_1_0,
     };
 
-    chars_t layers[] 
+    com::SimpleArray<chars_t, 4> layers
     {
         #ifdef _WIN32
         "VK_LAYER_KHRONOS_validation"
         #endif
-
         #ifdef __linux__
         "VK_LAYER_LUNARG_standard_validation"
-        #endif
+        #endif 
     };
 
-    chars_t extensions[] 
+    com::SimpleArray extensions
     {
         VK_EXT_DEBUG_UTILS_EXTENSION_NAME,
         VK_KHR_SURFACE_EXTENSION_NAME,
@@ -53,7 +52,6 @@ void Instance::Create()
         #ifdef _WIN32
         VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
         #endif
-
         #ifdef __linux__
         VK_KHR_XLIB_SURFACE_EXTENSION_NAME,
         #endif
@@ -67,10 +65,10 @@ void Instance::Create()
         .pNext                   = &debugInfo, //so instance creation messages are handled
         .flags                   = 0,
         .pApplicationInfo        = &appInfo,
-        .enabledLayerCount       = array_extent(layers), 
-        .ppEnabledLayerNames     = layers,
-        .enabledExtensionCount   = array_extent(extensions),
-        .ppEnabledExtensionNames = extensions
+        .enabledLayerCount       = layers.count, 
+        .ppEnabledLayerNames     = layers.data,
+        .enabledExtensionCount   = extensions.count,
+        .ppEnabledExtensionNames = extensions.data
     };
     VkCheck(vkCreateInstance(&instInfo, GetAlloc(), &instance));
 
