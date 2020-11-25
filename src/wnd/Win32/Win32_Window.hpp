@@ -34,7 +34,7 @@ i32 height = CW_USEDEFAULT,
 i32 xpos   = CW_USEDEFAULT,
 i32 ypos   = CW_USEDEFAULT)
 {
-    const WNDCLASSEX wndClass 
+    WNDCLASSEX wndClass 
     {
         .cbSize         = sizeof(WNDCLASSEX),
         .style          = CS_HREDRAW | CS_VREDRAW,
@@ -80,6 +80,7 @@ Win32_Window::~Win32_Window()
 
 void Win32_Window::Update()
 {
+    app::glo::events.count = 0;
     for (MSG message; PeekMessage(&message, NULL, 0, 0, PM_REMOVE);)
     {
         TranslateMessage(&message);

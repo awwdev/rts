@@ -22,6 +22,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         renderer.Update();
         com::dt::UpdateTime();
         com::dt::PrintFps();
+
+        FOR_SIMPLE_ARRAY(app::glo::events, i)
+        {
+            auto& ev = app::glo::events[i];
+            if (ev.eventEnum == app::EventEnum::KeyDown && 
+                ev.keyboard.type == app::KeyboardEnum::Escape)
+            {
+                app::glo::isAppRunning = false;
+            }
+        }
     }
 
     return EXIT_SUCCESS;
