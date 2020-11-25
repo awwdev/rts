@@ -28,14 +28,14 @@ void Presentation::Create(Context&)
         .pNext = nullptr,
         .flags = 0,
     };
-    VkCheck(vkCreateSemaphore(g_devicePtr, &semaphoreInfo, nullptr, &semaphore));
+    VkCheck(vkCreateSemaphore(g_devicePtr, &semaphoreInfo, GetAlloc(), &semaphore));
 }
 
 ///////////////////////////////////////////////////////////
 
 void Presentation::Destroy()
 {
-    vkDestroySemaphore(g_devicePtr, semaphore, nullptr);
+    vkDestroySemaphore(g_devicePtr, semaphore, GetAlloc());
 }
 
 ///////////////////////////////////////////////////////////

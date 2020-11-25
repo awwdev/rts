@@ -23,7 +23,7 @@ struct Device
 void Device::Create(Physical& physical)
 {
     float priorities { 1.f };
-    VkDeviceQueueCreateInfo const queueInfo
+    VkDeviceQueueCreateInfo queueInfo
     {
         .sType             = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
         .pNext             = nullptr,
@@ -40,7 +40,7 @@ void Device::Create(Physical& physical)
 
     VkPhysicalDeviceFeatures deviceFeatures {};
 
-    VkDeviceCreateInfo const deviceInfo 
+    VkDeviceCreateInfo deviceInfo 
     {
         .sType                      = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
         .pNext                      = nullptr,
@@ -54,7 +54,7 @@ void Device::Create(Physical& physical)
         .pEnabledFeatures           = &deviceFeatures
     };
 
-    VkCheck(vkCreateDevice(physical.physical, &deviceInfo, nullptr, &device));
+    VkCheck(vkCreateDevice(physical.physical, &deviceInfo, GetAlloc(), &device));
     vkGetDeviceQueue(device, physical.queueIndex, 0, &queue);
 
     g_devicePtr = device;

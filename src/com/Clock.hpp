@@ -1,0 +1,48 @@
+#pragma once
+
+#include <chrono>
+#include "com/Types.hpp"
+
+///////////////////////////////////////////////////////////
+
+namespace mini::com {
+
+///////////////////////////////////////////////////////////
+
+struct Clock
+{
+    using clock_t = std::chrono::high_resolution_clock;
+    using dur_t = std::chrono::duration<f64>;
+
+    clock_t::time_point t1;
+    Clock();
+    void Start();
+    auto Stop();
+};
+
+////////////////////////////////////////////////////////////
+
+Clock::Clock()
+{
+    Start();
+}
+
+///////////////////////////////////////////////////////////
+
+void Clock::Start()
+{
+    t1 = clock_t::now();
+}
+
+///////////////////////////////////////////////////////////
+
+auto Clock::Stop()
+{
+    auto t2 = clock_t::now();
+    dur_t dur = t2 - t1;
+    return dur.count();
+}   
+
+///////////////////////////////////////////////////////////
+
+}//ns

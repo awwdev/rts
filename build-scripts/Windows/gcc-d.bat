@@ -14,6 +14,7 @@ g++ ^
 -mwindows ^
 -std=c++2a ^
 -Wall -Wextra -Wpedantic ^
+-Wno-unused-parameter ^
 -I %src_hpp% ^
 -I %ext_hpp% ^
 -L %ext_lib% ^

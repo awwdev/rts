@@ -2,6 +2,7 @@
 
 #include "vuk/Vulkan.hpp"
 #include "com/Types.hpp"
+#include "com/Clock.hpp"
 #include "vuk/Context/InstanceExt.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -71,11 +72,10 @@ void Instance::Create()
         .enabledExtensionCount   = array_extent(extensions),
         .ppEnabledExtensionNames = extensions
     };
-
-    VkCheck(vkCreateInstance(&instInfo, nullptr, &instance));
+    VkCheck(vkCreateInstance(&instInfo, GetAlloc(), &instance));
 
     ((PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT"))
-    (instance, &debugInfo, nullptr, &debugMessenger);
+    (instance, &debugInfo, GetAlloc(), &debugMessenger);
 }
 
 ///////////////////////////////////////////////////////////
@@ -83,8 +83,8 @@ void Instance::Create()
 void Instance::Destroy()
 {
     ((PFN_vkDestroyDebugUtilsMessengerEXT) 
-    vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT"))(instance, debugMessenger, nullptr);
-    vkDestroyInstance(instance, nullptr);
+    vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT"))(instance, debugMessenger, GetAlloc());
+    vkDestroyInstance(instance, GetAlloc());
 }
 
 ///////////////////////////////////////////////////////////

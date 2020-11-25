@@ -2,6 +2,7 @@
 #include "app/Global.hpp"
 #include "vuk/Renderer.hpp"
 #include "com/Time.hpp"
+#include "com/Clock.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -14,8 +15,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
     wnd::Console  console  { 600, 400, 64, 400 + 64 };
     wnd::Window   window   { "mini window", 600, 400, 64, 64 };
+
+    com::Clock clock;
     vuk::Renderer renderer { { window.hInstance, window.hWnd } };
-   
+    com::Print(clock.Stop());
+
     while(app::glo::isAppRunning)
     {
         window.Update(); 
@@ -26,6 +30,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         if (app::glo::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
             app::glo::isAppRunning = false;
     }
+
+    com::Clock clock2;
+    renderer.~Renderer();
+    com::Print(clock2.Stop());
+
+    system("pause");
+    std::terminate();
 
     return EXIT_SUCCESS;
 }

@@ -30,7 +30,7 @@ void Commands::Create(uint32_t queueIdx)
         .flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
         .queueFamilyIndex = queueIdx
     };
-    VkCheck(vkCreateCommandPool(g_devicePtr, &poolInfo, nullptr, &pool));
+    VkCheck(vkCreateCommandPool(g_devicePtr, &poolInfo, GetAlloc(), &pool));
 
     VkCommandBufferAllocateInfo allocInfo
     {
@@ -48,7 +48,7 @@ void Commands::Create(uint32_t queueIdx)
 void Commands::Destroy()
 {
     vkFreeCommandBuffers(g_devicePtr, pool, 1, &buffer);
-    vkDestroyCommandPool(g_devicePtr, pool, nullptr);
+    vkDestroyCommandPool(g_devicePtr, pool,  GetAlloc());
 }
 
 ///////////////////////////////////////////////////////////
