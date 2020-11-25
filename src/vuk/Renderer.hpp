@@ -82,14 +82,16 @@ void Renderer::Update()
         return;
 
     uint32_t imageIndex = 0;
-    VkCheck(vkAcquireNextImageKHR(
+    auto res = vkAcquireNextImageKHR(
         context.device.device, 
         context.swapchain.swapchain, 
         0, 
         sync.imageAcquired[currentFrame], 
         VK_NULL_HANDLE, 
         &imageIndex
-    ));
+    );
+    if (res != VK_SUCCESS)
+        return;
 
     if (sync.inFlight[imageIndex] != VK_NULL_HANDLE) 
         vkWaitForFences(g_devicePtr, 1, &sync.inFlight[imageIndex], VK_FALSE, UINT64_MAX);
@@ -126,7 +128,7 @@ void Renderer::Update()
         .pImageIndices          = &imageIndex,
         .pResults               = nullptr
     };
-    VkCheck(vkQueuePresentKHR(context.device.queue, &presentInfo));
+    auto res2 = vkQueuePresentKHR(context.device.queue, &presentInfo);
 
     currentFrame = (currentFrame + 1) % (context.swapchain.images.count - 1);
 }

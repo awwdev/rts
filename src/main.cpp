@@ -38,11 +38,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 int main()
 {
     wnd::Window   window { "mini window", 600, 400, 64, 64 };
-    //vuk::Renderer renderer { { window.display, window.window } };
+    vuk::Renderer renderer { { window.display, window.window } };
 
     while(app::glo::isAppRunning)
     {
-        //window.PollEvents();
+        window.PollEvents();
+        renderer.Update();
+
+        com::dt::UpdateTime();
+        com::dt::PrintFps();
     }   
 }
 #endif
