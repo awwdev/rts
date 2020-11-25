@@ -10,6 +10,7 @@
 
 #include "vulkan.h"
 #include "com/Print.hpp"
+#include <cstring>
 
 ///////////////////////////////////////////////////////////
 
@@ -69,7 +70,7 @@ void* ReallocationFunction(
     VkSystemAllocationScope                     allocationScope)
 {
     auto addr = bufferPtr;
-    memcpy(addr, pOriginal, size);
+    std::memcpy(addr, pOriginal, size);
     bufferPtr += size;
     return addr;
 }

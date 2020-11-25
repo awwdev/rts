@@ -1,14 +1,17 @@
 clear
-mkdir $build_dir
+mkdir -p $build_dir
+mkdir -p $build_dir/res
+cp -r -u $res_dir/* $build_dir/res
 
 g++ --version
 g++ \
 -g \
 -std=c++2a \
 -Wall -Wextra -Wpedantic \
+-Wno-unused-parameter \
 -I $src_hpp \
 -I $ext_hpp \
 -L $ext_lib \
 $src_cpp \
--o $build_dir$build_name \
+-o $build_dir/$build_name \
 -lX11 -lvulkan

@@ -28,7 +28,6 @@
     "cwd":              "${workspaceFolder}/build",
     "MIMode":           "gdb",
     "externalConsole":  true,
-    "preLaunchTask":    "gcc-d"
 }
 
 ]

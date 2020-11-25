@@ -74,7 +74,7 @@ void X11_Window::PollEvents()
         {
             case KeyPress:
             {
-                app::isAppRunning = false;
+                app::glo::isAppRunning = false;
             } 
             break;
         }
@@ -85,7 +85,7 @@ void X11_Window::PollEvents()
         if ((unsigned long)e.xclient.data.l[0] == wmDeleteWindow)
         {
             com::Print("Close");
-            app::isAppRunning = false;
+            app::glo::isAppRunning = false;
         }
     }
 }

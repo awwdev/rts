@@ -26,11 +26,11 @@
         "env": {
             "src_cpp": "${workspaceFolder}/src/main.cpp",
             "src_hpp": "${workspaceFolder}/src",
-            "build_dir": "${workspaceFolder}/build/",
+            "build_dir": "${workspaceFolder}/build",
             "build_name": "mini-d",
-            "ext_hpp": "${workspaceFolder}/ext/",
-            "ext_lib": "${workspaceFolder}/ext/",
-            "res_dir": "${workspaceFolder}/res/"
+            "ext_hpp": "${workspaceFolder}/ext",
+            "ext_lib": "${workspaceFolder}/ext",
+            "res_dir": "${workspaceFolder}/res"
         }
     }
 },
