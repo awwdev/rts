@@ -20,9 +20,7 @@ struct Win32_UdpSocket
 
     SOCKET sock;
 
-    Win32_UdpSocket();
-    ~Win32_UdpSocket();
-
+    void Init();
     void Bind(addr_t address = ADDR_ANY, port_t port = 54000);
     void Close();
     void Send(const byte_t* data, i32 size);
@@ -31,7 +29,7 @@ struct Win32_UdpSocket
 
 ///////////////////////////////////////////////////////////
 
-Win32_UdpSocket::Win32_UdpSocket()
+void Win32_UdpSocket::Init()
 {
     sock = socket(AF_INET, SOCK_DGRAM, 0);
     u_long blocking = 0;
@@ -39,13 +37,6 @@ Win32_UdpSocket::Win32_UdpSocket()
     int broadcast = 0;
     com::WinSockAssert(setsockopt(sock, SOL_SOCKET, SO_BROADCAST, (const char*)&broadcast, sizeof(broadcast)));
     Bind();
-}
-
-///////////////////////////////////////////////////////////
-
-Win32_UdpSocket::~Win32_UdpSocket()
-{
-    Close();
 }
 
 ///////////////////////////////////////////////////////////

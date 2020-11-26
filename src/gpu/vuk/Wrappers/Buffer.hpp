@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gpu/vuk/Vulkan.hpp"
+#include "gpu/vuk/Renderer/Context.hpp"
 #include <cstring>
 
 ///////////////////////////////////////////////////////////
@@ -10,10 +11,10 @@ namespace mini::gpu::vuk {
 ///////////////////////////////////////////////////////////
 
 inline uint32_t MemoryType(
-    const VkPhysicalDeviceMemoryProperties& physicalMemProps,
     const VkMemoryRequirements& memReqs,
     const VkMemoryPropertyFlags neededMemProps) 
 {
+    auto& physicalMemProps = g_contextPtr->physical.memoryProps;
     for (uint32_t i = 0; i < physicalMemProps.memoryTypeCount; ++i) {
         if (memReqs.memoryTypeBits & (1 << i) &&
             (physicalMemProps.memoryTypes[i].propertyFlags & neededMemProps) == neededMemProps) 
@@ -60,17 +61,16 @@ void Buffer::Create(VkBufferUsageFlags usage, size_t pSize, VkMemoryPropertyFlag
     vkGetBufferMemoryRequirements(g_devicePtr, buffer, &memReqs);
     allocationSize = memReqs.size;
 
-    //VkMemoryAllocateInfo allocInfo
-    //{
-    //    .sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
-    //    .pNext           = nullptr,
-    //    .allocationSize  = allocationSize,
-    //    .memoryTypeIndex = MemoryType(g_devicePtr, memReqs, memProps)
-    //};
+    VkMemoryAllocateInfo allocInfo
+    {
+        .sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+        .pNext           = nullptr,
+        .allocationSize  = allocationSize,
+        .memoryTypeIndex = MemoryType(memReqs, memProps)
+    };
 
-    //VkCheck(vkAllocateMemory(g_devicePtr, &allocInfo, nullptr, &memory));
-    //VkCheck(vkBindBufferMemory(g_devicePtr, buffer, memory, 0));
-    //allocationSize = memReqs.size;
+    VkCheck(vkAllocateMemory(g_devicePtr, &allocInfo, nullptr, &memory));
+    VkCheck(vkBindBufferMemory(g_devicePtr, buffer, memory, 0));
 }
 
 ///////////////////////////////////////////////////////////

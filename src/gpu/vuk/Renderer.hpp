@@ -5,6 +5,8 @@
 #include "gpu/vuk/Renderer/Commands.hpp"
 #include "gpu/vuk/Renderer/Sync.hpp"
 
+#include "gpu/RenderData.hpp"
+
 ///////////////////////////////////////////////////////////
 
 namespace mini::gpu::vuk {
@@ -22,7 +24,7 @@ struct Renderer
 
     Renderer(WindowHandle const&);
     ~Renderer(); 
-    void Update();
+    void Update(RenderData&);
     bool CheckSwapchain();
 };
 
@@ -75,7 +77,7 @@ Renderer::~Renderer()
 
 ///////////////////////////////////////////////////////////
 
-void Renderer::Update()
+void Renderer::Update(RenderData& renderData)
 {
     if (CheckSwapchain() == false)
         return;
@@ -101,6 +103,7 @@ void Renderer::Update()
     VkCheck(vkResetFences(g_devicePtr, 1, &sync.fences[currentFrame]));
 
     ///////////////////////////////////////////////////////////
+    states.Update(renderData);
     states.Record(commands, imageIndex);
     ///////////////////////////////////////////////////////////
 

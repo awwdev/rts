@@ -2,7 +2,7 @@
 #include "mem/Memory.hpp"
 #include "app/Global.hpp"
 #include "gpu/vuk/Renderer.hpp"
-#include "net/UdpSocket.hpp"
+#include "net/Networking.hpp"
 #include "com/Time.hpp"
 #include "com/Clock.hpp"
 #include "app/Scene.hpp"
@@ -19,19 +19,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     wnd::Console console { 600, 400, 64, 400 + 64 };
     mem::GlobalAlloc();
     mem::PrintAlloc();
-    net::InitializeWinsock();
 
     {
         wnd::Window window { "mini window", 600, 400, 64, 64 };
         gpu::vuk::Renderer renderer { { window.hInstance, window.hWnd } };
-        net::UdpSocket socket;
+        net::Networking networking;
         app::Scene scene;
 
         while(app::glo::isAppRunning)
         {
             window.Update(); 
             scene.Update();
-            renderer.Update();
+            renderer.Update(scene.renderData);
             
             com::dt::UpdateTime();
             com::dt::PrintFps();
@@ -41,7 +40,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         }
     }
 
-    net::DestroyWinsock();
     mem::GlobalDealloc();
     return EXIT_SUCCESS;
 }

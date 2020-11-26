@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gpu/vuk/States/DefaultState.hpp"
+#include "gpu/RenderData.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -15,6 +16,7 @@ struct States
     void Create(Context&);
     void Destroy();
     void Record(Commands&, uint32_t);
+    void Update(RenderData&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -29,6 +31,13 @@ void States::Create(Context& context)
 void States::Destroy()
 {
     defaultState.Destroy();
+}
+
+///////////////////////////////////////////////////////////
+
+void States::Update(RenderData& renderData)
+{
+    defaultState.Update(renderData);
 }
 
 ///////////////////////////////////////////////////////////
