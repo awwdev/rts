@@ -21,7 +21,7 @@ struct Swapchain
     VkFormat format = VK_FORMAT_B8G8R8A8_SRGB;
 
     void Create(Device&, Surface&);
-    void Destroy();
+    void Destroy(VkDevice);
 };
 
 ///////////////////////////////////////////////////////////
@@ -91,12 +91,12 @@ void Swapchain::Create(Device& device, Surface& surface)
 
 ///////////////////////////////////////////////////////////
 
-void Swapchain::Destroy()
+void Swapchain::Destroy(VkDevice device)
 {
-    vkDestroySwapchainKHR(g_devicePtr, swapchain, GetAlloc());
+    vkDestroySwapchainKHR(device, swapchain, GetAlloc());
     FOR_ARRAY(views, i)
     {
-        vkDestroyImageView(g_devicePtr, views[i], GetAlloc());
+        vkDestroyImageView(device, views[i], GetAlloc());
         views[i] = nullptr;
     }
     views.count = 0;

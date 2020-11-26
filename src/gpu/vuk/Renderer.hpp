@@ -39,7 +39,7 @@ bool Renderer::CheckSwapchain()
 
         commands.Destroy();
         states.Destroy();
-        context.swapchain.Destroy();
+        context.swapchain.Destroy(g_devicePtr);
 
         context.surface.UpdateSurfaceCapabilities(context.physical);
         context.swapchain.Create(context.device, context.surface);

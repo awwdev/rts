@@ -18,11 +18,10 @@ namespace mini::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-    static VkDevice g_devicePtr;
-    constexpr bool ENABLE_VK_CHECK = true;
+constexpr bool ENABLE_VK_CHECK = true;
 
-    alignas(8) inline char buffer [10'000'000]; 
-    alignas(8) inline char* bufferPtr = buffer;
+//alignas(8) inline char buffer [10'000'000]; 
+//alignas(8) inline char* bufferPtr = buffer;
 
 ///////////////////////////////////////////////////////////
 
@@ -47,9 +46,10 @@ void* AllocationFunction(
     VkSystemAllocationScope                     allocationScope)
 {
     //com::Print("alloc", size);
-    auto addr = bufferPtr;
-    bufferPtr += size;
-    return addr;
+    //auto addr = bufferPtr;
+    //bufferPtr += size;
+    //return addr;
+    return nullptr;
 }
 
 ///////////////////////////////////////////////////////////
@@ -69,10 +69,11 @@ void* ReallocationFunction(
     size_t                                      alignment,
     VkSystemAllocationScope                     allocationScope)
 {
-    auto addr = bufferPtr;
-    std::memcpy(addr, pOriginal, size);
-    bufferPtr += size;
-    return addr;
+    //auto addr = bufferPtr;
+    //std::memcpy(addr, pOriginal, size);
+    //bufferPtr += size;
+    //return addr;
+    return nullptr;
 }
 
 ///////////////////////////////////////////////////////////

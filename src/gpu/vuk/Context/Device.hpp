@@ -56,8 +56,6 @@ void Device::Create(Physical& physical)
 
     VkCheck(vkCreateDevice(physical.physical, &deviceInfo, GetAlloc(), &device));
     vkGetDeviceQueue(device, physical.queueIndex, 0, &queue);
-
-    g_devicePtr = device;
 }
 
 ///////////////////////////////////////////////////////////
@@ -65,7 +63,6 @@ void Device::Create(Physical& physical)
 void Device::Destroy()
 {
     vkDestroyDevice(device, nullptr);
-    g_devicePtr = nullptr;
 }
 
 ///////////////////////////////////////////////////////////

@@ -46,7 +46,7 @@ void DefaultState::Destroy()
 
 void DefaultState::Update(RenderData& renderData)
 {
-
+    
 }
 
 ///////////////////////////////////////////////////////////

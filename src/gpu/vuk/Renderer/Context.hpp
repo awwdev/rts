@@ -26,6 +26,11 @@ struct Context
 
 ///////////////////////////////////////////////////////////
 
+inline Context* g_contextPtr; 
+inline VkDevice g_devicePtr;
+
+///////////////////////////////////////////////////////////
+
 void Context::Create(WindowHandle const& wndHandle)
 {
     instance.Create();
@@ -33,16 +38,22 @@ void Context::Create(WindowHandle const& wndHandle)
     device.Create(physical);
     surface.Create(instance, physical, wndHandle);
     swapchain.Create(device, surface);
+
+    g_contextPtr = this;
+    g_devicePtr = device.device;
 }
 
 ///////////////////////////////////////////////////////////
 
 void Context::Destroy()
 {
-    swapchain.Destroy();
-    surface.Destroy(instance);
+    swapchain.Destroy(device.device);
+    surface.Destroy(instance.instance);
     device.Destroy();
     instance.Destroy();
+
+    g_contextPtr = nullptr;
+    g_devicePtr  = nullptr;
 }
 
 ///////////////////////////////////////////////////////////

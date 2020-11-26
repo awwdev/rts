@@ -17,7 +17,7 @@ struct Surface
     VkSurfaceCapabilitiesKHR capabilities;
 
     void Create(Instance&, Physical&, WindowHandle const&);
-    void Destroy(Instance&);
+    void Destroy(VkInstance);
     void UpdateSurfaceCapabilities(Physical&);
 };
 
@@ -54,9 +54,9 @@ void Surface::Create(Instance& instance, Physical& physical, WindowHandle const&
 
 ///////////////////////////////////////////////////////////
 
-void Surface::Destroy(Instance& instance)
+void Surface::Destroy(VkInstance instance)
 {
-    vkDestroySurfaceKHR(instance.instance, surface, GetAlloc());
+    vkDestroySurfaceKHR(instance, surface, GetAlloc());
 }
 
 ///////////////////////////////////////////////////////////
