@@ -129,6 +129,8 @@ void Renderer::Update()
         .pResults               = nullptr
     };
     auto res2 = vkQueuePresentKHR(context.device.queue, &presentInfo);
+    if (res2 != VK_SUCCESS)
+        com::PrintWarning("vkQueuePresentKHR not success", res2);
 
     currentFrame = (currentFrame + 1) % (context.swapchain.images.count - 1);
 }

@@ -11,10 +11,10 @@ namespace mini::vuk {
 
 struct Sync
 {
-    com::SimpleArray<VkSemaphore, 4> imageAcquired;
-    com::SimpleArray<VkSemaphore, 4> imageFinished;
-    com::SimpleArray<VkFence, 4> fences;
-    com::SimpleArray<VkFence, 4> inFlight {};
+    com::Array<VkSemaphore, 4> imageAcquired;
+    com::Array<VkSemaphore, 4> imageFinished;
+    com::Array<VkFence, 4> fences;
+    com::Array<VkFence, 4> inFlight {};
 
     void Create(Swapchain&);
     void Destroy();
@@ -43,11 +43,11 @@ void Sync::Create(Swapchain& swapchain)
         .flags = VK_FENCE_CREATE_SIGNALED_BIT 
     };
 
-    FOR_SIMPLE_ARRAY(imageAcquired, i) 
+    FOR_ARRAY(imageAcquired, i) 
         vkCreateSemaphore(g_devicePtr, &semaphoreInfo, GetAlloc(), &imageAcquired[i]);    
-    FOR_SIMPLE_ARRAY(imageFinished, i) 
+    FOR_ARRAY(imageFinished, i) 
         vkCreateSemaphore(g_devicePtr, &semaphoreInfo, GetAlloc(), &imageFinished[i]);  
-    FOR_SIMPLE_ARRAY(fences, i) 
+    FOR_ARRAY(fences, i) 
         vkCreateFence(g_devicePtr, &fenceInfo, GetAlloc(), &fences[i]);
     
 }
@@ -56,11 +56,11 @@ void Sync::Create(Swapchain& swapchain)
 
 void Sync::Destroy()
 {
-    FOR_SIMPLE_ARRAY(imageAcquired, i) 
+    FOR_ARRAY(imageAcquired, i) 
         vkDestroySemaphore(g_devicePtr, imageAcquired[i], GetAlloc());
-    FOR_SIMPLE_ARRAY(imageFinished, i) 
+    FOR_ARRAY(imageFinished, i) 
         vkDestroySemaphore(g_devicePtr, imageFinished[i], GetAlloc());
-    FOR_SIMPLE_ARRAY(fences, i)        
+    FOR_ARRAY(fences, i)        
         vkDestroyFence(g_devicePtr, fences[i], GetAlloc());
 
     imageAcquired.count = 0;

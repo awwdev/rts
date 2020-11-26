@@ -3,7 +3,7 @@
 #include "vuk/Vulkan.hpp"
 #include "vuk/Renderer/CommandsExt.hpp"
 #include "vuk/Context/Swapchain.hpp"
-#include "com/SimpleArray.hpp"
+#include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -14,7 +14,7 @@ namespace mini::vuk {
 struct Commands 
 {
     VkCommandPool pool;
-    com::SimpleArray<VkCommandBuffer, 4> buffers;
+    com::Array<VkCommandBuffer, 4> buffers;
     void Create(uint32_t, Swapchain&);
     void Destroy();
 };

@@ -3,7 +3,7 @@
 #include "vuk/Vulkan.hpp"
 #include "vuk/Context/Device.hpp"
 #include "vuk/Context/Surface.hpp"
-#include "com/SimpleArray.hpp"
+#include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -14,8 +14,8 @@ namespace mini::vuk {
 struct Swapchain
 {
     VkSwapchainKHR swapchain;
-    com::SimpleArray<VkImage, 4> images;
-    com::SimpleArray<VkImageView, 4> views;
+    com::Array<VkImage, 4> images;
+    com::Array<VkImageView, 4> views;
     uint32_t width;
     uint32_t height;
     VkFormat format = VK_FORMAT_B8G8R8A8_SRGB;
@@ -94,13 +94,13 @@ void Swapchain::Create(Device& device, Surface& surface)
 void Swapchain::Destroy()
 {
     vkDestroySwapchainKHR(g_devicePtr, swapchain, GetAlloc());
-    FOR_SIMPLE_ARRAY(views, i)
+    FOR_ARRAY(views, i)
     {
         vkDestroyImageView(g_devicePtr, views[i], GetAlloc());
         views[i] = nullptr;
     }
     views.count = 0;
-    FOR_SIMPLE_ARRAY(images, i)
+    FOR_ARRAY(images, i)
     {
         images[i] = nullptr; //swapchain will destroy images
     }

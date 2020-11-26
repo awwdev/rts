@@ -1,8 +1,6 @@
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include "wnd/Win32/Win32_Undef.hpp"
+#include "com/Windows.hpp"
 #include "app/Global.hpp"
 #include "com/Time.hpp"
 #include "com/Print.hpp"

@@ -1,0 +1,11 @@
+#pragma once
+
+#include "mem/MemoryAlloc.hpp"
+
+///////////////////////////////////////////////////////////
+
+namespace mini::mem {
+
+
+
+}//ns

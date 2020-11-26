@@ -2,7 +2,7 @@
 
 #include "vuk/Vulkan.hpp"
 #include "vuk/Context/Swapchain.hpp"
-#include "com/SimpleArray.hpp"
+#include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -17,8 +17,8 @@ struct RenderPass
     uint32_t height;
     VkFormat format;
 
-    com::SimpleArray<VkFramebuffer, 4> framebuffers;
-    com::SimpleArray<VkRenderPassBeginInfo, 4> beginInfos;
+    com::Array<VkFramebuffer, 4> framebuffers;
+    com::Array<VkRenderPassBeginInfo, 4> beginInfos;
 
     void Create(Swapchain&);
     void Destroy();
@@ -132,13 +132,13 @@ void RenderPass::Create(Swapchain& swapchain)
 void RenderPass::Destroy()
 {
     vkDestroyRenderPass(g_devicePtr, renderPass, GetAlloc());
-    FOR_SIMPLE_ARRAY(framebuffers, i)
+    FOR_ARRAY(framebuffers, i)
     {
         vkDestroyFramebuffer(g_devicePtr, framebuffers[i], GetAlloc());
         framebuffers[i] = nullptr;
     }
     framebuffers.count = 0;
-    FOR_SIMPLE_ARRAY(beginInfos, i)
+    FOR_ARRAY(beginInfos, i)
     {
         beginInfos[i] = {};
     }

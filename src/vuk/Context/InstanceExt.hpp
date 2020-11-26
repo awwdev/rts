@@ -1,7 +1,7 @@
 #pragma once
 
 #include "vuk/Vulkan.hpp"
-#include "com/SimpleArray.hpp"
+#include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -56,7 +56,7 @@ inline auto DebugMessengerInfo()
 
 inline void PrintInstanceLayers()
 {
-    com::SimpleArray<VkLayerProperties, 20> layers;
+    com::Array<VkLayerProperties, 20> layers;
     vkEnumerateInstanceLayerProperties(&layers.count, nullptr);
     vkEnumerateInstanceLayerProperties(&layers.count, layers.data);
     for(uint32_t i = 0; i < layers.count; ++i)

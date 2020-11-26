@@ -1,10 +1,7 @@
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include "wnd/Win32/Win32_Undef.hpp"
+#include "com/Windows.hpp"
 #include "wnd/Win32/Win32_WindowProc.hpp"
-#include "wnd/Win32/Win32_WinAssert.hpp"
 #include "com/Types.hpp"
 #include "com/Print.hpp"
 
@@ -49,7 +46,7 @@ i32 ypos   = CW_USEDEFAULT)
         .lpszClassName  = wndClassName,
         .hIconSm        = LoadIcon(NULL, IDI_APPLICATION),
     };
-    WinAssert(RegisterClassEx(&wndClass));
+    com::WinAssert(RegisterClassEx(&wndClass));
 
     hWnd = CreateWindowEx(
         0,                                //dwExStyle                  
@@ -65,15 +62,15 @@ i32 ypos   = CW_USEDEFAULT)
         hInstance,                        //hInstance
         0                                 //lpParam
     );
-    WinAssert(hWnd);  
+    com::WinAssert(hWnd);  
 }
 
 ///////////////////////////////////////////////////////////
 
 Win32_Window::~Win32_Window()
 {
-    WinAssert(DestroyWindow(hWnd));
-    WinAssert(UnregisterClass(wndClassName, hInstance));
+    com::WinAssert(DestroyWindow(hWnd));
+    com::WinAssert(UnregisterClass(wndClassName, hInstance));
 }
 
 ///////////////////////////////////////////////////////////

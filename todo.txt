@@ -1,0 +1,1 @@
+- test static linkage on linux

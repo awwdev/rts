@@ -1,7 +1,7 @@
 #pragma once
 
 #include "com/Types.hpp"
-#include "com/SimpleArray.hpp"
+#include "com/Array.hpp"
 #include "app/Events.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -16,13 +16,13 @@ inline i32  fps;
 inline bool hasSecondPassed;
 inline i32  windowWidth;
 inline i32  windowHeight;
-inline com::SimpleArray<Event, 10> events;
+inline com::Array<Event, 10> events;
 
 ///////////////////////////////////////////////////////////
 
 inline bool HasEvent(app::EventEnum eventEnum)
 {
-    FOR_SIMPLE_ARRAY(events, i)
+    FOR_ARRAY(events, i)
     {
         auto& ev = events[i];
         if (ev.eventEnum == eventEnum)

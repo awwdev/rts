@@ -34,7 +34,7 @@ void Instance::Create()
         .apiVersion             = VK_API_VERSION_1_0,
     };
 
-    com::SimpleArray<chars_t, 4> layers
+    com::Array<chars_t, 4> layers
     {
         #ifdef _WIN32
         "VK_LAYER_KHRONOS_validation"
@@ -44,7 +44,7 @@ void Instance::Create()
         #endif 
     };
 
-    com::SimpleArray extensions
+    com::Array extensions
     {
         VK_EXT_DEBUG_UTILS_EXTENSION_NAME,
         VK_KHR_SURFACE_EXTENSION_NAME,
