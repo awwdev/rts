@@ -33,7 +33,6 @@ void Context::Create(WindowHandle const& wndHandle)
     device.Create(physical);
     surface.Create(instance, physical, wndHandle);
     swapchain.Create(device, surface);
-    PrintPhysicalAPI(physical.physicalProps);
 }
 
 ///////////////////////////////////////////////////////////

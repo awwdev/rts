@@ -2,6 +2,7 @@
 #include "mem/Memory.hpp"
 #include "app/Global.hpp"
 #include "vuk/Renderer.hpp"
+#include "net/UdpSocket.hpp"
 #include "com/Time.hpp"
 #include "com/Clock.hpp"
 
@@ -16,15 +17,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
     wnd::Console console { 600, 400, 64, 400 + 64 };
     mem::GlobalAlloc();
+    mem::PrintAlloc();
+    net::InitializeWinsock();
 
     //struct Foo { int num; };
     //auto blockPtr = mem::ClaimBlock<Foo>(42);
     //system("pause");
 
-    mem::PrintAlloc();
     {
-        wnd::Window   window   { "mini window", 600, 400, 64, 64 };
-        vuk::Renderer renderer { { window.hInstance, window.hWnd } };
+        wnd::Window    window   { "mini window", 600, 400, 64, 64 };
+        vuk::Renderer  renderer { { window.hInstance, window.hWnd } };
+        net::UdpSocket socket  {};
 
         while(app::glo::isAppRunning)
         {
@@ -38,6 +41,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
                 app::glo::isAppRunning = false;
         }
     }
+
+    net::DestroyWinsock();
     mem::GlobalDealloc();
     return EXIT_SUCCESS;
 }
@@ -50,6 +55,9 @@ int main()
 {
     wnd::Window   window { "mini window", 600, 400, 64, 64 };
     vuk::Renderer renderer { { window.display, window.window } };
+
+    //TODO socket
+    //TODO mem
 
     while(app::glo::isAppRunning)
     {

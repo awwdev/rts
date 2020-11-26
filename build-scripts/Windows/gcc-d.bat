@@ -16,6 +16,7 @@ g++ ^
 -Wall -Wextra -Wpedantic ^
 -Wno-unused-parameter ^
 -Wno-unused-function ^
+-Wno-unused-variable ^
 -I %src_hpp% ^
 -I %ext_hpp% ^
 -L %ext_lib% ^

@@ -11,7 +11,7 @@ namespace mini::vuk {
 
 inline void PrintPhysicalAPI(VkPhysicalDeviceProperties& physicalProps)
 {
-    com::PrintColored(com::ConsoleColor::Cyan, "Vulkan physical API version", 
+    com::PrintColored(com::ConsoleColor::Magenta, "Vulkan physical API version", 
         VK_VERSION_MAJOR(physicalProps.apiVersion),
         VK_VERSION_MINOR(physicalProps.apiVersion), 
         VK_VERSION_PATCH(physicalProps.apiVersion)

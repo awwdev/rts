@@ -58,6 +58,8 @@ Renderer::Renderer(WindowHandle const& wndHandle)
     states.Create(context); 
     commands.Create(context.physical.queueIndex, context.swapchain);
     sync.Create(context.swapchain);
+    
+    PrintPhysicalAPI(context.physical.physicalProps);
 }
 
 ///////////////////////////////////////////////////////////
