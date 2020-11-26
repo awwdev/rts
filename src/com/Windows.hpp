@@ -22,6 +22,17 @@ inline void WinAssert(auto expr)
     }
 }
 
+////////////////////////////////////////////////////////////
+
+inline void WinSockAssert(auto expr)
+{
+    if (expr != 0)
+    {
+        auto err = WSAGetLastError();
+        com::PrintError("WinSockAssert failed", err);
+    }
+}
+
 ///////////////////////////////////////////////////////////
 
 }//ns

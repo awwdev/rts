@@ -1,10 +1,11 @@
 #include "wnd/Window.hpp"
 #include "mem/Memory.hpp"
 #include "app/Global.hpp"
-#include "vuk/Renderer.hpp"
+#include "gpu/vuk/Renderer.hpp"
 #include "net/UdpSocket.hpp"
 #include "com/Time.hpp"
 #include "com/Clock.hpp"
+#include "app/Scene.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -20,18 +21,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     mem::PrintAlloc();
     net::InitializeWinsock();
 
-    //struct Foo { int num; };
-    //auto blockPtr = mem::ClaimBlock<Foo>(42);
-    //system("pause");
-
     {
-        wnd::Window    window   { "mini window", 600, 400, 64, 64 };
-        vuk::Renderer  renderer { { window.hInstance, window.hWnd } };
-        net::UdpSocket socket  {};
+        wnd::Window window { "mini window", 600, 400, 64, 64 };
+        gpu::vuk::Renderer renderer { { window.hInstance, window.hWnd } };
+        net::UdpSocket socket;
+        app::Scene scene;
 
         while(app::glo::isAppRunning)
         {
             window.Update(); 
+            scene.Update();
             renderer.Update();
             
             com::dt::UpdateTime();
@@ -54,7 +53,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 int main()
 {
     wnd::Window   window { "mini window", 600, 400, 64, 64 };
-    vuk::Renderer renderer { { window.display, window.window } };
+    gpu::vuk Renderer renderer { { window.display, window.window } };
 
     //TODO socket
     //TODO mem

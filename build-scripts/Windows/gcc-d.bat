@@ -17,6 +17,7 @@ g++ ^
 -Wno-unused-parameter ^
 -Wno-unused-function ^
 -Wno-unused-variable ^
+-Wno-unused-but-set-variable ^
 -I %src_hpp% ^
 -I %ext_hpp% ^
 -L %ext_lib% ^

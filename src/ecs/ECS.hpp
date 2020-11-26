@@ -1,0 +1,29 @@
+#pragma once
+
+#include "ecs/Systems/RenderSystem.hpp"
+#include "ecs/ComponentArrays.hpp"
+#include "gpu/RenderData.hpp"
+
+///////////////////////////////////////////////////////////
+
+namespace mini::ecs {
+
+///////////////////////////////////////////////////////////
+
+struct ECS 
+{
+    ComponentArrays arrays;
+    void Update(gpu::RenderData&);
+};
+
+///////////////////////////////////////////////////////////
+
+void ECS::Update(gpu::RenderData& renderData)
+{
+    //calling systems
+    RenderSystem(arrays, renderData);
+}
+
+///////////////////////////////////////////////////////////
+
+}//ns

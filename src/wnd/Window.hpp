@@ -15,7 +15,7 @@ namespace mini::wnd
 ///////////////////////////////////////////////////////////
 
 #ifdef __linux__
-#include "wnd/Linux/X11_Window.hpp"
+#include "wnd/Unix/X11_Window.hpp"
 namespace mini::wnd 
 {
     using Window = X11_Window;

@@ -20,7 +20,7 @@
 },
 {
     "label": "gcc-d",
-    "command": "${workspaceFolder}/build-scripts/Linux/gcc-d.sh",
+    "command": "${workspaceFolder}/build-scripts/Unix/gcc-d.sh",
     "type": "shell",
     "options": {
         "env": {

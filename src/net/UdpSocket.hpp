@@ -13,7 +13,7 @@ namespace mini::net
 ///////////////////////////////////////////////////////////
 
 #ifdef __linux__
-#include "wnd/Linux/X11_Window.hpp"
+#include "wnd/Unix/X11_Window.hpp"
 namespace mini::net 
 {
     using UdpSocket = void*;
