@@ -24,7 +24,7 @@ struct Win32_UdpSocket
     ~Win32_UdpSocket();
 
     void Bind(addr_t address = ADDR_ANY, port_t port = 54000);
-    void Unbind();
+    void Close();
     void Send(const byte_t* data, i32 size);
     void Receive();
 };
@@ -45,7 +45,7 @@ Win32_UdpSocket::Win32_UdpSocket()
 
 Win32_UdpSocket::~Win32_UdpSocket()
 {
-    Unbind();
+    Close();
 }
 
 ///////////////////////////////////////////////////////////
@@ -65,11 +65,10 @@ void Win32_UdpSocket::Bind(addr_t address, port_t port)
 
 ///////////////////////////////////////////////////////////
 
-void Win32_UdpSocket::Unbind()
+void Win32_UdpSocket::Close()
 {
     if (isBound)
     {
-        
         com::WinSockAssert(closesocket(sock));
         isBound = false;
     }
