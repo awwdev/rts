@@ -15,6 +15,7 @@ g++ ^
 -std=c++2a ^
 -Wall -Wextra -Wpedantic ^
 -Wno-unused-parameter ^
+-Wno-unused-function ^
 -I %src_hpp% ^
 -I %ext_hpp% ^
 -L %ext_lib% ^

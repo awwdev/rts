@@ -8,8 +8,7 @@
 #include <sys/mman.h>
 #endif
 
-#include "mem/BlockPtr.hpp"
-#include "mem/MemoryBlocks.hpp"
+#include "mem/MemoryInfo.hpp"
 #include "com/Bitset.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -21,7 +20,7 @@ namespace mini::mem {
 inline i8* blockArrayPtrs [BLOCK_ARRAY_COUNT];
 inline com::Bitset<BLOCK_COUNT_TOTAL> blocksUsed;
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 static void GlobalAlloc()
 {
@@ -38,11 +37,11 @@ static void GlobalAlloc()
 
     for(idx_t i = 1; i < BLOCK_ARRAY_COUNT; ++i)
     {
-        blockArrayPtrs[i] = blockArrayPtrs[i-1] + BLOCK_ARRAYS[i-1].size * BLOCK_ARRAYS[i-1].count;
+        blockArrayPtrs[i] = blockArrayPtrs[i-1] + BLOCK_ARRAY_INFOS[i-1].blockSize * BLOCK_ARRAY_INFOS[i-1].count;
     }
 }
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 static void GlobalDealloc()
 {
@@ -52,6 +51,17 @@ static void GlobalDealloc()
     #ifdef __linux__
     munmap(blockArrayPtrs[0], ALLOCATION_SIZE);
     #endif
+}
+
+///////////////////////////////////////////////////////////
+
+static void PrintAlloc()
+{
+    FOR_C_ARRAY(blockArrayPtrs, i)
+    {
+        auto addr = (std::uintptr_t) blockArrayPtrs[i];
+        com::Print("BlockArrayInfo", i, std::hex, addr, std::dec);
+    }
 }
 
 ///////////////////////////////////////////////////////////

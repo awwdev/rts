@@ -23,7 +23,7 @@ struct Shader
     static VkPipelineShaderStageCreateInfo CreateShaderInfo(VkShaderStageFlagBits, VkShaderModule);
 };
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 void Shader::Create(chars_t pathVert, chars_t pathFrag)
 {
@@ -33,7 +33,7 @@ void Shader::Create(chars_t pathVert, chars_t pathFrag)
     stageInfos[1] = CreateShaderInfo(VK_SHADER_STAGE_FRAGMENT_BIT, modules[1]);
 }
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 void Shader::Destroy()
 {
@@ -41,7 +41,7 @@ void Shader::Destroy()
     vkDestroyShaderModule(g_devicePtr, modules[1], GetAlloc());    
 }
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 VkShaderModule Shader::LoadShaderModule(chars_t path)
 {
@@ -69,7 +69,7 @@ VkShaderModule Shader::LoadShaderModule(chars_t path)
     return mod;
 }
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 VkPipelineShaderStageCreateInfo Shader::CreateShaderInfo(VkShaderStageFlagBits stage, VkShaderModule mod)
 {
@@ -84,6 +84,6 @@ VkPipelineShaderStageCreateInfo Shader::CreateShaderInfo(VkShaderStageFlagBits s
     };
 }
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 }//ns

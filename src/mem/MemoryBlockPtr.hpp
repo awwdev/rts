@@ -15,6 +15,9 @@ TEMPLATE struct BlockPtr
 {
     idx_t blockId = 0;
     T*    ptr = nullptr;
+
+    //BlockPtr() = default;
+    //~BlockPtr();
 };
 
 ///////////////////////////////////////////////////////////

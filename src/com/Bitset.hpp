@@ -3,6 +3,7 @@
 #include <cstring>
 #include "com/Types.hpp"
 #include "com/Assert.hpp"
+#include "com/Optional.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -25,6 +26,8 @@ TEMPLATE struct Bitset
     bool Test(idx_t) const;
     void Flip(idx_t);
     void Clear();
+    
+    Optional<idx_t> FindFirstFreeBit(idx_t startAt = 0);
 
     inline constexpr idx_t Bit (auto const i) { return static_cast<idx_t>(i) % idx_t { 8 }; }
     inline constexpr idx_t Byte(auto const i) { return static_cast<idx_t>(i) / idx_t { 8 }; }
@@ -41,7 +44,7 @@ TEMPLATE void Bitset<N>::Set(idx_t idx, bool setTrue)
         : bytes[Byte(idx)] & ~(1 << Bit(idx));
 }
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 TEMPLATE bool Bitset<N>::Test(idx_t idx) const
 {
@@ -49,7 +52,7 @@ TEMPLATE bool Bitset<N>::Test(idx_t idx) const
     return bytes[Byte(idx)] & (1 << Bit(idx));
 }
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 TEMPLATE void Bitset<N>::Flip(idx_t idx)
 {
@@ -57,7 +60,7 @@ TEMPLATE void Bitset<N>::Flip(idx_t idx)
     bytes[Byte(idx)] ^= 1 << Bit(idx);
 }
 
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 TEMPLATE void Bitset<N>::Clear()
 {
@@ -65,6 +68,19 @@ TEMPLATE void Bitset<N>::Clear()
 }
 
 ///////////////////////////////////////////////////////////
+
+TEMPLATE Optional<idx_t> Bitset<N>::FindFirstFreeBit(idx_t startAt)
+{
+    for(idx_t i = startAt; i < BIT_COUNT; ++i)
+    {   
+        const auto bit = bytes[Byte(i)] & (1 << Bit(i));
+        if (bit == 0) 
+            return i;
+    }
+    return {};
+}
+
+////////////////////////////////////////////////////////////
 
 #undef TEMPLATE
 
