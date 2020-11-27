@@ -20,9 +20,11 @@ using u32 = std::uint32_t;
 using f32 = float;
 using f64 = double;
 
+///////////////////////////////////////////////////////////
+
 using chars_t = char const *;
-using idx_t = u32; //unsigned because of STL and Vulkan
-using byte_t = char;
+using idx_t   = u32; //unsigned because of STL and Vulkan
+using byte_t  = char;
 
 ///////////////////////////////////////////////////////////
 

@@ -2,6 +2,7 @@
 
 #include "com/Windows.hpp"
 #include "net/Win32/Win32_UdpSocket.hpp"
+#include "net/IpAddress.hpp"
 #include "com/Types.hpp"
 #include "com/Assert.hpp"
 #include "com/Print.hpp"
@@ -18,7 +19,8 @@ struct Win32_Network
 
     Win32_Network();
     ~Win32_Network();
-    void Connect();
+
+    void Connect(IpAddress const&);
     void Disconnect();
 };
 
@@ -27,11 +29,12 @@ struct Win32_Network
 Win32_Network::Win32_Network()
 {
     WSADATA wsaData;
-    WinCheck(WSAStartup(MAKEWORD(2, 2), &wsaData));
+    WinSockCheck(WSAStartup(MAKEWORD(2, 2), &wsaData));
     com::PrintColored(com::ConsoleColor::Magenta, "Winsock", 
     (i32)LOBYTE(wsaData.wVersion), (i32)HIBYTE(wsaData.wVersion));
 
     socket.Init();
+    Connect({ "127.0.0.1", 27015 });
 }
 
 ////////////////////////////////////////////////////////////
@@ -39,14 +42,14 @@ Win32_Network::Win32_Network()
 Win32_Network::~Win32_Network()
 {
     Disconnect();
-    WinCheck(WSACleanup());
+    WinSockCheck(WSACleanup());
 }
 
 ///////////////////////////////////////////////////////////
 
-void Win32_Network::Connect()
+void Win32_Network::Connect(IpAddress const& ip)
 {
-    socket.Bind();
+    socket.Bind(ip);
 }
 
 ///////////////////////////////////////////////////////////

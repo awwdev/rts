@@ -30,7 +30,7 @@ inline void WinCheck(auto expr, chars_t msg = "")
 namespace mini::net 
 {
 
-inline void WinCheck(auto pExpr, chars_t msg = "")
+inline void WinSockCheck(auto pExpr, chars_t msg = "")
 {
     bool expr = [&]
     {
