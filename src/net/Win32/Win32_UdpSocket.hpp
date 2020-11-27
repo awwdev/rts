@@ -14,14 +14,13 @@ struct Win32_UdpSocket
 {
     SOCKET sock;
     bool isBound;
-    char receiveBuffer [MAX_DATAGRAM_SIZE];
 
     void Init();
     void Bind(IpAddress const&);
     void Close();
 
     void Send(IpAddress const&, Packet const&);
-    bool Receive();
+    auto Receive() -> Packet;
 };
 
 ///////////////////////////////////////////////////////////
@@ -67,15 +66,16 @@ void Win32_UdpSocket::Send(IpAddress const& ip, Packet const& packet)
 
 ///////////////////////////////////////////////////////////
 
-bool Win32_UdpSocket::Receive()
+auto Win32_UdpSocket::Receive() -> Packet
 {
+    Packet packet {};
     sockaddr_in sockaddr;
     int sockaddrSize = sizeof(sockaddr);
-    auto bytesRecv = recvfrom(sock, receiveBuffer, array_extent(receiveBuffer), 0, (SOCKADDR*) &sockaddr, &sockaddrSize);
-    WinSockCheck(bytesRecv != SOCKET_ERROR);
+    packet.size = recvfrom(sock, packet.data, array_extent(packet.data), 0, (SOCKADDR*) &sockaddr, &sockaddrSize);
+    WinSockCheck(packet.size != SOCKET_ERROR);
     auto ip = CreateIpAddress(sockaddr);
-    com::Print("received", bytesRecv, "from", ip.str, ip.port);
-    return bytesRecv > 0;
+    com::Print("received", packet.size, "from", ip.str, ip.port);
+    return packet;
 }
 
 ///////////////////////////////////////////////////////////

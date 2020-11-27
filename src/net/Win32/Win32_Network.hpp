@@ -37,12 +37,17 @@ Win32_Network::Win32_Network()
     Connect(IpAddress{ "127.0.0.1", 27015 });
     Packet packet;
     packet.Write("Hello");
-    packet.Write(42);
+    packet.Write(int(42));
     socket.Send(IpAddress{ "127.0.0.1", 27015 }, packet);
     
-    if (socket.Receive())
+    auto packet2 = socket.Receive();
+    if (packet2.size > 0)
     {
-
+        char str [6];
+        int  num;
+        packet2.Read(str);
+        packet2.Read(num);
+        com::Print("packet content", str, num);
     }
 }
 
