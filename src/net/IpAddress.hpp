@@ -11,19 +11,29 @@ namespace mini::net {
 
 struct IpAddress
 {
-    chars_t address;
-    u16 port;
+    char str [INET_ADDRSTRLEN];
+    u16  port;
 };
 
 ////////////////////////////////////////////////////////////
 
-inline auto CreateIpAddress(IpAddress const& ip)
+inline auto CreateSockAddr(IpAddress const& ip)
 {
     sockaddr_in sockaddr {};
-    sockaddr.sin_family      = AF_INET;
-    sockaddr.sin_addr.s_addr = inet_addr(ip.address);
-    sockaddr.sin_port        = htons(ip.port);
+    sockaddr.sin_family = AF_INET;
+    sockaddr.sin_port = htons(ip.port);
+    inet_pton(AF_INET, ip.str, &sockaddr.sin_addr);
     return sockaddr;
+}
+
+///////////////////////////////////////////////////////////
+
+inline auto CreateIpAddress(sockaddr_in const& sockaddr)
+{
+    IpAddress ip;
+    inet_ntop(AF_INET, &(sockaddr.sin_addr), ip.str, INET_ADDRSTRLEN);
+    ip.port = ntohs(sockaddr.sin_port);
+    return ip;
 }
 
 ///////////////////////////////////////////////////////////

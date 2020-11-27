@@ -34,11 +34,16 @@ Win32_Network::Win32_Network()
     (i32)LOBYTE(wsaData.wVersion), (i32)HIBYTE(wsaData.wVersion));
 
     socket.Init();
-    Connect({ "127.0.0.1", 27015 });
+    Connect(IpAddress{ "127.0.0.1", 27015 });
     Packet packet;
     packet.Write("Hello");
     packet.Write(42);
-    socket.Send({ "127.0.0.1", 27015 }, packet);
+    socket.Send(IpAddress{ "127.0.0.1", 27015 }, packet);
+    
+    if (socket.Receive())
+    {
+
+    }
 }
 
 ////////////////////////////////////////////////////////////

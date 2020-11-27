@@ -21,7 +21,7 @@ struct Win32_UdpSocket
     void Close();
 
     void Send(IpAddress const&, Packet const&);
-    void Receive();
+    bool Receive();
 };
 
 ///////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ void Win32_UdpSocket::Init()
 
 void Win32_UdpSocket::Bind(IpAddress const& ip)
 {
-    auto sockaddr = CreateIpAddress(ip);
+    auto sockaddr = CreateSockAddr(ip);
     WinSockCheck(bind(sock, (SOCKADDR*) &sockaddr, sizeof(sockaddr)));
     isBound = true;
 }
@@ -59,19 +59,23 @@ void Win32_UdpSocket::Close()
 void Win32_UdpSocket::Send(IpAddress const& ip, Packet const& packet)
 {
     if (packet.size <= 0) return;
-    auto sockaddr = CreateIpAddress(ip);
-    auto bytesSend = sendto(sock, packet.data, packet.size, 0, (SOCKADDR*) &sockaddr, sizeof(sockaddr));
-    WinSockCheck(bytesSend != SOCKET_ERROR);
-    com::Print("send", bytesSend);
+    auto sockaddr = CreateSockAddr(ip);
+    auto bytesSent = sendto(sock, packet.data, packet.size, 0, (SOCKADDR*) &sockaddr, sizeof(sockaddr));
+    WinSockCheck(bytesSent != SOCKET_ERROR);
+    com::Print("send", bytesSent);
 }
 
 ///////////////////////////////////////////////////////////
 
-void Win32_UdpSocket::Receive()
+bool Win32_UdpSocket::Receive()
 {
     sockaddr_in sockaddr;
     int sockaddrSize = sizeof(sockaddr);
-    WinSockCheck(recvfrom(sock, receiveBuffer, array_extent(receiveBuffer), 0, (SOCKADDR*) &sockaddr, &sockaddrSize));
+    auto bytesRecv = recvfrom(sock, receiveBuffer, array_extent(receiveBuffer), 0, (SOCKADDR*) &sockaddr, &sockaddrSize);
+    WinSockCheck(bytesRecv != SOCKET_ERROR);
+    auto ip = CreateIpAddress(sockaddr);
+    com::Print("received", bytesRecv, "from", ip.str, ip.port);
+    return bytesRecv > 0;
 }
 
 ///////////////////////////////////////////////////////////
