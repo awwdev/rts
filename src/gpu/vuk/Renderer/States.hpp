@@ -2,6 +2,7 @@
 
 #include "gpu/vuk/States/DefaultState.hpp"
 #include "gpu/RenderData.hpp"
+#include "gpu/vuk/Renderer/Commands.hpp"
 
 ///////////////////////////////////////////////////////////
 

@@ -7,7 +7,7 @@
 ///////////////////////////////////////////////////////////////////////////
 {
     "name": "[Windows] mingw-gcc",
-    "compilerPath": "I:\\programs\\msys64\\mingw64\\bin\\g++.exe", 
+    //"compilerPath": "I:\\programs\\msys64\\mingw64\\bin\\g++.exe", 
     "includePath":
     [ 
         "${workspaceFolder}\\src\\**",
@@ -15,7 +15,8 @@
         "I:\\programs\\msys64\\mingw64\\include\\**"
     ],
     "cppStandard": "c++20",
-    "intelliSenseMode": "gcc-x64" 
+    //"intelliSenseMode": "gcc-x64" 
+    "intelliSenseMode": "msvc-x64" //gcc intellisense breaks at some point sadly
 },
 
 ///////////////////////////////////////////////////////////////////////////

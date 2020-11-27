@@ -8,7 +8,7 @@ namespace mini::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void DefaultRenderPass(RenderPass& renderPass, Swapchain& swapchain)
+inline void CreateDefaultRenderPass(RenderPass& renderPass, Swapchain& swapchain)
 {
     renderPass.Create(swapchain);
 }

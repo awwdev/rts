@@ -28,7 +28,7 @@ inline uint32_t MemoryType(
 
 struct Buffer
 {
-    VkBuffer buffer;
+    VkBuffer buffer = VK_NULL_HANDLE;
     VkDeviceMemory memory;
     void* memPtr;
     size_t allocationSize;

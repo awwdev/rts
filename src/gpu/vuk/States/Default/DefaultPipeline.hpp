@@ -8,7 +8,7 @@ namespace mini::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void DefaultPipeline(Pipeline& pipeline, Shader& shader, RenderPass& renderPass)
+inline void CreateDefaultPipeline(Pipeline& pipeline, Shader& shader, RenderPass& renderPass)
 {
     PipelineInfo pipelineInfo;
     

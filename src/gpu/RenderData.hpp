@@ -1,5 +1,7 @@
 #pragma once
 
+#include "gpu/DefaultVertex.hpp"
+
 ///////////////////////////////////////////////////////////
 
 namespace mini::gpu {

@@ -1,17 +1,19 @@
 #pragma once
 
-#include "gpu/vuk/Wrappers/Shader.hpp"
+#include "com/Vec.hpp"
 
 ///////////////////////////////////////////////////////////
 
-namespace mini::gpu::vuk {
+namespace mini::gpu {
 
 ///////////////////////////////////////////////////////////
 
-inline void CreateDefaultShader(Shader& shader)
+struct DefaultVertex
 {
-    shader.Create("res/Shaders/spv/default.vert.spv", "res/Shaders/spv/default.frag.spv");
-}
+    Vec2f pos;
+    Vec2f tex;
+    Vec2f col;
+};
 
 ///////////////////////////////////////////////////////////
 
