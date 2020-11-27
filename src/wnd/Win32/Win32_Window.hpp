@@ -46,7 +46,7 @@ i32 ypos   = CW_USEDEFAULT)
         .lpszClassName  = wndClassName,
         .hIconSm        = LoadIcon(NULL, IDI_APPLICATION),
     };
-    com::WinAssert(RegisterClassEx(&wndClass));
+    WinCheck(RegisterClassEx(&wndClass));
 
     hWnd = CreateWindowEx(
         0,                                //dwExStyle                  
@@ -62,15 +62,15 @@ i32 ypos   = CW_USEDEFAULT)
         hInstance,                        //hInstance
         0                                 //lpParam
     );
-    com::WinAssert(hWnd);  
+    WinCheck(hWnd);  
 }
 
 ///////////////////////////////////////////////////////////
 
 Win32_Window::~Win32_Window()
 {
-    com::WinAssert(DestroyWindow(hWnd));
-    com::WinAssert(UnregisterClass(wndClassName, hInstance));
+    WinCheck(DestroyWindow(hWnd));
+    WinCheck(UnregisterClass(wndClassName, hInstance));
 }
 
 ///////////////////////////////////////////////////////////

@@ -1,0 +1,23 @@
+#pragma once
+
+///////////////////////////////////////////////////////////
+
+namespace mini::net 
+{
+    constexpr auto MAX_DATAGRAM_SIZE = 65507;
+}
+
+///////////////////////////////////////////////////////////
+
+#ifdef _WIN32
+#include "net/Win32/Win32_Network.hpp"
+namespace mini::net
+{
+    using Network = Win32_Network;
+}
+#endif
+
+///////////////////////////////////////////////////////////
+
+#ifdef __linux__
+#endif

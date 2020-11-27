@@ -9,12 +9,12 @@ namespace mini::com {
 
 ///////////////////////////////////////////////////////////
 
-inline void Assert(bool expr, const char* msg)
+inline void Assert(bool expr, auto... args)
 {
     if (expr)
         return;
 
-    com::PrintError(msg);
+    com::PrintError(args...);
 
     #ifdef _WIN32
     __debugbreak();

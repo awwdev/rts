@@ -10,6 +10,7 @@
 
 #include "vulkan.h"
 #include "com/Print.hpp"
+#include "com/Assert.hpp"
 #include <cstring>
 
 ///////////////////////////////////////////////////////////
@@ -32,8 +33,7 @@ inline void VkCheck(VkResult result)
 
     if (result != VK_SUCCESS)
     {
-        com::PrintError("VkResult", result);
-        __builtin_trap();
+        com::Assert(false, "VkResult", result);
     }   
 }
 

@@ -6,33 +6,45 @@
 #include <ws2tcpip.h>
 #include "com/WindowsUndef.hpp"
 #include "com/Print.hpp"
+#include "com/Types.hpp"
+#include "com/Assert.hpp"
 
 ///////////////////////////////////////////////////////////
 
-namespace mini::com {
-
-///////////////////////////////////////////////////////////
-
-inline void WinAssert(auto expr)
+namespace mini::wnd
 {
-    if (expr == 0)
+    
+inline void WinCheck(auto expr, chars_t msg = "")
+{
+    if (expr == 0) //for handles and winbool
     {
         auto err = GetLastError();
-        com::PrintError("WinAssert failed", err);
+        com::Assert(false, "WinCheck failed", err, msg);
     }
 }
+
+}//ns
 
 ////////////////////////////////////////////////////////////
 
-inline void WinSockAssert(auto expr)
+namespace mini::net 
 {
-    if (expr != 0)
+
+inline void WinCheck(auto pExpr, chars_t msg = "")
+{
+    bool expr = [&]
+    {
+        if constexpr (std::is_pointer_v<decltype(pExpr)>)
+        return pExpr != 0; //success on handle
+        else    
+        return pExpr == 0; //success on int
+    }();
+
+    if (!expr)
     {
         auto err = WSAGetLastError();
-        com::PrintError("WinSockAssert failed", err);
+        com::Assert(false, "WinCheck failed", err, msg);
     }
 }
-
-///////////////////////////////////////////////////////////
 
 }//ns
