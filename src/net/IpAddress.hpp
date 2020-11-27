@@ -19,20 +19,20 @@ struct IpAddress
 
 inline auto CreateSockAddr(IpAddress const& ip)
 {
-    sockaddr_in sockaddr {};
-    sockaddr.sin_family = AF_INET;
-    sockaddr.sin_port = htons(ip.port);
-    inet_pton(AF_INET, ip.str, &sockaddr.sin_addr);
-    return sockaddr;
+    sockaddr_in addr {};
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(ip.port);
+    inet_pton(AF_INET, ip.str, &addr.sin_addr);
+    return addr;
 }
 
 ///////////////////////////////////////////////////////////
 
-inline auto CreateIpAddress(sockaddr_in const& sockaddr)
+inline auto CreateIpAddress(sockaddr_in const& addr)
 {
     IpAddress ip;
-    inet_ntop(AF_INET, &(sockaddr.sin_addr), ip.str, INET_ADDRSTRLEN);
-    ip.port = ntohs(sockaddr.sin_port);
+    inet_ntop(AF_INET, &(addr.sin_addr), ip.str, INET_ADDRSTRLEN);
+    ip.port = ntohs(addr.sin_port);
     return ip;
 }
 

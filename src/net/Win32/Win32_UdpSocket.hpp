@@ -18,6 +18,7 @@ struct Win32_UdpSocket
     void Init();
     void Bind(IpAddress const&);
     void Close();
+    auto GetAddress() const -> IpAddress;
 
     void Send(IpAddress const&, Packet const&);
     auto Receive() -> Packet;
@@ -39,8 +40,8 @@ void Win32_UdpSocket::Init()
 
 void Win32_UdpSocket::Bind(IpAddress const& ip)
 {
-    auto sockaddr = CreateSockAddr(ip);
-    WinSockCheck(bind(sock, (SOCKADDR*) &sockaddr, sizeof(sockaddr)));
+    auto addr = CreateSockAddr(ip);
+    WinSockCheck(bind(sock, (SOCKADDR*) &addr, sizeof(addr)));
     isBound = true;
 }
 
@@ -51,15 +52,25 @@ void Win32_UdpSocket::Close()
     if (!isBound) return;
     WinSockCheck(closesocket(sock));
     isBound = false;
-}        
+}       
+
+///////////////////////////////////////////////////////////
+
+auto Win32_UdpSocket::GetAddress() const -> IpAddress
+{
+    sockaddr_in addr;
+    i32 addrSize = sizeof(addr);
+    WinSockCheck(getsockname(sock, (SOCKADDR*) &addr, &addrSize));
+    return CreateIpAddress(addr);
+}
 
 ///////////////////////////////////////////////////////////
 
 void Win32_UdpSocket::Send(IpAddress const& ip, Packet const& packet)
 {
     if (packet.size <= 0) return;
-    auto sockaddr = CreateSockAddr(ip);
-    auto bytesSent = sendto(sock, packet.data, packet.size, 0, (SOCKADDR*) &sockaddr, sizeof(sockaddr));
+    auto addr = CreateSockAddr(ip);
+    auto bytesSent = sendto(sock, packet.data, packet.size, 0, (SOCKADDR*) &addr, sizeof(addr));
     WinSockCheck(bytesSent != SOCKET_ERROR);
     com::Print("send", bytesSent);
 }
@@ -69,11 +80,11 @@ void Win32_UdpSocket::Send(IpAddress const& ip, Packet const& packet)
 auto Win32_UdpSocket::Receive() -> Packet
 {
     Packet packet {};
-    sockaddr_in sockaddr;
-    int sockaddrSize = sizeof(sockaddr);
-    packet.size = recvfrom(sock, packet.data, array_extent(packet.data), 0, (SOCKADDR*) &sockaddr, &sockaddrSize);
+    sockaddr_in addr;
+    int addrSize = sizeof(addr);
+    packet.size = recvfrom(sock, packet.data, array_extent(packet.data), 0, (SOCKADDR*) &addr, &addrSize);
     WinSockCheck(packet.size != SOCKET_ERROR);
-    auto ip = CreateIpAddress(sockaddr);
+    auto ip = CreateIpAddress(addr);
     com::Print("received", packet.size, "from", ip.str, ip.port);
     return packet;
 }

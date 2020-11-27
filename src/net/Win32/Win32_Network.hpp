@@ -35,6 +35,9 @@ Win32_Network::Win32_Network()
 
     socket.Init();
     Connect(IpAddress{ "127.0.0.1", 27015 });
+    auto myAddress = socket.GetAddress();
+    com::Print("I am", myAddress.str, myAddress.port);
+
     Packet packet;
     packet.Write("Hello");
     packet.Write(int(42));
