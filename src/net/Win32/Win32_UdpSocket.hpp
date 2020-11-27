@@ -3,8 +3,6 @@
 #include "com/Windows.hpp"
 #include "net/Packet.hpp"
 #include "net/IpAddress.hpp"
-#include "com/Types.hpp"
-#include "com/Assert.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -16,12 +14,13 @@ struct Win32_UdpSocket
 {
     SOCKET sock;
     bool isBound;
+    char receiveBuffer [MAX_DATAGRAM_SIZE];
 
     void Init();
     void Bind(IpAddress const&);
     void Close();
 
-    void Send(IpAddress const&, byte_t* data, i32 size);
+    void Send(IpAddress const&, Packet const&);
     void Receive();
 };
 
@@ -30,7 +29,7 @@ struct Win32_UdpSocket
 void Win32_UdpSocket::Init()
 {
     sock = socket(AF_INET, SOCK_DGRAM, 0);
-    WinSockCheck(sock == INVALID_SOCKET);
+    WinSockCheck(sock != INVALID_SOCKET);
     u_long nonBlocking = 1;
     WinSockCheck(ioctlsocket(sock, FIONBIO, &nonBlocking));
     int broadcast = 1;
@@ -50,31 +49,29 @@ void Win32_UdpSocket::Bind(IpAddress const& ip)
 
 void Win32_UdpSocket::Close()
 {
-    if (isBound)
-    {
-        WinSockCheck(closesocket(sock));
-        isBound = false;
-    }
+    if (!isBound) return;
+    WinSockCheck(closesocket(sock));
+    isBound = false;
 }        
 
 ///////////////////////////////////////////////////////////
 
-void Win32_UdpSocket::Send(IpAddress const& ip, byte_t* data, i32 size)
+void Win32_UdpSocket::Send(IpAddress const& ip, Packet const& packet)
 {
+    if (packet.size <= 0) return;
     auto sockaddr = CreateIpAddress(ip);
-    WinSockCheck(sendto(sock, data, size, 0, (SOCKADDR*) &sockaddr, sizeof(sockaddr)));
+    auto bytesSend = sendto(sock, packet.data, packet.size, 0, (SOCKADDR*) &sockaddr, sizeof(sockaddr));
+    WinSockCheck(bytesSend != SOCKET_ERROR);
+    com::Print("send", bytesSend);
 }
 
 ///////////////////////////////////////////////////////////
 
 void Win32_UdpSocket::Receive()
 {
-    /*
-    sockaddr address {};
-    int size = sizeof(address);
-    byte_t buffer [MAX_DATAGRAM_SIZE];
-    WinSockCheck(recvfrom(sock, buffer, MAX_DATAGRAM_SIZE, 0, &address, &size));
-    */
+    sockaddr_in sockaddr;
+    int sockaddrSize = sizeof(sockaddr);
+    WinSockCheck(recvfrom(sock, receiveBuffer, array_extent(receiveBuffer), 0, (SOCKADDR*) &sockaddr, &sockaddrSize));
 }
 
 ///////////////////////////////////////////////////////////

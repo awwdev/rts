@@ -1,7 +1,9 @@
 #pragma once
 
+#include "net/Network.hpp"
 #include "com/Types.hpp"
 #include "com/Assert.hpp"
+#include <cstring>
 
 ///////////////////////////////////////////////////////////
 
@@ -9,29 +11,42 @@ namespace mini::net {
 
 ///////////////////////////////////////////////////////////
 
-#define TEMPLATE template<auto N>
+constexpr auto MAX_DATAGRAM_SIZE = 65507;
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE struct Packet
+struct Packet
 {
-    byte_t data [N];
-    idx_t size = 0;
+    char data [MAX_DATAGRAM_SIZE];
+    size_t size = 0;
 
-    void Write(byte_t* data, idx_t size);
+    void Write(auto...);
     void Read();
 };
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void Packet<N>::Write(byte_t* data, idx_t size)
+void Packet::Write(auto... pData)
 {
+    auto writeFn = [&](auto pData)
+    {
+        auto pSize = [&]
+        {
+            if constexpr(std::is_same_v<const char*, decltype(pData)>)
+            return std::strlen(pData);
+            return sizeof(decltype(pData));
+        }();
 
+        std::memcpy(data + size, &pData, pSize);
+        size += pSize;
+    };
+
+    (writeFn(pData),...);
 }
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void Packet<N>::Read()
+void Packet::Read()
 {
 
 }

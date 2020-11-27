@@ -35,6 +35,10 @@ Win32_Network::Win32_Network()
 
     socket.Init();
     Connect({ "127.0.0.1", 27015 });
+    Packet packet;
+    packet.Write("Hello");
+    packet.Write(42);
+    socket.Send({ "127.0.0.1", 27015 }, packet);
 }
 
 ////////////////////////////////////////////////////////////

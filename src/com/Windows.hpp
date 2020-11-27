@@ -36,14 +36,18 @@ inline void WinSockCheck(auto pExpr, chars_t msg = "")
     {
         if constexpr (std::is_pointer_v<decltype(pExpr)>)
         return pExpr != 0; //success on handle
-        else    
+        else
+        if constexpr (std::is_same_v<bool, decltype(pExpr)>)
+        return pExpr; // bool 
+        else 
         return pExpr == 0; //success on int
+
     }();
 
     if (!expr)
     {
         auto err = WSAGetLastError();
-        com::Assert(false, "WinCheck failed", err, msg);
+        com::Assert(false, "WinSockCheck failed", err, msg);
     }
 }
 
