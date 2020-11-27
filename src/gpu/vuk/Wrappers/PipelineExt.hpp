@@ -9,17 +9,20 @@ namespace mini::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline auto VertexInput()
+template<u32 BINDING_COUNT, u32 ATTRIBUTE_COUNT>
+auto VertexInput(
+VkVertexInputBindingDescription   (&bindings)[BINDING_COUNT],
+VkVertexInputAttributeDescription (&attributes)[ATTRIBUTE_COUNT])
 {
     return VkPipelineVertexInputStateCreateInfo
     {
         .sType                           = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
         .pNext                           = nullptr,
         .flags                           = 0,
-        .vertexBindingDescriptionCount   = 0,
-        .pVertexBindingDescriptions      = nullptr,
-        .vertexAttributeDescriptionCount = 0,
-        .pVertexAttributeDescriptions    = nullptr
+        .vertexBindingDescriptionCount   = BINDING_COUNT,
+        .pVertexBindingDescriptions      = bindings,
+        .vertexAttributeDescriptionCount = ATTRIBUTE_COUNT,
+        .pVertexAttributeDescriptions    = attributes
     };
 }
 

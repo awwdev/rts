@@ -32,11 +32,11 @@ struct DefaultState
 
 void DefaultState::Create(Context& context)
 {
-    CreateDefaultShader(shader);
-    CreateDefaultRenderPass(renderPass, context.swapchain);
-    CreateDefaultPipeline(pipeline, shader, renderPass);
     uniforms.Create();
     vertices.Create();
+    CreateDefaultShader(shader);
+    CreateDefaultRenderPass(renderPass, context.swapchain);
+    CreateDefaultPipeline(pipeline, vertices, uniforms, shader, renderPass);
 }
 
 ///////////////////////////////////////////////////////////
@@ -64,8 +64,8 @@ void DefaultState::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
 {
     vkCmdBeginRenderPass    (cmdBuffer, &renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
+    vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, &vertices.vbo.activeBuffer->buffer, &vertices.offsets);
     //vkCmdBindIndexBuffer    (cmdBuffer, vertices.ibo, 0, vertices.ibo.type);
-    //vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, vertices.vbo, nullptr);
     //vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 1, nullptr, 0, nullptr);
     vkCmdDraw               (cmdBuffer, 3, 1, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);

@@ -12,7 +12,7 @@ struct DefaultVertex
 {
     Vec2f pos;
     Vec2f tex;
-    Vec2f col;
+    Col4f col;
 };
 
 ///////////////////////////////////////////////////////////

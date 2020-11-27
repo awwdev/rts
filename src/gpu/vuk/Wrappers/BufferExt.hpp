@@ -26,7 +26,7 @@ TEMPLATE struct BufferExt
     void Create();
     void Destroy();
     void Bake();
-    void Append();
+    void Append(T const&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -53,14 +53,15 @@ TEMPLATE void BUFFER_EXT::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void BUFFER_EXT::Bake()
+TEMPLATE void BUFFER_EXT::Append(T const& element)
 {
-
+    activeBuffer->Store((void*)&element, sizeof(T), count * sizeof(T));
+    count += 1;
 }
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void BUFFER_EXT::Append()
+TEMPLATE void BUFFER_EXT::Bake()
 {
 
 }
