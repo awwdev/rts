@@ -53,4 +53,12 @@ constexpr auto array_extent(auto const (&)[N])
 
 ///////////////////////////////////////////////////////////
 
+template<typename T> requires std::is_enum_v<T>
+constexpr auto enum_cast(T e)
+{
+    return static_cast<std::underlying_type_t<T>>(e);
+}
+
+///////////////////////////////////////////////////////////
+
 }//ns

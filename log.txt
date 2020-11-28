@@ -6,4 +6,4 @@
 2020-11-25 swapchain recreation, proper presentation and commands, linux triangle works mostly
 2020-11-26 winapi sockets test, memory impl begin, some basic code flow
 2020-11-27 low level network layer windows done, receive and send, ext buffer, vbo
-2020-11-28 ibo, texture
+2020-11-28 ibo, descriptors, pushConstants, ubo, image

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "gpu/vuk/Renderer/Context.hpp"
-#include "com/Array.hpp"
+#include "gpu/vuk/Vulkan.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -9,24 +8,14 @@ namespace mini::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct UniformInfo
-{
-    enum Type { Buffer, Image } type;
-    VkDescriptorSetLayoutBinding binding;
-    union 
-    {
-        VkDescriptorBufferInfo bufferInfo;
-        VkDescriptorImageInfo  imageInfo;
-    };
-};
-
 ///////////////////////////////////////////////////////////
 
-struct Descriptors
+struct Image
 {
-    VkDescriptorPool pool;
-    VkDescriptorSetLayout layout;
-    com::Array<VkDescriptorSet, 10> sets;
+    VkImage image;
+    VkDeviceMemory memory;
+    VkImageView view;
+    VkImageLayout layout;
 
     void Create();
     void Destroy();
@@ -34,14 +23,14 @@ struct Descriptors
 
 ///////////////////////////////////////////////////////////
 
-void Descriptors::Create()
+void Image::Create()
 {
 
 }
 
 ///////////////////////////////////////////////////////////
 
-void Descriptors::Destroy()
+void Image::Destroy()
 {
 
 }
