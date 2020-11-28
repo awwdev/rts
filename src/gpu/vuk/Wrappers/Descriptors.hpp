@@ -1,0 +1,31 @@
+#pragma once
+
+#include "gpu/vuk/Renderer/Context.hpp"
+
+///////////////////////////////////////////////////////////
+
+namespace rpg::gpu::vuk {
+
+///////////////////////////////////////////////////////////
+
+struct UniformInfo
+{
+    enum Type { Buffer, Image } type;
+    VkDescriptorSetLayoutBinding binding;
+    union 
+    {
+        VkDescriptorBufferInfo bufferInfo;
+        VkDescriptorImageInfo  imageInfo;
+    };
+};
+
+///////////////////////////////////////////////////////////
+
+struct Descriptors
+{
+
+};
+
+///////////////////////////////////////////////////////////
+
+}//ns

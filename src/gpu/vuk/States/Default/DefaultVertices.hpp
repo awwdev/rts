@@ -69,10 +69,6 @@ void DefaultVertices::Create()
     ibo.Create();
 
     //test
-    //vbo.Append({ {-0.5,-0.5 }, {}, { 1, 0, 0, 1 } });
-    //vbo.Append({ {-0.5, 0.5 }, {}, { 1, 0, 0, 1 } });
-    //vbo.Append({ { 0.5, 0.5 }, {}, { 1, 0, 0, 1 } });
-    //vbo.Append({ { 0.5,-0.5 }, {}, { 1, 0, 0, 1 } });
 
     f32 x = 32;
     f32 y = 32;

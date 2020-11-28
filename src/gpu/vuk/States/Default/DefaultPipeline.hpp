@@ -17,8 +17,7 @@ Pipeline& pipeline,
 DefaultVertices& vertices,
 DefaultUniforms& uniforms,
 Shader& shader, 
-RenderPass& renderPass,
-PushConstants<DefaultPushConstants>& pushConstants)
+RenderPass& renderPass)
 {
     PipelineInfo pipelineInfo;
     
@@ -29,7 +28,7 @@ PushConstants<DefaultPushConstants>& pushConstants)
     pipelineInfo.rasterization = Rasterization();
     pipelineInfo.depthStencil = DepthStencil();
     pipelineInfo.blendState = BlendStateInfo();
-    pipelineInfo.layoutInfo = PipelineLayout(&pushConstants.rangeInfo, 1);
+    pipelineInfo.layoutInfo = PipelineLayout(&uniforms.pushConstants.rangeInfo, 1);
 
     pipeline.Create(shader, renderPass, pipelineInfo);
 }
