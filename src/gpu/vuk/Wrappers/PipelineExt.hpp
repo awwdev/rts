@@ -129,7 +129,7 @@ inline auto Rasterization()
         .depthClampEnable        = VK_FALSE,
         .rasterizerDiscardEnable = VK_FALSE,
         .polygonMode             = VK_POLYGON_MODE_FILL,
-        .cullMode                = VK_CULL_MODE_BACK_BIT,
+        .cullMode                = VK_CULL_MODE_NONE,//VK_CULL_MODE_BACK_BIT
         .frontFace               = VK_FRONT_FACE_COUNTER_CLOCKWISE,
         .depthBiasEnable         = VK_FALSE,
         .depthBiasConstantFactor = 0.f,
@@ -219,7 +219,9 @@ inline auto BlendStateInfo()
 
 ///////////////////////////////////////////////////////////
 
-inline auto PipelineLayout()
+inline auto PipelineLayout(
+VkPushConstantRange* pushConstantRanges = nullptr,
+u32 pushConstantCount = 0)
 {
     return VkPipelineLayoutCreateInfo
     {
@@ -228,8 +230,8 @@ inline auto PipelineLayout()
         .flags                  = 0,
         .setLayoutCount         = 0,
         .pSetLayouts            = nullptr,
-        .pushConstantRangeCount = 0,
-        .pPushConstantRanges    = nullptr,
+        .pushConstantRangeCount = pushConstantCount,
+        .pPushConstantRanges    = pushConstantRanges,
     };
 }
 

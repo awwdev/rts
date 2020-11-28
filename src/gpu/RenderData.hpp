@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gpu/DefaultVertex.hpp"
+#include "gpu/DefaultRenderData.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -10,7 +10,7 @@ namespace mini::gpu {
 
 struct RenderData 
 {
-
+    DefaultRenderData defaultRenderData;
 };
 
 ///////////////////////////////////////////////////////////

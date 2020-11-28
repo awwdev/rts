@@ -1,18 +1,19 @@
 #pragma once
 
-#include "com/Vec.hpp"
+#include "gpu/vuk/Vulkan.hpp"
 
 ///////////////////////////////////////////////////////////
 
-namespace mini::gpu {
+namespace mini::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct DefaultVertex
+template<typename T>
+struct PushConstants
 {
-    Vec2f pos;
-    Vec2f tex;
-    Col4f col;
+    T data;
+    VkPushConstantRange rangeInfo;
+    static constexpr auto size = sizeof(T);
 };
 
 ///////////////////////////////////////////////////////////

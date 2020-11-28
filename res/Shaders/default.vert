@@ -8,12 +8,24 @@ layout (location = 2) in vec4 inCol;
 
 ///////////////////////////////////////////////////////////
 
+layout(push_constant) uniform PushConstants
+{
+    uint windowWidth;
+    uint windowHeight;
+} 
+meta;
+
+///////////////////////////////////////////////////////////
+
 layout(location = 0) out vec4 outColor;
 
 ///////////////////////////////////////////////////////////
 
 void main() 
 {
-    gl_Position = vec4(inPos, 0, 1);
+    float x = inPos.x / meta.windowWidth  * 2 - 1;
+    float y = inPos.y / meta.windowHeight * 2 - 1;
+
+    gl_Position = vec4(x, y, 0, 1);
     outColor    = inCol;
 }

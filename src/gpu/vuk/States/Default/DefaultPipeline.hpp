@@ -4,6 +4,7 @@
 
 #include "gpu/vuk/States/Default/DefaultVertices.hpp"
 #include "gpu/vuk/States/Default/DefaultUniforms.hpp"
+#include "gpu/vuk/Wrappers/PushConstants.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -16,7 +17,8 @@ Pipeline& pipeline,
 DefaultVertices& vertices,
 DefaultUniforms& uniforms,
 Shader& shader, 
-RenderPass& renderPass)
+RenderPass& renderPass,
+PushConstants<DefaultPushConstants>& pushConstants)
 {
     PipelineInfo pipelineInfo;
     
@@ -27,7 +29,7 @@ RenderPass& renderPass)
     pipelineInfo.rasterization = Rasterization();
     pipelineInfo.depthStencil = DepthStencil();
     pipelineInfo.blendState = BlendStateInfo();
-    pipelineInfo.layoutInfo = PipelineLayout();
+    pipelineInfo.layoutInfo = PipelineLayout(&pushConstants.rangeInfo, 1);
 
     pipeline.Create(shader, renderPass, pipelineInfo);
 }

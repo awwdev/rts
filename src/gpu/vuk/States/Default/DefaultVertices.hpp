@@ -3,7 +3,8 @@
 #include "gpu/vuk/Vulkan.hpp"
 #include "gpu/RenderData.hpp"
 #include "gpu/vuk/Wrappers/BufferExt.hpp"
-#include "gpu/DefaultVertex.hpp"
+#include "gpu/DefaultRenderData.hpp"
+#include "com/Types.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -68,10 +69,20 @@ void DefaultVertices::Create()
     ibo.Create();
 
     //test
-    vbo.Append({ {-0.5,-0.5 }, {}, { 1, 0, 0, 1 } });
-    vbo.Append({ {-0.5, 0.5 }, {}, { 1, 0, 0, 1 } });
-    vbo.Append({ { 0.5, 0.5 }, {}, { 1, 0, 0, 1 } });
-    vbo.Append({ { 0.5,-0.5 }, {}, { 1, 0, 0, 1 } });
+    //vbo.Append({ {-0.5,-0.5 }, {}, { 1, 0, 0, 1 } });
+    //vbo.Append({ {-0.5, 0.5 }, {}, { 1, 0, 0, 1 } });
+    //vbo.Append({ { 0.5, 0.5 }, {}, { 1, 0, 0, 1 } });
+    //vbo.Append({ { 0.5,-0.5 }, {}, { 1, 0, 0, 1 } });
+
+    f32 x = 32;
+    f32 y = 32;
+    f32 w = 64;
+    f32 h = 64;
+
+    vbo.Append({ { x + 0, y + 0 }, {}, { 1, 0, 0, 1 } });
+    vbo.Append({ { x + w, y + 0 }, {}, { 0, 1, 0, 1 } });
+    vbo.Append({ { x + w, y + h }, {}, { 0, 0, 1, 1 } });
+    vbo.Append({ { x + 0, y + h }, {}, { 1, 1, 1, 1 } });
 
     ibo.Append(0);
     ibo.Append(1);
@@ -93,7 +104,6 @@ void DefaultVertices::Destroy()
 
 void DefaultVertices::Update(RenderData& renderData)
 {
-
 }
 
 ///////////////////////////////////////////////////////////
