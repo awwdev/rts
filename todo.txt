@@ -1,3 +1,2 @@
-- vk buffer
 - test static linkage on linux
 - linux test memory

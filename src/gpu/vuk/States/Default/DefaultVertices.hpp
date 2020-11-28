@@ -68,9 +68,17 @@ void DefaultVertices::Create()
     ibo.Create();
 
     //test
-    vbo.Append({ { 0.0,-0.5 }, {}, { 1, 0, 0, 1 } });
-    vbo.Append({ {-0.5, 0.5 }, {}, { 0, 1, 0, 1 } });
-    vbo.Append({ { 0.5, 0.5 }, {}, { 0, 0, 1, 1 } });
+    vbo.Append({ {-0.5,-0.5 }, {}, { 1, 0, 0, 1 } });
+    vbo.Append({ {-0.5, 0.5 }, {}, { 1, 0, 0, 1 } });
+    vbo.Append({ { 0.5, 0.5 }, {}, { 1, 0, 0, 1 } });
+    vbo.Append({ { 0.5,-0.5 }, {}, { 1, 0, 0, 1 } });
+
+    ibo.Append(0);
+    ibo.Append(1);
+    ibo.Append(2);
+    ibo.Append(0);
+    ibo.Append(2);
+    ibo.Append(3);
 }
 
 ///////////////////////////////////////////////////////////

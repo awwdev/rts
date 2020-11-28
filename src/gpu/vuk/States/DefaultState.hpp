@@ -65,9 +65,9 @@ void DefaultState::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
     vkCmdBeginRenderPass    (cmdBuffer, &renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
     vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, &vertices.vbo.activeBuffer->buffer, &vertices.offsets);
-    //vkCmdBindIndexBuffer    (cmdBuffer, vertices.ibo, 0, vertices.ibo.type);
+    vkCmdBindIndexBuffer    (cmdBuffer, vertices.ibo.activeBuffer->buffer, 0, VK_INDEX_TYPE_UINT32);
     //vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 1, nullptr, 0, nullptr);
-    vkCmdDraw               (cmdBuffer, 3, 1, 0, 0);
+    vkCmdDrawIndexed        (cmdBuffer, 6, 1, 0, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
 }
 
