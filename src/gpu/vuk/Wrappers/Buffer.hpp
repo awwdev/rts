@@ -2,6 +2,7 @@
 
 #include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Renderer/Context.hpp"
+#include "gpu/vuk/Context/PhysicalExt.hpp"
 #include <cstring>
 
 ///////////////////////////////////////////////////////////
@@ -10,28 +11,11 @@ namespace mini::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline uint32_t MemoryType(
-    const VkMemoryRequirements& memReqs,
-    const VkMemoryPropertyFlags neededMemProps) 
-{
-    auto& physicalMemProps = g_contextPtr->physical.memoryProps;
-    for (uint32_t i = 0; i < physicalMemProps.memoryTypeCount; ++i) {
-        if (memReqs.memoryTypeBits & (1 << i) &&
-            (physicalMemProps.memoryTypes[i].propertyFlags & neededMemProps) == neededMemProps) 
-            return i;
-    }
-    com::PrintError("no suitable memory type found!");
-    return {};
-}
-
-///////////////////////////////////////////////////////////
-
 struct Buffer
 {
     VkBuffer buffer = VK_NULL_HANDLE;
     VkDeviceMemory memory;
     void* memPtr;
-    size_t allocationSize;
 
     void Create(VkBufferUsageFlags, size_t, VkMemoryPropertyFlags);
     void Destroy();
@@ -57,20 +41,7 @@ void Buffer::Create(VkBufferUsageFlags usage, size_t pSize, VkMemoryPropertyFlag
     };
     VkCheck(vkCreateBuffer(g_devicePtr, &bufferInfo, nullptr, &buffer));
 
-    VkMemoryRequirements memReqs;
-    vkGetBufferMemoryRequirements(g_devicePtr, buffer, &memReqs);
-    allocationSize = memReqs.size;
-
-    VkMemoryAllocateInfo allocInfo
-    {
-        .sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
-        .pNext           = nullptr,
-        .allocationSize  = allocationSize,
-        .memoryTypeIndex = MemoryType(memReqs, memProps)
-    };
-
-    VkCheck(vkAllocateMemory(g_devicePtr, &allocInfo, nullptr, &memory));
-    VkCheck(vkBindBufferMemory(g_devicePtr, buffer, memory, 0));
+    AllocateMemory(buffer, memory, memProps);
 }
 
 ///////////////////////////////////////////////////////////

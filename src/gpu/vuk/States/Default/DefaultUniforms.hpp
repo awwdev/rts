@@ -28,6 +28,7 @@ struct DefaultUniforms
     UniformInfo infos [enum_cast(DefaultUniformEnum::ENUM_END)];
     PushConstants<DefaultPushConstants> pushConstants;
     VkSampler sampler; 
+    Image textures;
 
     void Create();
     void Destroy();
@@ -43,7 +44,9 @@ void DefaultUniforms::Create()
     pushConstants.rangeInfo.size = pushConstants.size;
     pushConstants.rangeInfo.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
-    //sampler
+    //textures
+    textures.Create(VK_FORMAT_R8G8B8A8_SRGB, 
+    VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 32, 32, 1);
     CreateSamplerPixelPerfect(sampler);
     infos[enum_cast(DefaultUniformEnum::TextureSampler)] =
     {
@@ -57,8 +60,8 @@ void DefaultUniforms::Create()
         },
         .imageInfo {
             .sampler        = sampler,
-            .imageView      = 0,//!finalImage.view,
-            .imageLayout    = VkImageLayout::VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,//!finalImage.currentLayout
+            .imageView      = textures.view,
+            .imageLayout    = textures.layout,
         }
     };
 }
@@ -76,6 +79,7 @@ void DefaultUniforms::Update(RenderData& renderData)
 void DefaultUniforms::Destroy()
 {
     vkDestroySampler(g_devicePtr, sampler, GetAlloc());
+    textures.Destroy();
 }
 
 ///////////////////////////////////////////////////////////

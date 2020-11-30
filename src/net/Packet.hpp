@@ -27,14 +27,14 @@ struct Packet
 
 ///////////////////////////////////////////////////////////
 
-void Packet::Write(auto const&... pData)
+void Packet::Write(auto const&... pDatas)
 {
     auto writeFn = [&](auto const& pData)
     {
         auto pSize = [&]
         {
             if constexpr(std::is_same_v<const char*, decltype(pData)>)
-            return std::strlen(pData) + 1;
+                return std::strlen(pData) + 1;
             return sizeof(decltype(pData));
         }();
 
@@ -42,19 +42,19 @@ void Packet::Write(auto const&... pData)
         size += pSize;
     };
 
-    (writeFn(pData),...);
+    (writeFn(pDatas),...);
 }
 
 ///////////////////////////////////////////////////////////
 
-void Packet::Read(auto&... pData)
+void Packet::Read(auto&... pDatas)
 {
     auto readFn = [&](auto& pData)
     {
         auto pSize = [&]
         {
             if constexpr(std::is_same_v<const char*, decltype(pData)>)
-            return std::strlen(pData);
+                return std::strlen(pData);
             return sizeof(decltype(pData));
         }();
 
@@ -62,7 +62,7 @@ void Packet::Read(auto&... pData)
         readPos += pSize;
     };
 
-    (readFn(pData),...);
+    (readFn(pDatas),...);
 }
 
 ///////////////////////////////////////////////////////////

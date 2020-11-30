@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gpu/vuk/Renderer/Context.hpp"
+#include "gpu/vuk/Context/PhysicalExt.hpp"
 #include "gpu/vuk/Renderer/States.hpp"
 #include "gpu/vuk/Renderer/Commands.hpp"
 #include "gpu/vuk/Renderer/Sync.hpp"
@@ -61,7 +62,8 @@ Renderer::Renderer(WindowHandle const& wndHandle)
     commands.Create(context.physical.queueIndex, context.swapchain);
     sync.Create(context.swapchain);
     
-    PrintPhysicalAPI(context.physical.physicalProps);
+    PrintPhysicalAPI();
+    //PrintPhysical();
 }
 
 ///////////////////////////////////////////////////////////

@@ -49,7 +49,9 @@ void Win32_UdpSocket::Bind(IpAddress const& ip)
 
 void Win32_UdpSocket::Close()
 {
-    if (!isBound) return;
+    if (!isBound) 
+    return;
+
     WinSockCheck(closesocket(sock));
     isBound = false;
 }       
@@ -79,7 +81,7 @@ void Win32_UdpSocket::Send(IpAddress const& ip, Packet const& packet)
 
 auto Win32_UdpSocket::Receive() -> Packet
 {
-    Packet packet {};
+    Packet packet;
     sockaddr_in addr;
     int addrSize = sizeof(addr);
     packet.size = recvfrom(sock, packet.data, array_extent(packet.data), 0, (SOCKADDR*) &addr, &addrSize);

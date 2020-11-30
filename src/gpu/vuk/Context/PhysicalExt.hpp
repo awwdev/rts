@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gpu/vuk/Vulkan.hpp"
+#include "gpu/vuk/Renderer/Context.hpp"
 #include "com/Print.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -9,8 +10,60 @@ namespace mini::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void PrintPhysicalAPI(VkPhysicalDeviceProperties& physicalProps)
+inline u32 MemoryType(
+VkMemoryRequirements& memReqs,
+VkMemoryPropertyFlags neededMemProps) 
 {
+    auto& physicalMemProps = g_contextPtr->physical.memoryProps;
+    for (uint32_t i = 0; i < physicalMemProps.memoryTypeCount; ++i) {
+        if (memReqs.memoryTypeBits & (1 << i) &&
+            (physicalMemProps.memoryTypes[i].propertyFlags & neededMemProps) == neededMemProps) 
+            return i;
+    }
+    com::PrintError("no suitable memory type found!");
+    return {};
+}
+
+///////////////////////////////////////////////////////////
+
+inline auto AllocationInfo(VkMemoryRequirements& memReqs, VkMemoryPropertyFlags memProps)
+{
+    return VkMemoryAllocateInfo
+    {
+        .sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+        .pNext           = nullptr,
+        .allocationSize  = memReqs.size,
+        .memoryTypeIndex = MemoryType(memReqs, memProps)
+    };
+}
+
+///////////////////////////////////////////////////////////
+
+template<typename T>
+inline auto AllocateMemory(T& imageOrBuffer, VkDeviceMemory& memory, VkMemoryPropertyFlags memProps)
+{
+    constexpr auto isBuffer = std::is_same_v<T, VkBuffer>;
+    VkMemoryRequirements memReqs;
+
+    if constexpr(isBuffer)
+    vkGetBufferMemoryRequirements(g_devicePtr, imageOrBuffer, &memReqs);
+    else
+    vkGetImageMemoryRequirements(g_devicePtr, imageOrBuffer, &memReqs);   
+
+    auto allocInfo = AllocationInfo(memReqs, memProps);
+    VkCheck(vkAllocateMemory(g_devicePtr, &allocInfo, nullptr, &memory));   
+
+    if constexpr(isBuffer)
+    VkCheck(vkBindBufferMemory(g_devicePtr, imageOrBuffer, memory, 0));
+    else
+    VkCheck(vkBindImageMemory(g_devicePtr, imageOrBuffer, memory, 0));
+}
+
+///////////////////////////////////////////////////////////
+
+inline void PrintPhysicalAPI()
+{
+    auto& physicalProps = g_contextPtr->physical.physicalProps;
     com::PrintColored(com::ConsoleColor::Magenta, "Vulkan physical API version", 
         VK_VERSION_MAJOR(physicalProps.apiVersion),
         VK_VERSION_MINOR(physicalProps.apiVersion), 
@@ -20,11 +73,12 @@ inline void PrintPhysicalAPI(VkPhysicalDeviceProperties& physicalProps)
 
 ///////////////////////////////////////////////////////////
 
-inline void PrintPhysical(
-VkPhysicalDevice& physical, 
-VkPhysicalDeviceProperties& physicalProps, 
-VkPhysicalDeviceMemoryProperties& memoryProps)
+inline void PrintPhysical()
 {
+    auto& physical = g_contextPtr->physical.physical;
+    auto& physicalProps = g_contextPtr->physical.physicalProps;
+    auto& memoryProps = g_contextPtr->physical.memoryProps;
+
     com::Print(com::ConsoleColor::Yellow, "device");
     com::Print("deviceName", physicalProps.deviceName);
     com::Print("deviceType", physicalProps.deviceType);

@@ -18,7 +18,7 @@ namespace mini::com {
 TEMPLATE struct Bitset
 {
     static constexpr idx_t BIT_COUNT  = N;
-    static constexpr idx_t BYTE_COUNT = BIT_COUNT / 8 + 1;
+    static constexpr idx_t BYTE_COUNT = (BIT_COUNT + 7) / 8;
 
     i8 bytes [BYTE_COUNT];
 

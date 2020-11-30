@@ -15,13 +15,7 @@ inline void Assert(bool expr, auto... args)
         return;
 
     com::PrintError(args...);
-
-    #ifdef _WIN32
-    __debugbreak();
-    #endif
-    #ifdef __linux__
     __builtin_trap();
-    #endif
 }
 
 ///////////////////////////////////////////////////////////

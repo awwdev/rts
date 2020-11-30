@@ -16,15 +16,10 @@ const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 void*)
 {
     if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
-    {
         com::PrintWarning(pCallbackData->pMessage);
-    }
         
     if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
-    {
-        com::PrintError(pCallbackData->pMessage);
-        __builtin_trap();
-    }
+        com::Assert(false, pCallbackData->pMessage);
 
     return VK_FALSE;
 }

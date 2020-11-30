@@ -29,7 +29,7 @@ inline void CreateSamplerPixelPerfect(VkSampler& sampler)
         .minLod                  = 0,
         .maxLod                  = 0, 
         .borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK, 
-        .unnormalizedCoordinates = VK_TRUE
+        .unnormalizedCoordinates = VK_FALSE
     };
     VkCheck(vkCreateSampler(g_devicePtr, &samplerInfo, nullptr, &sampler));
 }
