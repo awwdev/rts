@@ -17,6 +17,8 @@ constexpr VkComponentMapping IMAGE_COMPONENT_MAPPING_DEFAULT =
     .a = VK_COMPONENT_SWIZZLE_A
 };
 
+static VkBufferImageCopy g_imageCopyInfos [2000];
+
 ///////////////////////////////////////////////////////////
 
 struct Image
@@ -124,10 +126,9 @@ void Image::Store(VkCommandPool cmdPool, void const* data, u32 size, u32 singleT
     tmpBuffer.Map();
     tmpBuffer.Store(data, size);
 
-    VkBufferImageCopy imageCopyInfos [10];
     for(u32 layerIdx = 0; layerIdx < layerCount; ++layerIdx)
     {
-        imageCopyInfos[layerIdx] = 
+        g_imageCopyInfos[layerIdx] = 
         {
             .bufferOffset       = layerIdx * singleTextureSize,
             .bufferRowLength    = 0,
@@ -150,9 +151,11 @@ void Image::Store(VkCommandPool cmdPool, void const* data, u32 size, u32 singleT
         cmdBuffer, 
         tmpBuffer.buffer, image, 
         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
-        layerCount, imageCopyInfos
+        layerCount, g_imageCopyInfos
     );
     EndCommands_OneTime(cmdBuffer, cmdPool);
+
+    tmpBuffer.Destroy();
 }
 
 ///////////////////////////////////////////////////////////

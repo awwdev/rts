@@ -28,7 +28,7 @@ struct DefaultUniforms
     UniformInfo infos [enum_cast(DefaultUniformEnum::ENUM_END)];
     PushConstants<DefaultPushConstants> pushConstants;
     VkSampler sampler; 
-    Image textures;
+    Image textureArray;
 
     void Create(VkCommandPool);
     void Destroy();
@@ -45,25 +45,37 @@ void DefaultUniforms::Create(VkCommandPool cmdPool)
     pushConstants.rangeInfo.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
     //textures
-    textures.Create(cmdPool, VK_FORMAT_R8G8B8A8_SRGB, 
+    textureArray.Create(cmdPool, VK_FORMAT_R8G8B8A8_SRGB, 
     VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 32, 32, 1);
     CreateSamplerPixelPerfect(sampler);
     infos[enum_cast(DefaultUniformEnum::TextureSampler)] =
     {
         .type = UniformInfo::Image,
-        .binding {
+        .binding 
+        {
             .binding            = enum_cast(DefaultUniformEnum::TextureSampler),
             .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
             .descriptorCount    = 1,
             .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
             .pImmutableSamplers = nullptr,
         },
-        .imageInfo {
+        .imageInfo 
+        {
             .sampler        = sampler,
-            .imageView      = textures.view,
-            .imageLayout    = textures.layout,
+            .imageView      = textureArray.view,
+            .imageLayout    = textureArray.layout,
         }
     };
+
+    //test
+    static char colors [32][32][4] {};
+    for(auto y = 0; y < 32; ++y) {
+    for(auto x = 0; x < 32; ++x) {
+        colors[y][x][0] = (char)255;
+        colors[y][x][3] = (char)255;
+    }}
+    textureArray.Store(cmdPool, colors, 32*32*4, 4);
+    textureArray.Bake(cmdPool);
 }
 
 ///////////////////////////////////////////////////////////
@@ -79,7 +91,7 @@ void DefaultUniforms::Update(RenderData& renderData)
 void DefaultUniforms::Destroy()
 {
     vkDestroySampler(g_devicePtr, sampler, GetAlloc());
-    textures.Destroy();
+    textureArray.Destroy();
 }
 
 ///////////////////////////////////////////////////////////
