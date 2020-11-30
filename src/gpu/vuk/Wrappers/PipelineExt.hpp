@@ -220,6 +220,8 @@ inline auto BlendStateInfo()
 ///////////////////////////////////////////////////////////
 
 inline auto PipelineLayout(
+VkDescriptorSetLayout* setLayouts = nullptr, 
+u32 setLayoutCount = 0,
 VkPushConstantRange* pushConstantRanges = nullptr,
 u32 pushConstantCount = 0)
 {
@@ -228,8 +230,8 @@ u32 pushConstantCount = 0)
         .sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
         .pNext                  = nullptr,
         .flags                  = 0,
-        .setLayoutCount         = 0,
-        .pSetLayouts            = nullptr,
+        .setLayoutCount         = setLayoutCount,
+        .pSetLayouts            = setLayouts,
         .pushConstantRangeCount = pushConstantCount,
         .pPushConstantRanges    = pushConstantRanges,
     };

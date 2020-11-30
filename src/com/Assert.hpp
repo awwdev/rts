@@ -15,7 +15,7 @@ inline void Assert(bool expr, auto... args)
         return;
 
     com::PrintError(args...);
-    __builtin_trap();
+     __builtin_trap();
 }
 
 ///////////////////////////////////////////////////////////

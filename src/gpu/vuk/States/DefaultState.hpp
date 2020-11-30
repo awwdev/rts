@@ -68,7 +68,8 @@ void DefaultState::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
     vkCmdPushConstants      (cmdBuffer, pipeline.layout, VK_SHADER_STAGE_VERTEX_BIT, 0, uniforms.pushConstants.size, &uniforms.pushConstants.data);
     vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, &vertices.vbo.activeBuffer->buffer, &vertices.offsets);
     vkCmdBindIndexBuffer    (cmdBuffer, vertices.ibo.activeBuffer->buffer, 0, VK_INDEX_TYPE_UINT32);
-    //vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 1, nullptr, 0, nullptr);
+    vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 
+                             uniforms.descriptors.sets.count, uniforms.descriptors.sets.data, 0, nullptr);
     vkCmdDrawIndexed        (cmdBuffer, vertices.ibo.count, 1, 0, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
 }
