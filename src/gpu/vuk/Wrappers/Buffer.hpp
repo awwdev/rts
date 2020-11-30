@@ -19,7 +19,7 @@ struct Buffer
 
     void Create(VkBufferUsageFlags, size_t, VkMemoryPropertyFlags);
     void Destroy();
-    void Store(void*, size_t, size_t);
+    void Store(void const*, size_t, size_t offset = 0);
     void Map();
     void Unmap();
 };
@@ -55,7 +55,7 @@ void Buffer::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void Buffer::Store(void* data, size_t size, size_t offset)
+void Buffer::Store(void const* data, size_t size, size_t offset)
 {
     std::memcpy((char*)memPtr + offset, data, size);
 }

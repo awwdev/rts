@@ -6,6 +6,7 @@
 #include "gpu/vuk/States/Default/DefaultVertices.hpp"
 #include "gpu/vuk/States/Default/DefaultUniforms.hpp"
 
+#include "gpu/vuk/Renderer/Commands.hpp"
 #include "gpu/RenderData.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -22,7 +23,7 @@ struct DefaultState
     DefaultUniforms uniforms;
     DefaultVertices vertices;
 
-    void Create(Context&);
+    void Create(Context&, Commands&);
     void Destroy();
     void Update(RenderData& renderData);
     void Record(VkCommandBuffer, uint32_t);
@@ -30,9 +31,9 @@ struct DefaultState
 
 ///////////////////////////////////////////////////////////
 
-void DefaultState::Create(Context& context)
+void DefaultState::Create(Context& context, Commands& cmds)
 {
-    uniforms.Create();
+    uniforms.Create(cmds.pool);
     vertices.Create();
     CreateDefaultShader(shader);
     CreateDefaultRenderPass(renderPass, context.swapchain);

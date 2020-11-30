@@ -46,8 +46,8 @@ bool Renderer::CheckSwapchain()
 
         context.surface.UpdateSurfaceCapabilities(context.physical);
         context.swapchain.Create(context.device, context.surface);
-        states.Create(context); 
         commands.Create(context.physical.queueIndex, context.swapchain);
+        states.Create(context, commands); 
     }
 
     return true;
@@ -58,8 +58,8 @@ bool Renderer::CheckSwapchain()
 Renderer::Renderer(WindowHandle const& wndHandle)
 {
     context.Create(wndHandle);
-    states.Create(context); 
     commands.Create(context.physical.queueIndex, context.swapchain);
+    states.Create(context, commands); 
     sync.Create(context.swapchain);
     
     PrintPhysicalAPI();
@@ -97,7 +97,10 @@ void Renderer::Update(RenderData& renderData)
         &imageIndex
     );
     if (res != VK_SUCCESS)
+    {
+        com::PrintWarning("vkAcquireNextImageKHR fail", res);
         return;
+    }
 
     if (sync.inFlight[imageIndex] != VK_NULL_HANDLE) 
         vkWaitForFences(g_devicePtr, 1, &sync.inFlight[imageIndex], VK_FALSE, UINT64_MAX);

@@ -30,14 +30,14 @@ struct DefaultUniforms
     VkSampler sampler; 
     Image textures;
 
-    void Create();
+    void Create(VkCommandPool);
     void Destroy();
     void Update(RenderData&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void DefaultUniforms::Create()
+void DefaultUniforms::Create(VkCommandPool cmdPool)
 {
     //push constants
     pushConstants.rangeInfo.offset = 0;
@@ -45,7 +45,7 @@ void DefaultUniforms::Create()
     pushConstants.rangeInfo.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
     //textures
-    textures.Create(VK_FORMAT_R8G8B8A8_SRGB, 
+    textures.Create(cmdPool, VK_FORMAT_R8G8B8A8_SRGB, 
     VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 32, 32, 1);
     CreateSamplerPixelPerfect(sampler);
     infos[enum_cast(DefaultUniformEnum::TextureSampler)] =

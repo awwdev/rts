@@ -14,7 +14,7 @@ struct States
 {
     DefaultState defaultState;
 
-    void Create(Context&);
+    void Create(Context&, Commands&);
     void Destroy();
     void Record(Commands&, uint32_t);
     void Update(RenderData&);
@@ -22,9 +22,9 @@ struct States
 
 ///////////////////////////////////////////////////////////
 
-void States::Create(Context& context)
+void States::Create(Context& context, Commands& cmds)
 {
-    defaultState.Create(context);
+    defaultState.Create(context, cmds);
 }
 
 ///////////////////////////////////////////////////////////

@@ -49,6 +49,7 @@ TEMPLATE void BUFFER_EXT::Destroy()
     if (cpuBuffer.buffer) cpuBuffer.Destroy();
     if (gpuBuffer.buffer) gpuBuffer.Destroy();
     activeBuffer = nullptr;
+    count = 0;
 }
 
 ///////////////////////////////////////////////////////////
