@@ -1,9 +1,12 @@
 {
 "version": "2.0.0",
 "tasks": [
+
+///////////////////////////////////////////////////////////
+
 {
     "label": "mingw-gcc-d",
-    "command": "${workspaceFolder}\\build-scripts\\Windows\\gcc-d.bat",
+    "command": "${workspaceFolder}\\shell\\Windows\\gcc-d.bat",
     "type": "shell",
     "options": {
         "env": {
@@ -18,9 +21,12 @@
         }
     },
 },
+
+///////////////////////////////////////////////////////////
+
 {
     "label": "gcc-d",
-    "command": "${workspaceFolder}/build-scripts/Unix/gcc-d.sh",
+    "command": "${workspaceFolder}/shell/Unix/gcc-d.sh",
     "type": "shell",
     "options": {
         "env": {
@@ -34,14 +40,31 @@
         }
     }
 },
+
+///////////////////////////////////////////////////////////
+
 {
     "label": "glslc",
-    "command": "${workspaceFolder}\\build-scripts\\Windows\\shaders.bat",
+    "command": "${workspaceFolder}\\shell\\Windows\\glslc.bat",
     "type": "shell",
     "options": {
         "env": {
-            "res":   "${workspaceFolder}\\res\\Shaders\\",
-            "glslc": "I:\\programs\\Vulkan 1.2.154.1\\Bin32\\"
+            "res":   "${workspaceFolder}\\res\\Shaders",
+            "glslc": "I:\\programs\\Vulkan 1.2.154.1\\Bin32"
+        }
+    }
+},
+
+///////////////////////////////////////////////////////////
+
+{
+    "label": "magick",
+    "command": "${workspaceFolder}\\shell\\Windows\\magick.bat",
+    "type": "shell",
+    "options": {
+        "env": {
+            "res":   "${workspaceFolder}\\res\\Textures",
+            "magick": "I:\\programs\\ImageMagick"
         }
     }
 },
