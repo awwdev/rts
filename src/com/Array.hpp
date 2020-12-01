@@ -26,7 +26,7 @@ TEMPLATE struct Array
     auto& operator[](idx_t);
     auto& operator[](idx_t) const;
 
-    void Append(auto... args);
+    auto& Append(auto... args);
     T* Contains(T const&);
 };
 
@@ -48,11 +48,12 @@ TEMPLATE auto& Array<T, N>::operator[](idx_t i) const
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void Array<T, N>::Append(auto... args)
+TEMPLATE auto& Array<T, N>::Append(auto... args)
 {
     com::Assert((count + 1) < N, "array exhausted");
     data[count] = { args... };
     count += 1;
+    return data[count - 1];
 }
 
 ///////////////////////////////////////////////////////////

@@ -51,15 +51,9 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
     VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 32, 32, 1);
     CreateSamplerPixelPerfect(sampler);
 
-    //test
-    //static char colors [32][32][4] {};
-    //for(auto y = 0; y < 32; ++y) {
-    //for(auto x = 0; x < 32; ++x) {
-    //    colors[y][x][0] = (char)255;
-    //    colors[y][x][3] = (char)255;
-    //}}
-    auto& textures = resources.textures;
-    textureArray.Store(cmdPool, textures.buffer, textures.SIZE, textures.SIZE); //move into create a bit?
+    //store
+    auto& texture = resources.textures.textureArray[0]; //iterate array
+    textureArray.Store(cmdPool, texture.buffer, texture.SIZE, texture.SIZE);
     textureArray.Bake(cmdPool);
 
     infos[enum_cast(DefaultUniformEnum::TextureSampler)] =
