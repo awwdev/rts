@@ -53,7 +53,7 @@ void Swapchain::Create(Device& device, Surface& surface)
         .oldSwapchain           = nullptr
     };
 
-    VkCheck(vkCreateSwapchainKHR(device.device, &swapInfo, GetAlloc(), &swapchain));
+    VkCheck(vkCreateSwapchainKHR(device.device, &swapInfo, GetVkAlloc(), &swapchain));
 
 
     VkCheck(vkGetSwapchainImagesKHR(device.device, swapchain, &images.count, nullptr));
@@ -85,7 +85,7 @@ void Swapchain::Create(Device& device, Surface& surface)
                 .layerCount     = 1
             }
         };
-        VkCheck(vkCreateImageView(device.device, &viewInfo, GetAlloc(), &views[i]));
+        VkCheck(vkCreateImageView(device.device, &viewInfo, GetVkAlloc(), &views[i]));
     }
 }
 
@@ -93,10 +93,10 @@ void Swapchain::Create(Device& device, Surface& surface)
 
 void Swapchain::Destroy(VkDevice device)
 {
-    vkDestroySwapchainKHR(device, swapchain, GetAlloc());
+    vkDestroySwapchainKHR(device, swapchain, GetVkAlloc());
     FOR_ARRAY(views, i)
     {
-        vkDestroyImageView(device, views[i], GetAlloc());
+        vkDestroyImageView(device, views[i], GetVkAlloc());
         views[i] = nullptr;
     }
     views.count = 0;

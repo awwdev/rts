@@ -72,7 +72,7 @@ VkCommandPool cmdPool, VkFormat format, VkImageUsageFlags usage, u32 pWidth, u32
         .pQueueFamilyIndices    = 0,
         .initialLayout          = layout
     };
-    VkCheck(vkCreateImage(g_devicePtr, &imageInfo, GetAlloc(), &image));
+    VkCheck(vkCreateImage(g_devicePtr, &imageInfo, GetVkAlloc(), &image));
 
     AllocateMemory(image, memory, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
@@ -94,7 +94,7 @@ VkCommandPool cmdPool, VkFormat format, VkImageUsageFlags usage, u32 pWidth, u32
             .layerCount     = layerCount
         }
     };
-    VkCheck(vkCreateImageView(g_devicePtr, &viewInfo, GetAlloc(), &view));
+    VkCheck(vkCreateImageView(g_devicePtr, &viewInfo, GetVkAlloc(), &view));
 
     Transition(
         cmdPool, 
@@ -108,9 +108,9 @@ VkCommandPool cmdPool, VkFormat format, VkImageUsageFlags usage, u32 pWidth, u32
 
 void Image::Destroy()
 {
-    vkDestroyImage      (g_devicePtr, image, GetAlloc());
-    vkFreeMemory        (g_devicePtr, memory, GetAlloc());
-    vkDestroyImageView  (g_devicePtr, view, GetAlloc());       
+    vkDestroyImage      (g_devicePtr, image, GetVkAlloc());
+    vkFreeMemory        (g_devicePtr, memory, GetVkAlloc());
+    vkDestroyImageView  (g_devicePtr, view, GetVkAlloc());       
     *this = {};
 }
 

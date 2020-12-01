@@ -48,8 +48,8 @@ void Buffer::Create(VkBufferUsageFlags usage, size_t pSize, VkMemoryPropertyFlag
 
 void Buffer::Destroy()
 {
-    vkDestroyBuffer (g_devicePtr, buffer, GetAlloc());
-    vkFreeMemory    (g_devicePtr, memory, GetAlloc()); //will unmap
+    vkDestroyBuffer (g_devicePtr, buffer, GetVkAlloc());
+    vkFreeMemory    (g_devicePtr, memory, GetVkAlloc()); //will unmap
     *this = {};
 }
 

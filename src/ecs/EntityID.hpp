@@ -1,7 +1,6 @@
 #pragma once
 
-#include "ecs/ComponentArray.hpp"
-#include "ecs/Components/MainComponent.hpp"
+#include "com/Types.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -9,10 +8,9 @@ namespace mini::ecs {
 
 ///////////////////////////////////////////////////////////
 
-struct ComponentArrays 
-{
-    ComponentArray<MainComponent, COMPONENT_COUNT_MAX> mainComponents;
-};
+using ID = u16;
+constexpr ID COMPONENT_COUNT_MAX = 1000;
+constexpr ID ENTITY_COUNT_MAX = 1000;
 
 ///////////////////////////////////////////////////////////
 

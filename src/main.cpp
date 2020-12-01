@@ -28,6 +28,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         net::Network network;
         app::Scene scene;
 
+        auto  ID = scene.ecs.AddEntity();
+        auto& mainComponent = scene.ecs.AddComponent<ecs::MainComponent>(ID);
+
         while(app::glo::isAppRunning)
         {
             window.Update(); 

@@ -93,7 +93,7 @@ void DefaultUniforms::Destroy()
 {
     descriptors.Destroy();
     textureArray.Destroy();
-    vkDestroySampler(g_devicePtr, sampler, GetAlloc());
+    vkDestroySampler(g_devicePtr, sampler, GetVkAlloc());
 }
 
 ///////////////////////////////////////////////////////////

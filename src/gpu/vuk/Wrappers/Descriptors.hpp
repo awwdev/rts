@@ -47,7 +47,7 @@ struct Descriptors
             .bindingCount   = array_extent(bindings),
             .pBindings      = bindings
         };
-        VkCheck(vkCreateDescriptorSetLayout(g_devicePtr, &descSetLayoutInfo, GetAlloc(), &layout));
+        VkCheck(vkCreateDescriptorSetLayout(g_devicePtr, &descSetLayoutInfo, GetVkAlloc(), &layout));
 
         //pool
         VkDescriptorPoolSize poolSizes [UNIFORM_COUNT];
@@ -67,7 +67,7 @@ struct Descriptors
             .poolSizeCount  = array_extent(poolSizes),
             .pPoolSizes     = poolSizes
         };
-        VkCheck(vkCreateDescriptorPool(g_devicePtr, &poolInfo, GetAlloc(), &pool));
+        VkCheck(vkCreateDescriptorPool(g_devicePtr, &poolInfo, GetVkAlloc(), &pool));
 
         //allocation
         sets.count = 1;
@@ -106,8 +106,8 @@ struct Descriptors
 
 void Descriptors::Destroy()
 {
-    vkDestroyDescriptorSetLayout(g_devicePtr, layout, GetAlloc());
-    vkDestroyDescriptorPool(g_devicePtr, pool, GetAlloc());
+    vkDestroyDescriptorSetLayout(g_devicePtr, layout, GetVkAlloc());
+    vkDestroyDescriptorPool(g_devicePtr, pool, GetVkAlloc());
     sets.count = 0;
 }
 

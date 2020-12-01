@@ -23,15 +23,15 @@ struct Pipeline
 
 void Pipeline::Destroy()
 {
-    vkDestroyPipeline(g_devicePtr, pipeline, GetAlloc());
-    vkDestroyPipelineLayout(g_devicePtr, layout, GetAlloc());
+    vkDestroyPipeline(g_devicePtr, pipeline, GetVkAlloc());
+    vkDestroyPipelineLayout(g_devicePtr, layout, GetVkAlloc());
 }
 
 ///////////////////////////////////////////////////////////
 
 void Pipeline::Create(Shader& shader, RenderPass& renderPass, PipelineInfo& pipelineInfo)
 {
-    VkCheck(vkCreatePipelineLayout(g_devicePtr, &pipelineInfo.layoutInfo, GetAlloc(), &layout));
+    VkCheck(vkCreatePipelineLayout(g_devicePtr, &pipelineInfo.layoutInfo, GetVkAlloc(), &layout));
 
     VkGraphicsPipelineCreateInfo createInfo
     {
@@ -56,7 +56,7 @@ void Pipeline::Create(Shader& shader, RenderPass& renderPass, PipelineInfo& pipe
         .basePipelineIndex          = -1
     };
     
-    VkCheck(vkCreateGraphicsPipelines(g_devicePtr, VK_NULL_HANDLE, 1, &createInfo, GetAlloc(), &pipeline));
+    VkCheck(vkCreateGraphicsPipelines(g_devicePtr, VK_NULL_HANDLE, 1, &createInfo, GetVkAlloc(), &pipeline));
 }
 
 ///////////////////////////////////////////////////////////

@@ -90,7 +90,7 @@ const VkAllocationCallbacks alloc
 
 ///////////////////////////////////////////////////////////
 
-inline const VkAllocationCallbacks* GetAlloc()
+inline const VkAllocationCallbacks* GetVkAlloc()
 {
     return nullptr;
     //return &alloc;

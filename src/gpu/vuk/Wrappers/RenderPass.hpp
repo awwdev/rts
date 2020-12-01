@@ -89,7 +89,7 @@ void RenderPass::Create(Swapchain& swapchain)
         .dependencyCount = 1,
         .pDependencies   = &dependency
     };
-    VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetAlloc(), &renderPass));
+    VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &renderPass));
 
     auto count = swapchain.images.count;
     framebuffers.count = count;
@@ -109,7 +109,7 @@ void RenderPass::Create(Swapchain& swapchain)
             .height          = height,
             .layers          = 1
         };
-        VkCheck(vkCreateFramebuffer(g_devicePtr, &framebufferInfo, GetAlloc(), &framebuffers[i]));
+        VkCheck(vkCreateFramebuffer(g_devicePtr, &framebufferInfo, GetVkAlloc(), &framebuffers[i]));
 
         beginInfos[i] = 
         {
@@ -131,10 +131,10 @@ void RenderPass::Create(Swapchain& swapchain)
 
 void RenderPass::Destroy()
 {
-    vkDestroyRenderPass(g_devicePtr, renderPass, GetAlloc());
+    vkDestroyRenderPass(g_devicePtr, renderPass, GetVkAlloc());
     FOR_ARRAY(framebuffers, i)
     {
-        vkDestroyFramebuffer(g_devicePtr, framebuffers[i], GetAlloc());
+        vkDestroyFramebuffer(g_devicePtr, framebuffers[i], GetVkAlloc());
         framebuffers[i] = nullptr;
     }
     framebuffers.count = 0;

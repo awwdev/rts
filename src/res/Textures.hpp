@@ -22,7 +22,7 @@ struct Texture
 
 struct Textures
 {
-    com::Array<Texture, 100> textureArray;
+    com::Array<Texture, 10> textureArray;
     void Load();
 };
 

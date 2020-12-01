@@ -54,7 +54,7 @@ void Device::Create(Physical& physical)
         .pEnabledFeatures           = &deviceFeatures
     };
 
-    VkCheck(vkCreateDevice(physical.physical, &deviceInfo, GetAlloc(), &device));
+    VkCheck(vkCreateDevice(physical.physical, &deviceInfo, GetVkAlloc(), &device));
     vkGetDeviceQueue(device, physical.queueIndex, 0, &queue);
 }
 

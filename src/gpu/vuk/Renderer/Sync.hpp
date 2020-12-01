@@ -44,11 +44,11 @@ void Sync::Create(Swapchain& swapchain)
     };
 
     FOR_ARRAY(imageAcquired, i) 
-        vkCreateSemaphore(g_devicePtr, &semaphoreInfo, GetAlloc(), &imageAcquired[i]);    
+        vkCreateSemaphore(g_devicePtr, &semaphoreInfo, GetVkAlloc(), &imageAcquired[i]);    
     FOR_ARRAY(imageFinished, i) 
-        vkCreateSemaphore(g_devicePtr, &semaphoreInfo, GetAlloc(), &imageFinished[i]);  
+        vkCreateSemaphore(g_devicePtr, &semaphoreInfo, GetVkAlloc(), &imageFinished[i]);  
     FOR_ARRAY(fences, i) 
-        vkCreateFence(g_devicePtr, &fenceInfo, GetAlloc(), &fences[i]);
+        vkCreateFence(g_devicePtr, &fenceInfo, GetVkAlloc(), &fences[i]);
     
 }
 
@@ -57,11 +57,11 @@ void Sync::Create(Swapchain& swapchain)
 void Sync::Destroy()
 {
     FOR_ARRAY(imageAcquired, i) 
-        vkDestroySemaphore(g_devicePtr, imageAcquired[i], GetAlloc());
+        vkDestroySemaphore(g_devicePtr, imageAcquired[i], GetVkAlloc());
     FOR_ARRAY(imageFinished, i) 
-        vkDestroySemaphore(g_devicePtr, imageFinished[i], GetAlloc());
+        vkDestroySemaphore(g_devicePtr, imageFinished[i], GetVkAlloc());
     FOR_ARRAY(fences, i)        
-        vkDestroyFence(g_devicePtr, fences[i], GetAlloc());
+        vkDestroyFence(g_devicePtr, fences[i], GetVkAlloc());
 
     imageAcquired.count = 0;
     imageFinished.count = 0;

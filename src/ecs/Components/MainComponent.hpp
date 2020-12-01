@@ -1,7 +1,6 @@
 #pragma once
 
-#include "ecs/ComponentArray.hpp"
-#include "ecs/Components/MainComponent.hpp"
+#include "com/Vec.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -9,9 +8,10 @@ namespace mini::ecs {
 
 ///////////////////////////////////////////////////////////
 
-struct ComponentArrays 
+struct MainComponent
 {
-    ComponentArray<MainComponent, COMPONENT_COUNT_MAX> mainComponents;
+    Vec2f pos;
+    i32 textureId;
 };
 
 ///////////////////////////////////////////////////////////

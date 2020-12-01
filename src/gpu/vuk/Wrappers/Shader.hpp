@@ -37,8 +37,8 @@ void Shader::Create(chars_t pathVert, chars_t pathFrag)
 
 void Shader::Destroy()
 {
-    vkDestroyShaderModule(g_devicePtr, modules[0], GetAlloc());    
-    vkDestroyShaderModule(g_devicePtr, modules[1], GetAlloc());    
+    vkDestroyShaderModule(g_devicePtr, modules[0], GetVkAlloc());    
+    vkDestroyShaderModule(g_devicePtr, modules[1], GetVkAlloc());    
 }
 
 ///////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ VkShaderModule Shader::LoadShaderModule(chars_t path)
         .codeSize   = (uint32_t)size,
         .pCode      = reinterpret_cast<uint32_t const*>(buffer)
     };
-    VkCheck(vkCreateShaderModule(g_devicePtr, &moduleInfo, GetAlloc(), &mod));
+    VkCheck(vkCreateShaderModule(g_devicePtr, &moduleInfo, GetVkAlloc(), &mod));
 
     delete[] buffer;
     return mod;

@@ -34,7 +34,7 @@ void Surface::Create(Instance& instance, Physical& physical, WindowHandle const&
         .hinstance  = wndHandle.hInstance,
         .hwnd       = wndHandle.hWnd,
     };
-    VkCheck(vkCreateWin32SurfaceKHR(instance.instance, &surfInfo, GetAlloc(), &surface));
+    VkCheck(vkCreateWin32SurfaceKHR(instance.instance, &surfInfo, GetVkAlloc(), &surface));
 #endif
 
 #ifdef __linux__
@@ -56,7 +56,7 @@ void Surface::Create(Instance& instance, Physical& physical, WindowHandle const&
 
 void Surface::Destroy(VkInstance instance)
 {
-    vkDestroySurfaceKHR(instance, surface, GetAlloc());
+    vkDestroySurfaceKHR(instance, surface, GetVkAlloc());
 }
 
 ///////////////////////////////////////////////////////////

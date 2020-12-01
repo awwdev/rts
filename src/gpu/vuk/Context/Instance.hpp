@@ -70,10 +70,10 @@ void Instance::Create()
         .enabledExtensionCount   = extensions.count,
         .ppEnabledExtensionNames = extensions.data
     };
-    VkCheck(vkCreateInstance(&instInfo, GetAlloc(), &instance));
+    VkCheck(vkCreateInstance(&instInfo, GetVkAlloc(), &instance));
 
     ((PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT"))
-    (instance, &debugInfo, GetAlloc(), &debugMessenger);
+    (instance, &debugInfo, GetVkAlloc(), &debugMessenger);
 }
 
 ///////////////////////////////////////////////////////////
@@ -81,8 +81,8 @@ void Instance::Create()
 void Instance::Destroy()
 {
     ((PFN_vkDestroyDebugUtilsMessengerEXT) 
-    vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT"))(instance, debugMessenger, GetAlloc());
-    vkDestroyInstance(instance, GetAlloc());
+    vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT"))(instance, debugMessenger, GetVkAlloc());
+    vkDestroyInstance(instance, GetVkAlloc());
 }
 
 ///////////////////////////////////////////////////////////
