@@ -1,8 +1,10 @@
 #pragma once
 
 #include "gpu/vuk/States/DefaultState.hpp"
-#include "gpu/RenderData.hpp"
 #include "gpu/vuk/Renderer/Commands.hpp"
+
+#include "gpu/RenderData.hpp"
+#include "res/Resources.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -14,7 +16,7 @@ struct States
 {
     DefaultState defaultState;
 
-    void Create(Context&, Commands&);
+    void Create(Context&, Commands&, res::Resources&);
     void Destroy();
     void Record(Commands&, uint32_t);
     void Update(RenderData&);
@@ -22,9 +24,9 @@ struct States
 
 ///////////////////////////////////////////////////////////
 
-void States::Create(Context& context, Commands& cmds)
+void States::Create(Context& context, Commands& cmds, res::Resources& resources)
 {
-    defaultState.Create(context, cmds);
+    defaultState.Create(context, cmds, resources);
 }
 
 ///////////////////////////////////////////////////////////

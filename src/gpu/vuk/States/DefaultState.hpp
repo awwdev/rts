@@ -8,6 +8,7 @@
 
 #include "gpu/vuk/Renderer/Commands.hpp"
 #include "gpu/RenderData.hpp"
+#include "res/Resources.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -23,7 +24,7 @@ struct DefaultState
     DefaultUniforms uniforms;
     DefaultVertices vertices;
 
-    void Create(Context&, Commands&);
+    void Create(Context&, Commands&, res::Resources&);
     void Destroy();
     void Update(RenderData& renderData);
     void Record(VkCommandBuffer, uint32_t);
@@ -31,9 +32,9 @@ struct DefaultState
 
 ///////////////////////////////////////////////////////////
 
-void DefaultState::Create(Context& context, Commands& cmds)
+void DefaultState::Create(Context& context, Commands& cmds, res::Resources& resources)
 {
-    uniforms.Create(cmds.pool);
+    uniforms.Create(cmds.pool, resources);
     vertices.Create();
     CreateDefaultShader(shader);
     CreateDefaultRenderPass(renderPass, context.swapchain);

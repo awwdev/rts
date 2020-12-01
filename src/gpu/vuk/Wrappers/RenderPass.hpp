@@ -16,6 +16,7 @@ struct RenderPass
     uint32_t width;
     uint32_t height;
     VkFormat format;
+    VkClearValue clear = {};
 
     com::Array<VkFramebuffer, 4> framebuffers;
     com::Array<VkRenderPassBeginInfo, 4> beginInfos;
@@ -110,7 +111,6 @@ void RenderPass::Create(Swapchain& swapchain)
         };
         VkCheck(vkCreateFramebuffer(g_devicePtr, &framebufferInfo, GetAlloc(), &framebuffers[i]));
 
-        VkClearValue clear = { .color { 1, 0.1, 0.1, 1 } };
         beginInfos[i] = 
         {
             .sType          = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,

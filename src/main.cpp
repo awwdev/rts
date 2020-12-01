@@ -3,6 +3,7 @@
 #include "app/Global.hpp"
 #include "gpu/vuk/Renderer.hpp"
 #include "net/Network.hpp"
+#include "res/Resources.hpp"
 #include "com/Time.hpp"
 #include "com/Clock.hpp"
 #include "app/Scene.hpp"
@@ -22,7 +23,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
     {
         wnd::Window window { "mini window", 600, 400, 64, 64 };
-        gpu::vuk::Renderer renderer { { window.hInstance, window.hWnd } };
+        res::Resources resources;
+        gpu::vuk::Renderer renderer { { window.hInstance, window.hWnd }, resources };
         net::Network network;
         app::Scene scene;
 
@@ -30,7 +32,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         {
             window.Update(); 
             scene.Update();
-            renderer.Update(scene.renderData);
+            renderer.Update(scene.renderData, resources);
             
             com::dt::UpdateTime();
             com::dt::PrintFps();

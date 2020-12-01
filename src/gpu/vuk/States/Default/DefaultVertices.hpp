@@ -75,10 +75,10 @@ void DefaultVertices::Create()
     f32 w = 64;
     f32 h = 64;
 
-    vbo.Append({ { x + 0, y + 0 }, {}, { 1, 0, 0, 1 } });
-    vbo.Append({ { x + w, y + 0 }, {}, { 0, 1, 0, 1 } });
-    vbo.Append({ { x + w, y + h }, {}, { 0, 0, 1, 1 } });
-    vbo.Append({ { x + 0, y + h }, {}, { 1, 1, 1, 1 } });
+    vbo.Append({ { x + 0, y + 0 }, { 0, 0 }, { 1, 0, 0, 1 } });
+    vbo.Append({ { x + w, y + 0 }, { 1, 0 }, { 0, 1, 0, 1 } });
+    vbo.Append({ { x + w, y + h }, { 1, 1 }, { 0, 0, 1, 1 } });
+    vbo.Append({ { x + 0, y + h }, { 0, 1 }, { 1, 1, 1, 1 } });
 
     ibo.Append(0);
     ibo.Append(1);

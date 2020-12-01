@@ -8,6 +8,7 @@
 #include "gpu/vuk/Wrappers/Image.hpp"
 #include "gpu/RenderData.hpp"
 #include "app/Global.hpp"
+#include "res/Resources.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -31,14 +32,14 @@ struct DefaultUniforms
     Image textureArray;
     Descriptors descriptors;
 
-    void Create(VkCommandPool);
+    void Create(VkCommandPool, res::Resources&);
     void Destroy();
     void Update(RenderData&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void DefaultUniforms::Create(VkCommandPool cmdPool)
+void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 {
     //push constants
     pushConstants.rangeInfo.offset = 0;
@@ -51,13 +52,14 @@ void DefaultUniforms::Create(VkCommandPool cmdPool)
     CreateSamplerPixelPerfect(sampler);
 
     //test
-    static char colors [32][32][4] {};
-    for(auto y = 0; y < 32; ++y) {
-    for(auto x = 0; x < 32; ++x) {
-        colors[y][x][0] = (char)255;
-        colors[y][x][3] = (char)255;
-    }}
-    textureArray.Store(cmdPool, colors, 32*32*4, 4);
+    //static char colors [32][32][4] {};
+    //for(auto y = 0; y < 32; ++y) {
+    //for(auto x = 0; x < 32; ++x) {
+    //    colors[y][x][0] = (char)255;
+    //    colors[y][x][3] = (char)255;
+    //}}
+    auto& textures = resources.textures;
+    textureArray.Store(cmdPool, textures.buffer, textures.SIZE, textures.SIZE); //move into create a bit?
     textureArray.Bake(cmdPool);
 
     infos[enum_cast(DefaultUniformEnum::TextureSampler)] =

@@ -7,6 +7,7 @@
 #include "gpu/vuk/Renderer/Sync.hpp"
 
 #include "gpu/RenderData.hpp"
+#include "res/Resources.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -23,15 +24,15 @@ struct Renderer
 
     uint32_t currentFrame = 0;
 
-    Renderer(WindowHandle const&);
+    Renderer(WindowHandle const&, res::Resources&);
     ~Renderer(); 
-    void Update(RenderData&);
-    bool CheckSwapchain();
+    void Update(RenderData&, res::Resources&);
+    bool CheckSwapchain(res::Resources&);
 };
 
 ///////////////////////////////////////////////////////////
 
-bool Renderer::CheckSwapchain()
+bool Renderer::CheckSwapchain(res::Resources& resources)
 {
     if (app::glo::windowHeight <= 0 || app::glo::windowWidth <= 0)
         return false;
@@ -47,7 +48,7 @@ bool Renderer::CheckSwapchain()
         context.surface.UpdateSurfaceCapabilities(context.physical);
         context.swapchain.Create(context.device, context.surface);
         commands.Create(context.physical.queueIndex, context.swapchain);
-        states.Create(context, commands); 
+        states.Create(context, commands, resources); 
     }
 
     return true;
@@ -55,11 +56,11 @@ bool Renderer::CheckSwapchain()
 
 ///////////////////////////////////////////////////////////
 
-Renderer::Renderer(WindowHandle const& wndHandle)
+Renderer::Renderer(WindowHandle const& wndHandle, res::Resources& resources)
 {
     context.Create(wndHandle);
     commands.Create(context.physical.queueIndex, context.swapchain);
-    states.Create(context, commands); 
+    states.Create(context, commands, resources); 
     sync.Create(context.swapchain);
     
     PrintPhysicalAPI();
@@ -79,9 +80,9 @@ Renderer::~Renderer()
 
 ///////////////////////////////////////////////////////////
 
-void Renderer::Update(RenderData& renderData)
+void Renderer::Update(RenderData& renderData, res::Resources& resources)
 {
-    if (CheckSwapchain() == false)
+    if (CheckSwapchain(resources) == false)
         return;
 
     if (vkWaitForFences(g_devicePtr, 1, &sync.fences[currentFrame], VK_FALSE, 0) != VK_SUCCESS)
