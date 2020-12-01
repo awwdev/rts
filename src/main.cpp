@@ -43,7 +43,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             auto& mainComponent = scene.ecs.arrays.Add<ecs::MainComponent>(ID);
             mainComponent.pos  = { 16 + 32, 16 };
             mainComponent.size = { 32, 32 };
-            mainComponent.textureId = 0;
+            mainComponent.textureId = 1;
         }
         
         while(app::glo::isAppRunning)

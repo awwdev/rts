@@ -47,13 +47,17 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
     pushConstants.rangeInfo.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
     //textures
+    u32 layerCount = resources.textures.textureArray.count;
     textureArray.Create(cmdPool, VK_FORMAT_R8G8B8A8_SRGB, 
-    VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 32, 32, 1);
+    VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 32, 32, layerCount);
     CreateSamplerPixelPerfect(sampler);
 
     //store
-    auto& texture = resources.textures.textureArray[0]; //iterate array
-    textureArray.Store(cmdPool, texture.buffer, texture.SIZE, texture.SIZE);
+    auto& textureArrayHost = resources.textures.textureArray;
+    auto& textureSize  = textureArrayHost[0].SIZE;
+    textureArray.Store(cmdPool, textureArrayHost.data, textureSize * textureArrayHost.count, textureSize); 
+    //TODO textureArray class ? 
+    //TODO count instead of total size
     textureArray.Bake(cmdPool);
 
     infos[enum_cast(DefaultUniformEnum::TextureSampler)] =

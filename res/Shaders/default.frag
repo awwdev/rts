@@ -5,6 +5,7 @@
 
 layout(location = 0) in vec4 inCol;
 layout(location = 1) in vec2 inTex;
+layout(location = 2) in flat uint inTexId;
 
 ///////////////////////////////////////////////////////////
 
@@ -18,8 +19,7 @@ layout(binding = 0) uniform sampler2DArray textures;
 
 void main() 
 {
-    const int LAYER = 0;
-    vec3 uv = vec3(inTex.x, inTex.y, LAYER);
+    vec3 uv = vec3(inTex.x, inTex.y, inTexId);
     vec4 col = texture(textures, uv);
     outCol = col;
 }

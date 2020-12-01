@@ -12,7 +12,7 @@ struct MainComponent
 {
     Vec2f pos;
     Vec2f size;
-    i32 textureId;
+    u32 textureId;
 };
 
 ///////////////////////////////////////////////////////////

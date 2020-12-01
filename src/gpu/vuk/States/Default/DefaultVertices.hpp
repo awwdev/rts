@@ -19,7 +19,7 @@ struct DefaultVertices
     VkDeviceSize offsets = 0;
 
     static VkVertexInputBindingDescription   bindings   [1];
-    static VkVertexInputAttributeDescription attributes [3];
+    static VkVertexInputAttributeDescription attributes [4];
 
     void Create();
     void Destroy();
@@ -39,7 +39,7 @@ VkVertexInputBindingDescription DefaultVertices::bindings [1] =
 
 ///////////////////////////////////////////////////////////
 
-VkVertexInputAttributeDescription DefaultVertices::attributes [3] =
+VkVertexInputAttributeDescription DefaultVertices::attributes [4] =
 {
     {
         .location   = 0,
@@ -58,6 +58,12 @@ VkVertexInputAttributeDescription DefaultVertices::attributes [3] =
         .binding    = 0, 
         .format     = VK_FORMAT_R32G32B32A32_SFLOAT,
         .offset     = offsetof(DefaultVertex, col),
+    },
+    {
+        .location   = 3,
+        .binding    = 0, 
+        .format     = VK_FORMAT_R32_UINT,
+        .offset     = offsetof(DefaultVertex, texId),
     },
 };
 
