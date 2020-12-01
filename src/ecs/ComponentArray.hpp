@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ecs/EntityID.hpp"
+#include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -15,26 +16,26 @@ namespace mini::ecs {
 TEMPLATE 
 struct ComponentArray
 {
-    T  dense [N];
+    com::Array<T, N> dense;
     ID componentLookup [N];
     ID entityLookup [N];
 
-    void Add();
-    void Remove();
+    auto& Add(ID);
+    void Remove(ID);
 };
 
 ///////////////////////////////////////////////////////////
 
 TEMPLATE 
-void ComponentArray<T, N>::Add()
+auto& ComponentArray<T, N>::Add(ID entityID)
 {
-
+    return dense.Append();
 }
 
 ///////////////////////////////////////////////////////////
 
 TEMPLATE 
-void ComponentArray<T, N>::Remove()
+void ComponentArray<T, N>::Remove(ID entityID)
 {
     
 }

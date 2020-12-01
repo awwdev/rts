@@ -14,8 +14,8 @@ namespace mini::gpu::vuk {
 
 struct DefaultVertices
 {
-    VertexBuffer<DefaultVertex, 1000> vbo;
-    IndexBuffer<u32, 1000> ibo;
+    VertexBuffer<DefaultVertex, gpu::VERTEX_COUNT_MAX> vbo;
+    IndexBuffer<u32, (u32)(gpu::VERTEX_COUNT_MAX * 1.5)> ibo;
     VkDeviceSize offsets = 0;
 
     static VkVertexInputBindingDescription   bindings   [1];
@@ -68,18 +68,7 @@ void DefaultVertices::Create()
     vbo.Create();
     ibo.Create();
 
-    //test
-
-    f32 x = 32;
-    f32 y = 32;
-    f32 w = 64;
-    f32 h = 64;
-
-    vbo.Append({ { x + 0, y + 0 }, { 0, 0 }, { 1, 0, 0, 1 } });
-    vbo.Append({ { x + w, y + 0 }, { 1, 0 }, { 0, 1, 0, 1 } });
-    vbo.Append({ { x + w, y + h }, { 1, 1 }, { 0, 0, 1, 1 } });
-    vbo.Append({ { x + 0, y + h }, { 0, 1 }, { 1, 1, 1, 1 } });
-
+    //!IBO CAN BE CREATED WITH PATTERN AND THEN BE BAKED!
     ibo.Append(0);
     ibo.Append(1);
     ibo.Append(2);
@@ -100,6 +89,13 @@ void DefaultVertices::Destroy()
 
 void DefaultVertices::Update(RenderData& renderData)
 {
+    //TODO array overload and store whole array at once 
+    auto& vertices = renderData.defaultRenderData.vertices;
+    vbo.count = 0;
+    FOR_ARRAY(vertices, i)
+    {
+        vbo.Append(vertices[i]);
+    }
 }
 
 ///////////////////////////////////////////////////////////

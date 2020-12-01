@@ -11,10 +11,6 @@ namespace mini::ecs {
 
 ///////////////////////////////////////////////////////////
 
-#define TEMPLATE template<typename T>
-
-///////////////////////////////////////////////////////////
-
 struct ECS 
 {
     com::Bitset<ENTITY_COUNT_MAX> entities;
@@ -23,9 +19,6 @@ struct ECS
     auto AddEntity();
     void RemoveEntity();
     void Update(gpu::RenderData&);
-
-    TEMPLATE auto& AddComponent(ID);
-    TEMPLATE void  RemoveComponent(ID);
 };
 
 ///////////////////////////////////////////////////////////
@@ -34,8 +27,8 @@ auto ECS::AddEntity()
 {
     auto freeBit = entities.FindFirstFreeBit();
     com::Assert(freeBit.hasValue, "no free entity");
-
-    return (ID) 0;
+    entities.Set(freeBit.Value());
+    return freeBit.Value();
 }
 
 ///////////////////////////////////////////////////////////
@@ -47,31 +40,10 @@ void ECS::RemoveEntity()
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE
-auto& ECS::AddComponent(ID entityID)
-{
-    return arrays.mainComponents.dense[0];
-}
-
-///////////////////////////////////////////////////////////
-
-TEMPLATE
-void ECS::RemoveComponent(ID entityID)
-{
-
-}
-
-///////////////////////////////////////////////////////////
-
 void ECS::Update(gpu::RenderData& renderData)
 {
-    //calling systems
     RenderSystem(arrays, renderData);
 }
-
-///////////////////////////////////////////////////////////
-
-#undef TEMPLATE
 
 ///////////////////////////////////////////////////////////
 

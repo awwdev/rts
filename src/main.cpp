@@ -28,8 +28,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         net::Network network;
         app::Scene scene;
 
+        //test
         auto  ID = scene.ecs.AddEntity();
-        auto& mainComponent = scene.ecs.AddComponent<ecs::MainComponent>(ID);
+        auto& mainComponent = scene.ecs.arrays.Add<ecs::MainComponent>(ID);
+        mainComponent.pos  = { 16, 16 };
+        mainComponent.size = { 32, 32 };
+        mainComponent.textureId = 0;
 
         while(app::glo::isAppRunning)
         {

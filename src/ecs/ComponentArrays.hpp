@@ -9,10 +9,37 @@ namespace mini::ecs {
 
 ///////////////////////////////////////////////////////////
 
+#define TEMPLATE template<typename T>
+
+///////////////////////////////////////////////////////////
+
 struct ComponentArrays 
 {
     ComponentArray<MainComponent, COMPONENT_COUNT_MAX> mainComponents;
+    
+    TEMPLATE auto& Add(ID);
+    TEMPLATE void  Remove(ID);
 };
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE
+auto& ComponentArrays::Add(ID entityID)
+{
+    if constexpr(std::is_same_v<T, MainComponent>) 
+        return mainComponents.Add(entityID); 
+}
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE
+void ComponentArrays::Remove(ID entityID)
+{
+}
+
+///////////////////////////////////////////////////////////
+
+#undef TEMPLATE
 
 ///////////////////////////////////////////////////////////
 

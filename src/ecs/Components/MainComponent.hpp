@@ -11,6 +11,7 @@ namespace mini::ecs {
 struct MainComponent
 {
     Vec2f pos;
+    Vec2f size;
     i32 textureId;
 };
 

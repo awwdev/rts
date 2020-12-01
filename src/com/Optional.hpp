@@ -26,6 +26,7 @@ TEMPLATE struct Optional
     Optional();
     Optional(auto const&... args);
     explicit operator bool() const { return hasValue; }
+    T& Value() { return data.value; }
 };
 
 ///////////////////////////////////////////////////////////
