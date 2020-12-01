@@ -66,15 +66,19 @@ VkVertexInputAttributeDescription DefaultVertices::attributes [3] =
 void DefaultVertices::Create()
 {
     vbo.Create();
-    ibo.Create();
 
-    //!IBO CAN BE CREATED WITH PATTERN AND THEN BE BAKED!
-    ibo.Append(0);
-    ibo.Append(1);
-    ibo.Append(2);
-    ibo.Append(0);
-    ibo.Append(2);
-    ibo.Append(3);
+    //IBO PATTERN
+    ibo.Create();
+    for(auto i = 0; i < 400; i+=4)
+    {
+        ibo.Append(i + 0);
+        ibo.Append(i + 1);
+        ibo.Append(i + 2);
+        ibo.Append(i + 0);
+        ibo.Append(i + 2);
+        ibo.Append(i + 3);
+    }
+    ibo.Bake();
 }
 
 ///////////////////////////////////////////////////////////

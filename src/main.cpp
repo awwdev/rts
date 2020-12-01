@@ -8,6 +8,8 @@
 #include "com/Clock.hpp"
 #include "app/Scene.hpp"
 
+#include <cmath>
+
 ///////////////////////////////////////////////////////////
 
 using namespace mini;
@@ -29,12 +31,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         app::Scene scene;
 
         //test
-        auto  ID = scene.ecs.AddEntity();
-        auto& mainComponent = scene.ecs.arrays.Add<ecs::MainComponent>(ID);
-        mainComponent.pos  = { 16, 16 };
-        mainComponent.size = { 32, 32 };
-        mainComponent.textureId = 0;
-
+        {
+            auto  ID = scene.ecs.AddEntity();
+            auto& mainComponent = scene.ecs.arrays.Add<ecs::MainComponent>(ID);
+            mainComponent.pos  = { 16, 16 };
+            mainComponent.size = { 32, 32 };
+            mainComponent.textureId = 0;
+        }
+        {
+            auto  ID = scene.ecs.AddEntity();
+            auto& mainComponent = scene.ecs.arrays.Add<ecs::MainComponent>(ID);
+            mainComponent.pos  = { 16 + 32, 16 };
+            mainComponent.size = { 32, 32 };
+            mainComponent.textureId = 0;
+        }
+        
         while(app::glo::isAppRunning)
         {
             window.Update(); 
@@ -53,6 +64,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     return EXIT_SUCCESS;
 }
 #endif
+
+struct Foo {} constexpr foo;
 
 ///////////////////////////////////////////////////////////
 
