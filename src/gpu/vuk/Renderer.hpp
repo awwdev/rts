@@ -34,10 +34,10 @@ struct Renderer
 
 bool Renderer::CheckSwapchain(res::Resources& resources)
 {
-    if (app::glo::windowHeight <= 0 || app::glo::windowWidth <= 0)
+    if (app::windowHeight <= 0 || app::windowWidth <= 0)
         return false;
 
-    if (app::glo::HasEvent(app::EventEnum::WND_MOVE_SIZE))
+    if (app::HasEvent(app::EventEnum::WND_MOVE_SIZE))
     {
         vkDeviceWaitIdle(g_devicePtr);
 

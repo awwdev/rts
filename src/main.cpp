@@ -8,8 +8,6 @@
 #include "com/Clock.hpp"
 #include "app/Scene.hpp"
 
-#include <cmath>
-
 ///////////////////////////////////////////////////////////
 
 using namespace mini;
@@ -30,23 +28,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         net::Network network;
         app::Scene scene;
 
-        //test
-        {
-            auto  ID = scene.ecs.AddEntity();
-            auto& mainComponent = scene.ecs.arrays.Add<ecs::MainComponent>(ID);
-            mainComponent.pos  = { 16, 16 };
-            mainComponent.size = { 32, 32 };
-            mainComponent.textureId = 0;
-        }
-        {
-            auto  ID = scene.ecs.AddEntity();
-            auto& mainComponent = scene.ecs.arrays.Add<ecs::MainComponent>(ID);
-            mainComponent.pos  = { 16 + 32, 16 };
-            mainComponent.size = { 32, 32 };
-            mainComponent.textureId = 1;
-        }
-        
-        while(app::glo::isAppRunning)
+        while(app::isAppRunning)
         {
             window.Update(); 
             scene.Update();
@@ -55,8 +37,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             com::dt::UpdateTime();
             com::dt::PrintFps();
 
-            if (app::glo::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
-                app::glo::isAppRunning = false;
+            if (app::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
+                app::isAppRunning = false;
         }
     }
 
@@ -64,8 +46,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     return EXIT_SUCCESS;
 }
 #endif
-
-struct Foo {} constexpr foo;
 
 ///////////////////////////////////////////////////////////
 
@@ -78,7 +58,7 @@ int main()
     //TODO socket
     //TODO mem
 
-    while(app::glo::isAppRunning)
+    while(app::isAppRunning)
     {
         window.PollEvents();
         renderer.Update();
@@ -86,8 +66,8 @@ int main()
         com::dt::UpdateTime();
         com::dt::PrintFps();
 
-        if (app::glo::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
-            app::glo::isAppRunning = false;
+        if (app::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
+            app::isAppRunning = false;
     }   
 }
 #endif

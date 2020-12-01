@@ -12,6 +12,7 @@ enum class EventEnum
 {
     WND_MOVE_SIZE,
     KEY_DOWN_ESCAPE,
+    MB_LEFT_DOWN,
 };
 
 ///////////////////////////////////////////////////////////
@@ -21,8 +22,6 @@ struct Event
     EventEnum eventEnum;
     i32 xpos;
     i32 ypos;
-    i32 width;
-    i32 height;
 
     bool operator==(Event const& other) const;
 };

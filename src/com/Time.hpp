@@ -25,15 +25,15 @@ inline void UpdateTime()
     auto t2 = clock_t::now();
     dur_t dur = t2 - t1;
     t1 = t2;
-    app::glo::dt = dur.count();
-    secTimer += app::glo::dt;
+    app::dt = dur.count();
+    secTimer += app::dt;
     frames += 1;
-    app::glo::hasSecondPassed = false;
+    app::hasSecondPassed = false;
     if (secTimer >= 1)
     {
-        app::glo::hasSecondPassed = true;
+        app::hasSecondPassed = true;
         secTimer = 0;
-        app::glo::fps = frames;
+        app::fps = frames;
         frames = 0;
     }
 }
@@ -42,8 +42,8 @@ inline void UpdateTime()
 
 inline void PrintFps()
 {
-    if (app::glo::hasSecondPassed)
-        com::Print("fps", app::glo::fps, "dt", app::glo::dt);
+    if (app::hasSecondPassed)
+        com::Print("fps", app::fps, "dt", app::dt);
 }
 
 ///////////////////////////////////////////////////////////

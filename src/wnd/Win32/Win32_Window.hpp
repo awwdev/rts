@@ -77,7 +77,7 @@ Win32_Window::~Win32_Window()
 
 void Win32_Window::Update()
 {
-    app::glo::events.count = 0;
+    app::events.count = 0;
     for (MSG message; PeekMessage(&message, NULL, 0, 0, PM_REMOVE);)
     {
         TranslateMessage(&message);

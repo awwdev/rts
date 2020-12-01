@@ -8,4 +8,4 @@
 2020-11-27 low level network layer windows done, receive and send, ext buffer, vbo
 2020-11-28 ibo, descriptors, pushConstants, ubo, image (impl begin)
 2020-11-30 image transition, storage, descriptors, shader sampler, rendering texture
-2020-12-01 rgba import, resources, magick bat
+2020-12-01 rgba import, resources, magick bat, ecs basics, tex array idx, 

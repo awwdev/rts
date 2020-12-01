@@ -57,8 +57,8 @@ i32 ypos   = 64)
     wmDeleteWindow = XInternAtom(display, "WM_DELETE_WINDOW", false);
     XSetWMProtocols(display, window, &wmDeleteWindow, 1);
 
-    app::glo::windowWidth = width;
-    app::glo::windowHeight = height;
+    app::windowWidth = width;
+    app::windowHeight = height;
 }
 
 ///////////////////////////////////////////////////////////
@@ -83,7 +83,7 @@ void X11_Window::PollEvents()
                 {
                     app::Event event {};
                     event.eventEnum = app::EventEnum::KEY_DOWN_ESCAPE;
-                    app::glo::events.Append(event);
+                    app::events.Append(event);
                 }
             } 
             break;
@@ -91,15 +91,15 @@ void X11_Window::PollEvents()
 
         XWindowAttributes attributes;
         XGetWindowAttributes(display, window, &attributes);
-        app::glo::windowWidth = attributes.width;
-        app::glo::windowHeight = attributes.height;
+        app::windowWidth = attributes.width;
+        app::windowHeight = attributes.height;
 
         app::Event event {};
         event.eventEnum = app::EventEnum::WND_MOVE_SIZE;
         event.width = attributes.width;
         event.height = attributes.height;
-        if (app::glo::events.Contains(event) == nullptr)
-            app::glo::events.Append(event);
+        if (app::events.Contains(event) == nullptr)
+            app::events.Append(event);
     }
 
     if (XCheckTypedWindowEvent(display, window, ClientMessage, &e))
@@ -107,7 +107,7 @@ void X11_Window::PollEvents()
         if ((unsigned long)e.xclient.data.l[0] == wmDeleteWindow)
         {
             com::Print("Close");
-            app::glo::isAppRunning = false;
+            app::isAppRunning = false;
         }
     }
 }
