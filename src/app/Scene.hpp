@@ -41,7 +41,7 @@ Scene::Scene()
         auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);
         transformComponent.position  = { rand() % 600, rand() % 400 };
         transformComponent.positionTarget = transformComponent.position;
-        transformComponent.size = { 32, 32 };
+        transformComponent.size = { 64, 64 };
         auto& renderComponent = ecs.arrays.Add<ecs::RenderComponent>(ID);
         renderComponent.textureId = 1;
     }

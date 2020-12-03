@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include "com/Vec.hpp"
+#include "app/Global.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -27,11 +28,18 @@ void TransformComponent::MoveToTarget()
     if (delta.x < 0) position.x--;
     if (delta.y > 0) position.y++;
     if (delta.y < 0) position.y--;
+
+    //test
+    if (position == positionTarget)
+    {
+        positionTarget.x = rand() % app::windowWidth;
+        positionTarget.y = rand() % app::windowHeight;
+    }
 }
 
 ///////////////////////////////////////////////////////////
 
 //TODO lockstep
-//TODO delta time for interpolation
+//TODO delta time (interpolation)
 
 }//ns
