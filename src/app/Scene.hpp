@@ -2,6 +2,7 @@
 
 #include "ecs/ECS.hpp"
 #include "gpu/RenderData.hpp"
+#include "cmd/Timeline.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -13,6 +14,7 @@ struct Scene
 {
     ecs::ECS ecs; //could be optional (optionally initialized)
     gpu::RenderData renderData;
+    cmd::Timeline timeline;
 
     //test
     ecs::MainComponent* mainComponent;
@@ -25,6 +27,8 @@ struct Scene
 
 Scene::Scene()
 {
+    com::Print(std::boolalpha, cmd::b);
+
     //test
     {
         auto  ID = ecs.AddEntity();

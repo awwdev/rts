@@ -1,4 +1,4 @@
-# mini
+# rts
 2D Framework
 - header-only, (using unity build for testing, 1 x main.cpp)
 - window, input, utils, containers, vulkan, network, memory
