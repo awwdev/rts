@@ -2,6 +2,7 @@
 
 #include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Wrappers/Buffer.hpp"
+#include "gpu/vuk/Renderer/CommandsExt.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -25,8 +26,10 @@ TEMPLATE struct BufferExt
 
     void Create();
     void Destroy();
-    void Bake();
-    void Append(T const&);
+    void Bake(VkCommandPool);
+    void Append(T const& element);
+    void Append(T const* elements, idx_t elementCount);
+    auto CurrentByteSize() const { return count * sizeof(T); }
 };
 
 ///////////////////////////////////////////////////////////
@@ -56,15 +59,44 @@ TEMPLATE void BUFFER_EXT::Destroy()
 
 TEMPLATE void BUFFER_EXT::Append(T const& element)
 {
-    activeBuffer->Store((void*)&element, sizeof(T), count * sizeof(T));
+    activeBuffer->Store((void*)&element, sizeof(T), CurrentByteSize());
     count += 1;
 }
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void BUFFER_EXT::Bake()
+TEMPLATE void BUFFER_EXT::Append(T const* elements, idx_t elementCount)
 {
+    activeBuffer->Store((void*)elements, elementCount * sizeof(T), CurrentByteSize());
+    count += elementCount;
+}
 
+///////////////////////////////////////////////////////////
+
+TEMPLATE void BUFFER_EXT::Bake(VkCommandPool cmdPool)
+{
+    if (gpuBuffer.buffer) {
+        VkCheck(vkQueueWaitIdle(g_contextPtr->device.queue));
+        gpuBuffer.Destroy();
+    }
+
+    gpuBuffer.Create(
+        BUFFER_USAGE | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        BYTE_SIZE,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+    );
+
+    auto cmdBuffer = BeginCommands_OneTime(cmdPool);
+    VkBufferCopy copyRegion 
+    {
+        .srcOffset = 0,
+        .dstOffset = 0,
+        .size = CurrentByteSize()
+    };
+    vkCmdCopyBuffer(cmdBuffer, cpuBuffer.buffer, gpuBuffer.buffer, 1, &copyRegion);
+    EndCommands_OneTime(cmdBuffer, cmdPool);
+
+    activeBuffer = &gpuBuffer;
 }
 
 ///////////////////////////////////////////////////////////

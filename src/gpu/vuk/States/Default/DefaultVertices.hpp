@@ -1,10 +1,10 @@
 #pragma once
 
 #include "gpu/vuk/Vulkan.hpp"
-#include "gpu/RenderData.hpp"
 #include "gpu/vuk/Wrappers/BufferExt.hpp"
-#include "gpu/DefaultRenderData.hpp"
+#include "gpu/RenderData.hpp"
 #include "com/Types.hpp"
+#include "ecs/EntityID.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -21,7 +21,7 @@ struct DefaultVertices
     static VkVertexInputBindingDescription   bindings   [1];
     static VkVertexInputAttributeDescription attributes [3];
 
-    void Create();
+    void Create(VkCommandPool);
     void Destroy();
     void Update(RenderData&);
 };
@@ -63,13 +63,13 @@ VkVertexInputAttributeDescription DefaultVertices::attributes [3] =
 
 ///////////////////////////////////////////////////////////
 
-void DefaultVertices::Create()
+void DefaultVertices::Create(VkCommandPool pool)
 {
     vbo.Create();
 
     //IBO PATTERN
     ibo.Create();
-    for(auto i = 0; i < 400; i+=4)
+    for(auto i = 0; i < ecs::ENTITY_COUNT_MAX * 4; i+=4)
     {
         ibo.Append(i + 0);
         ibo.Append(i + 1);
@@ -78,7 +78,7 @@ void DefaultVertices::Create()
         ibo.Append(i + 2);
         ibo.Append(i + 3);
     }
-    ibo.Bake();
+    ibo.Bake(pool);
 }
 
 ///////////////////////////////////////////////////////////
@@ -93,15 +93,14 @@ void DefaultVertices::Destroy()
 
 void DefaultVertices::Update(RenderData& renderData)
 {
-    //TODO array overload and store whole array at once 
+    
     auto& vertices = renderData.defaultRenderData.vertices;
     vbo.count = 0;
-    FOR_ARRAY(vertices, i)
-    {
-        vbo.Append(vertices[i]);
-    }
+    vbo.Append(vertices.data, vertices.count);
 }
 
 ///////////////////////////////////////////////////////////
+
+//TODO better index buffer strategy? because pattern is so obvious
 
 }//ns

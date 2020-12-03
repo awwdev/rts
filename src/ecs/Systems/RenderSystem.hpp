@@ -59,4 +59,7 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData)
 
 ///////////////////////////////////////////////////////////
 
+//! coupling of y array size and max window heigth
+//! size depends much on max entity count
+
 }//ns

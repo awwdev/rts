@@ -17,7 +17,7 @@ struct Scene
     cmd::Timeline timeline;
 
     //test
-    ecs::TransformComponent* transformComponent;
+    //ecs::TransformComponent* transformComponent;
 
     Scene();
     void Update();
@@ -28,19 +28,20 @@ struct Scene
 Scene::Scene()
 {
     //test
-    auto ID = ecs.AddEntity();
-    ecs.arrays.Add<ecs::RenderComponent>(ID);
-    transformComponent = &ecs.arrays.Add<ecs::TransformComponent>(ID);
-    transformComponent->position  = { 32, 32 };
-    transformComponent->positionTarget = transformComponent->position;
-    transformComponent->size = { 32, 32 };
+    //auto ID = ecs.AddEntity();
+    //ecs.arrays.Add<ecs::RenderComponent>(ID);
+    //transformComponent = &ecs.arrays.Add<ecs::TransformComponent>(ID);
+    //transformComponent->position  = { 32, 32 };
+    //transformComponent->positionTarget = transformComponent->position;
+    //transformComponent->size = { 32, 32 };
 
+    for(auto i = 0; i < 1000; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);
-        transformComponent.position  = { 64, 64 };
+        transformComponent.position  = { rand() % 600, rand() % 400 };
         transformComponent.positionTarget = transformComponent.position;
-        transformComponent.size = { 64, 64 };
+        transformComponent.size = { 32, 32 };
         auto& renderComponent = ecs.arrays.Add<ecs::RenderComponent>(ID);
         renderComponent.textureId = 1;
     }
@@ -56,7 +57,7 @@ void Scene::Update()
         auto& event = app::events[i];
         if (event.eventEnum == app::EventEnum::MB_LEFT_DOWN)
         {
-            transformComponent->positionTarget = { event.xpos, event.ypos };
+            //transformComponent->positionTarget = { event.xpos, event.ypos };
         }
     }
 

@@ -32,10 +32,10 @@ struct DefaultState
 
 ///////////////////////////////////////////////////////////
 
-void DefaultState::Create(Context& context, Commands& cmds, res::Resources& resources)
+void DefaultState::Create(Context& context, Commands& commands, res::Resources& resources)
 {
-    uniforms.Create(cmds.pool, resources);
-    vertices.Create();
+    uniforms.Create(commands.pool, resources);
+    vertices.Create(commands.pool);
     CreateDefaultShader(shader);
     CreateDefaultRenderPass(renderPass, context.swapchain);
     CreateDefaultPipeline(pipeline, vertices, uniforms, shader, renderPass);

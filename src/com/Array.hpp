@@ -50,7 +50,7 @@ TEMPLATE auto& Array<T, N>::operator[](idx_t i) const
 
 TEMPLATE auto& Array<T, N>::Append(auto... args)
 {
-    com::Assert((count + 1) < N, "array exhausted");
+    com::Assert((count + 1) <= N, "array exhausted");
     data[count] = { args... };
     count += 1;
     return data[count - 1];

@@ -1,5 +1,6 @@
-- renderer onto heap
+- buffer bake
 
+- renderer onto heap
 - test static linkage on linux
 - linux test memory
 - could reduce recording and draw "everything" but on update make stuff not visible

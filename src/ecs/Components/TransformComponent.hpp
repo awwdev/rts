@@ -23,13 +23,15 @@ struct TransformComponent
 void TransformComponent::MoveToTarget()
 {
     auto delta = positionTarget - position;
-    position.x += delta.x / 10.f; //this is not precise since int
-    position.y += delta.y / 10.f;
+    if (delta.x > 0) position.x++;
+    if (delta.x < 0) position.x--;
+    if (delta.y > 0) position.y++;
+    if (delta.y < 0) position.y--;
 }
 
 ///////////////////////////////////////////////////////////
 
-//TODO fixed point math, lockstep
+//TODO lockstep
 //TODO delta time for interpolation
 
 }//ns
