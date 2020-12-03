@@ -31,13 +31,15 @@ Scene::Scene()
     auto ID = ecs.AddEntity();
     ecs.arrays.Add<ecs::RenderComponent>(ID);
     transformComponent = &ecs.arrays.Add<ecs::TransformComponent>(ID);
-    transformComponent->position  = { 16 + 32, 16 };
+    transformComponent->position  = { 32, 32 };
+    transformComponent->positionTarget = transformComponent->position;
     transformComponent->size = { 32, 32 };
 
     {
         auto ID = ecs.AddEntity();
         auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);
         transformComponent.position  = { 64, 64 };
+        transformComponent.positionTarget = transformComponent.position;
         transformComponent.size = { 64, 64 };
         auto& renderComponent = ecs.arrays.Add<ecs::RenderComponent>(ID);
         renderComponent.textureId = 1;
@@ -54,7 +56,7 @@ void Scene::Update()
         auto& event = app::events[i];
         if (event.eventEnum == app::EventEnum::MB_LEFT_DOWN)
         {
-            transformComponent->position = { event.xpos, event.ypos };
+            transformComponent->positionTarget = { event.xpos, event.ypos };
         }
     }
 

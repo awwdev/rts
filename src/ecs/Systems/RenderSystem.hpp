@@ -31,6 +31,7 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData)
         auto& transformComponent = transformComponents[i];
         auto  y = transformComponent.position.y + transformComponent.size.y;
         //subtract the camera pos to "normalize"
+        if (y < 0) continue;
         //cull objects that are outside camera
         depthSorted[y].Append(arrays.transformComponents.GetEntity(i));
     }
@@ -57,7 +58,5 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData)
 }
 
 ///////////////////////////////////////////////////////////
-
-//TODO make vertex coords ints
 
 }//ns

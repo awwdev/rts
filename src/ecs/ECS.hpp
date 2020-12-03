@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ecs/Systems/RenderSystem.hpp"
+#include "ecs/Systems/TransformSystem.hpp"
+
 #include "ecs/ComponentArrays.hpp"
 #include "gpu/RenderData.hpp"
 #include "com/Bitset.hpp"
@@ -42,6 +44,7 @@ void ECS::RemoveEntity()
 
 void ECS::Update(gpu::RenderData& renderData)
 {
+    TransformSystem(arrays, renderData);
     RenderSystem(arrays, renderData);
 }
 
