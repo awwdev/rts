@@ -8,11 +8,11 @@ namespace rts::ecs {
 
 ///////////////////////////////////////////////////////////
 
-struct MainComponent
+struct TransformComponent
 {
-    Vec2f pos;
-    Vec2f size;
-    u32 textureId;
+    Vec2i position;
+    Vec2i size;
+    Vec2i positionTarget;
 };
 
 ///////////////////////////////////////////////////////////

@@ -11,6 +11,7 @@ namespace rts::cmd {
 
 struct CmdMove 
 {
+    com::Array<ecs::ID, 10> entities;
     i32 xpos;
     i32 ypos;
     void Execute(ecs::ECS&);

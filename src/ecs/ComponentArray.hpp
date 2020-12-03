@@ -13,15 +13,17 @@ namespace rts::ecs {
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE 
+template<typename T, auto N = ENTITY_COUNT_MAX>
 struct ComponentArray
 {
     com::Array<T, N> dense;
-    ID componentLookup [N];
-    ID entityLookup [N];
+    ID denseLookup [N];  //via entity id
+    ID entityLookup [N]; //via dense index
 
-    auto& Add(ID);
-    void Remove(ID);
+    auto& Add(ID entityID);
+    void  Remove(ID entityID);
+    auto  GetEntity(ID denseID) const;
+    auto& GetComponent(ID entityID);
 };
 
 ///////////////////////////////////////////////////////////
@@ -29,7 +31,11 @@ struct ComponentArray
 TEMPLATE 
 auto& ComponentArray<T, N>::Add(ID entityID)
 {
-    return dense.Append();
+    auto& component = dense.Append();
+    auto denseIdx = dense.count - 1;
+    denseLookup[entityID] = denseIdx;
+    entityLookup[denseIdx] = entityID;
+    return component;
 }
 
 ///////////////////////////////////////////////////////////
@@ -41,6 +47,23 @@ void ComponentArray<T, N>::Remove(ID entityID)
 }
 
 ///////////////////////////////////////////////////////////
+
+TEMPLATE
+auto ComponentArray<T, N>::GetEntity(ID denseID) const
+{
+    return entityLookup[denseID];
+}
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE
+auto& ComponentArray<T, N>::GetComponent(ID entityID) 
+{
+    return dense[denseLookup[entityID]];
+}
+
+///////////////////////////////////////////////////////////
+
 
 #undef TEMPLATE
 

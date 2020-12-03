@@ -10,28 +10,54 @@ namespace rts::ecs {
 
 ///////////////////////////////////////////////////////////
 
+inline com::Array<ID, ecs::ENTITY_COUNT_MAX> depthSorted [1024];
+
+///////////////////////////////////////////////////////////
+
 static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData)
 {
     auto& vertices = renderData.defaultRenderData.vertices;
-    auto& mainComponents = arrays.mainComponents.dense;
-
     vertices.count = 0;
-    FOR_ARRAY(mainComponents, i)
+
+    auto& transformComponents = arrays.transformComponents.dense;
+    auto& renderComponents = arrays.renderComponents.dense;
+
+    FOR_C_ARRAY(depthSorted, i)
     {
-        //TODO sort by y
+        depthSorted[i].count = 0;
+    }
+    FOR_ARRAY(transformComponents, i)
+    {
+        auto& transformComponent = transformComponents[i];
+        auto  y = transformComponent.position.y + transformComponent.size.y;
+        //subtract the camera pos to "normalize"
+        //cull objects that are outside camera
+        depthSorted[y].Append(arrays.transformComponents.GetEntity(i));
+    }
+    FOR_C_ARRAY(depthSorted, y)
+    {
+        auto& entityIDs = depthSorted[y];
+        FOR_ARRAY(entityIDs, i)
+        {
+            auto& entityID = entityIDs[i];
+            auto& transformComponent = arrays.transformComponents.GetComponent(entityID);
+            auto& p = transformComponent.position;
+            auto& s = transformComponent.size;
+            auto& renderComponent = arrays.renderComponents.GetComponent(entityID);
+            auto& t = renderComponent.textureId;
 
-        auto& mainComponent = mainComponents[i];
-        auto& p = mainComponent.pos;
-        auto& s = mainComponent.size;
-        auto& t = mainComponent.textureId;
-
-        vertices.Append(p.x + 0.f, p.y + 0.f, 0.f, 0.f, 1.f, 1.f, 1.f, 1.f, t);
-        vertices.Append(p.x + s.x, p.y + 0.f, 1.f, 0.f, 1.f, 1.f, 1.f, 1.f, t);
-        vertices.Append(p.x + s.x, p.y + s.y, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, t);
-        vertices.Append(p.x + 0.f, p.y + s.y, 0.f, 1.f, 1.f, 1.f, 1.f, 1.f, t);
+            constexpr Col4f COLOR = { 1, 1, 1, 1 };
+            vertices.Append(p.x      , p.y      , COLOR, t);
+            vertices.Append(p.x + s.x, p.y      , COLOR, t);
+            vertices.Append(p.x + s.x, p.y + s.y, COLOR, t);
+            vertices.Append(p.x      , p.y + s.y, COLOR, t);
+        }
+        
     }
 }
 
 ///////////////////////////////////////////////////////////
+
+//TODO make vertex coords ints
 
 }//ns

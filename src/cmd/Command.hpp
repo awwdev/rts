@@ -23,7 +23,7 @@ struct Command
     {
         CmdMove cmdMove;
     }
-    cmdUnion;
+    cmdUnion {};
 
     void Execute(ecs::ECS&);
 };

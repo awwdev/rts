@@ -15,8 +15,7 @@ constexpr auto VERTEX_COUNT_MAX = 1000;
 
 struct DefaultVertex
 {
-    Vec2f pos;
-    Vec2f tex; //not necessary when tex array is fully used
+    Vec2i pos;
     Col4f col;
     u32   texId;
 };

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "ecs/ComponentArray.hpp"
-#include "ecs/Components/MainComponent.hpp"
+#include "ecs/Components/TransformComponent.hpp"
+#include "ecs/Components/RenderComponent.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -15,7 +16,8 @@ namespace rts::ecs {
 
 struct ComponentArrays 
 {
-    ComponentArray<MainComponent, COMPONENT_COUNT_MAX> mainComponents;
+    ComponentArray<TransformComponent> transformComponents;
+    ComponentArray<RenderComponent>    renderComponents;
     
     TEMPLATE auto& Add(ID);
     TEMPLATE void  Remove(ID);
@@ -23,16 +25,16 @@ struct ComponentArrays
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE
+TEMPLATE 
 auto& ComponentArrays::Add(ID entityID)
 {
-    if constexpr(std::is_same_v<T, MainComponent>) 
-        return mainComponents.Add(entityID); 
+    if constexpr(std::is_same_v<T, TransformComponent>) return transformComponents.Add(entityID); 
+    if constexpr(std::is_same_v<T, RenderComponent>)    return renderComponents.Add(entityID); 
 }
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE
+TEMPLATE 
 void ComponentArrays::Remove(ID entityID)
 {
 }

@@ -17,7 +17,7 @@ struct Scene
     cmd::Timeline timeline;
 
     //test
-    ecs::MainComponent* mainComponent;
+    ecs::TransformComponent* transformComponent;
 
     Scene();
     void Update();
@@ -27,22 +27,21 @@ struct Scene
 
 Scene::Scene()
 {
-    com::Print(std::boolalpha, cmd::b);
-
     //test
-    {
-        auto  ID = ecs.AddEntity();
-        auto& mainComponent = ecs.arrays.Add<ecs::MainComponent>(ID);
-        mainComponent.pos  = { 16, 16 };
-        mainComponent.size = { 32, 32 };
-        mainComponent.textureId = 0;
-    }
+    auto ID = ecs.AddEntity();
+    ecs.arrays.Add<ecs::RenderComponent>(ID);
+    transformComponent = &ecs.arrays.Add<ecs::TransformComponent>(ID);
+    transformComponent->position  = { 16 + 32, 16 };
+    transformComponent->size = { 32, 32 };
 
-    auto  ID = ecs.AddEntity();
-    mainComponent = &ecs.arrays.Add<ecs::MainComponent>(ID);
-    mainComponent->pos  = { 16 + 32, 16 };
-    mainComponent->size = { 32, 32 };
-    mainComponent->textureId = 1;
+    {
+        auto ID = ecs.AddEntity();
+        auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);
+        transformComponent.position  = { 64, 64 };
+        transformComponent.size = { 64, 64 };
+        auto& renderComponent = ecs.arrays.Add<ecs::RenderComponent>(ID);
+        renderComponent.textureId = 1;
+    }
 }
 
 ///////////////////////////////////////////////////////////
@@ -55,7 +54,7 @@ void Scene::Update()
         auto& event = app::events[i];
         if (event.eventEnum == app::EventEnum::MB_LEFT_DOWN)
         {
-            mainComponent->pos = { (f32)event.xpos, (f32)event.ypos };
+            transformComponent->position = { event.xpos, event.ypos };
         }
     }
 
