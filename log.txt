@@ -9,4 +9,6 @@
 2020-11-28 ibo, descriptors, pushConstants, ubo, image (impl begin)
 2020-11-30 image transition, storage, descriptors, shader sampler, rendering texture
 2020-12-01 rgba import, resources, magick bat, ecs basics, tex array idx
-2020-12-03 cmds, timeline, component types, y sort (index based), transform move, 
+2020-12-03 cmds, timeline, component types, y sort (index based), transform move, buffer bake, benchs
+
+lockstep, interpolation, animation

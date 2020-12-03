@@ -1,6 +1,12 @@
-- buffer bake
+lockstep, interpolation, animation
+renderer onto heap (mem)
 
-- renderer onto heap
-- test static linkage on linux
-- linux test memory
-- could reduce recording and draw "everything" but on update make stuff not visible
+linux testing
+--------------
+networking
+memory
+static linkage test
+
+other
+------
+record once and render always max but make stuff not needed invisible
