@@ -11,7 +11,7 @@
 
 ///////////////////////////////////////////////////////////
 
-namespace mini::wnd
+namespace rts::wnd
 {
     
 inline void WinCheck(auto expr, chars_t msg = "")
@@ -27,7 +27,7 @@ inline void WinCheck(auto expr, chars_t msg = "")
 
 ////////////////////////////////////////////////////////////
 
-namespace mini::net 
+namespace rts::net 
 {
 
 inline void WinSockCheck(auto pExpr, chars_t msg = "")

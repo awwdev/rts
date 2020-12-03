@@ -7,16 +7,7 @@
 
 ///////////////////////////////////////////////////////////
 
-namespace mini::wnd {
-
-///////////////////////////////////////////////////////////
-
-inline void WmClose();
-inline void WmKeyDown(WPARAM);
-inline void WmKeyUp(WPARAM);
-inline void WmSize(WPARAM, LPARAM);
-inline void WmSizeMoveExit();
-inline void WmButtonDown();
+namespace rts::wnd {
 
 ///////////////////////////////////////////////////////////
 
@@ -76,7 +67,7 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 
-    if (app::events.Contains(event) == nullptr)    
+    if (app::events.Contains(event) == nullptr) //avoid window resize spam for example, but caution
         app::events.Append(event);
 
     return 0;    

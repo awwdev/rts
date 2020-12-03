@@ -4,7 +4,7 @@
 
 #ifdef _WIN32
 #include "net/Win32/Win32_Network.hpp"
-namespace mini::net
+namespace rts::net
 {
     using Network = Win32_Network;
 }

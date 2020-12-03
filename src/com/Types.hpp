@@ -5,7 +5,7 @@
 
 ///////////////////////////////////////////////////////////
 
-namespace mini {
+namespace rts {
 
 ///////////////////////////////////////////////////////////
 
@@ -24,20 +24,6 @@ using f64 = double;
 
 using chars_t = char const *;
 using idx_t   = u32; //unsigned because of STL and Vulkan
-
-struct Bytes
-{
-    char*  data;
-    size_t size;
-
-    Bytes() = default;
-
-    template<typename T>
-    Bytes(T pData, size_t pSize = sizeof(T))
-        : data { (char*) pData }
-        , size { pSize }
-    {}
-};
 
 ///////////////////////////////////////////////////////////
 
