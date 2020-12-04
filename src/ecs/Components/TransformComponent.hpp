@@ -27,18 +27,46 @@ void TransformComponent::MoveToTarget()
 {
     positionPrev = position; //!
 
-    auto delta = positionTarget - position;
-    if (delta.x > 0) position.x += 4;
-    if (delta.x < 0) position.x -= 4;
-    if (delta.y > 0) position.y += 4;
-    if (delta.y < 0) position.y -= 4;
+    auto deltaX = positionTarget.x - position.x;
+    auto deltaY = positionTarget.y - position.y;
+    f32 spd = 1;
+
+    if (deltaX > 0) 
+    {
+        position.x += spd;
+        auto tmpX = positionTarget.x - position.x;
+        if (tmpX <= 0)
+            position.x = positionTarget.x;
+    }
+    else if (deltaX < 0)
+    {
+        position.x -= spd;
+        auto tmpX = positionTarget.x - position.x;
+        if (tmpX >= 0)
+            position.x = positionTarget.x;
+    } 
+
+    if (deltaY > 0) 
+    {
+        position.y += spd;
+        auto tmpY = positionTarget.y - position.y;
+        if (tmpY <= 0)
+            position.y = positionTarget.y;
+    }
+    else if (deltaY < 0)
+    {
+        position.y -= spd;
+        auto tmpY = positionTarget.y - position.y;
+        if (tmpY >= 0)
+            position.y = positionTarget.y;
+    } 
 
     //test
-    //if (position == positionTarget)
-    //{
-    //    positionTarget.x = rand() % app::windowWidth;
-    //    positionTarget.y = rand() % app::windowHeight;
-    //}
+    if (position == positionTarget)
+    {
+        positionTarget.x = rand() % app::windowWidth / 2;
+        positionTarget.y = rand() % app::windowHeight / 2;
+    }
 }
 
 ///////////////////////////////////////////////////////////

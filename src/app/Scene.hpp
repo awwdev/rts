@@ -37,11 +37,11 @@ Scene::Scene()
     //transformComponent->positionTarget = transformComponent->position;
     //transformComponent->size = { 32, 32 };
 
-    for(auto i = 0; i < 100; ++i)
+    for(auto i = 0; i < 1000; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);
-        transformComponent.position  = { rand() % 600, rand() % 400 };
+        transformComponent.position  = { rand() % 600 / 2, rand() % 400 / 2 };
         transformComponent.positionTarget = transformComponent.position;
         transformComponent.size = { 32, 32 };
         auto& renderComponent = ecs.arrays.Add<ecs::RenderComponent>(ID);
