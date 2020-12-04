@@ -21,26 +21,26 @@ TEMPLATE struct Optional
         struct {} uninit;
         T value;
     }
-    data;
+    unionData;
 
     Optional();
     Optional(auto const&... args);
     explicit operator bool() const { return hasValue; }
-    T& Value() { return data.value; }
+    T& Value() { return unionData.value; }
 };
 
 ///////////////////////////////////////////////////////////
 
 TEMPLATE Optional<T>::Optional()
-    : hasValue { false }
-    , data     { .uninit {} }
+    : hasValue  { false }
+    , unionData { .uninit {} }
 {}
 
 ///////////////////////////////////////////////////////////
 
 TEMPLATE Optional<T>::Optional(auto const&... args)
-    : hasValue { true }
-    , data     { .value { args... } }
+    : hasValue  { true }
+    , unionData { .value { args... } }
 {}
 
 ///////////////////////////////////////////////////////////

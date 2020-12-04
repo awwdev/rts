@@ -14,8 +14,8 @@ namespace rts::gpu::vuk {
 
 struct DefaultVertices
 {
-    VertexBuffer<DefaultVertex, gpu::VERTEX_COUNT_MAX> vbo;
-    IndexBuffer<u32, (u32)(gpu::VERTEX_COUNT_MAX * 1.5)> ibo;
+    VertexBuffer<DefaultVertex, DEFAULT_VERTEX_COUNT_MAX> vbo;
+    IndexBuffer<u32, (u32)(DEFAULT_VERTEX_COUNT_MAX * 1.5)> ibo;
     VkDeviceSize offsets = 0;
 
     static VkVertexInputBindingDescription   bindings   [1];

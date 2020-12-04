@@ -2,9 +2,9 @@
 
 ///////////////////////////////////////////////////////////
 
-layout (location = 0) in vec2 inPos;
-layout (location = 1) in vec4 inCol;
-layout (location = 2) in uint inTexId;
+layout(location = 0) in vec2 inPos;
+layout(location = 1) in vec4 inCol;
+layout(location = 2) in uint inTexId;
 
 ///////////////////////////////////////////////////////////
 

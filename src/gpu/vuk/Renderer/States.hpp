@@ -16,6 +16,7 @@ namespace rts::gpu::vuk {
 struct States
 {
     DefaultState defaultState;
+    PostState postState;
 
     void Create(Context&, Commands&, res::Resources&);
     void Destroy();
@@ -28,12 +29,14 @@ struct States
 void States::Create(Context& context, Commands& cmds, res::Resources& resources)
 {
     defaultState.Create(context, cmds, resources);
+    postState.Create(context, cmds, resources);
 }
 
 ///////////////////////////////////////////////////////////
 
 void States::Destroy()
 {
+    postState.Destroy();
     defaultState.Destroy();
 }
 
@@ -42,6 +45,7 @@ void States::Destroy()
 void States::Update(RenderData& renderData)
 {
     defaultState.Update(renderData);
+    postState.Update(renderData);
 }
 
 ///////////////////////////////////////////////////////////
@@ -52,6 +56,7 @@ void States::Record(Commands& commands, uint32_t imageIndex)
     const auto beginInfo = CreateCmdBeginInfo();
     VkCheck(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
     defaultState.Record(cmdBuffer, imageIndex);
+    postState.Record(cmdBuffer, imageIndex);
     VkCheck(vkEndCommandBuffer(cmdBuffer));
 }
 

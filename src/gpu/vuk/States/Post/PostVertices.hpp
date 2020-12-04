@@ -14,12 +14,11 @@ namespace rts::gpu::vuk {
 
 struct PostVertices
 {
-    VertexBuffer<DefaultVertex, gpu::VERTEX_COUNT_MAX> vbo;
-    IndexBuffer<u32, (u32)(gpu::VERTEX_COUNT_MAX * 1.5)> ibo;
+    VertexBuffer<PostVertex, POST_VERTEX_COUNT> vbo;
     VkDeviceSize offsets = 0;
 
     static VkVertexInputBindingDescription   bindings   [1];
-    static VkVertexInputAttributeDescription attributes [3];
+    static VkVertexInputAttributeDescription attributes [2];
 
     void Create(VkCommandPool);
     void Destroy();
@@ -32,32 +31,26 @@ VkVertexInputBindingDescription PostVertices::bindings [1] =
 {
     {
         .binding    = 0,
-        .stride     = sizeof(DefaultVertex),
+        .stride     = sizeof(PostVertex),
         .inputRate  = VK_VERTEX_INPUT_RATE_VERTEX
     }
 };
 
 ///////////////////////////////////////////////////////////
 
-VkVertexInputAttributeDescription PostVertices::attributes [3] =
+VkVertexInputAttributeDescription PostVertices::attributes [2] =
 {
     {
         .location   = 0,
         .binding    = 0, 
         .format     = VK_FORMAT_R32G32_SFLOAT,
-        .offset     = offsetof(DefaultVertex, pos),
+        .offset     = offsetof(PostVertex, pos),
     },
     {
         .location   = 1,
         .binding    = 0, 
-        .format     = VK_FORMAT_R32G32B32A32_SFLOAT,
-        .offset     = offsetof(DefaultVertex, col),
-    },
-    {
-        .location   = 2,
-        .binding    = 0, 
-        .format     = VK_FORMAT_R32_UINT,
-        .offset     = offsetof(DefaultVertex, texId),
+        .format     = VK_FORMAT_R32G32_SFLOAT,
+        .offset     = offsetof(PostVertex, tex),
     },
 };
 
@@ -66,19 +59,6 @@ VkVertexInputAttributeDescription PostVertices::attributes [3] =
 void PostVertices::Create(VkCommandPool pool)
 {
     vbo.Create();
-
-    //IBO PATTERN
-    ibo.Create();
-    for(auto i = 0; i < ecs::ENTITY_COUNT_MAX * 4; i+=4)
-    {
-        ibo.Append(i + 0);
-        ibo.Append(i + 1);
-        ibo.Append(i + 2);
-        ibo.Append(i + 0);
-        ibo.Append(i + 2);
-        ibo.Append(i + 3);
-    }
-    ibo.Bake(pool);
 }
 
 ///////////////////////////////////////////////////////////
@@ -86,16 +66,13 @@ void PostVertices::Create(VkCommandPool pool)
 void PostVertices::Destroy()
 {
     vbo.Destroy();
-    ibo.Destroy();
 }
 
 ///////////////////////////////////////////////////////////
 
 void PostVertices::Update(RenderData& renderData)
 {
-    auto& vertices = renderData.defaultRenderData.vertices;
-    vbo.count = 0;
-    vbo.Append(vertices.data, vertices.count);
+
 }
 
 ///////////////////////////////////////////////////////////

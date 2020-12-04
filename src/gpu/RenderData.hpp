@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gpu/DefaultRenderData.hpp"
+#include "gpu/PostRenderData.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -11,6 +12,7 @@ namespace rts::gpu {
 struct RenderData 
 {
     DefaultRenderData defaultRenderData;
+    PostRenderData postRenderData;
 };
 
 ///////////////////////////////////////////////////////////

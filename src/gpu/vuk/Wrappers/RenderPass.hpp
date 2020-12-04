@@ -3,6 +3,7 @@
 #include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Context/Swapchain.hpp"
 #include "com/Array.hpp"
+#include "com/Optional.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -16,7 +17,7 @@ struct RenderPass
     uint32_t width;
     uint32_t height;
     VkFormat format;
-    VkClearValue clear = {};
+    com::Optional<VkClearValue> clear {};
 
     com::Array<VkFramebuffer, 4> framebuffers;
     com::Array<VkRenderPassBeginInfo, 4> beginInfos;
@@ -121,8 +122,8 @@ void RenderPass::Create(Swapchain& swapchain)
                 .offset     = VkOffset2D {0, 0},
                 .extent     = { width, height }
             },
-            .clearValueCount= 1,
-            .pClearValues   = &clear
+            .clearValueCount= (clear.hasValue ? 1u : 0u),
+            .pClearValues   = (clear.hasValue ? &clear.Value() : nullptr),
         };
     }
 }

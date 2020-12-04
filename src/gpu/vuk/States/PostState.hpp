@@ -38,7 +38,7 @@ void PostState::Create(Context& context, Commands& commands, res::Resources& res
     vertices.Create(commands.pool);
     CreatePostShader(shader);
     CreatePostRenderPass(renderPass, context.swapchain);
-    CreatePostPipeline(pipeline, vertices, uniforms, shader, renderPass);
+    //CreatePostPipeline(pipeline, vertices, uniforms, shader, renderPass);
 }
 
 ///////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ void PostState::Destroy()
 {
     uniforms.Destroy();
     vertices.Destroy();
-    pipeline.Destroy();
+    //pipeline.Destroy();
     renderPass.Destroy();
     shader.Destroy();
 }
@@ -64,6 +64,7 @@ void PostState::Update(RenderData& renderData)
 
 void PostState::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
 {
+    /*
     vkCmdBeginRenderPass    (cmdBuffer, &renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
     vkCmdPushConstants      (cmdBuffer, pipeline.layout, VK_SHADER_STAGE_VERTEX_BIT, 0, uniforms.pushConstants.size, &uniforms.pushConstants.data);
@@ -73,6 +74,7 @@ void PostState::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
                              uniforms.descriptors.sets.count, uniforms.descriptors.sets.data, 0, nullptr);
     vkCmdDrawIndexed        (cmdBuffer, (u32)(vertices.vbo.count * 1.5), 1, 0, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
+    */
 }
 
 ///////////////////////////////////////////////////////////

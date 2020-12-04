@@ -10,5 +10,6 @@
 2020-11-30 image transition, storage, descriptors, shader sampler, rendering texture
 2020-12-01 rgba import, resources, magick bat, ecs basics, tex array idx
 2020-12-03 cmds, timeline, component types, y sort (index based), transform move, buffer bake, benchs
+2020-12-04 post state (resolution scaling and potential post fx), basic fixed step, interpolation
 
 lockstep, interpolation, animation

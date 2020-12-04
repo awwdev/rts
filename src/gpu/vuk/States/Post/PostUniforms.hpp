@@ -27,7 +27,7 @@ enum class PostUniformEnum : u32
 struct PostUniforms
 {
     UniformInfo infos [enum_cast(PostUniformEnum::ENUM_END)];
-    PushConstants<DefaultPushConstants> pushConstants;
+    PushConstants<PostPushConstants> pushConstants;
     VkSampler sampler; 
     Descriptors descriptors;
 
@@ -52,8 +52,6 @@ void PostUniforms::Update(RenderData& renderData)
 
 void PostUniforms::Destroy()
 {
-    descriptors.Destroy();
-    vkDestroySampler(g_devicePtr, sampler, GetVkAlloc());
 }
 
 ///////////////////////////////////////////////////////////
