@@ -49,7 +49,15 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
     //textures
     u32 layerCount = resources.textures.textureArray.count;
     textureArray.Create(cmdPool, VK_FORMAT_R8G8B8A8_SRGB, 
-    VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 32, 32, layerCount);
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
+        VK_IMAGE_VIEW_TYPE_2D_ARRAY,
+        32, 32, layerCount); 
+    textureArray.Transition(
+        cmdPool, 
+        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
+        0, VK_ACCESS_TRANSFER_WRITE_BIT,
+        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT
+    );
     CreateSamplerPixelPerfect(sampler);
 
     //store

@@ -8,12 +8,17 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void CreateDefaultRenderPass(RenderPass& rp, Swapchain& swapchain)
+inline void CreateDefaultRenderPass(VkCommandPool cmdPool, RenderPass& rp, Swapchain& swapchain)
 {
-    rp.clear = { VkClearValue { .color { 0.025, 0.025, 0.025, 1 } } }; //!
+    rp.clear = { VkClearValue { .color { 0.015, 0.015, 0.015, 1 } } }; //!
     rp.width  = swapchain.width;
     rp.height = swapchain.height;
-    rp.format = swapchain.format;
+    rp.format = swapchain.format; //VK_FORMAT_R8G8B8A8_UNORM
+
+    rp.offscreen.Create(cmdPool, rp.format, 
+        VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
+        VK_IMAGE_VIEW_TYPE_2D,
+        rp.width, rp.height, 1);
 
     VkAttachmentDescription colorDesc
     {
@@ -25,8 +30,9 @@ inline void CreateDefaultRenderPass(RenderPass& rp, Swapchain& swapchain)
         .stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE,
         .stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE,
         .initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED,
-        .finalLayout    = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+        .finalLayout    = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL //!
     };
+    rp.offscreen.layout = colorDesc.finalLayout;
 
     VkAttachmentReference colorRef
     {
@@ -68,8 +74,8 @@ inline void CreateDefaultRenderPass(RenderPass& rp, Swapchain& swapchain)
         .pAttachments    = &colorDesc,
         .subpassCount    = 1,
         .pSubpasses      = &subpass,
-        .dependencyCount = 1,
-        .pDependencies   = &dependency
+        .dependencyCount = 0,//1, //!
+        .pDependencies   = nullptr,//&dependency //!
     };
     VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &rp.renderPass));
 
@@ -86,7 +92,7 @@ inline void CreateDefaultRenderPass(RenderPass& rp, Swapchain& swapchain)
             .flags           = 0,
             .renderPass      = rp.renderPass,
             .attachmentCount = 1,
-            .pAttachments    = &swapchain.views[i],
+            .pAttachments    = &rp.offscreen.view, //! should need multiple images (swapchain count)
             .width           = rp.width,
             .height          = rp.height,
             .layers          = 1

@@ -2,6 +2,7 @@
 
 #include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Context/Swapchain.hpp"
+#include "gpu/vuk/Wrappers/Image.hpp"
 #include "com/Array.hpp"
 #include "com/Optional.hpp"
 
@@ -17,10 +18,11 @@ struct RenderPass
     uint32_t width;
     uint32_t height;
     VkFormat format;
-    com::Optional<VkClearValue> clear {};
 
+    com::Optional<VkClearValue> clear {};
     com::Array<VkFramebuffer, 4> framebuffers;
     com::Array<VkRenderPassBeginInfo, 4> beginInfos;
+    Image offscreen; //optional
 
     void Destroy();
 };
@@ -29,6 +31,9 @@ struct RenderPass
 
 void RenderPass::Destroy()
 {
+    if (offscreen.image)
+        offscreen.Destroy();
+
     vkDestroyRenderPass(g_devicePtr, renderPass, GetVkAlloc());
     FOR_ARRAY(framebuffers, i)
     {
@@ -36,6 +41,7 @@ void RenderPass::Destroy()
         framebuffers[i] = nullptr;
     }
     framebuffers.count = 0;
+    
     FOR_ARRAY(beginInfos, i)
     {
         beginInfos[i] = {};

@@ -29,7 +29,7 @@ struct States
 void States::Create(Context& context, Commands& cmds, res::Resources& resources)
 {
     defaultState.Create(context, cmds, resources);
-    postState.Create(context, cmds, resources);
+    postState.Create(context, cmds, resources, defaultState);
 }
 
 ///////////////////////////////////////////////////////////
@@ -53,10 +53,10 @@ void States::Update(RenderData& renderData)
 void States::Record(Commands& commands, uint32_t imageIndex)
 {
     auto cmdBuffer = commands.buffers[imageIndex];
-    const auto beginInfo = CreateCmdBeginInfo();
+    auto beginInfo = CreateCmdBeginInfo();
     VkCheck(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
     defaultState.Record(cmdBuffer, imageIndex);
-    //postState.Record(cmdBuffer, imageIndex);
+    postState.Record(cmdBuffer, imageIndex);
     VkCheck(vkEndCommandBuffer(cmdBuffer));
 }
 

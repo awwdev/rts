@@ -2,6 +2,7 @@
 
 #include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Renderer/CommandsExt.hpp"
+#include "gpu/vuk/Wrappers/Buffer.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -32,10 +33,18 @@ struct Image
     u32 width = 0;
     u32 height = 0;
 
-    void Create(VkCommandPool, VkFormat, VkImageUsageFlags, u32, u32, u32);
+    void Create(
+        VkCommandPool, 
+        VkFormat, 
+        VkImageUsageFlags, 
+        VkImageViewType,
+        u32, u32, u32
+    );
+
     void Destroy();
     void Store(VkCommandPool, void const*, u32, u32);
     void Bake(VkCommandPool);
+
     void Transition(
         VkCommandPool, VkImageLayout,
         VkAccessFlags, VkAccessFlags, 
@@ -46,7 +55,11 @@ struct Image
 ///////////////////////////////////////////////////////////
 
 void Image::Create(
-VkCommandPool cmdPool, VkFormat format, VkImageUsageFlags usage, u32 pWidth, u32 pHeight, u32 pLayerCount)
+VkCommandPool cmdPool, 
+VkFormat format, 
+VkImageUsageFlags usage, 
+VkImageViewType viewType,
+u32 pWidth, u32 pHeight, u32 pLayerCount)
 {
     layout = VK_IMAGE_LAYOUT_UNDEFINED;
     aspect = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -82,7 +95,7 @@ VkCommandPool cmdPool, VkFormat format, VkImageUsageFlags usage, u32 pWidth, u32
         .pNext              = nullptr,
         .flags              = 0, 
         .image              = image, 
-        .viewType           = VK_IMAGE_VIEW_TYPE_2D_ARRAY, 
+        .viewType           = viewType, 
         .format             = format,
         .components         = IMAGE_COMPONENT_MAPPING_DEFAULT,
         .subresourceRange   = 
@@ -95,13 +108,6 @@ VkCommandPool cmdPool, VkFormat format, VkImageUsageFlags usage, u32 pWidth, u32
         }
     };
     VkCheck(vkCreateImageView(g_devicePtr, &viewInfo, GetVkAlloc(), &view));
-
-    Transition(
-        cmdPool, 
-        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
-        0, VK_ACCESS_TRANSFER_WRITE_BIT,
-        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT
-    );
 }
 
 ///////////////////////////////////////////////////////////

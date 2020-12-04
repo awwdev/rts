@@ -37,7 +37,7 @@ void DefaultState::Create(Context& context, Commands& commands, res::Resources& 
     uniforms.Create(commands.pool, resources);
     vertices.Create(commands.pool);
     CreateDefaultShader(shader);
-    CreateDefaultRenderPass(renderPass, context.swapchain);
+    CreateDefaultRenderPass(commands.pool, renderPass, context.swapchain);
     CreateDefaultPipeline(pipeline, vertices, uniforms, shader, renderPass);
 }
 

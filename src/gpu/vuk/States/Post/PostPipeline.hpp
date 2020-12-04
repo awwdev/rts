@@ -27,7 +27,10 @@ RenderPass& renderPass)
     pipelineInfo.rasterization = Rasterization();
     pipelineInfo.depthStencil = DepthStencil();
     pipelineInfo.blendState = BlendStateInfo();
-    pipelineInfo.layoutInfo = PipelineLayout();
+    pipelineInfo.layoutInfo = PipelineLayout(
+        &uniforms.descriptors.layout, 1
+        //&uniforms.pushConstants.rangeInfo, 1
+    );
 
     pipeline.Create(shader, renderPass, pipelineInfo);
 }
