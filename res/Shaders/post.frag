@@ -11,12 +11,12 @@ layout(location = 0) out vec4 outCol;
 
 ///////////////////////////////////////////////////////////
 
-layout(binding = 0) uniform sampler2D offscreen;
+//layout(binding = 0) uniform sampler2D offscreen;
 
 ///////////////////////////////////////////////////////////
 
 void main() 
 {
-    vec4 col = texture(offscreen, inTex);
-    outCol = col;
+    //vec4 col = texture(offscreen, inTex);
+    outCol = vec4(1, 0, 0, 1);
 }

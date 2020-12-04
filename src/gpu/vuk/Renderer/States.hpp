@@ -56,7 +56,7 @@ void States::Record(Commands& commands, uint32_t imageIndex)
     const auto beginInfo = CreateCmdBeginInfo();
     VkCheck(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
     defaultState.Record(cmdBuffer, imageIndex);
-    postState.Record(cmdBuffer, imageIndex);
+    //postState.Record(cmdBuffer, imageIndex);
     VkCheck(vkEndCommandBuffer(cmdBuffer));
 }
 
