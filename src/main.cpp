@@ -8,6 +8,8 @@
 #include "com/Clock.hpp"
 #include "app/Scene.hpp"
 
+#include <thread>
+
 ///////////////////////////////////////////////////////////
 
 using namespace rts;
@@ -28,17 +30,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         net::Network network;
         app::Scene scene;
 
+        //! not stable yet
+        std::jthread t {
+            [&] {
+                while(app::isAppRunning)
+                {
+                    scene.Update();
+                    renderer.Update(scene.renderData, resources);
+                    
+                    com::dt::UpdateTime();
+                    com::dt::PrintFps();
+
+                    if (app::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
+                        app::isAppRunning = false;
+                }
+            }
+        };
+
         while(app::isAppRunning)
         {
             window.Update(); 
-            scene.Update();
-            renderer.Update(scene.renderData, resources);
-            
-            com::dt::UpdateTime();
-            com::dt::PrintFps();
-
-            if (app::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
-                app::isAppRunning = false;
         }
     }
 
