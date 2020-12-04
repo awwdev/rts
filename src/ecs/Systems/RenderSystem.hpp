@@ -55,7 +55,9 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, a
 
             auto& s = transformComponent.size;
             auto& renderComponent = arrays.renderComponents.GetComponent(entityID);
-            auto& t = renderComponent.textureId;
+
+            renderComponent.Animate();
+            auto& t = renderComponent.texIndex;
 
             constexpr Col4f COLOR = { 1, 1, 1, 1 };
             

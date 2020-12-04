@@ -10,10 +10,10 @@ namespace rts::gpu::vuk {
 
 inline void CreateDefaultRenderPass(VkCommandPool cmdPool, RenderPass& rp, Swapchain& swapchain)
 {
-    rp.clear = { VkClearValue { .color { 0.015, 0.015, 0.015, 1 } } }; //!
+    rp.clear = { VkClearValue { .color { 155/255.f, 186/255.f, 94/255.f, 1.f } } }; //!
     rp.width  = swapchain.width;
     rp.height = swapchain.height;
-    rp.format = swapchain.format; //VK_FORMAT_R8G8B8A8_UNORM
+    rp.format = swapchain.format;
 
     rp.offscreen.Create(cmdPool, rp.format, 
         VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 

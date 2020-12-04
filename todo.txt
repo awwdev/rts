@@ -1,5 +1,3 @@
-resolution scale, offscreen triangle
-animation
 renderer onto heap (mem)
 
 linux testing

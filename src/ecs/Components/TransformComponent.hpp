@@ -34,11 +34,11 @@ void TransformComponent::MoveToTarget()
     if (delta.y < 0) position.y -= 4;
 
     //test
-    if (position == positionTarget)
-    {
-        positionTarget.x = rand() % app::windowWidth;
-        positionTarget.y = rand() % app::windowHeight;
-    }
+    //if (position == positionTarget)
+    //{
+    //    positionTarget.x = rand() % app::windowWidth;
+    //    positionTarget.y = rand() % app::windowHeight;
+    //}
 }
 
 ///////////////////////////////////////////////////////////

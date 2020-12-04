@@ -1,5 +1,5 @@
 @echo off
 pushd %res%
 mkdir %res%\\rgba
-%magick%\\mogrify -format rgba -path "rgba" *.gif
+%magick%\\mogrify -set colorspace RGB -format rgba -path "rgba" *.png
 popd
