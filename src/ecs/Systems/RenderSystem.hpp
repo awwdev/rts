@@ -2,7 +2,9 @@
 
 #include "ecs/ComponentArrays.hpp"
 #include "gpu/RenderData.hpp"
+#include "app/Lockstep.hpp"
 #include "com/Print.hpp"
+#include "com/Utils.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -11,10 +13,11 @@ namespace rts::ecs {
 ///////////////////////////////////////////////////////////
 
 inline com::Array<ID, ecs::ENTITY_COUNT_MAX> depthSorted [1024];
+inline double time = 0;
 
 ///////////////////////////////////////////////////////////
 
-static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData)
+static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, app::Lockstep& lockstep)
 {
     auto& vertices = renderData.defaultRenderData.vertices;
     vertices.count = 0;
@@ -42,12 +45,20 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData)
         {
             auto& entityID = entityIDs[i];
             auto& transformComponent = arrays.transformComponents.GetComponent(entityID);
-            auto& p = transformComponent.position;
+
+            if (time < lockstep.stepTimePrev)
+                time += app::dt;
+            time = com::Min(time, lockstep.stepTimePrev);
+            if (lockstep.nextStep)
+                time = 0;
+            auto p = transformComponent.InterpolatedPosition(time, lockstep.stepTimePrev);
+
             auto& s = transformComponent.size;
             auto& renderComponent = arrays.renderComponents.GetComponent(entityID);
             auto& t = renderComponent.textureId;
 
             constexpr Col4f COLOR = { 1, 1, 1, 1 };
+            
             vertices.Append(p.x      , p.y      , COLOR, t);
             vertices.Append(p.x + s.x, p.y      , COLOR, t);
             vertices.Append(p.x + s.x, p.y + s.y, COLOR, t);

@@ -16,7 +16,7 @@ constexpr auto VERTEX_COUNT_MAX = ecs::ENTITY_COUNT_MAX * 4;
 
 struct DefaultVertex
 {
-    Vec2i pos;
+    Vec2f pos;
     Col4f col;
     u32   texId;
 };

@@ -3,6 +3,7 @@
 #include "ecs/ECS.hpp"
 #include "gpu/RenderData.hpp"
 #include "cmd/Timeline.hpp"
+#include "app/Lockstep.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -15,6 +16,7 @@ struct Scene
     ecs::ECS ecs; //could be optional (optionally initialized)
     gpu::RenderData renderData;
     cmd::Timeline timeline;
+    app::Lockstep lockstep;
 
     //test
     //ecs::TransformComponent* transformComponent;
@@ -35,7 +37,7 @@ Scene::Scene()
     //transformComponent->positionTarget = transformComponent->position;
     //transformComponent->size = { 32, 32 };
 
-    for(auto i = 0; i < 1000; ++i)
+    for(auto i = 0; i < 1; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);
@@ -61,7 +63,12 @@ void Scene::Update()
         }
     }
 
-    ecs.Update(renderData);
+    if (lockstep.Update())
+    {
+        ecs.Step();
+    }
+    ecs.Render(renderData, lockstep);
+
     //UI
 }
 

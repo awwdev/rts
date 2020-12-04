@@ -5,6 +5,7 @@
 
 #include "ecs/ComponentArrays.hpp"
 #include "gpu/RenderData.hpp"
+#include "app/Lockstep.hpp"
 #include "com/Bitset.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -20,7 +21,8 @@ struct ECS
 
     auto AddEntity();
     void RemoveEntity();
-    void Update(gpu::RenderData&);
+    void Step();
+    void Render(gpu::RenderData&, app::Lockstep&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -42,10 +44,16 @@ void ECS::RemoveEntity()
 
 ///////////////////////////////////////////////////////////
 
-void ECS::Update(gpu::RenderData& renderData)
+void ECS::Step()
 {
-    TransformSystem(arrays, renderData);
-    RenderSystem(arrays, renderData);
+    TransformSystem(arrays);
+}
+
+///////////////////////////////////////////////////////////
+
+void ECS::Render(gpu::RenderData& renderData, app::Lockstep& lockstep)
+{
+    RenderSystem(arrays, renderData, lockstep);
 }
 
 ///////////////////////////////////////////////////////////

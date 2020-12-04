@@ -19,6 +19,7 @@ struct Swapchain
     uint32_t width;
     uint32_t height;
     VkFormat format = VK_FORMAT_B8G8R8A8_SRGB;
+    VkPresentModeKHR presentMode = VK_PRESENT_MODE_FIFO_KHR; //VK_PRESENT_MODE_IMMEDIATE_KHR
 
     void Create(Device&, Surface&);
     void Destroy(VkDevice);
@@ -31,7 +32,7 @@ void Swapchain::Create(Device& device, Surface& surface)
     width  = surface.capabilities.currentExtent.width;
     height = surface.capabilities.currentExtent.height;
 
-    VkSwapchainCreateInfoKHR const swapInfo
+    VkSwapchainCreateInfoKHR swapInfo
     {
         .sType                  = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
         .pNext                  = nullptr,
@@ -48,7 +49,7 @@ void Swapchain::Create(Device& device, Surface& surface)
         .pQueueFamilyIndices    = nullptr,
         .preTransform           = surface.capabilities.currentTransform,
         .compositeAlpha         = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
-        .presentMode            = VK_PRESENT_MODE_IMMEDIATE_KHR, //VK_PRESENT_MODE_FIFO_KHR
+        .presentMode            = presentMode,
         .clipped                = VK_FALSE,
         .oldSwapchain           = nullptr
     };

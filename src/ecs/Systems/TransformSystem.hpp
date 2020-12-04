@@ -10,7 +10,7 @@ namespace rts::ecs {
 
 ///////////////////////////////////////////////////////////
 
-static void TransformSystem(ComponentArrays& arrays, gpu::RenderData& renderData)
+static void TransformSystem(ComponentArrays& arrays)
 {
     auto& transformComponents = arrays.transformComponents.dense;
     FOR_ARRAY(transformComponents, i)

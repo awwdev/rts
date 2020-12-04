@@ -27,31 +27,23 @@ struct Renderer
     Renderer(WindowHandle const&, res::Resources&);
     ~Renderer(); 
     void Update(RenderData&, res::Resources&);
-    bool CheckSwapchain(res::Resources&);
+    void RecreateSwapchain(res::Resources&);
 };
 
 ///////////////////////////////////////////////////////////
 
-bool Renderer::CheckSwapchain(res::Resources& resources)
+void Renderer::RecreateSwapchain(res::Resources& resources)
 {
-    if (app::windowHeight <= 0 || app::windowWidth <= 0)
-        return false;
+    vkDeviceWaitIdle(g_devicePtr);
 
-    if (app::HasEvent(app::EventEnum::WND_MOVE_SIZE))
-    {
-        vkDeviceWaitIdle(g_devicePtr);
+    commands.Destroy();
+    states.Destroy();
+    context.swapchain.Destroy(g_devicePtr);
 
-        commands.Destroy();
-        states.Destroy();
-        context.swapchain.Destroy(g_devicePtr);
-
-        context.surface.UpdateSurfaceCapabilities(context.physical);
-        context.swapchain.Create(context.device, context.surface);
-        commands.Create(context.physical.queueIndex, context.swapchain);
-        states.Create(context, commands, resources); 
-    }
-
-    return true;
+    context.surface.UpdateSurfaceCapabilities(context.physical);
+    context.swapchain.Create(context.device, context.surface);
+    commands.Create(context.physical.queueIndex, context.swapchain);
+    states.Create(context, commands, resources); 
 }
 
 ///////////////////////////////////////////////////////////
@@ -82,8 +74,11 @@ Renderer::~Renderer()
 
 void Renderer::Update(RenderData& renderData, res::Resources& resources)
 {
-    if (CheckSwapchain(resources) == false)
+    if (app::windowHeight <= 0 || app::windowWidth <= 0)
         return;
+
+    if (app::HasEvent(app::EventEnum::WND_MOVE_SIZE))
+        RecreateSwapchain(resources);
 
     if (vkWaitForFences(g_devicePtr, 1, &sync.fences[currentFrame], VK_FALSE, 0) != VK_SUCCESS)
         return;

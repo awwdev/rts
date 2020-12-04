@@ -1,0 +1,40 @@
+#pragma once
+
+#include "com/Types.hpp"
+#include "app/Global.hpp"
+
+///////////////////////////////////////////////////////////
+
+namespace rts::app {
+
+///////////////////////////////////////////////////////////
+
+struct Lockstep 
+{
+    double stepTime = 0;
+    double stepTimeMax = 0.200;
+    double stepTimePrev = 0;
+    bool nextStep = false;
+
+    bool Update();
+};
+
+///////////////////////////////////////////////////////////
+
+bool Lockstep::Update()
+{
+    nextStep = false;
+    stepTime += app::dt;
+    if (stepTime > stepTimeMax)
+    {
+        stepTimePrev = stepTime;
+        stepTime = 0;
+        nextStep = true;
+        return true;
+    }
+    return false;
+}
+
+///////////////////////////////////////////////////////////
+
+}//ns

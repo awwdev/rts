@@ -1,12 +1,18 @@
-lockstep, interpolation, animation
+resolution scale, offscreen triangle
+animation
 renderer onto heap (mem)
 
 linux testing
 --------------
-networking
-memory
-static linkage test
+- networking
+- memory
+- static linkage test
 
 other
 ------
 record once and render always max but make stuff not needed invisible
+
+basic gui
+---------
+- text rendering
+- window
