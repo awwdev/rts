@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mutex>
+#include <atomic>
 
 #include "com/Types.hpp"
 #include "com/Optional.hpp"
@@ -40,37 +41,34 @@ bool Event::operator==(Event const& other) const
 
 ///////////////////////////////////////////////////////////
 
-struct MTEventBuffer
+struct EventBuffer
 {
     static constexpr auto EVENT_COUNT_MAX = 10;
+    Event buffer [EVENT_COUNT_MAX];
+    std::atomic<idx_t> count = 0;
 
-    com::Array<Event, EVENT_COUNT_MAX> buffer;
-    std::mutex bufferMutex;
-
-    auto Poll() -> com::Optional<Event>;
-    void Push(Event const&);
+    void Append(Event const&);
+    void Reset();
 };
 
 ///////////////////////////////////////////////////////////
 
-auto MTEventBuffer::Poll() -> com::Optional<Event>
+void EventBuffer::Append(Event const& ev)
 {
-    com::Optional<Event> ev;
-    bufferMutex.lock();
-    if (buffer.count > 0)
-        ev = buffer.Pop();        
-    bufferMutex.unlock();
-    return ev;
+    if (count + 1 >= EVENT_COUNT_MAX)
+    {
+        com::PrintWarning("event buffer exhausted");
+        return;
+    }
+    buffer[count] = ev;
+    count++;
 }
 
 ///////////////////////////////////////////////////////////
 
-void MTEventBuffer::Push(Event const& ev)
+void EventBuffer::Reset()
 {
-    bufferMutex.lock();
-    if (buffer.Contains(ev) == nullptr)
-        buffer.Append(ev);
-    bufferMutex.unlock();
+    count = 0;
 }
 
 ///////////////////////////////////////////////////////////

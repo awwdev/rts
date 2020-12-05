@@ -54,7 +54,7 @@ Scene::Scene()
 void Scene::Update()
 {
     //test
-    FOR_ARRAY(app::glo::events, i)
+    //FOR_ARRAY(app::glo::events, i)
     {
         //auto& event = app::events[i];
         //if (event.eventEnum == app::EventEnum::MB_LEFT_DOWN)

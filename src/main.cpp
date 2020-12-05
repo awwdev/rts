@@ -24,12 +24,6 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 
     while(app::glo::isAppRunning)
     {
-        app::glo::events.count = 0;
-        while(auto optEv = app::glo::eventBuffer.Poll())
-        {
-            app::glo::events.Append(optEv.Data());
-        }
-
         scene.Update();
         renderer.Update(scene.renderData, resources);
         
@@ -38,6 +32,8 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 
         if (app::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
             app::glo::isAppRunning = false;
+
+        app::glo::eventBuffer.Reset();
     }
 }
 
@@ -47,14 +43,14 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 {
     wnd::Console console { 600, 400, 64, 400 + 64 };
-    mem::GlobalAlloc();
+    mem::Allocate();
     mem::PrintAlloc();
 
     wnd::Window window { hInst, "mini window", 600, 400, 64, 64 };
     std::jthread appThread { AppMain, gpu::vuk::WindowHandle { window.hInstance, window.hWnd } };
     window.BlockingPollEvents(); 
 
-    mem::GlobalDealloc();
+    mem::Deallocate();
     return EXIT_SUCCESS;
 }
 #endif

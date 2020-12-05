@@ -6,10 +6,6 @@ linux testing
 - memory
 - static linkage test
 
-other
-------
-record once and render always max but make stuff not needed invisible
-
 basic gui
 ---------
 - text rendering

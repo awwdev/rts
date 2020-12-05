@@ -22,7 +22,7 @@ inline com::Bitset<BLOCK_COUNT_TOTAL> blocksUsed;
 
 ///////////////////////////////////////////////////////////
 
-static void GlobalAlloc()
+static void Allocate()
 {
     com::PrintColored(com::ConsoleColor::Magenta, "Allocation Size", ALLOCATION_SIZE);
 
@@ -43,7 +43,7 @@ static void GlobalAlloc()
 
 ///////////////////////////////////////////////////////////
 
-static void GlobalDealloc()
+static void Deallocate()
 {
     #ifdef _WIN32
     VirtualFree(blockArrayPtrs[0], 0, MEM_RELEASE);

@@ -67,7 +67,7 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 
-    app::glo::eventBuffer.Push(event);
+    app::glo::eventBuffer.Append(event);
     return 0;    
 }
 

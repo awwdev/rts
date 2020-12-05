@@ -15,8 +15,7 @@ namespace rts::app {
 namespace glo
 {
     inline std::atomic<bool> isAppRunning = true;
-    inline MTEventBuffer eventBuffer;
-    inline com::Array<Event, 10> events;
+    inline EventBuffer eventBuffer;
 
     inline f64  dt;
     inline i32  fps;
@@ -29,9 +28,10 @@ namespace glo
 
 inline bool HasEvent(app::EventEnum eventEnum)
 {
-    FOR_ARRAY(glo::events, i)
+    const idx_t count = glo::eventBuffer.count;
+    for(idx_t i = 0; i < count; ++i)
     {
-        auto& ev = glo::events[i];
+        auto& ev = glo::eventBuffer.buffer[i];  
         if (ev.eventEnum == eventEnum)
             return true;
     }
