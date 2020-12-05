@@ -83,7 +83,7 @@ void X11_Window::PollEvents()
                 {
                     app::Event event {};
                     event.eventEnum = app::EventEnum::KEY_DOWN_ESCAPE;
-                    app::events.Append(event);
+                    app::eventBuffer.Append(event);
                 }
             } 
             break;
@@ -98,8 +98,8 @@ void X11_Window::PollEvents()
         event.eventEnum = app::EventEnum::WND_MOVE_SIZE;
         event.width = attributes.width;
         event.height = attributes.height;
-        if (app::events.Contains(event) == nullptr)
-            app::events.Append(event);
+        if (app::eventBuffer.Contains(event) == nullptr)
+            app::eventBuffer.Append(event);
     }
 
     if (XCheckTypedWindowEvent(display, window, ClientMessage, &e))

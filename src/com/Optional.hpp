@@ -15,32 +15,32 @@ namespace rts::com {
 
 TEMPLATE struct Optional
 {
-    bool hasValue;
+    bool hasData;
     union 
     {
         struct {} uninit;
-        T value;
+        T data;
     }
     unionData;
 
     Optional();
     Optional(auto const&... args);
-    explicit operator bool() const { return hasValue; }
-    T& Value() { return unionData.value; }
+    explicit operator bool() const { return hasData; }
+    T& Data() { return unionData.data; }
 };
 
 ///////////////////////////////////////////////////////////
 
 TEMPLATE Optional<T>::Optional()
-    : hasValue  { false }
+    : hasData   { false }
     , unionData { .uninit {} }
 {}
 
 ///////////////////////////////////////////////////////////
 
 TEMPLATE Optional<T>::Optional(auto const&... args)
-    : hasValue  { true }
-    , unionData { .value { args... } }
+    : hasData   { true }
+    , unionData { .data { args... } }
 {}
 
 ///////////////////////////////////////////////////////////

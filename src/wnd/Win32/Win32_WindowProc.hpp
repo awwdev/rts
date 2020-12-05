@@ -14,7 +14,7 @@ namespace rts::wnd {
 static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     app::Event event {};
-
+    
     switch(uMsg)
     {
         ///////////////////////////////////////////////////////////
@@ -23,16 +23,17 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_CLOSE:
         case WM_QUIT:
         app::isAppRunning = false;  
-        return 0;
+        break;
 
         ///////////////////////////////////////////////////////////
 
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
-
+        
         switch(wParam)
         {
-            case VK_ESCAPE: event.eventEnum = app::EventEnum::KEY_DOWN_ESCAPE; break;
+            case VK_ESCAPE: 
+            event.eventEnum = app::EventEnum::KEY_DOWN_ESCAPE; break;
             default: break;
         };
 
@@ -58,7 +59,6 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         app::windowWidth  = LOWORD(lParam);
         app::windowHeight = HIWORD(lParam);    
         event.eventEnum = app::EventEnum::WND_MOVE_SIZE;
-        com::dt::t1 = com::dt::clock_t::now();
         break;
 
         ///////////////////////////////////////////////////////////
@@ -67,9 +67,7 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 
-    if (app::events.Contains(event) == nullptr) //avoid window resize spam for example, but caution
-        app::events.Append(event);
-
+    app::eventBuffer.Push(event);
     return 0;    
 }
 

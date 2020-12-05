@@ -54,13 +54,13 @@ Scene::Scene()
 void Scene::Update()
 {
     //test
-    FOR_ARRAY(app::events, i)
+    FOR_ARRAY(app::eventBuffer, i)
     {
-        auto& event = app::events[i];
-        if (event.eventEnum == app::EventEnum::MB_LEFT_DOWN)
-        {
-            //transformComponent->positionTarget = { event.xpos, event.ypos };
-        }
+        //auto& event = app::events[i];
+        //if (event.eventEnum == app::EventEnum::MB_LEFT_DOWN)
+        //{
+           //transformComponent->positionTarget = { event.xpos, event.ypos };
+        //}
     }
 
     if (lockstep.Update())

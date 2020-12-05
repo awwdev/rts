@@ -4,6 +4,7 @@
 #include "wnd/Win32/Win32_WindowProc.hpp"
 #include "com/Types.hpp"
 #include "com/Print.hpp"
+#include "app/Global.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -13,23 +14,25 @@ namespace rts::wnd {
 
 struct Win32_Window
 {
-    HWND hWnd = 0;
-    HINSTANCE hInstance = GetModuleHandle(0);
+    HINSTANCE hInstance;
+    HWND hWnd = NULL;
     chars_t wndClassName = "wnd";
 
-    Win32_Window(chars_t, i32, i32, i32, i32);
+    Win32_Window(HINSTANCE, chars_t, i32, i32, i32, i32);
     ~Win32_Window();
-    void Update();
+    void BlockingPollEvents();
 };
 
 ///////////////////////////////////////////////////////////
 
 Win32_Window::Win32_Window(
-chars_t title  = "Window",
+HINSTANCE pInst = GetModuleHandle(NULL),
+chars_t title = "Window",
 i32 width  = CW_USEDEFAULT,
 i32 height = CW_USEDEFAULT,
 i32 xpos   = CW_USEDEFAULT,
 i32 ypos   = CW_USEDEFAULT)
+    : hInstance { pInst }
 {
     WNDCLASSEX wndClass 
     {
@@ -75,14 +78,19 @@ Win32_Window::~Win32_Window()
 
 ///////////////////////////////////////////////////////////
 
-void Win32_Window::Update()
+void Win32_Window::BlockingPollEvents()
 {
-    app::events.count = 0;
-    for (MSG message; PeekMessage(&message, NULL, 0, 0, PM_REMOVE);)
+    MSG message;
+    BOOL rtn;
+    while((rtn = GetMessage(&message, NULL, 0, 0)))
     {
+        WinCheck(rtn != -1, "GetMessage Error");
+        if (!app::isAppRunning)
+            break;
+
         TranslateMessage(&message);
         DispatchMessage(&message);
-    }    
+    } 
 }
 
 ///////////////////////////////////////////////////////////

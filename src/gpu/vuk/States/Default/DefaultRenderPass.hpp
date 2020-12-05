@@ -109,8 +109,8 @@ inline void CreateDefaultRenderPass(VkCommandPool cmdPool, RenderPass& rp, Swapc
                 .offset     = VkOffset2D {0, 0},
                 .extent     = { rp.width, rp.height }
             },
-            .clearValueCount= (rp.clear.hasValue ? 1u : 0u),
-            .pClearValues   = (rp.clear.hasValue ? &rp.clear.Value() : nullptr),
+            .clearValueCount= (rp.clear.hasData ? 1u : 0u),
+            .pClearValues   = (rp.clear.hasData ? &rp.clear.Data() : nullptr),
         };
     }
 }

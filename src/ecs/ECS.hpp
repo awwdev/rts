@@ -30,9 +30,9 @@ struct ECS
 auto ECS::AddEntity()
 {
     auto freeBit = entities.FindFirstFreeBit();
-    com::Assert(freeBit.hasValue, "no free entity");
-    entities.Set(freeBit.Value());
-    return freeBit.Value();
+    com::Assert(freeBit.hasData, "no free entity");
+    entities.Set(freeBit.Data());
+    return freeBit.Data();
 }
 
 ///////////////////////////////////////////////////////////

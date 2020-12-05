@@ -1,5 +1,7 @@
 #pragma once
 
+#include <atomic>
+
 #include "com/Types.hpp"
 #include "com/Array.hpp"
 #include "app/Events.hpp"
@@ -10,13 +12,15 @@ namespace rts::app {
 
 ///////////////////////////////////////////////////////////
 
-inline bool isAppRunning = true;
+inline std::atomic<bool> isAppRunning = true;
+inline MTEventBuffer eventBuffer;
+inline com::Array<Event, 10> events;
+
 inline f64  dt;
 inline i32  fps;
 inline bool hasSecondPassed;
 inline i32  windowWidth;
 inline i32  windowHeight;
-inline com::Array<Event, 10> events;
 
 ///////////////////////////////////////////////////////////
 

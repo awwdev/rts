@@ -1,6 +1,8 @@
 #pragma once
 
+#include <atomic>
 #include "com/Types.hpp"
+#include "com/Optional.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -31,6 +33,39 @@ struct Event
 bool Event::operator==(Event const& other) const
 {
     return this->eventEnum == other.eventEnum;
+}
+
+///////////////////////////////////////////////////////////
+
+struct MTEventBuffer
+{
+    static constexpr auto EVENT_COUNT_MAX = 10;
+
+    Event buffer [EVENT_COUNT_MAX]; 
+    std::atomic<idx_t> count = 0;
+
+    auto Poll() -> com::Optional<Event>;
+    void Push(Event const&);
+};
+
+///////////////////////////////////////////////////////////
+
+auto MTEventBuffer::Poll() -> com::Optional<Event>
+{
+    if (count > 0)
+    {
+        count--;
+        return buffer[count];
+    }    
+    return {};
+}
+
+///////////////////////////////////////////////////////////
+
+void MTEventBuffer::Push(Event const& ev)
+{
+    buffer[count] = ev;
+    count++;
 }
 
 ///////////////////////////////////////////////////////////

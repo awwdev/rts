@@ -17,7 +17,7 @@ static auto ClaimBlock(auto... args)
     constexpr idx_t blockArrayBitIdx = GetBlockArrayBitIndex(blockArrayIdx);
 
     auto freeBlock = blocksUsed.FindFirstFreeBit(blockArrayBitIdx);
-    com::Assert(freeBlock.hasValue, "no free blocks available");
+    com::Assert(freeBlock.hasData, "no free blocks available");
 
     //TODO
 

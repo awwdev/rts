@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cmath>
 #include "com/Vec.hpp"
 #include "app/Global.hpp"
 
