@@ -3,6 +3,7 @@
 #include <atomic>
 #include "com/Types.hpp"
 #include "com/Optional.hpp"
+#include "com/Assert.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -64,6 +65,7 @@ auto MTEventBuffer::Poll() -> com::Optional<Event>
 
 void MTEventBuffer::Push(Event const& ev)
 {
+    com::Assert(count < EVENT_COUNT_MAX, "mt event buffer exhausted");
     buffer[count] = ev;
     count++;
 }

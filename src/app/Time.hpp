@@ -7,7 +7,7 @@
 
 ///////////////////////////////////////////////////////////
 
-namespace rts::com::dt {
+namespace rts::app {
 
 ///////////////////////////////////////////////////////////
 
@@ -25,15 +25,15 @@ inline void UpdateTime()
     auto t2 = clock_t::now();
     dur_t dur = t2 - t1;
     t1 = t2;
-    app::dt = dur.count();
-    secTimer += app::dt;
+    app::glo::dt = dur.count();
+    secTimer += app::glo::dt;
     frames += 1;
-    app::hasSecondPassed = false;
+    app::glo::hasSecondPassed = false;
     if (secTimer >= 1)
     {
-        app::hasSecondPassed = true;
+        app::glo::hasSecondPassed = true;
         secTimer = 0;
-        app::fps = frames;
+        app::glo::fps = frames;
         frames = 0;
     }
 }
@@ -42,8 +42,8 @@ inline void UpdateTime()
 
 inline void PrintFps()
 {
-    if (app::hasSecondPassed)
-        com::Print("fps", app::fps, "dt", app::dt);
+    if (app::glo::hasSecondPassed)
+        com::Print("fps", app::glo::fps, "dt", app::glo::dt);
 }
 
 ///////////////////////////////////////////////////////////

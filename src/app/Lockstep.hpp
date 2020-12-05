@@ -24,7 +24,7 @@ struct Lockstep
 bool Lockstep::Update()
 {
     nextStep = false;
-    stepTime += app::dt;
+    stepTime += app::glo::dt;
     if (stepTime > stepTimeMax)
     {
         stepTimePrev = stepTime;

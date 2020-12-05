@@ -1,14 +1,13 @@
+#include <thread>
+
 #include "wnd/Window.hpp"
 #include "mem/Memory.hpp"
-#include "app/Global.hpp"
+#include "res/Resources.hpp"
 #include "gpu/vuk/Renderer.hpp"
 #include "net/Network.hpp"
-#include "res/Resources.hpp"
-#include "com/Time.hpp"
-#include "com/Clock.hpp"
 #include "app/Scene.hpp"
-
-#include <thread>
+#include "app/Global.hpp"
+#include "app/Time.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -23,22 +22,22 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
     net::Network network;
     app::Scene scene;
 
-    while(app::isAppRunning)
+    while(app::glo::isAppRunning)
     {
-        app::events.count = 0;
-        while(auto optEv = app::eventBuffer.Poll())
+        app::glo::events.count = 0;
+        while(auto optEv = app::glo::eventBuffer.Poll())
         {
-            app::events.Append(optEv.Data());
+            app::glo::events.Append(optEv.Data());
         }
 
         scene.Update();
         renderer.Update(scene.renderData, resources);
         
-        com::dt::UpdateTime();
-        com::dt::PrintFps();
+        app::UpdateTime();
+        app::PrintFps();
 
         if (app::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
-            app::isAppRunning = false;
+            app::glo::isAppRunning = false;
     }
 }
 
@@ -76,8 +75,8 @@ int main()
         window.PollEvents();
         renderer.Update();
 
-        com::dt::UpdateTime();
-        com::dt::PrintFps();
+        app::UpdateTime();
+        app::PrintFps();
 
         if (app::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
             app::isAppRunning = false;

@@ -23,7 +23,7 @@ struct RenderComponent
 
 void RenderComponent::Animate()
 {
-    time += app::dt;
+    time += app::glo::dt;
     if (time > frameTime)
     {
         time = 0;

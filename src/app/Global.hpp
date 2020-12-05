@@ -12,23 +12,26 @@ namespace rts::app {
 
 ///////////////////////////////////////////////////////////
 
-inline std::atomic<bool> isAppRunning = true;
-inline MTEventBuffer eventBuffer;
-inline com::Array<Event, 10> events;
+namespace glo
+{
+    inline std::atomic<bool> isAppRunning = true;
+    inline MTEventBuffer eventBuffer;
+    inline com::Array<Event, 10> events;
 
-inline f64  dt;
-inline i32  fps;
-inline bool hasSecondPassed;
-inline i32  windowWidth;
-inline i32  windowHeight;
+    inline f64  dt;
+    inline i32  fps;
+    inline bool hasSecondPassed;
+    inline i32  windowWidth;
+    inline i32  windowHeight;
+}
 
 ///////////////////////////////////////////////////////////
 
 inline bool HasEvent(app::EventEnum eventEnum)
 {
-    FOR_ARRAY(events, i)
+    FOR_ARRAY(glo::events, i)
     {
-        auto& ev = events[i];
+        auto& ev = glo::events[i];
         if (ev.eventEnum == eventEnum)
             return true;
     }

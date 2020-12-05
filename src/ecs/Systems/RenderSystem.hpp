@@ -47,7 +47,7 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, a
             auto& transformComponent = arrays.transformComponents.GetComponent(entityID);
 
             if (time < lockstep.stepTimePrev)
-                time += app::dt;
+                time += app::glo::dt;
             time = com::Min(time, lockstep.stepTimePrev);
             if (lockstep.nextStep)
                 time = 0;

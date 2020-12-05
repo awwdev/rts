@@ -63,8 +63,8 @@ void TransformComponent::MoveToTarget()
     //test
     if (position == positionTarget)
     {
-        positionTarget.x = rand() % app::windowWidth / 2;
-        positionTarget.y = rand() % app::windowHeight / 2;
+        positionTarget.x = rand() % app::glo::windowWidth / 2;
+        positionTarget.y = rand() % app::glo::windowHeight / 2;
     }
 }
 

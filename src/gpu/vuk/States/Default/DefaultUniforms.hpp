@@ -95,8 +95,8 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
 void DefaultUniforms::Update(RenderData& renderData)
 {
-    pushConstants.data.windowWidth = app::windowWidth;
-    pushConstants.data.windowHeight = app::windowHeight;
+    pushConstants.data.windowWidth = app::glo::windowWidth;
+    pushConstants.data.windowHeight = app::glo::windowHeight;
 }
 
 ///////////////////////////////////////////////////////////

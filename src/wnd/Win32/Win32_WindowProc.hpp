@@ -2,7 +2,7 @@
 
 #include "com/Windows.hpp"
 #include "app/Global.hpp"
-#include "com/Time.hpp"
+#include "app/Time.hpp"
 #include "com/Print.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_DESTROY:
         case WM_CLOSE:
         case WM_QUIT:
-        app::isAppRunning = false;  
+        app::glo::isAppRunning = false;  
         break;
 
         ///////////////////////////////////////////////////////////
@@ -56,8 +56,8 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         ///////////////////////////////////////////////////////////
 
         case WM_SIZE:
-        app::windowWidth  = LOWORD(lParam);
-        app::windowHeight = HIWORD(lParam);    
+        app::glo::windowWidth  = LOWORD(lParam);
+        app::glo::windowHeight = HIWORD(lParam);    
         event.eventEnum = app::EventEnum::WND_MOVE_SIZE;
         break;
 
@@ -67,7 +67,7 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 
-    app::eventBuffer.Push(event);
+    app::glo::eventBuffer.Push(event);
     return 0;    
 }
 

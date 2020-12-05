@@ -74,7 +74,7 @@ Renderer::~Renderer()
 
 void Renderer::Update(RenderData& renderData, res::Resources& resources)
 {
-    if (app::windowHeight <= 0 || app::windowWidth <= 0)
+    if (app::glo::windowHeight <= 0 || app::glo::windowWidth <= 0)
         return;
 
     if (app::HasEvent(app::EventEnum::WND_MOVE_SIZE))

@@ -85,7 +85,7 @@ void Win32_Window::BlockingPollEvents()
     while((rtn = GetMessage(&message, NULL, 0, 0)))
     {
         WinCheck(rtn != -1, "GetMessage Error");
-        if (!app::isAppRunning)
+        if (!app::glo::isAppRunning)
             break;
 
         TranslateMessage(&message);
