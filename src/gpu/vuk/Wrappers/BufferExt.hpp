@@ -17,7 +17,8 @@ namespace rts::gpu::vuk {
 
 TEMPLATE struct BufferExt
 {
-    static constexpr auto BYTE_SIZE = sizeof(T) * N;
+    static constexpr idx_t COUNT_MAX = N;
+    static constexpr idx_t BYTE_SIZE = sizeof(T) * N;
     idx_t count = 0;
 
     Buffer  cpuBuffer;

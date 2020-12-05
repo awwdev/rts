@@ -24,15 +24,15 @@ struct Renderer
 
     uint32_t currentFrame = 0;
 
-    Renderer(WindowHandle const&, res::Resources&);
+    Renderer(WindowHandle const&, res::Resources&, RenderData&);
     ~Renderer(); 
     void Update(RenderData&, res::Resources&);
-    void RecreateSwapchain(res::Resources&);
+    void RecreateSwapchain(res::Resources&, RenderData&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void Renderer::RecreateSwapchain(res::Resources& resources)
+void Renderer::RecreateSwapchain(res::Resources& resources, RenderData& renderData)
 {
     vkDeviceWaitIdle(g_devicePtr);
 
@@ -43,16 +43,16 @@ void Renderer::RecreateSwapchain(res::Resources& resources)
     context.surface.UpdateSurfaceCapabilities(context.physical);
     context.swapchain.Create(context.device, context.surface);
     commands.Create(context.physical.queueIndex, context.swapchain);
-    states.Create(context, commands, resources); 
+    states.Create(context, commands, resources, renderData); 
 }
 
 ///////////////////////////////////////////////////////////
 
-Renderer::Renderer(WindowHandle const& wndHandle, res::Resources& resources)
+Renderer::Renderer(WindowHandle const& wndHandle, res::Resources& resources, RenderData& renderData)
 {
     context.Create(wndHandle);
     commands.Create(context.physical.queueIndex, context.swapchain);
-    states.Create(context, commands, resources); 
+    states.Create(context, commands, resources, renderData); 
     sync.Create(context.swapchain);
     
     PrintPhysicalAPI();
@@ -78,7 +78,7 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
         return;
 
     if (app::HasEvent(app::EventEnum::WND_MOVE_SIZE))
-        RecreateSwapchain(resources);
+        RecreateSwapchain(resources, renderData);
 
     if (vkWaitForFences(g_devicePtr, 1, &sync.fences[currentFrame], VK_FALSE, 0) != VK_SUCCESS)
         return;
@@ -105,11 +105,11 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
 
     ///////////////////////////////////////////////////////////
     states.Update(renderData);
-    states.Record(commands, imageIndex);
+    //states.Record(commands, imageIndex);
     ///////////////////////////////////////////////////////////
 
-    const VkPipelineStageFlags waitStages = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    VkSubmitInfo const submitInfo 
+    VkPipelineStageFlags waitStages = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    VkSubmitInfo submitInfo 
     {
         .sType                  = VK_STRUCTURE_TYPE_SUBMIT_INFO,
         .pNext                  = nullptr,
@@ -123,7 +123,7 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
     };
     VkCheck(vkQueueSubmit(context.device.queue, 1, &submitInfo, sync.fences[currentFrame]));
 
-    VkPresentInfoKHR const presentInfo 
+    VkPresentInfoKHR presentInfo 
     {
         .sType                  = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
         .pNext                  = nullptr,

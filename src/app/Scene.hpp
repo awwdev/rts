@@ -37,7 +37,7 @@ Scene::Scene()
     //transformComponent->positionTarget = transformComponent->position;
     //transformComponent->size = { 32, 32 };
 
-    for(auto i = 0; i < 1000; ++i)
+    for(auto i = 0; i < 100; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);
@@ -54,7 +54,7 @@ Scene::Scene()
 void Scene::Update()
 {
     //test
-    FOR_ARRAY(app::glo::eventBuffer, i)
+    FOR_ARRAY(app::glo::events, i)
     {
         //auto& event = app::events[i];
         //if (event.eventEnum == app::EventEnum::MB_LEFT_DOWN)

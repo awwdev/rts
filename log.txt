@@ -11,4 +11,4 @@
 2020-12-01 rgba import, resources, magick bat, ecs basics, tex array idx
 2020-12-03 cmds, timeline, component types, y sort (index based), transform move, buffer bake, benchs
 2020-12-04 post state (resolution scaling and potential post fx, offscreen), basic fixed step, interpolation, basic animation, color space
-2020-12-05
+2020-12-05 input thread (event buffer), responsive wnd, 

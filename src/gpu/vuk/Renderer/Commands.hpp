@@ -27,7 +27,7 @@ void Commands::Create(uint32_t queueIdx, Swapchain& swapchain)
     {
         .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
         .pNext = nullptr,
-        .flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
+        .flags = 0,//!VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,
         .queueFamilyIndex = queueIdx
     };
     VkCheck(vkCreateCommandPool(g_devicePtr, &poolInfo, GetVkAlloc(), &pool));

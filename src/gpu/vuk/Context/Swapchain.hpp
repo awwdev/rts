@@ -19,7 +19,8 @@ struct Swapchain
     uint32_t width;
     uint32_t height;
     VkFormat format = VK_FORMAT_B8G8R8A8_UNORM;//VK_FORMAT_B8G8R8A8_SRGB;//VK_FORMAT_B8G8R8A8_UNORM
-    VkPresentModeKHR presentMode = VK_PRESENT_MODE_FIFO_KHR; //VK_PRESENT_MODE_IMMEDIATE_KHR//VK_PRESENT_MODE_FIFO_KHR
+    VkPresentModeKHR presentMode = VK_PRESENT_MODE_IMMEDIATE_KHR;
+    //VkPresentModeKHR presentMode = VK_PRESENT_MODE_FIFO_KHR;
 
     void Create(Device&, Surface&);
     void Destroy(VkDevice);

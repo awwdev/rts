@@ -18,7 +18,7 @@ struct States
     DefaultState defaultState;
     PostState postState;
 
-    void Create(Context&, Commands&, res::Resources&);
+    void Create(Context&, Commands&, res::Resources&, RenderData&);
     void Destroy();
     void Record(Commands&, uint32_t);
     void Update(RenderData&);
@@ -26,10 +26,16 @@ struct States
 
 ///////////////////////////////////////////////////////////
 
-void States::Create(Context& context, Commands& cmds, res::Resources& resources)
+void States::Create(Context& context, Commands& commands, res::Resources& resources, RenderData& renderData)
 {
-    defaultState.Create(context, cmds, resources);
-    postState.Create(context, cmds, resources, defaultState);
+    defaultState.Create(context, commands, resources);
+    postState.Create(context, commands, resources, defaultState);
+
+    for(idx_t i = 0; i < context.swapchain.images.count; ++i)
+    {
+        Update(renderData);
+        Record(commands, i);
+    }        
 }
 
 ///////////////////////////////////////////////////////////

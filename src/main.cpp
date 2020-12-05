@@ -18,9 +18,9 @@ using namespace rts;
 inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 {  
     res::Resources resources;
-    gpu::vuk::Renderer renderer { wndHandle, resources };
-    net::Network network;
     app::Scene scene;
+    gpu::vuk::Renderer renderer { wndHandle, resources, scene.renderData };
+    net::Network network;
 
     while(app::glo::isAppRunning)
     {

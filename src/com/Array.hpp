@@ -27,6 +27,7 @@ TEMPLATE struct Array
     auto& operator[](idx_t) const;
 
     auto& Append(auto... args);
+    auto& Pop();
     T* Contains(T const&);
 };
 
@@ -34,7 +35,7 @@ TEMPLATE struct Array
 
 TEMPLATE auto& Array<T, N>::operator[](idx_t i)
 {
-    com::Assert(i < count, "index out of array bounds");
+    com::Assert(i < count, "array access out of bounds");
     return data[i];
 }
 
@@ -42,7 +43,7 @@ TEMPLATE auto& Array<T, N>::operator[](idx_t i)
 
 TEMPLATE auto& Array<T, N>::operator[](idx_t i) const
 {
-    com::Assert(i < count, "index out of array bounds");
+    com::Assert(i < count, "array access out of bounds");
     return data[i];
 }
 
@@ -81,6 +82,15 @@ TEMPLATE T* Array<T, N>::Contains(T const& other)
             return &element;
     }
     return nullptr;
+}
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE auto& Array<T, N>::Pop()
+{
+    com::Assert(count > 0, "array access out of bounds");
+    count--;
+    return data[count];
 }
 
 ///////////////////////////////////////////////////////////

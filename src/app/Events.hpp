@@ -1,9 +1,11 @@
 #pragma once
 
-#include <atomic>
+#include <mutex>
+
 #include "com/Types.hpp"
 #include "com/Optional.hpp"
 #include "com/Assert.hpp"
+#include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -42,8 +44,8 @@ struct MTEventBuffer
 {
     static constexpr auto EVENT_COUNT_MAX = 10;
 
-    Event buffer [EVENT_COUNT_MAX]; 
-    std::atomic<idx_t> count = 0;
+    com::Array<Event, EVENT_COUNT_MAX> buffer;
+    std::mutex bufferMutex;
 
     auto Poll() -> com::Optional<Event>;
     void Push(Event const&);
@@ -53,21 +55,22 @@ struct MTEventBuffer
 
 auto MTEventBuffer::Poll() -> com::Optional<Event>
 {
-    if (count > 0)
-    {
-        count--;
-        return buffer[count];
-    }    
-    return {};
+    com::Optional<Event> ev;
+    bufferMutex.lock();
+    if (buffer.count > 0)
+        ev = buffer.Pop();        
+    bufferMutex.unlock();
+    return ev;
 }
 
 ///////////////////////////////////////////////////////////
 
 void MTEventBuffer::Push(Event const& ev)
 {
-    com::Assert(count < EVENT_COUNT_MAX, "mt event buffer exhausted");
-    buffer[count] = ev;
-    count++;
+    bufferMutex.lock();
+    if (buffer.Contains(ev) == nullptr)
+        buffer.Append(ev);
+    bufferMutex.unlock();
 }
 
 ///////////////////////////////////////////////////////////
