@@ -1,8 +1,7 @@
 #pragma once
 
-#include "gpu/RenderData_Default.hpp"
-#include "gpu/RenderData_UI.hpp"
-#include "gpu/RenderData_Post.hpp"
+#include "com/Vec.hpp"
+#include "com/POD_Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -10,11 +9,9 @@ namespace rts::gpu {
 
 ///////////////////////////////////////////////////////////
 
-struct RenderData 
+struct RenderData_UI
 {
-    RenderData_Default rd_Default;
-    RenderData_Post    rd_Post;
-    RenderData_UI      rd_UI;
+
 };
 
 ///////////////////////////////////////////////////////////

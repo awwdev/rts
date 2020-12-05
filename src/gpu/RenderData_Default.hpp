@@ -1,7 +1,7 @@
 #pragma once
 
 #include "com/Vec.hpp"
-#include "com/Array.hpp"
+#include "com/POD_Array.hpp"
 #include "ecs/EntityID.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -10,28 +10,30 @@ namespace rts::gpu {
 
 ///////////////////////////////////////////////////////////
 
-constexpr auto POST_VERTEX_COUNT = 100;
+constexpr auto DEFAULT_VERTEX_COUNT_MAX = ecs::ENTITY_COUNT_MAX * 4;
 
 ///////////////////////////////////////////////////////////
 
-struct PostVertex
+struct DefaultVertex
 {
     Vec2f pos;
-    Vec2f tex;
+    Col4f col;
+    u32   texId;
 };
 
 ///////////////////////////////////////////////////////////
 
-struct PostPushConstants
+struct DefaultPushConstants
 {
-    i32 resolutionScale = 1;
+    i32 windowWidth;
+    i32 windowHeight;
 };
 
 ///////////////////////////////////////////////////////////
 
-struct PostRenderData
+struct RenderData_Default
 {
-    com::Array<PostVertex, POST_VERTEX_COUNT> vertices;
+    com::POD_Array<DefaultVertex, DEFAULT_VERTEX_COUNT_MAX> vertices;
 };
 
 ///////////////////////////////////////////////////////////

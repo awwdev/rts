@@ -3,7 +3,7 @@
 #include <atomic>
 
 #include "com/Types.hpp"
-#include "com/Array.hpp"
+#include "com/POD_Array.hpp"
 #include "app/Events.hpp"
 
 ///////////////////////////////////////////////////////////

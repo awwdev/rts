@@ -23,12 +23,12 @@ struct Physical
 
 void Physical::Create(Instance& instance)
 {
-    com::Array<VkPhysicalDevice, 10> physicals;
+    com::POD_Array<VkPhysicalDevice, 10> physicals;
     VkCheck(vkEnumeratePhysicalDevices(instance.instance, &physicals.count, nullptr));
     VkCheck(vkEnumeratePhysicalDevices(instance.instance, &physicals.count, physicals.data));
     physical = physicals[0];
 
-    com::Array<VkQueueFamilyProperties, 10> famProps;
+    com::POD_Array<VkQueueFamilyProperties, 10> famProps;
     vkGetPhysicalDeviceQueueFamilyProperties(physical, &famProps.count, nullptr);
     vkGetPhysicalDeviceQueueFamilyProperties(physical, &famProps.count, famProps.data);
     FOR_ARRAY(famProps, i)

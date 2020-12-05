@@ -12,14 +12,14 @@ namespace rts::ecs {
 
 ///////////////////////////////////////////////////////////
 
-inline com::Array<ID, ecs::ENTITY_COUNT_MAX> depthSorted [1024];
+inline com::POD_Array<ID, ecs::ENTITY_COUNT_MAX> depthSorted [1024];
 inline double time = 0;
 
 ///////////////////////////////////////////////////////////
 
 static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, app::Lockstep& lockstep)
 {
-    auto& vertices = renderData.defaultRenderData.vertices;
+    auto& vertices = renderData.rd_Default.vertices;
     vertices.count = 0;
 
     auto& transformComponents = arrays.transformComponents.dense;

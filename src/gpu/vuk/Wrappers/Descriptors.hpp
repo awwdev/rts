@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gpu/vuk/Renderer/Context.hpp"
-#include "com/Array.hpp"
+#include "com/POD_Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -26,7 +26,7 @@ struct Descriptors
 {
     VkDescriptorPool pool;
     VkDescriptorSetLayout layout;
-    com::Array<VkDescriptorSet, 10> sets;
+    com::POD_Array<VkDescriptorSet, 10> sets;
 
     void Destroy();
 

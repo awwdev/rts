@@ -1,27 +1,26 @@
 #pragma once
 
-#include "com/Types.hpp"
-#include "ecs/ECS.hpp"
+#include "gui/Widgets/Window.hpp"
+#include "gpu/RenderData.hpp"
 
 ///////////////////////////////////////////////////////////
 
-namespace rts::cmd {
+namespace rts::gui {
 
 ///////////////////////////////////////////////////////////
 
-struct CmdMove 
+struct DebugGUI
 {
-    com::POD_Array<ecs::ID, 10> entities;
-    i32 xpos;
-    i32 ypos;
-    void Execute(ecs::ECS&);
+    Window wndStats { 32, 32, 128, 64 };
+
+    void Update(gpu::RenderData&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void CmdMove::Execute(ecs::ECS& ecs)
+void DebugGUI::Update(gpu::RenderData& renderData)
 {
-    
+
 }
 
 ///////////////////////////////////////////////////////////

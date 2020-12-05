@@ -15,13 +15,13 @@ namespace rts::com {
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE struct Array
+TEMPLATE struct POD_Array
 {
     idx_t count = 0;
     T data [N];
 
-    Array() = default;
-    Array(auto... elements);
+    POD_Array() = default;
+    POD_Array(auto... elements);
 
     auto& operator[](idx_t);
     auto& operator[](idx_t) const;
@@ -33,7 +33,7 @@ TEMPLATE struct Array
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE auto& Array<T, N>::operator[](idx_t i)
+TEMPLATE auto& POD_Array<T, N>::operator[](idx_t i)
 {
     com::Assert(i < count, "array access out of bounds");
     return data[i];
@@ -41,7 +41,7 @@ TEMPLATE auto& Array<T, N>::operator[](idx_t i)
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE auto& Array<T, N>::operator[](idx_t i) const
+TEMPLATE auto& POD_Array<T, N>::operator[](idx_t i) const
 {
     com::Assert(i < count, "array access out of bounds");
     return data[i];
@@ -49,7 +49,7 @@ TEMPLATE auto& Array<T, N>::operator[](idx_t i) const
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE auto& Array<T, N>::Append(auto... args)
+TEMPLATE auto& POD_Array<T, N>::Append(auto... args)
 {
     com::Assert((count + 1) <= N, "array exhausted");
     data[count] = { args... };
@@ -59,7 +59,7 @@ TEMPLATE auto& Array<T, N>::Append(auto... args)
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE Array<T, N>::Array(auto... elements)
+TEMPLATE POD_Array<T, N>::POD_Array(auto... elements)
     : count { sizeof...(elements) }
     , data  { elements... }
 {
@@ -69,11 +69,11 @@ TEMPLATE Array<T, N>::Array(auto... elements)
 ///////////////////////////////////////////////////////////
 
 template<typename T, class... Ts>
-Array(T, Ts...) -> Array<T, sizeof...(Ts) + 1>;
+POD_Array(T, Ts...) -> POD_Array<T, sizeof...(Ts) + 1>;
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE T* Array<T, N>::Contains(T const& other)
+TEMPLATE T* POD_Array<T, N>::Contains(T const& other)
 {
     FOR_ARRAY((*this), i)
     {
@@ -86,7 +86,7 @@ TEMPLATE T* Array<T, N>::Contains(T const& other)
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE auto& Array<T, N>::Pop()
+TEMPLATE auto& POD_Array<T, N>::Pop()
 {
     com::Assert(count > 0, "array access out of bounds");
     count--;

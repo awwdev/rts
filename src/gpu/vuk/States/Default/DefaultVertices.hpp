@@ -94,7 +94,7 @@ void DefaultVertices::Destroy()
 void DefaultVertices::Update(RenderData& renderData)
 {
     
-    auto& vertices = renderData.defaultRenderData.vertices;
+    auto& vertices = renderData.rd_Default.vertices;
     vbo.count = 0;
     vbo.Append(vertices.data, vertices.count);
 }

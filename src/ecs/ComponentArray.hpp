@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ecs/EntityID.hpp"
-#include "com/Array.hpp"
+#include "com/POD_Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -16,7 +16,7 @@ namespace rts::ecs {
 template<typename T, auto N = ENTITY_COUNT_MAX>
 struct ComponentArray
 {
-    com::Array<T, N> dense;
+    com::POD_Array<T, N> dense;
     ID denseLookup [N];  //via entity id
     ID entityLookup [N]; //via dense index
 

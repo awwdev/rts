@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include "com/Assert.hpp"
-#include "com/Array.hpp"
+#include "com/POD_Array.hpp"
 #include "com/Print.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ struct Texture
 
 struct Textures
 {
-    com::Array<Texture, 10> textureArray;
+    com::POD_Array<Texture, 10> textureArray;
     void Load();
 };
 

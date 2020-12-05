@@ -4,6 +4,7 @@
 #include "gpu/RenderData.hpp"
 #include "cmd/Timeline.hpp"
 #include "app/Lockstep.hpp"
+#include "gui/DebugGUI.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -17,6 +18,7 @@ struct Scene
     gpu::RenderData renderData;
     cmd::Timeline timeline;
     app::Lockstep lockstep;
+    gui::DebugGUI debugGUI;
 
     //test
     //ecs::TransformComponent* transformComponent;
@@ -68,6 +70,7 @@ void Scene::Update()
         ecs.Step();
     }
     ecs.Render(renderData, lockstep);
+    debugGUI.Update(renderData);
 
     //UI
 }

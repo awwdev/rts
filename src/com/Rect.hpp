@@ -1,28 +1,24 @@
 #pragma once
 
-#include "com/Types.hpp"
-#include "ecs/ECS.hpp"
+#include <iostream>
+#include "com/Vec.hpp"
 
 ///////////////////////////////////////////////////////////
 
-namespace rts::cmd {
+namespace rts {
 
 ///////////////////////////////////////////////////////////
 
-struct CmdMove 
+template<typename T>
+struct Rect
 {
-    com::POD_Array<ecs::ID, 10> entities;
-    i32 xpos;
-    i32 ypos;
-    void Execute(ecs::ECS&);
+    Vec2<T> min;
+    Vec2<T> max;
 };
 
 ///////////////////////////////////////////////////////////
 
-void CmdMove::Execute(ecs::ECS& ecs)
-{
-    
-}
+using Rectf = Rect<f32>;
 
 ///////////////////////////////////////////////////////////
 

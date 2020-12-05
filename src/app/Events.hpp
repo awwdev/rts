@@ -6,7 +6,7 @@
 #include "com/Types.hpp"
 #include "com/Optional.hpp"
 #include "com/Assert.hpp"
-#include "com/Array.hpp"
+#include "com/POD_Array.hpp"
 
 ///////////////////////////////////////////////////////////
 

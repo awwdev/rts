@@ -3,7 +3,7 @@
 #include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Context/Swapchain.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
-#include "com/Array.hpp"
+#include "com/POD_Array.hpp"
 #include "com/Optional.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -20,8 +20,8 @@ struct RenderPass
     VkFormat format;
 
     com::Optional<VkClearValue> clear {};
-    com::Array<VkFramebuffer, 4> framebuffers;
-    com::Array<VkRenderPassBeginInfo, 4> beginInfos;
+    com::POD_Array<VkFramebuffer, 4> framebuffers;
+    com::POD_Array<VkRenderPassBeginInfo, 4> beginInfos;
     Image offscreen; //optional
 
     void Destroy();
