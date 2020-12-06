@@ -70,7 +70,7 @@ void StateUI::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
     //vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 
     //                         uniforms.descriptors.sets.count, uniforms.descriptors.sets.data, 0, nullptr);
     //! reuse index buffer from default?
-    vkCmdDrawIndexed        (cmdBuffer, 6, 1, 0, 0, 0);
+    //vkCmdDrawIndexed        (cmdBuffer, 6, 1, 0, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
 }
 

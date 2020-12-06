@@ -13,9 +13,11 @@ namespace rts::gpu::vuk {
 struct DefaultVertices
 {
     using Vertex = VertexDefault;
+    static constexpr auto VkIndex = VK_INDEX_TYPE_UINT16;
+    using Index = u16;
 
-    VertexBuffer<Vertex, VERTEX_COUNT_MAX_DEFAULT> vbo;
-    IndexBuffer<u32, (u32)(VERTEX_COUNT_MAX_DEFAULT * 1.5)> ibo;
+    VertexBuffer<Vertex, 40'000> vbo;
+    IndexBuffer<Index, 60'000> ibo;
     VkDeviceSize offsets = 0;
 
     static VkVertexInputBindingDescription   bindings   [1];
@@ -28,7 +30,8 @@ struct DefaultVertices
 
 ///////////////////////////////////////////////////////////
 
-VkVertexInputBindingDescription DefaultVertices::bindings [1] =
+VkVertexInputBindingDescription 
+DefaultVertices::bindings [1] =
 {
     {
         .binding    = 0,
@@ -39,7 +42,8 @@ VkVertexInputBindingDescription DefaultVertices::bindings [1] =
 
 ///////////////////////////////////////////////////////////
 
-VkVertexInputAttributeDescription DefaultVertices::attributes [3] =
+VkVertexInputAttributeDescription 
+DefaultVertices::attributes [3] =
 {
     {
         .location   = 0,
@@ -69,14 +73,21 @@ void DefaultVertices::Create(VkCommandPool pool)
 
     //IBO PATTERN
     ibo.Create();
-    for(auto i = 0; i < ecs::ENTITY_COUNT_MAX * 4; i+=4)
+    for(auto i = 0; i < 40'000; i+=4)
     {
+        //ibo.Append(i + 0);
+        //ibo.Append(i + 1);
+        //ibo.Append(i + 2);
+        //ibo.Append(i + 0);
+        //ibo.Append(i + 2);
+        //ibo.Append(i + 3);
+        
         ibo.Append(i + 0);
         ibo.Append(i + 1);
         ibo.Append(i + 2);
-        ibo.Append(i + 0);
-        ibo.Append(i + 2);
         ibo.Append(i + 3);
+        ibo.Append(0xFFFF);
+        
     }
     ibo.Bake(pool);
 }
@@ -93,8 +104,8 @@ void DefaultVertices::Destroy()
 
 void DefaultVertices::Update(RenderDataDefault& rd)
 {
-    vbo.count = 0;
-    vbo.Append(rd.vertices.data, rd.vertices.count);
+    //vbo.count = 0;
+    //vbo.Append(rd.vertices.data, rd.vertices.count);
 }
 
 ///////////////////////////////////////////////////////////

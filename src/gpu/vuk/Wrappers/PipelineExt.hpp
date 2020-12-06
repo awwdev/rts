@@ -9,34 +9,37 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-template<u32 BINDING_COUNT, u32 ATTRIBUTE_COUNT>
 auto VertexInput(
-VkVertexInputBindingDescription   (&bindings)[BINDING_COUNT],
-VkVertexInputAttributeDescription (&attributes)[ATTRIBUTE_COUNT])
+VkVertexInputBindingDescription* bindings = nullptr,
+u32 bindingCount = 0,
+VkVertexInputAttributeDescription* attributes = nullptr,
+u32 attributeCount = 0)
 {
     return VkPipelineVertexInputStateCreateInfo
     {
         .sType                           = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
         .pNext                           = nullptr,
         .flags                           = 0,
-        .vertexBindingDescriptionCount   = BINDING_COUNT,
+        .vertexBindingDescriptionCount   = bindingCount,
         .pVertexBindingDescriptions      = bindings,
-        .vertexAttributeDescriptionCount = ATTRIBUTE_COUNT,
+        .vertexAttributeDescriptionCount = attributeCount,
         .pVertexAttributeDescriptions    = attributes
     };
 }
 
 ///////////////////////////////////////////////////////////
 
-inline auto InputAssembly()
+inline auto InputAssembly(
+VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
+VkBool32 restart = VK_FALSE)
 {
     return VkPipelineInputAssemblyStateCreateInfo 
     {
         .sType                  = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
         .pNext                  = nullptr,
         .flags                  = 0,
-        .topology               = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
-        .primitiveRestartEnable = VK_FALSE 
+        .topology               = topology,
+        .primitiveRestartEnable = restart 
     };    
 }
 

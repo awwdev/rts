@@ -19,8 +19,13 @@ RenderPass& renderPass)
 {
     PipelineInfo pipelineInfo;
     
-    pipelineInfo.vertexInput = VertexInput(vertices.bindings, vertices.attributes);
-    pipelineInfo.inputAssembly = InputAssembly();
+    pipelineInfo.vertexInput = VertexInput();
+    //pipelineInfo.vertexInput = VertexInput(
+    //    vertices.bindings, array_extent(vertices.bindings), 
+    //    vertices.attributes, array_extent(vertices.attributes)
+    //);
+    pipelineInfo.inputAssembly = InputAssembly(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP, VK_TRUE);
+    //pipelineInfo.inputAssembly = InputAssembly();
     pipelineInfo.viewportState = ViewportState(renderPass.width, renderPass.height);
     pipelineInfo.multisampling = Multisampling();
     pipelineInfo.rasterization = Rasterization();

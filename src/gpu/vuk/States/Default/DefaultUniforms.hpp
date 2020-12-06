@@ -20,6 +20,7 @@ namespace rts::gpu::vuk {
 enum class DefaultUniformEnum : u32
 {
     TextureSampler,
+    UBO, 
     ENUM_END
 };
 
@@ -31,6 +32,7 @@ struct DefaultUniforms
     PushConstants<PushConstantsDefault> pushConstants;
     VkSampler sampler; 
     Image textureArray;
+    UniformBuffer<UniformDefault, 1'000> ubo;
     Descriptors descriptors;
 
     void Create(VkCommandPool, res::Resources&);
@@ -46,6 +48,28 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
     pushConstants.rangeInfo.offset = 0;
     pushConstants.rangeInfo.size = pushConstants.size;
     pushConstants.rangeInfo.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+    //uniform
+    ubo.Create();
+
+    infos[enum_cast(DefaultUniformEnum::UBO)] =
+    {
+        .type = UniformInfo::Buffer,
+        .binding 
+        {
+            .binding            = enum_cast(DefaultUniformEnum::UBO),
+            .descriptorType     = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+            .descriptorCount    = 1,
+            .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
+            .pImmutableSamplers = nullptr,
+        },
+        .bufferInfo
+        {
+            .buffer = ubo.activeBuffer->buffer,
+            .offset = 0,
+            .range = VK_WHOLE_SIZE,
+        }
+    };
 
     //textures
     u32 layerCount = resources.textures.textureArray.count;
@@ -98,6 +122,9 @@ void DefaultUniforms::Update(RenderDataDefault& rd)
 {
     pushConstants.data.windowWidth = app::glo::windowWidth;
     pushConstants.data.windowHeight = app::glo::windowHeight;
+
+    ubo.count = 0;
+    ubo.Append(rd.ubo.data, rd.ubo.count);
 }
 
 ///////////////////////////////////////////////////////////
@@ -107,6 +134,7 @@ void DefaultUniforms::Destroy()
     descriptors.Destroy();
     textureArray.Destroy();
     vkDestroySampler(g_devicePtr, sampler, GetVkAlloc());
+    ubo.Destroy();
 }
 
 ///////////////////////////////////////////////////////////

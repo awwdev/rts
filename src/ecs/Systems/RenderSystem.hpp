@@ -34,7 +34,7 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, a
         //subtract the camera pos to "normalize"
         if (y < 0) continue;
         //cull objects that are outside camera
-        depthSorted[y].Append(arrays.transformComponents.GetEntity(i));
+        depthSorted[(u32)y].Append(arrays.transformComponents.GetEntity(i));
     }
     FOR_C_ARRAY(depthSorted, y)
     {
@@ -50,19 +50,21 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, a
             if (lockstep.nextStep)
                 time = 0;
                 
-            auto p = transformComponent.InterpolatedPosition(time, lockstep.stepTimePrev);
+            auto  p = transformComponent.InterpolatedPosition(time, lockstep.stepTimePrev);
             auto& s = transformComponent.size;
-            auto& renderComponent = arrays.renderComponents.GetComponent(entityID);
 
+            auto& renderComponent = arrays.renderComponents.GetComponent(entityID);
             renderComponent.Animate();
             auto& t = renderComponent.texIndex;
 
+            Rectf rect { p, s };
             constexpr Col4f COLOR = { 1, 1, 1, 1 };
-            
-            vertices.Append(p.x      , p.y      , COLOR, t);
-            vertices.Append(p.x + s.x, p.y      , COLOR, t);
-            vertices.Append(p.x + s.x, p.y + s.y, COLOR, t);
-            vertices.Append(p.x      , p.y + s.y, COLOR, t);
+            renderData.renderDataDefault.ubo.Append(rect, COLOR, t);
+
+            //vertices.Append(p.x      , p.y      , COLOR, t);
+            //vertices.Append(p.x + s.x, p.y      , COLOR, t);
+            //vertices.Append(p.x + s.x, p.y + s.y, COLOR, t);
+            //vertices.Append(p.x      , p.y + s.y, COLOR, t);
         }
         
     }

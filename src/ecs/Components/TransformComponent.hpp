@@ -14,7 +14,7 @@ struct TransformComponent
     Vec2i position;
     Vec2i positionPrev = position;
     Vec2i positionTarget = position;
-    Vec2i size;
+    Vec2f size;
 
     void MoveToTarget();
     auto InterpolatedPosition(double time, double timeMax);

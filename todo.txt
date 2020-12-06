@@ -16,3 +16,6 @@ linux testing
 - networking
 - memory
 - static linkage test
+
+
+10'000 entities, vbo (updated), ibo -> 1000 fps

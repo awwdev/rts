@@ -39,7 +39,7 @@ Scene::Scene()
     //transformComponent->positionTarget = transformComponent->position;
     //transformComponent->size = { 32, 32 };
 
-    for(auto i = 0; i < 1; ++i)
+    for(auto i = 0; i < 1'000; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);
