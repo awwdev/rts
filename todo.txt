@@ -1,12 +1,15 @@
+string class
 renderer onto heap (mem)
+text rendering
+window 
+blur
+IsPointInsideRect
+
+
+
 
 linux testing
 --------------
 - networking
 - memory
 - static linkage test
-
-basic gui
----------
-- text rendering
-- window

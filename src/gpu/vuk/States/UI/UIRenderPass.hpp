@@ -8,7 +8,7 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void CreateRenderPassPost(RenderPass& rp, Swapchain& swapchain)
+inline void CreateRenderPassUI(RenderPass& rp, Swapchain& swapchain)
 {
     rp.width  = swapchain.width;
     rp.height = swapchain.height;

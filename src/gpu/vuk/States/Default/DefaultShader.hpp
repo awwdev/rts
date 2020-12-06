@@ -8,7 +8,7 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void CreateDefaultShader(Shader& shader)
+inline void CreateShaderDefault(Shader& shader)
 {
     shader.Create("res/Shaders/spv/default.vert.spv", "res/Shaders/spv/default.frag.spv");
 }

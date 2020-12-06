@@ -19,9 +19,7 @@ inline double time = 0;
 
 static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, app::Lockstep& lockstep)
 {
-    auto& vertices = renderData.rd_Default.vertices;
-    vertices.count = 0;
-
+    auto& vertices = renderData.renderDataDefault.vertices;
     auto& transformComponents = arrays.transformComponents.dense;
     auto& renderComponents = arrays.renderComponents.dense;
 
@@ -51,8 +49,8 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, a
             time = com::Min(time, lockstep.stepTimePrev);
             if (lockstep.nextStep)
                 time = 0;
+                
             auto p = transformComponent.InterpolatedPosition(time, lockstep.stepTimePrev);
-
             auto& s = transformComponent.size;
             auto& renderComponent = arrays.renderComponents.GetComponent(entityID);
 

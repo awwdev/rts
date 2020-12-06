@@ -2,7 +2,6 @@
 
 #include "com/Vec.hpp"
 #include "com/POD_Array.hpp"
-#include "ecs/EntityID.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -10,29 +9,27 @@ namespace rts::gpu {
 
 ///////////////////////////////////////////////////////////
 
-constexpr auto POST_VERTEX_COUNT = 100;
-
-///////////////////////////////////////////////////////////
-
-struct PostVertex
+struct VertexUI
 {
     Vec2f pos;
-    Vec2f tex;
+    Col4f col;
+    u32   texId;
 };
 
 ///////////////////////////////////////////////////////////
 
-struct PostPushConstants
+struct RenderDataUI
 {
-    i32 resolutionScale = 1;
+    com::POD_Array<VertexUI, 1000> vertices;
+    void Clear();
 };
 
 ///////////////////////////////////////////////////////////
 
-struct RenderData_Post
+void RenderDataUI::Clear()
 {
-    com::POD_Array<PostVertex, POST_VERTEX_COUNT> vertices;
-};
+    vertices.count = 0;
+}
 
 ///////////////////////////////////////////////////////////
 

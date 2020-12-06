@@ -10,11 +10,11 @@ namespace rts::gpu {
 
 ///////////////////////////////////////////////////////////
 
-constexpr auto DEFAULT_VERTEX_COUNT_MAX = ecs::ENTITY_COUNT_MAX * 4;
+constexpr auto VERTEX_COUNT_MAX_DEFAULT = ecs::ENTITY_COUNT_MAX * 4;
 
 ///////////////////////////////////////////////////////////
 
-struct DefaultVertex
+struct VertexDefault
 {
     Vec2f pos;
     Col4f col;
@@ -23,7 +23,7 @@ struct DefaultVertex
 
 ///////////////////////////////////////////////////////////
 
-struct DefaultPushConstants
+struct PushConstantsDefault
 {
     i32 windowWidth;
     i32 windowHeight;
@@ -31,10 +31,18 @@ struct DefaultPushConstants
 
 ///////////////////////////////////////////////////////////
 
-struct RenderData_Default
+struct RenderDataDefault
 {
-    com::POD_Array<DefaultVertex, DEFAULT_VERTEX_COUNT_MAX> vertices;
+    com::POD_Array<VertexDefault, VERTEX_COUNT_MAX_DEFAULT> vertices;
+    void Clear();
 };
+
+///////////////////////////////////////////////////////////
+
+void RenderDataDefault::Clear()
+{
+    vertices.count = 0;
+}
 
 ///////////////////////////////////////////////////////////
 

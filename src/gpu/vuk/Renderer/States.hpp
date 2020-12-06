@@ -1,8 +1,10 @@
 #pragma once
 
-#include "gpu/vuk/States/State_Default.hpp"
-#include "gpu/vuk/States/State_Post.hpp"
 #include "gpu/vuk/Renderer/Commands.hpp"
+
+#include "gpu/vuk/States/StateDefault.hpp"
+#include "gpu/vuk/States/StatePost.hpp"
+#include "gpu/vuk/States/StateUI.hpp"
 
 #include "gpu/RenderData.hpp"
 #include "res/Resources.hpp"
@@ -15,8 +17,9 @@ namespace rts::gpu::vuk {
 
 struct States
 {
-    State_Default state_Default;
-    State_Post    state_Post;
+    StateDefault state_Default;
+    StatePost    state_Post;
+    //StateUI      state_UI;
 
     void Create(Context&, Commands&, res::Resources&, RenderData&);
     void Destroy();

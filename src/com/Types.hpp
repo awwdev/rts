@@ -2,6 +2,7 @@
 
 #include <concepts>
 #include <cstdint>
+#include <limits>
 
 ///////////////////////////////////////////////////////////
 
@@ -19,6 +20,9 @@ using u32 = std::uint32_t;
 
 using f32 = float;
 using f64 = double;
+
+constexpr auto f32max = std::numeric_limits<f32>::max();
+constexpr auto f32min = std::numeric_limits<f32>::min();
 
 ///////////////////////////////////////////////////////////
 

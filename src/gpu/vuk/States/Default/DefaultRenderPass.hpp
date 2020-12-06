@@ -8,7 +8,7 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void CreateDefaultRenderPass(VkCommandPool cmdPool, RenderPass& rp, Swapchain& swapchain)
+inline void CreateRenderPassDefault(VkCommandPool cmdPool, RenderPass& rp, Swapchain& swapchain)
 {
     rp.clear = { VkClearValue { .color { 155/255.f, 186/255.f, 94/255.f, 1.f } } }; //!
     rp.width  = swapchain.width;

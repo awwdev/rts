@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gui/Widgets/Window.hpp"
+#include "gui/Widgets/Widget_Window.hpp"
 #include "gpu/RenderData.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -9,18 +9,19 @@ namespace rts::gui {
 
 ///////////////////////////////////////////////////////////
 
-struct DebugGUI
+struct GUI_Stats
 {
-    Window wndStats { 32, 32, 128, 64 };
+    Widget_Window wndStats { 32, 32, 128, 64 };
 
     void Update(gpu::RenderData&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void DebugGUI::Update(gpu::RenderData& renderData)
+void GUI_Stats::Update(gpu::RenderData& renderData)
 {
-
+    auto& renderDataUI = renderData.renderDataUI;
+    wndStats.Update(renderDataUI);
 }
 
 ///////////////////////////////////////////////////////////

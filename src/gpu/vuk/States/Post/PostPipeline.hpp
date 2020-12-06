@@ -12,7 +12,7 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void CreatePostPipeline(
+inline void CreatePipelinePost(
 Pipeline& pipeline, 
 PostVertices& vertices,
 PostUniforms& uniforms,

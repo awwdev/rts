@@ -1,12 +1,13 @@
 #pragma once
 
-#include "gpu/vuk/States/Default/DefaultShader.hpp"
-#include "gpu/vuk/States/Default/DefaultPipeline.hpp"
-#include "gpu/vuk/States/Default/DefaultRenderPass.hpp"
-#include "gpu/vuk/States/Default/DefaultVertices.hpp"
-#include "gpu/vuk/States/Default/DefaultUniforms.hpp"
+#include "gpu/vuk/States/Post/PostShader.hpp"
+#include "gpu/vuk/States/Post/PostPipeline.hpp"
+#include "gpu/vuk/States/Post/PostRenderPass.hpp"
+#include "gpu/vuk/States/Post/PostVertices.hpp"
+#include "gpu/vuk/States/Post/PostUniforms.hpp"
 
 #include "gpu/vuk/Renderer/Commands.hpp"
+#include "gpu/vuk/States/StateDefault.hpp"
 #include "gpu/RenderData.hpp"
 #include "res/Resources.hpp"
 
@@ -16,15 +17,15 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct State_Default
+struct StatePost
 {
     Pipeline pipeline;
     RenderPass renderPass;
     Shader shader;
-    DefaultUniforms uniforms;
-    DefaultVertices vertices;
+    PostUniforms uniforms;
+    PostVertices vertices;
 
-    void Create(Context&, Commands&, res::Resources&);
+    void Create(Context&, Commands&, res::Resources&, StateDefault&);
     void Destroy();
     void Update(RenderData& renderData);
     void Record(VkCommandBuffer, uint32_t);
@@ -32,18 +33,18 @@ struct State_Default
 
 ///////////////////////////////////////////////////////////
 
-void State_Default::Create(Context& context, Commands& commands, res::Resources& resources)
+void StatePost::Create(Context& context, Commands& commands, res::Resources& resources, StateDefault& defaultState)
 {
-    uniforms.Create(commands.pool, resources);
+    uniforms.Create(commands.pool, resources, defaultState.renderPass.offscreen);
     vertices.Create(commands.pool);
-    CreateDefaultShader(shader);
-    CreateDefaultRenderPass(commands.pool, renderPass, context.swapchain);
-    CreateDefaultPipeline(pipeline, vertices, uniforms, shader, renderPass);
+    CreateShaderPost(shader);
+    CreateRenderPassPost(renderPass, context.swapchain);
+    CreatePipelinePost(pipeline, vertices, uniforms, shader, renderPass);
 }
 
 ///////////////////////////////////////////////////////////
 
-void State_Default::Destroy()
+void StatePost::Destroy()
 {
     uniforms.Destroy();
     vertices.Destroy();
@@ -54,7 +55,7 @@ void State_Default::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void State_Default::Update(RenderData& renderData)
+void StatePost::Update(RenderData& renderData)
 {
     uniforms.Update(renderData);
     vertices.Update(renderData);
@@ -62,16 +63,15 @@ void State_Default::Update(RenderData& renderData)
 
 ///////////////////////////////////////////////////////////
 
-void State_Default::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
+void StatePost::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
 {
     vkCmdBeginRenderPass    (cmdBuffer, &renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
-    vkCmdPushConstants      (cmdBuffer, pipeline.layout, VK_SHADER_STAGE_VERTEX_BIT, 0, uniforms.pushConstants.size, &uniforms.pushConstants.data);
+    //vkCmdPushConstants      (cmdBuffer, pipeline.layout, VK_SHADER_STAGE_VERTEX_BIT, 0, uniforms.pushConstants.size, &uniforms.pushConstants.data);
     vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, &vertices.vbo.activeBuffer->buffer, &vertices.offsets);
-    vkCmdBindIndexBuffer    (cmdBuffer, vertices.ibo.activeBuffer->buffer, 0, VK_INDEX_TYPE_UINT32);
     vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 
                              uniforms.descriptors.sets.count, uniforms.descriptors.sets.data, 0, nullptr);
-    vkCmdDrawIndexed        (cmdBuffer, vertices.ibo.COUNT_MAX, 1, 0, 0, 0);
+    vkCmdDraw               (cmdBuffer, vertices.vbo.count, 1, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
 }
 

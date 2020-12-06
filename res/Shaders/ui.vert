@@ -1,0 +1,19 @@
+#version 450
+
+///////////////////////////////////////////////////////////
+
+layout(location = 0) in vec2 inPos;
+layout(location = 1) in vec4 inCol;
+layout(location = 2) in uint inTexId;
+
+///////////////////////////////////////////////////////////
+
+layout(location = 0) out vec4 outCol;
+
+///////////////////////////////////////////////////////////   
+
+void main() 
+{
+    gl_Position = vec4(inPos.x, inPos.y, 0, 1);
+    outCol = inCol;
+}

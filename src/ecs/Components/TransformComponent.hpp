@@ -28,7 +28,7 @@ void TransformComponent::MoveToTarget()
 
     auto deltaX = positionTarget.x - position.x;
     auto deltaY = positionTarget.y - position.y;
-    f32 spd = 1;
+    f32 spd = 4;
 
     if (deltaX > 0) 
     {

@@ -1,19 +1,17 @@
-#pragma once
-
-#include "com/Vec.hpp"
-#include "com/POD_Array.hpp"
+#version 450
+#extension GL_ARB_separate_shader_objects : enable
 
 ///////////////////////////////////////////////////////////
 
-namespace rts::gpu {
+layout(location = 0) in vec4 inCol;
 
 ///////////////////////////////////////////////////////////
 
-struct RenderData_UI
+layout(location = 0) out vec4 outCol;
+
+///////////////////////////////////////////////////////////
+
+void main() 
 {
-
-};
-
-///////////////////////////////////////////////////////////
-
-}//ns
+    outCol = inCol;
+}

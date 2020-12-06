@@ -4,7 +4,7 @@
 #include "gpu/RenderData.hpp"
 #include "cmd/Timeline.hpp"
 #include "app/Lockstep.hpp"
-#include "gui/DebugGUI.hpp"
+#include "gui/Editor/GUI_Stats.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -18,7 +18,7 @@ struct Scene
     gpu::RenderData renderData;
     cmd::Timeline timeline;
     app::Lockstep lockstep;
-    gui::DebugGUI debugGUI;
+    gui::GUI_Stats guiStats;
 
     //test
     //ecs::TransformComponent* transformComponent;
@@ -39,13 +39,13 @@ Scene::Scene()
     //transformComponent->positionTarget = transformComponent->position;
     //transformComponent->size = { 32, 32 };
 
-    for(auto i = 0; i < 100; ++i)
+    for(auto i = 0; i < 1; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);
         transformComponent.position  = { rand() % 600 / 2, rand() % 400 / 2 };
         transformComponent.positionTarget = transformComponent.position;
-        transformComponent.size = { 32, 32 };
+        transformComponent.size = { 64, 64 }; //double scale 
         auto& renderComponent = ecs.arrays.Add<ecs::RenderComponent>(ID);
         renderComponent.texIndex = 1;
     }
@@ -55,6 +55,8 @@ Scene::Scene()
 
 void Scene::Update()
 {
+    renderData.Clear();
+    
     //test
     //FOR_ARRAY(app::glo::events, i)
     {
@@ -70,7 +72,7 @@ void Scene::Update()
         ecs.Step();
     }
     ecs.Render(renderData, lockstep);
-    debugGUI.Update(renderData);
+    guiStats.Update(renderData);
 
     //UI
 }

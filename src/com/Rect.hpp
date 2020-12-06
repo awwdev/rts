@@ -12,8 +12,8 @@ namespace rts {
 template<typename T>
 struct Rect
 {
-    Vec2<T> min;
-    Vec2<T> max;
+    Vec2<T> pos;
+    Vec2<T> size;
 };
 
 ///////////////////////////////////////////////////////////

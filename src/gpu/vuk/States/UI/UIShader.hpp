@@ -1,20 +1,17 @@
 #pragma once
 
-#include "com/Types.hpp"
-#include "com/Print.hpp"
-#include "com/Assert.hpp"
-#include "com/Rect.hpp"
+#include "gpu/vuk/Wrappers/Shader.hpp"
 
 ///////////////////////////////////////////////////////////
 
-namespace rts::gui {
+namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct Window 
+inline void CreateShaderUI(Shader& shader)
 {
-    Rectf rect;
-};
+    shader.Create("res/Shaders/spv/ui.vert.spv", "res/Shaders/spv/ui.frag.spv");
+}
 
 ///////////////////////////////////////////////////////////
 

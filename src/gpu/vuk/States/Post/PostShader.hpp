@@ -8,7 +8,7 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void CreatePostShader(Shader& shader)
+inline void CreateShaderPost(Shader& shader)
 {
     shader.Create("res/Shaders/spv/post.vert.spv", "res/Shaders/spv/post.frag.spv");
 }

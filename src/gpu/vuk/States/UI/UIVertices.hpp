@@ -12,7 +12,7 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct PostVertices
+struct UIVertices
 {
     VertexBuffer<VertexPost, VERTEX_COUNT_MAX_POST> vbo;
     VkDeviceSize offsets = 0;
@@ -27,7 +27,7 @@ struct PostVertices
 
 ///////////////////////////////////////////////////////////
 
-VkVertexInputBindingDescription PostVertices::bindings [1] =
+VkVertexInputBindingDescription UIVertices::bindings [1] =
 {
     {
         .binding    = 0,
@@ -38,7 +38,7 @@ VkVertexInputBindingDescription PostVertices::bindings [1] =
 
 ///////////////////////////////////////////////////////////
 
-VkVertexInputAttributeDescription PostVertices::attributes [2] =
+VkVertexInputAttributeDescription UIVertices::attributes [2] =
 {
     {
         .location   = 0,
@@ -56,7 +56,7 @@ VkVertexInputAttributeDescription PostVertices::attributes [2] =
 
 ///////////////////////////////////////////////////////////
 
-void PostVertices::Create(VkCommandPool pool)
+void UIVertices::Create(VkCommandPool pool)
 {
     vbo.Create();
 
@@ -75,14 +75,14 @@ void PostVertices::Create(VkCommandPool pool)
 
 ///////////////////////////////////////////////////////////
 
-void PostVertices::Destroy()
+void UIVertices::Destroy()
 {
     vbo.Destroy();
 }
 
 ///////////////////////////////////////////////////////////
 
-void PostVertices::Update(RenderData& renderData)
+void UIVertices::Update(RenderData& renderData)
 {
 
 }

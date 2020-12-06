@@ -10,8 +10,8 @@ layout(location = 2) in uint inTexId;
 
 layout(push_constant) uniform PushConstants
 {
-    uint glo::windowWidth;
-    uint glo::windowHeight;
+    uint windowWidth;
+    uint windowHeight;
 } 
 meta;
 
@@ -35,8 +35,8 @@ const vec2 TEXTURE_COORD [4] =
 
 void main() 
 {
-    float x = inPos.x / meta.glo::windowWidth  * 2 - 1;
-    float y = inPos.y / meta.glo::windowHeight * 2 - 1;
+    float x = inPos.x / meta.windowWidth  * 2 - 1;
+    float y = inPos.y / meta.windowHeight * 2 - 1;
     gl_Position = vec4(x, y, 0, 1);
 
     outCol = inCol;

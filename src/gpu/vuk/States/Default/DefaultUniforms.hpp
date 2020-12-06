@@ -27,7 +27,7 @@ enum class DefaultUniformEnum : u32
 struct DefaultUniforms
 {
     UniformInfo infos [enum_cast(DefaultUniformEnum::ENUM_END)];
-    PushConstants<DefaultPushConstants> pushConstants;
+    PushConstants<PushConstantsDefault> pushConstants;
     VkSampler sampler; 
     Image textureArray;
     Descriptors descriptors;
