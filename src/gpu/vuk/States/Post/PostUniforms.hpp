@@ -6,9 +6,10 @@
 #include "gpu/vuk/Wrappers/Sampler.hpp"
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
-#include "gpu/RenderData.hpp"
+
 #include "app/Global.hpp"
 #include "res/Resources.hpp"
+#include "gpu/RenderDataPost.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -33,7 +34,7 @@ struct PostUniforms
 
     void Create(VkCommandPool, res::Resources&, Image&);
     void Destroy();
-    void Update(RenderData&);
+    void Update(RenderDataPost&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -66,7 +67,7 @@ void PostUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, Imag
 
 ///////////////////////////////////////////////////////////
 
-void PostUniforms::Update(RenderData& renderData)
+void PostUniforms::Update(RenderDataPost& rd)
 {
 }
 

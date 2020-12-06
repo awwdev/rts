@@ -6,6 +6,8 @@
 #include "gpu/vuk/States/UI/UIVertices.hpp"
 #include "gpu/vuk/States/UI/UIUniforms.hpp"
 
+#include "gpu/RenderDataUI.hpp"
+
 ///////////////////////////////////////////////////////////
 
 namespace rts::gpu::vuk {
@@ -22,7 +24,7 @@ struct StateUI
 
     void Create(Context&, Commands&, res::Resources&);
     void Destroy();
-    void Update(RenderData& renderData);
+    void Update(RenderDataUI&);
     void Record(VkCommandBuffer, uint32_t);
 };
 
@@ -50,10 +52,10 @@ void StateUI::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void StateUI::Update(RenderData& renderData)
+void StateUI::Update(RenderDataUI& rd)
 {
-    uniforms.Update(renderData);
-    vertices.Update(renderData);
+    uniforms.Update(rd);
+    vertices.Update(rd);
 }
 
 ///////////////////////////////////////////////////////////

@@ -1,10 +1,7 @@
 #pragma once
 
-#include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Wrappers/BufferExt.hpp"
-#include "gpu/RenderData.hpp"
-#include "com/Types.hpp"
-#include "ecs/EntityID.hpp"
+#include "gpu/RenderDataUI.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -24,7 +21,7 @@ struct UIVertices
 
     void Create(VkCommandPool);
     void Destroy();
-    void Update(RenderData&);
+    void Update(RenderDataUI&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -78,9 +75,10 @@ void UIVertices::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void UIVertices::Update(RenderData& renderData)
+void UIVertices::Update(RenderDataUI& rd)
 {
-
+    vbo.count = 0;
+    //vbo.Append()
 }
 
 ///////////////////////////////////////////////////////////

@@ -1,10 +1,8 @@
 #pragma once
 
 #include "gpu/vuk/Wrappers/Pipeline.hpp"
-
 #include "gpu/vuk/States/Post/PostVertices.hpp"
 #include "gpu/vuk/States/Post/PostUniforms.hpp"
-#include "gpu/vuk/Wrappers/PushConstants.hpp"
 
 ///////////////////////////////////////////////////////////
 

@@ -1,10 +1,7 @@
 #pragma once
 
-#include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Wrappers/BufferExt.hpp"
-#include "gpu/RenderData.hpp"
-#include "com/Types.hpp"
-#include "ecs/EntityID.hpp"
+#include "gpu/RenderDataPost.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -24,7 +21,7 @@ struct PostVertices
 
     void Create(VkCommandPool);
     void Destroy();
-    void Update(RenderData&);
+    void Update(RenderDataPost&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -84,7 +81,7 @@ void PostVertices::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void PostVertices::Update(RenderData& renderData)
+void PostVertices::Update(RenderDataPost& rd)
 {
 
 }

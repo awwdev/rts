@@ -8,7 +8,7 @@
 
 #include "gpu/vuk/Renderer/Commands.hpp"
 #include "gpu/vuk/States/StateDefault.hpp"
-#include "gpu/RenderData.hpp"
+#include "gpu/RenderDataPost.hpp"
 #include "res/Resources.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@ struct StatePost
 
     void Create(Context&, Commands&, res::Resources&, StateDefault&);
     void Destroy();
-    void Update(RenderData& renderData);
+    void Update(RenderDataPost&);
     void Record(VkCommandBuffer, uint32_t);
 };
 
@@ -55,10 +55,10 @@ void StatePost::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void StatePost::Update(RenderData& renderData)
+void StatePost::Update(RenderDataPost& rd)
 {
-    uniforms.Update(renderData);
-    vertices.Update(renderData);
+    uniforms.Update(rd);
+    vertices.Update(rd);
 }
 
 ///////////////////////////////////////////////////////////

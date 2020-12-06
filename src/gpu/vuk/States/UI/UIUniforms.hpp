@@ -6,9 +6,10 @@
 #include "gpu/vuk/Wrappers/Sampler.hpp"
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
-#include "gpu/RenderData.hpp"
+
 #include "app/Global.hpp"
 #include "res/Resources.hpp"
+#include "gpu/RenderDataUI.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -32,7 +33,7 @@ struct UIUniforms
 
     void Create(VkCommandPool, res::Resources&);
     void Destroy();
-    void Update(RenderData&);
+    void Update(RenderDataUI&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -66,7 +67,7 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
 ///////////////////////////////////////////////////////////
 
-void UIUniforms::Update(RenderData& renderData)
+void UIUniforms::Update(RenderDataUI& rd)
 {
 }
 

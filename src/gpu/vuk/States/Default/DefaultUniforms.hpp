@@ -6,9 +6,10 @@
 #include "gpu/vuk/Wrappers/Sampler.hpp"
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
-#include "gpu/RenderData.hpp"
+
 #include "app/Global.hpp"
 #include "res/Resources.hpp"
+#include "gpu/RenderDataDefault.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -34,7 +35,7 @@ struct DefaultUniforms
 
     void Create(VkCommandPool, res::Resources&);
     void Destroy();
-    void Update(RenderData&);
+    void Update(RenderDataDefault&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -93,7 +94,7 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
 ///////////////////////////////////////////////////////////
 
-void DefaultUniforms::Update(RenderData& renderData)
+void DefaultUniforms::Update(RenderDataDefault& rd)
 {
     pushConstants.data.windowWidth = app::glo::windowWidth;
     pushConstants.data.windowHeight = app::glo::windowHeight;

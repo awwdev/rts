@@ -7,7 +7,7 @@
 #include "gpu/vuk/States/Default/DefaultUniforms.hpp"
 
 #include "gpu/vuk/Renderer/Commands.hpp"
-#include "gpu/RenderData.hpp"
+#include "gpu/RenderDataDefault.hpp"
 #include "res/Resources.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ struct StateDefault
 
     void Create(Context&, Commands&, res::Resources&);
     void Destroy();
-    void Update(RenderData& renderData);
+    void Update(RenderDataDefault& renderData);
     void Record(VkCommandBuffer, uint32_t);
 };
 
@@ -54,10 +54,10 @@ void StateDefault::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void StateDefault::Update(RenderData& renderData)
+void StateDefault::Update(RenderDataDefault& rd)
 {
-    uniforms.Update(renderData);
-    vertices.Update(renderData);
+    uniforms.Update(rd);
+    vertices.Update(rd);
 }
 
 ///////////////////////////////////////////////////////////

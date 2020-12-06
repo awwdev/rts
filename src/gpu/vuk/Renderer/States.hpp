@@ -54,11 +54,11 @@ void States::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void States::Update(RenderData& renderData)
+void States::Update(RenderData& rd)
 {
-    stateDefault.Update(renderData);
-    statePost.Update(renderData);
-    stateUI.Update(renderData);
+    stateDefault.Update(rd.renderDataDefault);
+    statePost.Update(rd.renderDataPost);
+    stateUI.Update(rd.renderDataUI);
 }
 
 ///////////////////////////////////////////////////////////

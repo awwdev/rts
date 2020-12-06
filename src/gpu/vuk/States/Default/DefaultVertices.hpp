@@ -1,9 +1,7 @@
 #pragma once
 
-#include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Wrappers/BufferExt.hpp"
-#include "gpu/RenderData.hpp"
-#include "com/Types.hpp"
+#include "gpu/RenderDataDefault.hpp"
 #include "ecs/EntityID.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -25,7 +23,7 @@ struct DefaultVertices
 
     void Create(VkCommandPool);
     void Destroy();
-    void Update(RenderData&);
+    void Update(RenderDataDefault&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -93,12 +91,10 @@ void DefaultVertices::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void DefaultVertices::Update(RenderData& renderData)
+void DefaultVertices::Update(RenderDataDefault& rd)
 {
-    
-    auto& vertices = renderData.renderDataDefault.vertices;
     vbo.count = 0;
-    vbo.Append(vertices.data, vertices.count);
+    vbo.Append(rd.vertices.data, rd.vertices.count);
 }
 
 ///////////////////////////////////////////////////////////

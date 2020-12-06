@@ -1,10 +1,8 @@
 #pragma once
 
 #include "gpu/vuk/Wrappers/Pipeline.hpp"
-
 #include "gpu/vuk/States/Default/DefaultVertices.hpp"
 #include "gpu/vuk/States/Default/DefaultUniforms.hpp"
-#include "gpu/vuk/Wrappers/PushConstants.hpp"
 
 ///////////////////////////////////////////////////////////
 
