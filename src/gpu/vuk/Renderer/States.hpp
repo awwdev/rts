@@ -17,9 +17,9 @@ namespace rts::gpu::vuk {
 
 struct States
 {
-    StateDefault state_Default;
-    StatePost    state_Post;
-    //StateUI      state_UI;
+    StateDefault stateDefault;
+    StatePost    statePost;
+    StateUI      stateUI;
 
     void Create(Context&, Commands&, res::Resources&, RenderData&);
     void Destroy();
@@ -31,9 +31,11 @@ struct States
 
 void States::Create(Context& context, Commands& commands, res::Resources& resources, RenderData& renderData)
 {
-    state_Default.Create(context, commands, resources);
-    state_Post.Create(context, commands, resources, state_Default);
+    stateDefault.Create(context, commands, resources);
+    statePost.Create(context, commands, resources, stateDefault);
+    stateUI.Create(context, commands, resources);
 
+    //recording once
     for(idx_t i = 0; i < context.swapchain.images.count; ++i)
     {
         Update(renderData);
@@ -45,16 +47,18 @@ void States::Create(Context& context, Commands& commands, res::Resources& resour
 
 void States::Destroy()
 {
-    state_Post.Destroy();
-    state_Default.Destroy();
+    statePost.Destroy();
+    stateDefault.Destroy();
+    stateUI.Destroy();
 }
 
 ///////////////////////////////////////////////////////////
 
 void States::Update(RenderData& renderData)
 {
-    state_Default.Update(renderData);
-    state_Post.Update(renderData);
+    stateDefault.Update(renderData);
+    statePost.Update(renderData);
+    stateUI.Update(renderData);
 }
 
 ///////////////////////////////////////////////////////////
@@ -64,8 +68,9 @@ void States::Record(Commands& commands, uint32_t imageIndex)
     auto cmdBuffer = commands.buffers[imageIndex];
     auto beginInfo = CreateCmdBeginInfo();
     VkCheck(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
-    state_Default.Record(cmdBuffer, imageIndex);
-    state_Post.Record(cmdBuffer, imageIndex);
+    stateDefault.Record(cmdBuffer, imageIndex);
+    statePost.Record(cmdBuffer, imageIndex);
+    stateUI.Record(cmdBuffer, imageIndex);
     VkCheck(vkEndCommandBuffer(cmdBuffer));
 }
 

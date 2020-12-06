@@ -9,6 +9,10 @@ namespace rts::gpu {
 
 ///////////////////////////////////////////////////////////
 
+constexpr auto VERTEX_COUNT_MAX_UI = 1000;
+
+///////////////////////////////////////////////////////////
+
 struct VertexUI
 {
     Vec2f pos;
@@ -20,7 +24,7 @@ struct VertexUI
 
 struct RenderDataUI
 {
-    com::POD_Array<VertexUI, 1000> vertices;
+    com::POD_Array<VertexUI, VERTEX_COUNT_MAX_UI> vertices;
     void Clear();
 };
 

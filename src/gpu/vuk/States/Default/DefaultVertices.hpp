@@ -14,7 +14,9 @@ namespace rts::gpu::vuk {
 
 struct DefaultVertices
 {
-    VertexBuffer<VertexDefault, VERTEX_COUNT_MAX_DEFAULT> vbo;
+    using Vertex = VertexDefault;
+
+    VertexBuffer<Vertex, VERTEX_COUNT_MAX_DEFAULT> vbo;
     IndexBuffer<u32, (u32)(VERTEX_COUNT_MAX_DEFAULT * 1.5)> ibo;
     VkDeviceSize offsets = 0;
 
@@ -32,7 +34,7 @@ VkVertexInputBindingDescription DefaultVertices::bindings [1] =
 {
     {
         .binding    = 0,
-        .stride     = sizeof(VertexDefault),
+        .stride     = sizeof(Vertex),
         .inputRate  = VK_VERTEX_INPUT_RATE_VERTEX
     }
 };
@@ -45,19 +47,19 @@ VkVertexInputAttributeDescription DefaultVertices::attributes [3] =
         .location   = 0,
         .binding    = 0, 
         .format     = VK_FORMAT_R32G32_SFLOAT,
-        .offset     = offsetof(VertexDefault, pos),
+        .offset     = offsetof(Vertex, pos),
     },
     {
         .location   = 1,
         .binding    = 0, 
         .format     = VK_FORMAT_R32G32B32A32_SFLOAT,
-        .offset     = offsetof(VertexDefault, col),
+        .offset     = offsetof(Vertex, col),
     },
     {
         .location   = 2,
         .binding    = 0, 
         .format     = VK_FORMAT_R32_UINT,
-        .offset     = offsetof(VertexDefault, texId),
+        .offset     = offsetof(Vertex, texId),
     },
 };
 

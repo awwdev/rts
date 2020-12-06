@@ -14,7 +14,9 @@ namespace rts::gpu::vuk {
 
 struct PostVertices
 {
-    VertexBuffer<VertexPost, VERTEX_COUNT_MAX_POST> vbo;
+    using Vertex = VertexPost;
+
+    VertexBuffer<Vertex, VERTEX_COUNT_MAX_POST> vbo;
     VkDeviceSize offsets = 0;
 
     static VkVertexInputBindingDescription   bindings   [1];
@@ -31,7 +33,7 @@ VkVertexInputBindingDescription PostVertices::bindings [1] =
 {
     {
         .binding    = 0,
-        .stride     = sizeof(VertexPost),
+        .stride     = sizeof(Vertex),
         .inputRate  = VK_VERTEX_INPUT_RATE_VERTEX
     }
 };
@@ -44,13 +46,13 @@ VkVertexInputAttributeDescription PostVertices::attributes [2] =
         .location   = 0,
         .binding    = 0, 
         .format     = VK_FORMAT_R32G32_SFLOAT,
-        .offset     = offsetof(VertexPost, pos),
+        .offset     = offsetof(Vertex, pos),
     },
     {
         .location   = 1,
         .binding    = 0, 
         .format     = VK_FORMAT_R32G32_SFLOAT,
-        .offset     = offsetof(VertexPost, tex),
+        .offset     = offsetof(Vertex, tex),
     },
 };
 

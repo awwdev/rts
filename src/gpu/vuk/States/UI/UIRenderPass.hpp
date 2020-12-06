@@ -19,11 +19,11 @@ inline void CreateRenderPassUI(RenderPass& rp, Swapchain& swapchain)
         .flags          = 0,
         .format         = rp.format, 
         .samples        = VK_SAMPLE_COUNT_1_BIT,
-        .loadOp         = VK_ATTACHMENT_LOAD_OP_DONT_CARE, //!
+        .loadOp         = VK_ATTACHMENT_LOAD_OP_LOAD, //!
         .storeOp        = VK_ATTACHMENT_STORE_OP_STORE,
         .stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE,
         .stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE,
-        .initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED,
+        .initialLayout  = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, //!
         .finalLayout    = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, //!
     };
 
@@ -102,8 +102,8 @@ inline void CreateRenderPassUI(RenderPass& rp, Swapchain& swapchain)
                 .offset     = VkOffset2D {0, 0},
                 .extent     = { rp.width, rp.height }
             },
-            .clearValueCount= (rp.clear.hasData ? 1u : 0u),
-            .pClearValues   = (rp.clear.hasData ? &rp.clear.Data() : nullptr),
+            .clearValueCount= 0,
+            .pClearValues   = nullptr,
         };
     }
 }

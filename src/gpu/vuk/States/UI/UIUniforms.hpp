@@ -18,7 +18,7 @@ namespace rts::gpu::vuk {
 
 enum class UIUniformEnum : u32
 {
-    None,
+    FontTextureSampler,
     ENUM_END
 };
 
@@ -27,7 +27,6 @@ enum class UIUniformEnum : u32
 struct UIUniforms
 {
     UniformInfo infos [enum_cast(UIUniformEnum::ENUM_END)];
-    PushConstants<PushConstantsPost> pushConstants;
     VkSampler sampler; 
     Descriptors descriptors;
 
@@ -41,7 +40,28 @@ struct UIUniforms
 void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 {
     CreateSamplerPixelPerfect(sampler);
-    //descriptors.Create(infos);
+    /*
+    infos[enum_cast(UIUniformEnum::FontTextureSampler)] =
+    {
+        .type = UniformInfo::Image,
+        .binding 
+        {
+            .binding            = enum_cast(UIUniformEnum::FontTextureSampler),
+            .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+            .descriptorCount    = 1,
+            .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
+            .pImmutableSamplers = nullptr,
+        },
+        .imageInfo 
+        {
+            .sampler        = sampler,
+            .imageView      = nullptr,//!
+            .imageLayout    = VK_IMAGE_LAYOUT_UNDEFINED,//!
+        }
+    };
+
+    descriptors.Create(infos);
+    */
 }
 
 ///////////////////////////////////////////////////////////
@@ -55,7 +75,7 @@ void UIUniforms::Update(RenderData& renderData)
 void UIUniforms::Destroy()
 {
     //descriptors.Destroy();
-    //vkDestroySampler(g_devicePtr, sampler, GetVkAlloc());
+    vkDestroySampler(g_devicePtr, sampler, GetVkAlloc());
 }
 
 ///////////////////////////////////////////////////////////
