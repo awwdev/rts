@@ -7,6 +7,10 @@ IsPointInsideRect
 
 renderpass dependency
 
+BENCHMARK text rendering
+A) IBO (device local) + VBO
+B) UBO only 
+
 linux testing
 --------------
 - networking

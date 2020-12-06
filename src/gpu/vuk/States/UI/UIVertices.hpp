@@ -78,7 +78,7 @@ void UIVertices::Destroy()
 void UIVertices::Update(RenderDataUI& rd)
 {
     vbo.count = 0;
-    //vbo.Append()
+    vbo.Append(rd.vertices.data, rd.vertices.count);
 }
 
 ///////////////////////////////////////////////////////////

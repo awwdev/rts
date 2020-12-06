@@ -64,13 +64,13 @@ void StateUI::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
 {
     vkCmdBeginRenderPass    (cmdBuffer, &renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
-    //vkCmdPushConstants      (cmdBuffer, pipeline.layout, VK_SHADER_STAGE_VERTEX_BIT, 0, uniforms.pushConstants.size, &uniforms.pushConstants.data);
     vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, &vertices.vbo.activeBuffer->buffer, &vertices.offsets);
+    vkCmdPushConstants      (cmdBuffer, pipeline.layout, VK_SHADER_STAGE_VERTEX_BIT, 0, uniforms.pushConstants.size, &uniforms.pushConstants.data);
     //vkCmdBindIndexBuffer    (cmdBuffer, vertices.ibo.activeBuffer->buffer, 0, VK_INDEX_TYPE_UINT32);
-    //!vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 
+    //vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 
     //                         uniforms.descriptors.sets.count, uniforms.descriptors.sets.data, 0, nullptr);
-    //reusable from default
-    //vkCmdDrawIndexed         (cmdBuffer, vertices.vbo.count, 1, 0, 0);
+    //! reuse index buffer from default?
+    vkCmdDrawIndexed        (cmdBuffer, 6, 1, 0, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
 }
 

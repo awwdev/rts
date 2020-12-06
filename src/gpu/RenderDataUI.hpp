@@ -22,6 +22,14 @@ struct VertexUI
 
 ///////////////////////////////////////////////////////////
 
+struct PushConstantsUI
+{
+    i32 windowWidth;
+    i32 windowHeight;
+};
+
+///////////////////////////////////////////////////////////
+
 struct RenderDataUI
 {
     com::POD_Array<VertexUI, VERTEX_COUNT_MAX_UI> vertices;

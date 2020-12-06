@@ -28,6 +28,7 @@ enum class UIUniformEnum : u32
 struct UIUniforms
 {
     UniformInfo infos [enum_cast(UIUniformEnum::ENUM_END)];
+    PushConstants<PushConstantsUI> pushConstants;
     VkSampler sampler; 
     Descriptors descriptors;
 
@@ -41,6 +42,13 @@ struct UIUniforms
 void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 {
     CreateSamplerPixelPerfect(sampler);
+
+    //push constants
+    pushConstants.rangeInfo.offset = 0;
+    pushConstants.rangeInfo.size = pushConstants.size;
+    pushConstants.rangeInfo.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+    //TODO font texture
     /*
     infos[enum_cast(UIUniformEnum::FontTextureSampler)] =
     {
@@ -69,6 +77,8 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
 void UIUniforms::Update(RenderDataUI& rd)
 {
+    pushConstants.data.windowWidth = app::glo::windowWidth;
+    pushConstants.data.windowHeight = app::glo::windowHeight;
 }
 
 ///////////////////////////////////////////////////////////
