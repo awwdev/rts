@@ -1,21 +1,13 @@
+move stuff to heap so exe is not bloated (might be debug info?)
+
+
 string class
 renderer onto heap (mem)
 text rendering
+renderpass dependency
 window 
 blur
 IsPointInsideRect
 
-renderpass dependency
 
-BENCHMARK text rendering
-A) IBO (device local) + VBO
-B) UBO only 
-
-linux testing
---------------
-- networking
-- memory
-- static linkage test
-
-
-10'000 entities, vbo (updated), ibo -> 1000 fps
+- linuxx static linkage test

@@ -6,6 +6,7 @@
 #include "gpu/vuk/Wrappers/Sampler.hpp"
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
+#include "ecs/EntityID.hpp"
 
 #include "app/Global.hpp"
 #include "res/Resources.hpp"
@@ -32,7 +33,7 @@ struct DefaultUniforms
     PushConstants<PushConstantsDefault> pushConstants;
     VkSampler sampler; 
     Image textureArray;
-    UniformBuffer<UniformDefault, 1'000> ubo;
+    StorageBuffer<UniformDefault, ecs::ENTITY_COUNT_MAX> ubo;
     Descriptors descriptors;
 
     void Create(VkCommandPool, res::Resources&);
@@ -58,7 +59,7 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
         .binding 
         {
             .binding            = enum_cast(DefaultUniformEnum::UBO),
-            .descriptorType     = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+            .descriptorType     = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
             .descriptorCount    = 1,
             .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
             .pImmutableSamplers = nullptr,

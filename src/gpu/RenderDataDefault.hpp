@@ -11,19 +11,6 @@ namespace rts::gpu {
 
 ///////////////////////////////////////////////////////////
 
-constexpr auto VERTEX_COUNT_MAX_DEFAULT = ecs::ENTITY_COUNT_MAX * 4;
-
-///////////////////////////////////////////////////////////
-
-struct VertexDefault
-{
-    Vec2f pos;
-    Col4f col;
-    u32   texId;
-};
-
-///////////////////////////////////////////////////////////
-
 struct PushConstantsDefault
 {
     i32 windowWidth;
@@ -34,17 +21,18 @@ struct PushConstantsDefault
 
 struct UniformDefault
 {
-    alignas(16) Rectf rect;
-    alignas(16) Col4f col;
-    alignas(16) u32 texId;
+    Rectf rect;
+    Col4f col;
+    u32 texId;
 };
+
+static constexpr auto s = sizeof(UniformDefault);
 
 ///////////////////////////////////////////////////////////
 
 struct RenderDataDefault
 {
-    com::POD_Array<VertexDefault, VERTEX_COUNT_MAX_DEFAULT> vertices;
-    com::POD_Array<UniformDefault, 1'000> ubo;
+    com::POD_Array<UniformDefault, ecs::ENTITY_COUNT_MAX> ubo;
     void Clear();
 };
 
@@ -52,7 +40,6 @@ struct RenderDataDefault
 
 void RenderDataDefault::Clear()
 {
-    vertices.count = 0;
     ubo.count = 0;
 }
 

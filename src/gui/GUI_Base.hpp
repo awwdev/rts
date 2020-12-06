@@ -20,11 +20,6 @@ inline void AddRect(gpu::RenderDataUI& rd, Rectf& rect)
     auto& s = rect.size;
     auto  c = Col4f { 1, 1, 1, 0.5 };
     auto  t = TEX_ID_OPAQUE;
-
-    rd.vertices.Append(p.x,         p.y,        c, t);
-    rd.vertices.Append(p.x + s.x,   p.y,        c, t);
-    rd.vertices.Append(p.x + s.x,   p.y + s.y,  c, t);
-    rd.vertices.Append(p.x,         p.y + s.y,  c, t);
 }
 
 ///////////////////////////////////////////////////////////

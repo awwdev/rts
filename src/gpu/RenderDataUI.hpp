@@ -15,9 +15,6 @@ constexpr auto VERTEX_COUNT_MAX_UI = 1000;
 
 struct VertexUI
 {
-    Vec2f pos;
-    Col4f col;
-    u32   texId;
 };
 
 ///////////////////////////////////////////////////////////

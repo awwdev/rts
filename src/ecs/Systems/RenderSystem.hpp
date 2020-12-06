@@ -19,7 +19,6 @@ inline double time = 0;
 
 static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, app::Lockstep& lockstep)
 {
-    auto& vertices = renderData.renderDataDefault.vertices;
     auto& transformComponents = arrays.transformComponents.dense;
     auto& renderComponents = arrays.renderComponents.dense;
 
@@ -60,11 +59,6 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, a
             Rectf rect { p, s };
             constexpr Col4f COLOR = { 1, 1, 1, 1 };
             renderData.renderDataDefault.ubo.Append(rect, COLOR, t);
-
-            //vertices.Append(p.x      , p.y      , COLOR, t);
-            //vertices.Append(p.x + s.x, p.y      , COLOR, t);
-            //vertices.Append(p.x + s.x, p.y + s.y, COLOR, t);
-            //vertices.Append(p.x      , p.y + s.y, COLOR, t);
         }
         
     }

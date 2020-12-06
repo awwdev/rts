@@ -1,7 +1,6 @@
 #pragma once
 
 #include "gpu/vuk/Wrappers/Pipeline.hpp"
-#include "gpu/vuk/States/UI/UIVertices.hpp"
 #include "gpu/vuk/States/UI/UIUniforms.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -12,16 +11,12 @@ namespace rts::gpu::vuk {
 
 inline void CreatePipelineUI(
 Pipeline& pipeline, 
-UIVertices& vertices,
 UIUniforms& uniforms,
 Shader& shader, 
 RenderPass& renderPass)
 {
     PipelineInfo pipelineInfo;
-    pipelineInfo.vertexInput = VertexInput(
-        vertices.bindings, array_extent(vertices.bindings), 
-        vertices.attributes, array_extent(vertices.attributes)
-    );
+    pipelineInfo.vertexInput = VertexInput();
     pipelineInfo.inputAssembly = InputAssembly();
     pipelineInfo.viewportState = ViewportState(renderPass.width, renderPass.height);
     pipelineInfo.multisampling = Multisampling();
