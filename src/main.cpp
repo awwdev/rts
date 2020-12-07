@@ -24,6 +24,8 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 
     while(app::glo::isAppRunning)
     {
+        app::glo::eventBuffer.Poll();
+
         scene.Update();
         renderer.Update(scene.renderData, resources);
         
@@ -32,9 +34,6 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 
         if (app::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
             app::glo::isAppRunning = false;
-
-        app::glo::eventBuffer.Reset();//! THIS IS WRONG
-        //TODO INSTEAD PULL STUFF
     }
 }
 

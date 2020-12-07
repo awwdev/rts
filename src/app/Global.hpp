@@ -16,6 +16,7 @@ namespace glo
 {
     inline std::atomic<bool> isAppRunning = true;
     inline std::atomic<bool> isWndResized = false;
+    inline std::atomic<bool> isWndMinMax  = false;
     inline EventBuffer eventBuffer;
 
     inline f64  dt;
@@ -29,10 +30,9 @@ namespace glo
 
 inline bool HasEvent(app::EventEnum eventEnum)
 {
-    const idx_t count = glo::eventBuffer.count.load();
-    for(idx_t i = 0; i < count; ++i)
+    FOR_ARRAY(glo::eventBuffer.appBuffer, i)
     {
-        auto const& ev = glo::eventBuffer.buffer[i];  
+        auto const& ev = glo::eventBuffer.appBuffer[i];  
         if (ev.eventEnum == eventEnum)
             return true;
     }
