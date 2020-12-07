@@ -21,7 +21,7 @@ struct States
     StatePost    statePost;
     StateUI      stateUI;
 
-    void Create(Context&, Commands&, res::Resources&, RenderData&);
+    void Create(Context&, Commands&, res::Resources&);
     void Destroy();
     void Record(Commands&, uint32_t);
     void Update(RenderData&);
@@ -29,18 +29,15 @@ struct States
 
 ///////////////////////////////////////////////////////////
 
-void States::Create(Context& context, Commands& commands, res::Resources& resources, RenderData& renderData)
+void States::Create(Context& context, Commands& commands, res::Resources& resources)
 {
     stateDefault.Create(context, commands, resources);
     statePost.Create(context, commands, resources, stateDefault);
     stateUI.Create(context, commands, resources);
 
-    //recording once
+    //!recording once
     for(idx_t i = 0; i < context.swapchain.images.count; ++i)
-    {
-        Update(renderData);
-        Record(commands, i);
-    }        
+        Record(commands, i);   
 }
 
 ///////////////////////////////////////////////////////////

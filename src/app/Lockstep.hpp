@@ -12,7 +12,7 @@ namespace rts::app {
 struct Lockstep 
 {
     double stepTime = 0;
-    double stepTimeMax = 0.200;
+    double stepTimeMax = 0.100;
     double stepTimePrev = 0;
     bool nextStep = false;
 

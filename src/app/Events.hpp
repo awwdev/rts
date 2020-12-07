@@ -16,7 +16,8 @@ namespace rts::app {
 
 enum class EventEnum
 {
-    WND_MOVE_SIZE,
+    WND_MOVESIZE,
+    WND_MOVESIZE_END,
     KEY_DOWN_ESCAPE,
     MB_LEFT_DOWN,
 };

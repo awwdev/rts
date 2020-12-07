@@ -15,10 +15,12 @@ inline void CreateRenderPassDefault(VkCommandPool cmdPool, RenderPass& rp, Swapc
     rp.height = swapchain.height;
     rp.format = swapchain.format;
 
-    rp.offscreen.Create(cmdPool, rp.format, 
+     rp.offscreen.Create(cmdPool, rp.format, 
         VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
         VK_IMAGE_VIEW_TYPE_2D,
-        rp.width, rp.height, 1);
+        rp.width, rp.height, 1
+    );//would need more images per swapchain image but that is hard to work out with uniforms
+    //so without dependencies probably UB
 
     VkAttachmentDescription colorDesc
     {
@@ -74,8 +76,8 @@ inline void CreateRenderPassDefault(VkCommandPool cmdPool, RenderPass& rp, Swapc
         .pAttachments    = &colorDesc,
         .subpassCount    = 1,
         .pSubpasses      = &subpass,
-        .dependencyCount = 0,//1, //!
-        .pDependencies   = nullptr,//&dependency //!
+        .dependencyCount = 1,
+        .pDependencies   = &dependency,
     };
     VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &rp.renderPass));
 
@@ -92,7 +94,7 @@ inline void CreateRenderPassDefault(VkCommandPool cmdPool, RenderPass& rp, Swapc
             .flags           = 0,
             .renderPass      = rp.renderPass,
             .attachmentCount = 1,
-            .pAttachments    = &rp.offscreen.view, //! should need multiple images (swapchain count)
+            .pAttachments    = &rp.offscreen.view,
             .width           = rp.width,
             .height          = rp.height,
             .layers          = 1
@@ -109,8 +111,8 @@ inline void CreateRenderPassDefault(VkCommandPool cmdPool, RenderPass& rp, Swapc
                 .offset     = VkOffset2D {0, 0},
                 .extent     = { rp.width, rp.height }
             },
-            .clearValueCount= (rp.clear.hasData ? 1u : 0u),
-            .pClearValues   = (rp.clear.hasData ? &rp.clear.Data() : nullptr),
+            .clearValueCount= 1,
+            .pClearValues   = &rp.clear,
         };
     }
 }

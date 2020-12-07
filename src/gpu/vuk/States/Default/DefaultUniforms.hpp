@@ -6,8 +6,8 @@
 #include "gpu/vuk/Wrappers/Sampler.hpp"
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
-#include "ecs/EntityID.hpp"
 
+#include "ecs/EntityID.hpp"
 #include "app/Global.hpp"
 #include "res/Resources.hpp"
 #include "gpu/RenderDataDefault.hpp"
@@ -20,7 +20,7 @@ namespace rts::gpu::vuk {
 
 enum class DefaultUniformEnum : u32
 {
-    TextureSampler,
+    TextureArray,
     UBO, 
     ENUM_END
 };
@@ -30,11 +30,12 @@ enum class DefaultUniformEnum : u32
 struct DefaultUniforms
 {
     UniformInfo infos [enum_cast(DefaultUniformEnum::ENUM_END)];
+    Descriptors descriptors;
+
     PushConstants<PushConstantsDefault> pushConstants;
-    VkSampler sampler; 
+    VkSampler textureArraySampler; 
     Image textureArray;
     StorageBuffer<UniformDefault, ecs::ENTITY_COUNT_MAX> ubo;
-    Descriptors descriptors;
 
     void Create(VkCommandPool, res::Resources&);
     void Destroy();
@@ -84,22 +85,20 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
         0, VK_ACCESS_TRANSFER_WRITE_BIT,
         VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT
     );
-    CreateSamplerPixelPerfect(sampler);
+    CreateSamplerPixelPerfect(textureArraySampler);
 
     //store
     auto& textureArrayHost = resources.textures.textureArray;
     auto& textureSize  = textureArrayHost[0].SIZE;
     textureArray.Store(cmdPool, textureArrayHost.data, textureSize * textureArrayHost.count, textureSize); 
-    //TODO textureArray class ? 
-    //TODO count instead of total size
     textureArray.Bake(cmdPool);
 
-    infos[enum_cast(DefaultUniformEnum::TextureSampler)] =
+    infos[enum_cast(DefaultUniformEnum::TextureArray)] =
     {
         .type = UniformInfo::Image,
         .binding 
         {
-            .binding            = enum_cast(DefaultUniformEnum::TextureSampler),
+            .binding            = enum_cast(DefaultUniformEnum::TextureArray),
             .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
             .descriptorCount    = 1,
             .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
@@ -107,13 +106,13 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
         },
         .imageInfo 
         {
-            .sampler        = sampler,
+            .sampler        = textureArraySampler,
             .imageView      = textureArray.view,
             .imageLayout    = textureArray.layout,
         }
     };
 
-    //descriptors
+    //write
     descriptors.Create(infos);
 }
 
@@ -126,6 +125,7 @@ void DefaultUniforms::Update(RenderDataDefault& rd)
 
     ubo.count = 0;
     ubo.Append(rd.ubo.data, rd.ubo.count);
+    //!does not really store data
 }
 
 ///////////////////////////////////////////////////////////
@@ -134,7 +134,7 @@ void DefaultUniforms::Destroy()
 {
     descriptors.Destroy();
     textureArray.Destroy();
-    vkDestroySampler(g_devicePtr, sampler, GetVkAlloc());
+    vkDestroySampler(g_devicePtr, textureArraySampler, GetVkAlloc());
     ubo.Destroy();
 }
 

@@ -17,14 +17,14 @@ RenderPass& renderPass)
 {
     PipelineInfo pipelineInfo;
     
-    pipelineInfo.vertexInput = VertexInput();
+    pipelineInfo.vertexInput   = VertexInput();
     pipelineInfo.inputAssembly = InputAssembly();
     pipelineInfo.viewportState = ViewportState(renderPass.width, renderPass.height);
     pipelineInfo.multisampling = Multisampling();
     pipelineInfo.rasterization = Rasterization();
-    pipelineInfo.depthStencil = DepthStencil();
-    pipelineInfo.blendState = BlendStateInfo();
-    pipelineInfo.layoutInfo = PipelineLayout(
+    pipelineInfo.depthStencil  = DepthStencil();
+    pipelineInfo.blendState    = BlendStateInfo();
+    pipelineInfo.layoutInfo    = PipelineLayout(
         &uniforms.descriptors.layout, 1,
         &uniforms.pushConstants.rangeInfo, 1
     );

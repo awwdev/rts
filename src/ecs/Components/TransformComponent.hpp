@@ -14,7 +14,7 @@ struct TransformComponent
     Vec2i position;
     Vec2i positionPrev = position;
     Vec2i positionTarget = position;
-    Vec2f size;
+    Vec2i size;
 
     void MoveToTarget();
     auto InterpolatedPosition(double time, double timeMax);
@@ -72,9 +72,9 @@ void TransformComponent::MoveToTarget()
 
 auto TransformComponent::InterpolatedPosition(double time, double timeMax)
 {
-    f32 x = positionPrev.x + (position.x - positionPrev.x) * (time / timeMax);
-    f32 y = positionPrev.y + (position.y - positionPrev.y) * (time / timeMax);
-    return Vec2f { x, y };
+    i32 x = positionPrev.x + (position.x - positionPrev.x) * (time / timeMax);
+    i32 y = positionPrev.y + (position.y - positionPrev.y) * (time / timeMax);
+    return Vec2i { x, y };
 }
 
 ///////////////////////////////////////////////////////////

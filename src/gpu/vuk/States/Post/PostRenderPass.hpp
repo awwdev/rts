@@ -102,8 +102,8 @@ inline void CreateRenderPassPost(RenderPass& rp, Swapchain& swapchain)
                 .offset     = VkOffset2D {0, 0},
                 .extent     = { rp.width, rp.height }
             },
-            .clearValueCount= (rp.clear.hasData ? 1u : 0u),
-            .pClearValues   = (rp.clear.hasData ? &rp.clear.Data() : nullptr),
+            .clearValueCount= 0,
+            .pClearValues   = nullptr,
         };
     }
 }

@@ -13,10 +13,10 @@ meta;
 
 struct Uniform
 {
-    float x;
-    float y;
-    float w;
-    float h;
+    int x;
+    int y;
+    int w;
+    int h;
     
     float r;
     float g;
@@ -28,11 +28,11 @@ struct Uniform
 
 ///////////////////////////////////////////////////////////  
 
-layout(std430, binding = 1) buffer readonly UBO
+layout(std430, binding = 1) buffer readonly SBO
 {
     Uniform array [];
 }
-ubo;
+sbo;
 
 ///////////////////////////////////////////////////////////
 
@@ -42,12 +42,11 @@ layout(location = 2) out flat uint outTexId;
 
 ///////////////////////////////////////////////////////////
 
-const vec2 TEXTURE_COORD [6] =
+const vec2 quad [6] =
 {
     vec2(0, 0),
     vec2(0, 1),
     vec2(1, 1),
-
     vec2(0, 0),
     vec2(1, 1),
     vec2(1, 0),
@@ -55,33 +54,21 @@ const vec2 TEXTURE_COORD [6] =
 
 ///////////////////////////////////////////////////////////   
 
-#define X 0
-#define Y 0
-#define S 64
-const vec2 quad [6] =
-{
-    vec2(X, Y),
-    vec2(X, Y + S),
-    vec2(X + S, Y + S),
-
-    vec2(X, Y),
-    vec2(X + S, Y + S),
-    vec2(X + S, Y),
-};
-
-///////////////////////////////////////////////////////////   
-
 void main() 
 {
-    Uniform uni = ubo.array[gl_VertexIndex / 6];
+    //index
+    Uniform uni = sbo.array[gl_VertexIndex / 6];
+    vec2 q = quad[gl_VertexIndex % 6];
 
-    //TODO size
-    vec2 inPos = vec2(uni.x, uni.y) + quad[gl_VertexIndex % 6];
-    float x = inPos.x / meta.windowWidth  * 2 - 1;
-    float y = inPos.y / meta.windowHeight * 2 - 1;
-    gl_Position = vec4(x, y, 0, 1);
+    //position
+    float x_px = uni.x + q.x * uni.w;
+    float y_px = uni.y + q.y * uni.h;
+    float x_dc = x_px / meta.windowWidth  * 2 - 1;
+    float y_dc = y_px / meta.windowHeight * 2 - 1;
+    gl_Position = vec4(x_dc, y_dc, 0, 1);
 
+    //other
     outCol = vec4(uni.r, uni.g, uni.b, uni.a);
-    outTex = TEXTURE_COORD[gl_VertexIndex % 6];
+    outTex = q;
     outTexId = uni.texId;
 }

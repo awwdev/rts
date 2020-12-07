@@ -39,15 +39,17 @@ Scene::Scene()
     //transformComponent->positionTarget = transformComponent->position;
     //transformComponent->size = { 32, 32 };
 
-    for(auto i = 0; i < 10'000; ++i)
+    for(auto i = 0; i < 4; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);
-        transformComponent.position  = { rand() % 600, rand() % 400 };
-        transformComponent.positionTarget = transformComponent.position;
+        auto x = rand() % app::glo::windowWidth;
+        auto y = rand() % app::glo::windowHeight;
+        transformComponent.position = { x, y };
+        transformComponent.positionTarget = { x, y };
         transformComponent.size = { 64, 64 }; //double scale 
         auto& renderComponent = ecs.arrays.Add<ecs::RenderComponent>(ID);
-        renderComponent.texIndex = 1;
+        renderComponent.texIndex = 0;
     }
 }
 

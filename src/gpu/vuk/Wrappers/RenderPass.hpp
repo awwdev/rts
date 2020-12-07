@@ -19,10 +19,11 @@ struct RenderPass
     uint32_t height;
     VkFormat format;
 
-    com::Optional<VkClearValue> clear {};
+    //optionality
     com::POD_Array<VkFramebuffer, 4> framebuffers;
     com::POD_Array<VkRenderPassBeginInfo, 4> beginInfos;
-    Image offscreen; //optional
+    VkClearValue clear;
+    Image offscreen;
 
     void Destroy();
 };
@@ -33,7 +34,7 @@ void RenderPass::Destroy()
 {
     if (offscreen.image)
         offscreen.Destroy();
-
+    
     vkDestroyRenderPass(g_devicePtr, renderPass, GetVkAlloc());
     FOR_ARRAY(framebuffers, i)
     {

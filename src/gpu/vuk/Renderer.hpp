@@ -43,7 +43,7 @@ void Renderer::RecreateSwapchain(res::Resources& resources, RenderData& renderDa
     context.surface.UpdateSurfaceCapabilities(context.physical);
     context.swapchain.Create(context.device, context.surface);
     commands.Create(context.physical.queueIndex, context.swapchain);
-    states.Create(context, commands, resources, renderData); 
+    states.Create(context, commands, resources); 
 }
 
 ///////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ Renderer::Renderer(WindowHandle const& wndHandle, res::Resources& resources, Ren
 {
     context.Create(wndHandle);
     commands.Create(context.physical.queueIndex, context.swapchain);
-    states.Create(context, commands, resources, renderData); 
+    states.Create(context, commands, resources); 
     sync.Create(context.swapchain);
     
     PrintPhysicalAPI();
@@ -74,10 +74,12 @@ Renderer::~Renderer()
 
 void Renderer::Update(RenderData& renderData, res::Resources& resources)
 {
-    if (app::glo::windowHeight <= 0 || app::glo::windowWidth <= 0)
+    if (app::glo::windowHeight <= 0 || 
+        app::glo::windowWidth  <= 0 ||
+        app::glo::isWndResized)
         return;
 
-    if (app::HasEvent(app::EventEnum::WND_MOVE_SIZE))
+    if (app::HasEvent(app::EventEnum::WND_MOVESIZE_END))
         RecreateSwapchain(resources, renderData);
 
     if (vkWaitForFences(g_devicePtr, 1, &sync.fences[currentFrame], VK_FALSE, 0) != VK_SUCCESS)
@@ -105,7 +107,6 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
 
     ///////////////////////////////////////////////////////////
     states.Update(renderData);
-    //states.Record(commands, imageIndex);
     ///////////////////////////////////////////////////////////
 
     VkPipelineStageFlags waitStages = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
@@ -136,7 +137,9 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
     };
     auto res2 = vkQueuePresentKHR(context.device.queue, &presentInfo);
     if (res2 != VK_SUCCESS)
+    {
         com::PrintWarning("vkQueuePresentKHR not success", res2);
+    }
 
     currentFrame = (currentFrame + 1) % (context.swapchain.images.count - 1);
 }

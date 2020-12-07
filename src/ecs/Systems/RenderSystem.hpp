@@ -19,21 +19,36 @@ inline double time = 0;
 
 static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, app::Lockstep& lockstep)
 {
-    auto& transformComponents = arrays.transformComponents.dense;
-    auto& renderComponents = arrays.renderComponents.dense;
+    auto& transformComponents = arrays.transformComponents;
+    auto& renderComponents = arrays.renderComponents;
+
+    /*
+    FOR_ARRAY(renderComponents.dense, denseID)
+    {
+        auto& renderComponent = renderComponents.dense[denseID];
+        auto  entityID = renderComponents.GetEntity(denseID);
+        auto& transformComponent = transformComponents.GetComponent(entityID);
+
+        Recti rect { transformComponent.position, transformComponent.size };
+        Col4f COLOR = { 1, 1, 1, 1 };
+        auto texId = renderComponent.texIndex;
+
+        renderData.renderDataDefault.ubo.Append(rect, COLOR, texId);
+    }
+    */
+
 
     FOR_C_ARRAY(depthSorted, i)
     {
         depthSorted[i].count = 0;
     }
-    FOR_ARRAY(transformComponents, i)
+    FOR_ARRAY(transformComponents.dense, i)
     {
-        auto& transformComponent = transformComponents[i];
-        auto  y = transformComponent.position.y + transformComponent.size.y;
+        auto& transformComponent = transformComponents.dense[i];
+        auto  y = (i32)(transformComponent.position.y + transformComponent.size.y);
         //subtract the camera pos to "normalize"
-        if (y < 0) continue;
-        //cull objects that are outside camera
-        depthSorted[(u32)y].Append(arrays.transformComponents.GetEntity(i));
+        if (y < 0 || y >= 1024) continue; //basic culling
+        depthSorted[y].Append(transformComponents.GetEntity(i));
     }
     FOR_C_ARRAY(depthSorted, y)
     {
@@ -41,7 +56,7 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, a
         FOR_ARRAY(entityIDs, i)
         {
             auto& entityID = entityIDs[i];
-            auto& transformComponent = arrays.transformComponents.GetComponent(entityID);
+            auto& transformComponent = transformComponents.GetComponent(entityID);
 
             if (time < lockstep.stepTimePrev)
                 time += app::glo::dt;
@@ -51,16 +66,15 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, a
                 
             auto  p = transformComponent.InterpolatedPosition(time, lockstep.stepTimePrev);
             auto& s = transformComponent.size;
+            Recti rect { p, s };
 
             auto& renderComponent = arrays.renderComponents.GetComponent(entityID);
             renderComponent.Animate();
             auto& t = renderComponent.texIndex;
 
-            Rectf rect { p, s };
             constexpr Col4f COLOR = { 1, 1, 1, 1 };
             renderData.renderDataDefault.ubo.Append(rect, COLOR, t);
         }
-        
     }
 }
 

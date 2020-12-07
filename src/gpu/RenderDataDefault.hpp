@@ -21,12 +21,10 @@ struct PushConstantsDefault
 
 struct UniformDefault
 {
-    Rectf rect;
+    Recti rect;
     Col4f col;
-    u32 texId;
+    u32   texId;
 };
-
-static constexpr auto s = sizeof(UniformDefault);
 
 ///////////////////////////////////////////////////////////
 

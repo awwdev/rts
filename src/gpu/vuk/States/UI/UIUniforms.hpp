@@ -19,7 +19,7 @@ namespace rts::gpu::vuk {
 
 enum class UIUniformEnum : u32
 {
-    FontTextureSampler,
+    TextureArray,
     ENUM_END
 };
 
@@ -28,9 +28,11 @@ enum class UIUniformEnum : u32
 struct UIUniforms
 {
     UniformInfo infos [enum_cast(UIUniformEnum::ENUM_END)];
-    PushConstants<PushConstantsUI> pushConstants;
-    VkSampler sampler; 
     Descriptors descriptors;
+
+    PushConstants<PushConstantsUI> pushConstants;
+    VkSampler textureArraySampler; 
+    Image textureArray;
 
     void Create(VkCommandPool, res::Resources&);
     void Destroy();
@@ -41,21 +43,31 @@ struct UIUniforms
 
 void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 {
-    CreateSamplerPixelPerfect(sampler);
-
     //push constants
     pushConstants.rangeInfo.offset = 0;
     pushConstants.rangeInfo.size = pushConstants.size;
     pushConstants.rangeInfo.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
-    //TODO font texture
-    /*
-    infos[enum_cast(UIUniformEnum::FontTextureSampler)] =
+    //font texture
+    textureArray.Create(cmdPool, VK_FORMAT_R8G8B8A8_SRGB, 
+        VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
+        VK_IMAGE_VIEW_TYPE_2D_ARRAY,
+        32, 32, 1); 
+    textureArray.Transition(
+        cmdPool, 
+        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
+        0, VK_ACCESS_TRANSFER_WRITE_BIT,
+        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT
+    );
+    textureArray.Bake(cmdPool);
+    CreateSamplerPixelPerfect(textureArraySampler);
+
+    infos[enum_cast(UIUniformEnum::TextureArray)] =
     {
         .type = UniformInfo::Image,
         .binding 
         {
-            .binding            = enum_cast(UIUniformEnum::FontTextureSampler),
+            .binding            = enum_cast(UIUniformEnum::TextureArray),
             .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
             .descriptorCount    = 1,
             .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
@@ -63,14 +75,14 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
         },
         .imageInfo 
         {
-            .sampler        = sampler,
-            .imageView      = nullptr,//!
-            .imageLayout    = VK_IMAGE_LAYOUT_UNDEFINED,//!
+            .sampler        = textureArraySampler,
+            .imageView      = textureArray.view,
+            .imageLayout    = textureArray.layout,
         }
     };
 
+    //write
     descriptors.Create(infos);
-    */
 }
 
 ///////////////////////////////////////////////////////////
@@ -85,8 +97,9 @@ void UIUniforms::Update(RenderDataUI& rd)
 
 void UIUniforms::Destroy()
 {
-    //descriptors.Destroy();
-    vkDestroySampler(g_devicePtr, sampler, GetVkAlloc());
+    descriptors.Destroy();
+    textureArray.Destroy();
+    vkDestroySampler(g_devicePtr, textureArraySampler, GetVkAlloc());
 }
 
 ///////////////////////////////////////////////////////////

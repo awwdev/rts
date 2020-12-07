@@ -58,7 +58,26 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_SIZE:
         app::glo::windowWidth  = LOWORD(lParam);
         app::glo::windowHeight = HIWORD(lParam);    
-        event.eventEnum = app::EventEnum::WND_MOVE_SIZE;
+        switch(wParam)
+        {
+            case SIZE_MAXIMIZED:
+            case SIZE_MINIMIZED:
+            com::Print("minmax");
+            event.eventEnum = app::EventEnum::WND_MOVESIZE_END;
+            app::glo::isWndResized = false;
+            break;
+
+            default: 
+            com::Print("restore");
+            app::glo::isWndResized = true;
+            event.eventEnum = app::EventEnum::WND_MOVESIZE;
+            break;
+        }
+        break;
+
+        case WM_EXITSIZEMOVE:
+        app::glo::isWndResized = false;
+        event.eventEnum = app::EventEnum::WND_MOVESIZE_END;
         break;
 
         ///////////////////////////////////////////////////////////
