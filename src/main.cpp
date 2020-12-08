@@ -17,17 +17,17 @@ using namespace rts;
 
 inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 {  
-    res::Resources resources;
-    app::Scene scene;
-    gpu::vuk::Renderer renderer { wndHandle, resources, scene.renderData };
+    auto ptrResources = mem::ClaimBlock<res::Resources>();
+    auto ptrScene     = mem::ClaimBlock<app::Scene>();
+    auto ptrRenderer  = mem::ClaimBlock<gpu::vuk::Renderer>(wndHandle, *ptrResources, ptrScene->renderData);
     net::Network network;
 
     while(app::glo::isAppRunning)
     {
         app::glo::eventBuffer.Poll();
 
-        scene.Update();
-        renderer.Update(scene.renderData, resources);
+        ptrScene->Update();
+        ptrRenderer->Update(ptrScene->renderData, *ptrResources);
         
         app::UpdateTime();
         app::PrintFps();

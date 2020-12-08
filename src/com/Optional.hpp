@@ -27,6 +27,7 @@ TEMPLATE struct Optional
     Optional(auto const&... args);
     explicit operator bool() const { return hasData; }
     T& Data() { return unionData.data; }
+    auto& operator*() { return unionData.data; }
 };
 
 ///////////////////////////////////////////////////////////

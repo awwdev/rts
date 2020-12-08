@@ -26,6 +26,7 @@ constexpr BlockArrayInfo BLOCK_ARRAY_INFOS []
     { .blockSize =    10'000, .count = 5    },
     { .blockSize =   100'000, .count = 5    },
     { .blockSize = 1'000'000, .count = 5    },
+    { .blockSize = 5'000'000, .count = 5    },
 };
 
 ///////////////////////////////////////////////////////////
