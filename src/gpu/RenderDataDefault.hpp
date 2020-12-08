@@ -11,34 +11,31 @@ namespace rts::gpu {
 
 ///////////////////////////////////////////////////////////
 
-struct PushConstantsDefault
+struct RenderData_Default
 {
-    i32 windowWidth;
-    i32 windowHeight;
-};
+    struct Push_Meta
+    {
+        i32 windowWidth;
+        i32 windowHeight;
+    };
 
-///////////////////////////////////////////////////////////
+    struct Uniform_QuadData
+    {
+        Recti rect;
+        Col4f col;
+        u32   texId;
+    };
 
-struct UniformDefault
-{
-    Recti rect;
-    Col4f col;
-    u32   texId;
-};
+    com::POD_Array<Uniform_QuadData, ecs::ENTITY_COUNT_MAX> quadData;
 
-///////////////////////////////////////////////////////////
-
-struct RenderDataDefault
-{
-    com::POD_Array<UniformDefault, ecs::ENTITY_COUNT_MAX> ubo;
     void Clear();
 };
 
 ///////////////////////////////////////////////////////////
 
-void RenderDataDefault::Clear()
+void RenderData_Default::Clear()
 {
-    ubo.count = 0;
+    quadData.count = 0;
 }
 
 ///////////////////////////////////////////////////////////

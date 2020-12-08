@@ -38,7 +38,8 @@ struct Image
         VkFormat, 
         VkImageUsageFlags, 
         VkImageViewType,
-        u32, u32, u32
+        u32, u32, u32,
+        bool transitionForStoring = false
     );
 
     void Destroy();
@@ -59,7 +60,8 @@ VkCommandPool cmdPool,
 VkFormat format, 
 VkImageUsageFlags usage, 
 VkImageViewType viewType,
-u32 pWidth, u32 pHeight, u32 pLayerCount)
+u32 pWidth, u32 pHeight, u32 pLayerCount,
+bool transitionForStoring)
 {
     layout = VK_IMAGE_LAYOUT_UNDEFINED;
     aspect = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -108,6 +110,15 @@ u32 pWidth, u32 pHeight, u32 pLayerCount)
         }
     };
     VkCheck(vkCreateImageView(g_devicePtr, &viewInfo, GetVkAlloc(), &view));
+
+    if (transitionForStoring)
+    {
+        Transition(
+        cmdPool, 
+        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
+        0, VK_ACCESS_TRANSFER_WRITE_BIT,
+        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT);
+    }
 }
 
 ///////////////////////////////////////////////////////////
@@ -122,15 +133,17 @@ void Image::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void Image::Store(VkCommandPool cmdPool, void const* data, u32 size, u32 singleTextureSize)
+void Image::Store(VkCommandPool cmdPool, void const* data, u32 singleTextureSize, u32 count)
 {
+    auto totalSize = count * singleTextureSize;
+
     Buffer tmpBuffer;
     tmpBuffer.Create(
-        VK_BUFFER_USAGE_TRANSFER_SRC_BIT, size, 
+        VK_BUFFER_USAGE_TRANSFER_SRC_BIT, totalSize, 
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
     );
     tmpBuffer.Map();
-    tmpBuffer.Store(data, size);
+    tmpBuffer.Store(data, totalSize);
 
     for(u32 layerIdx = 0; layerIdx < layerCount; ++layerIdx)
     {

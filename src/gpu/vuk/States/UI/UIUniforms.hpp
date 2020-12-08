@@ -33,6 +33,7 @@ struct UIUniforms
     PushConstants<PushConstantsUI> pushConstants;
     VkSampler textureArraySampler; 
     Image textureArray;
+    //StorageBuffer<, ecs::ENTITY_COUNT_MAX> ubo;
 
     void Create(VkCommandPool, res::Resources&);
     void Destroy();
@@ -45,7 +46,7 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 {
     //push constants
     pushConstants.rangeInfo.offset = 0;
-    pushConstants.rangeInfo.size = pushConstants.size;
+    pushConstants.rangeInfo.size = pushConstants.SIZE;
     pushConstants.rangeInfo.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
     //font texture

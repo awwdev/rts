@@ -13,7 +13,7 @@ struct PushConstants
 {
     T data;
     VkPushConstantRange rangeInfo;
-    static constexpr auto size = sizeof(T);
+    static constexpr auto SIZE = sizeof(T);
 };
 
 ///////////////////////////////////////////////////////////

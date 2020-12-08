@@ -12,9 +12,9 @@ namespace rts::gpu {
 
 struct RenderData 
 {
-    RenderDataDefault renderDataDefault;
-    RenderDataPost    renderDataPost;
-    RenderDataUI      renderDataUI;
+    RenderData_Default renderDataDefault;
+    RenderDataPost     renderDataPost;
+    RenderDataUI       renderDataUI;
 
     void Clear();
 };

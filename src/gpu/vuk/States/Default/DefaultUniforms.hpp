@@ -18,10 +18,10 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-enum class DefaultUniformEnum : u32
+enum class DefaultUniformsEnum : u32
 {
-    TextureArray,
-    UBO, 
+    SpriteArray,
+    QuadData, 
     ENUM_END
 };
 
@@ -29,37 +29,38 @@ enum class DefaultUniformEnum : u32
 
 struct DefaultUniforms
 {
-    UniformInfo infos [enum_cast(DefaultUniformEnum::ENUM_END)];
+    using RD = RenderData_Default;
+
+    UniformInfo infos [enum_cast(DefaultUniformsEnum::ENUM_END)];
     Descriptors descriptors;
 
-    PushConstants<PushConstantsDefault> pushConstants;
-    VkSampler textureArraySampler; 
-    Image textureArray;
-    StorageBuffer<UniformDefault, ecs::ENTITY_COUNT_MAX> ubo;
+    PushConstants<RD::Push_Meta> metaData;
+    VkSampler spriteArraySampler; 
+    Image spriteArray;
+    StorageBuffer<RD::Uniform_QuadData, ecs::ENTITY_COUNT_MAX> quadData;
 
     void Create(VkCommandPool, res::Resources&);
     void Destroy();
-    void Update(RenderDataDefault&);
+    void Update(RenderData_Default&);
 };
 
 ///////////////////////////////////////////////////////////
 
 void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 {
-    //push constants
-    pushConstants.rangeInfo.offset = 0;
-    pushConstants.rangeInfo.size = pushConstants.size;
-    pushConstants.rangeInfo.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+    //? push
+    metaData.rangeInfo.offset = 0;
+    metaData.rangeInfo.size = metaData.SIZE;
+    metaData.rangeInfo.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
-    //uniform
-    ubo.Create();
-
-    infos[enum_cast(DefaultUniformEnum::UBO)] =
+    //? uniform
+    quadData.Create();
+    infos[enum_cast(DefaultUniformsEnum::QuadData)] =
     {
         .type = UniformInfo::Buffer,
         .binding 
         {
-            .binding            = enum_cast(DefaultUniformEnum::UBO),
+            .binding            = enum_cast(DefaultUniformsEnum::QuadData),
             .descriptorType     = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
             .descriptorCount    = 1,
             .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
@@ -67,38 +68,31 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
         },
         .bufferInfo
         {
-            .buffer = ubo.activeBuffer->buffer,
+            .buffer = quadData.activeBuffer->buffer,
             .offset = 0,
-            .range = VK_WHOLE_SIZE,
+            .range  = VK_WHOLE_SIZE,
         }
     };
 
-    //textures
-    u32 layerCount = resources.textures.textureArray.count;
-    textureArray.Create(cmdPool, VK_FORMAT_R8G8B8A8_SRGB, 
+    //? texture array
+    u32 layerCount = resources.textures.sprites.count;
+    spriteArray.Create(cmdPool, VK_FORMAT_R8G8B8A8_SRGB, 
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
         VK_IMAGE_VIEW_TYPE_2D_ARRAY,
-        32, 32, layerCount); 
-    textureArray.Transition(
-        cmdPool, 
-        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
-        0, VK_ACCESS_TRANSFER_WRITE_BIT,
-        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT
-    );
-    CreateSamplerPixelPerfect(textureArraySampler);
+        32, 32, layerCount, true); 
+    CreateSamplerPixelPerfect(spriteArraySampler);
 
-    //store
-    auto& textureArrayHost = resources.textures.textureArray;
-    auto& textureSize  = textureArrayHost[0].SIZE;
-    textureArray.Store(cmdPool, textureArrayHost.data, textureSize * textureArrayHost.count, textureSize); 
-    textureArray.Bake(cmdPool);
+    auto& textureArrayHost = resources.textures.sprites;
+    auto& textureSize = textureArrayHost[0].SIZE;
+    spriteArray.Store(cmdPool, textureArrayHost.data, textureSize, textureArrayHost.count); 
+    spriteArray.Bake(cmdPool);
 
-    infos[enum_cast(DefaultUniformEnum::TextureArray)] =
+    infos[enum_cast(DefaultUniformsEnum::SpriteArray)] =
     {
         .type = UniformInfo::Image,
         .binding 
         {
-            .binding            = enum_cast(DefaultUniformEnum::TextureArray),
+            .binding            = enum_cast(DefaultUniformsEnum::SpriteArray),
             .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
             .descriptorCount    = 1,
             .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
@@ -106,26 +100,25 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
         },
         .imageInfo 
         {
-            .sampler        = textureArraySampler,
-            .imageView      = textureArray.view,
-            .imageLayout    = textureArray.layout,
+            .sampler        = spriteArraySampler,
+            .imageView      = spriteArray.view,
+            .imageLayout    = spriteArray.layout,
         }
     };
 
-    //write
+    //? write
     descriptors.Create(infos);
 }
 
 ///////////////////////////////////////////////////////////
 
-void DefaultUniforms::Update(RenderDataDefault& rd)
+void DefaultUniforms::Update(RenderData_Default& rd)
 {
-    pushConstants.data.windowWidth = app::glo::windowWidth;
-    pushConstants.data.windowHeight = app::glo::windowHeight;
+    metaData.data.windowWidth  = app::glo::windowWidth;
+    metaData.data.windowHeight = app::glo::windowHeight;
 
-    ubo.count = 0;
-    ubo.Append(rd.ubo.data, rd.ubo.count);
-    //!does not really store data
+    quadData.count = 0;
+    quadData.Append(rd.quadData.data, rd.quadData.count);
 }
 
 ///////////////////////////////////////////////////////////
@@ -133,9 +126,9 @@ void DefaultUniforms::Update(RenderDataDefault& rd)
 void DefaultUniforms::Destroy()
 {
     descriptors.Destroy();
-    textureArray.Destroy();
-    vkDestroySampler(g_devicePtr, textureArraySampler, GetVkAlloc());
-    ubo.Destroy();
+    spriteArray.Destroy();
+    vkDestroySampler(g_devicePtr, spriteArraySampler, GetVkAlloc());
+    quadData.Destroy();
 }
 
 ///////////////////////////////////////////////////////////

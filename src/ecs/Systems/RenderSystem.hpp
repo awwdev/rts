@@ -73,7 +73,7 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, a
             auto& t = renderComponent.texIndex;
 
             constexpr Col4f COLOR = { 1, 1, 1, 1 };
-            renderData.renderDataDefault.ubo.Append(rect, COLOR, t);
+            renderData.renderDataDefault.quadData.Append(rect, COLOR, t);
         }
     }
 }

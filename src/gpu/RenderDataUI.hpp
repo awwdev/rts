@@ -9,12 +9,15 @@ namespace rts::gpu {
 
 ///////////////////////////////////////////////////////////
 
-constexpr auto VERTEX_COUNT_MAX_UI = 1000;
+constexpr auto UI_QUAD_COUNT_MAX = 1000;
 
 ///////////////////////////////////////////////////////////
 
-struct VertexUI
+struct UniformUI
 {
+    Recti rect;
+    Col4f col;
+    u32   texId;
 };
 
 ///////////////////////////////////////////////////////////
@@ -29,7 +32,7 @@ struct PushConstantsUI
 
 struct RenderDataUI
 {
-    com::POD_Array<VertexUI, VERTEX_COUNT_MAX_UI> vertices;
+    com::POD_Array<UniformUI, UI_QUAD_COUNT_MAX> vertices;
     void Clear();
 };
 
