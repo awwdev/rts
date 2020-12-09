@@ -3,6 +3,7 @@
 #include "gui/GUI_Base.hpp"
 #include "com/Rect.hpp"
 #include "gpu/RenderDataUI.hpp"
+#include "com/String.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -15,6 +16,7 @@ struct Widget_Window
     static constexpr i32 BAR_H = 20;
     Recti rect;
     Recti limits { 32, 32, i32min, i32max };
+    com::String<100> title { "Window" };
 
     void Render(gpu::RenderDataUI&);
 };

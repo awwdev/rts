@@ -18,6 +18,7 @@ g++ ^
 -Wno-unused-function ^
 -Wno-unused-variable ^
 -Wno-unused-but-set-variable ^
+-Wno-unused-local-typedefs ^
 -I %src_hpp% ^
 -I %ext_hpp% ^
 -L %ext_lib% ^

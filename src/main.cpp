@@ -9,6 +9,8 @@
 #include "app/Global.hpp"
 #include "app/Time.hpp"
 
+#include "com/String.hpp"
+
 ///////////////////////////////////////////////////////////
 
 using namespace rts;
@@ -45,6 +47,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     wnd::Console console { 600, 400, 64, 400 + 64 };
     mem::Allocate();
     mem::PrintAlloc();
+
+    //test
+    com::String<100> str { "String" };
+    com::String<100> str2;
+    str.Append("hello");
+    str = "test";
+    str.Append(123);
+    str2 = str;
+    str2.Append(str);
+    com::Print(str2);
 
     wnd::Window window { hInst, "mini window", 600, 400, 64, 64 };
     std::thread appThread { AppMain, gpu::vuk::WindowHandle { window.hInstance, window.hWnd } };
