@@ -5,6 +5,7 @@
 #include "app/Lockstep.hpp"
 #include "com/Print.hpp"
 #include "com/Utils.hpp"
+#include "mem/Memory.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -12,13 +13,28 @@ namespace rts::ecs {
 
 ///////////////////////////////////////////////////////////
 
-inline com::POD_Array<ID, ecs::ENTITY_COUNT_MAX> depthSorted [1024];
-inline double time = 0;
+struct RenderSystem
+{
+    struct DepthSorted { com::POD_Array<ID, ecs::ENTITY_COUNT_MAX> depthSorted [1024]; };
+    mem::BlockPtr<DepthSorted> ptrDepthSorted;
+    double time = 0;
+
+    void Update(ComponentArrays&, gpu::RenderData&, app::Lockstep&);
+    RenderSystem();
+};
 
 ///////////////////////////////////////////////////////////
 
-static void RenderSystem(ComponentArrays& arrays, gpu::RenderData& renderData, app::Lockstep& lockstep)
+RenderSystem::RenderSystem()
 {
+    ptrDepthSorted = mem::ClaimBlock<DepthSorted>();
+}
+
+///////////////////////////////////////////////////////////
+
+void RenderSystem::Update(ComponentArrays& arrays, gpu::RenderData& renderData, app::Lockstep& lockstep)
+{
+    auto& depthSorted = ptrDepthSorted->depthSorted;
     auto& transformComponents = arrays.transformComponents;
     auto& renderComponents = arrays.renderComponents;
 

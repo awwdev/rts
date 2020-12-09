@@ -19,6 +19,8 @@ struct ECS
     com::Bitset<ENTITY_COUNT_MAX> entities;
     ComponentArrays arrays;
 
+    RenderSystem renderSystem;
+
     auto AddEntity();
     void RemoveEntity();
     void Step();
@@ -53,7 +55,7 @@ void ECS::Step()
 
 void ECS::Render(gpu::RenderData& renderData, app::Lockstep& lockstep)
 {
-    RenderSystem(arrays, renderData, lockstep);
+    renderSystem.Update(arrays, renderData, lockstep);
 }
 
 ///////////////////////////////////////////////////////////

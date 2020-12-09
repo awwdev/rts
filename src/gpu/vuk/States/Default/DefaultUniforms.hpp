@@ -1,13 +1,11 @@
 #pragma once
 
-#include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Wrappers/PushConstants.hpp"
 #include "gpu/vuk/Wrappers/BufferExt.hpp"
 #include "gpu/vuk/Wrappers/Sampler.hpp"
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
 
-#include "ecs/EntityID.hpp"
 #include "app/Global.hpp"
 #include "res/Resources.hpp"
 #include "gpu/RenderDataDefault.hpp"
@@ -20,8 +18,8 @@ namespace rts::gpu::vuk {
 
 enum class DefaultUniformsEnum : u32
 {
-    SpriteArray,
     QuadData, 
+    SpriteArray,
     ENUM_END
 };
 
@@ -29,30 +27,25 @@ enum class DefaultUniformsEnum : u32
 
 struct DefaultUniforms
 {
-    using RD = RenderData_Default;
+    using RD = RenderDataDefault;
 
     UniformInfo infos [enum_cast(DefaultUniformsEnum::ENUM_END)];
     Descriptors descriptors;
 
-    PushConstants<RD::Push_Meta> metaData;
+    PushConstants<RD::PushMeta, VK_SHADER_STAGE_VERTEX_BIT> metaData;
     VkSampler spriteArraySampler; 
     Image spriteArray;
-    StorageBuffer<RD::Uniform_QuadData, ecs::ENTITY_COUNT_MAX> quadData;
+    StorageBuffer<RD::UniformQuadData, ecs::ENTITY_COUNT_MAX> quadData;
 
     void Create(VkCommandPool, res::Resources&);
     void Destroy();
-    void Update(RenderData_Default&);
+    void Update(RenderDataDefault&);
 };
 
 ///////////////////////////////////////////////////////////
 
 void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 {
-    //? push
-    metaData.rangeInfo.offset = 0;
-    metaData.rangeInfo.size = metaData.SIZE;
-    metaData.rangeInfo.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-
     //? uniform
     quadData.Create();
     infos[enum_cast(DefaultUniformsEnum::QuadData)] =
@@ -80,12 +73,12 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
         VK_IMAGE_VIEW_TYPE_2D_ARRAY,
         32, 32, layerCount, true); 
-    CreateSamplerPixelPerfect(spriteArraySampler);
 
     auto& textureArrayHost = resources.textures.sprites;
     auto& textureSize = textureArrayHost[0].SIZE;
     spriteArray.Store(cmdPool, textureArrayHost.data, textureSize, textureArrayHost.count); 
     spriteArray.Bake(cmdPool);
+    CreateSamplerPixelPerfect(spriteArraySampler);
 
     infos[enum_cast(DefaultUniformsEnum::SpriteArray)] =
     {
@@ -112,7 +105,7 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
 ///////////////////////////////////////////////////////////
 
-void DefaultUniforms::Update(RenderData_Default& rd)
+void DefaultUniforms::Update(RenderDataDefault& rd)
 {
     metaData.data.windowWidth  = app::glo::windowWidth;
     metaData.data.windowHeight = app::glo::windowHeight;

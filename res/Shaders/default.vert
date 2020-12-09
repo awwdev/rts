@@ -28,7 +28,7 @@ struct Uniform
 
 ///////////////////////////////////////////////////////////  
 
-layout(std430, binding = 1) buffer readonly SBO
+layout(std430, binding = 0) buffer readonly SBO
 {
     Uniform array [];
 }

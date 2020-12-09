@@ -1,7 +1,7 @@
 #pragma once
 
-#include "com/Vec.hpp"
 #include "com/POD_Array.hpp"
+#include "com/Rect.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -9,30 +9,23 @@ namespace rts::gpu {
 
 ///////////////////////////////////////////////////////////
 
-constexpr auto UI_QUAD_COUNT_MAX = 1000;
-
-///////////////////////////////////////////////////////////
-
-struct UniformUI
-{
-    Recti rect;
-    Col4f col;
-    u32   texId;
-};
-
-///////////////////////////////////////////////////////////
-
-struct PushConstantsUI
-{
-    i32 windowWidth;
-    i32 windowHeight;
-};
-
-///////////////////////////////////////////////////////////
-
 struct RenderDataUI
 {
-    com::POD_Array<UniformUI, UI_QUAD_COUNT_MAX> vertices;
+    struct PushMeta
+    {
+        i32 windowHeight;
+        i32 windowWidth;
+    };
+
+    struct UniformQuadData
+    {
+        Recti rect;
+        Col4f col;
+        u32   texId;
+    };
+
+    static constexpr auto QUAD_COUNT_MAX = 1000;
+    com::POD_Array<UniformQuadData, QUAD_COUNT_MAX> quadData;
     void Clear();
 };
 
@@ -40,7 +33,7 @@ struct RenderDataUI
 
 void RenderDataUI::Clear()
 {
-    vertices.count = 0;
+    quadData.count = 0;
 }
 
 ///////////////////////////////////////////////////////////

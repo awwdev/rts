@@ -21,12 +21,13 @@ struct BlockArrayInfo
 
 constexpr BlockArrayInfo BLOCK_ARRAY_INFOS [] 
 {
-    { .blockSize =       100, .count = 1000 },
-    { .blockSize =     1'000, .count = 1000 },
-    { .blockSize =    10'000, .count = 5    },
-    { .blockSize =   100'000, .count = 5    },
-    { .blockSize = 1'000'000, .count = 5    },
-    { .blockSize = 5'000'000, .count = 5    },
+    { .blockSize =        100, .count = 1000 },
+    { .blockSize =      1'000, .count = 1000 },
+    { .blockSize =     10'000, .count = 5    },
+    { .blockSize =    100'000, .count = 5    },
+    { .blockSize =  1'000'000, .count = 5    },
+    { .blockSize =  5'000'000, .count = 5    },
+    { .blockSize = 25'000'000, .count = 1    },
 };
 
 ///////////////////////////////////////////////////////////

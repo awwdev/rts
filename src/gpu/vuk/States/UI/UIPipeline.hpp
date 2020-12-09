@@ -24,8 +24,8 @@ RenderPass& renderPass)
     pipelineInfo.depthStencil  = DepthStencil();
     pipelineInfo.blendState    = BlendStateInfo();
     pipelineInfo.layoutInfo    = PipelineLayout(
-        nullptr, 0, //!
-        &uniforms.pushConstants.rangeInfo, 1
+        &uniforms.descriptors.layout, 1,
+        &uniforms.metaData.rangeInfo, 1
     );
 
     pipeline.Create(shader, renderPass, pipelineInfo);

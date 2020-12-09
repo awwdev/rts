@@ -1,9 +1,9 @@
 #pragma once
 
-#include "com/Vec.hpp"
 #include "com/POD_Array.hpp"
-#include "ecs/EntityID.hpp"
 #include "com/Rect.hpp"
+
+#include "ecs/EntityID.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -11,29 +11,28 @@ namespace rts::gpu {
 
 ///////////////////////////////////////////////////////////
 
-struct RenderData_Default
+struct RenderDataDefault
 {
-    struct Push_Meta
+    struct PushMeta
     {
         i32 windowWidth;
         i32 windowHeight;
     };
 
-    struct Uniform_QuadData
+    struct UniformQuadData
     {
         Recti rect;
         Col4f col;
         u32   texId;
     };
 
-    com::POD_Array<Uniform_QuadData, ecs::ENTITY_COUNT_MAX> quadData;
-
+    com::POD_Array<UniformQuadData, ecs::ENTITY_COUNT_MAX> quadData;
     void Clear();
 };
 
 ///////////////////////////////////////////////////////////
 
-void RenderData_Default::Clear()
+void RenderDataDefault::Clear()
 {
     quadData.count = 0;
 }

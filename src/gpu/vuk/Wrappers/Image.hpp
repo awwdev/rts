@@ -18,7 +18,7 @@ constexpr VkComponentMapping IMAGE_COMPONENT_MAPPING_DEFAULT =
     .a = VK_COMPONENT_SWIZZLE_A
 };
 
-static VkBufferImageCopy g_imageCopyInfos [2000];
+static VkBufferImageCopy g_imageCopyInfos [250];
 
 ///////////////////////////////////////////////////////////
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Wrappers/PushConstants.hpp"
 #include "gpu/vuk/Wrappers/BufferExt.hpp"
 #include "gpu/vuk/Wrappers/Sampler.hpp"
@@ -17,9 +16,10 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-enum class UIUniformEnum : u32
+enum class UIUniformsEnum : u32
 {
-    TextureArray,
+    QuadData,
+    FontArray,
     ENUM_END
 };
 
@@ -27,13 +27,15 @@ enum class UIUniformEnum : u32
 
 struct UIUniforms
 {
-    UniformInfo infos [enum_cast(UIUniformEnum::ENUM_END)];
+    using RD = RenderDataUI;
+
+    UniformInfo infos [enum_cast(UIUniformsEnum::ENUM_END)];
     Descriptors descriptors;
 
-    PushConstants<PushConstantsUI> pushConstants;
-    VkSampler textureArraySampler; 
-    Image textureArray;
-    //StorageBuffer<, ecs::ENTITY_COUNT_MAX> ubo;
+    PushConstants<RD::PushMeta, VK_SHADER_STAGE_VERTEX_BIT> metaData;
+    VkSampler fontArraySampler; 
+    Image fontArray;
+    StorageBuffer<RD::UniformQuadData, RD::QUAD_COUNT_MAX> quadData;
 
     void Create(VkCommandPool, res::Resources&);
     void Destroy();
@@ -44,31 +46,44 @@ struct UIUniforms
 
 void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 {
-    //push constants
-    pushConstants.rangeInfo.offset = 0;
-    pushConstants.rangeInfo.size = pushConstants.SIZE;
-    pushConstants.rangeInfo.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+    //? uniform
+    quadData.Create();
+    infos[enum_cast(DefaultUniformsEnum::QuadData)] =
+    {
+        .type = UniformInfo::Buffer,
+        .binding 
+        {
+            .binding            = enum_cast(DefaultUniformsEnum::QuadData),
+            .descriptorType     = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+            .descriptorCount    = 1,
+            .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
+            .pImmutableSamplers = nullptr,
+        },
+        .bufferInfo
+        {
+            .buffer = quadData.activeBuffer->buffer,
+            .offset = 0,
+            .range  = VK_WHOLE_SIZE,
+        }
+    };
 
-    //font texture
-    textureArray.Create(cmdPool, VK_FORMAT_R8G8B8A8_SRGB, 
+    //? font array
+    u32 layerCount = 1; //TODO
+    fontArray.Create(cmdPool, VK_FORMAT_R8_SRGB, //grey
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
         VK_IMAGE_VIEW_TYPE_2D_ARRAY,
-        32, 32, 1); 
-    textureArray.Transition(
-        cmdPool, 
-        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
-        0, VK_ACCESS_TRANSFER_WRITE_BIT,
-        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT
-    );
-    textureArray.Bake(cmdPool);
-    CreateSamplerPixelPerfect(textureArraySampler);
+        32, 32, layerCount, true); 
 
-    infos[enum_cast(UIUniformEnum::TextureArray)] =
+    //TODO store textures
+    fontArray.Bake(cmdPool);
+    CreateSamplerPixelPerfect(fontArraySampler);
+
+    infos[enum_cast(UIUniformsEnum::FontArray)] =
     {
         .type = UniformInfo::Image,
         .binding 
         {
-            .binding            = enum_cast(UIUniformEnum::TextureArray),
+            .binding            = enum_cast(UIUniformsEnum::FontArray),
             .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
             .descriptorCount    = 1,
             .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
@@ -76,13 +91,13 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
         },
         .imageInfo 
         {
-            .sampler        = textureArraySampler,
-            .imageView      = textureArray.view,
-            .imageLayout    = textureArray.layout,
+            .sampler        = fontArraySampler,
+            .imageView      = fontArray.view,
+            .imageLayout    = fontArray.layout,
         }
     };
 
-    //write
+    //? write
     descriptors.Create(infos);
 }
 
@@ -90,8 +105,11 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
 void UIUniforms::Update(RenderDataUI& rd)
 {
-    pushConstants.data.windowWidth = app::glo::windowWidth;
-    pushConstants.data.windowHeight = app::glo::windowHeight;
+    metaData.data.windowWidth = app::glo::windowWidth;
+    metaData.data.windowHeight = app::glo::windowHeight;
+
+    quadData.count = 0;
+    quadData.Append(rd.quadData.data, rd.quadData.count);
 }
 
 ///////////////////////////////////////////////////////////
@@ -99,8 +117,9 @@ void UIUniforms::Update(RenderDataUI& rd)
 void UIUniforms::Destroy()
 {
     descriptors.Destroy();
-    textureArray.Destroy();
-    vkDestroySampler(g_devicePtr, textureArraySampler, GetVkAlloc());
+    fontArray.Destroy();
+    vkDestroySampler(g_devicePtr, fontArraySampler, GetVkAlloc());
+    quadData.Destroy();
 }
 
 ///////////////////////////////////////////////////////////

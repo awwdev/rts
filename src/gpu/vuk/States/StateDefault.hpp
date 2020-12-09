@@ -24,7 +24,7 @@ struct StateDefault
 
     void Create(Context&, Commands&, res::Resources&);
     void Destroy();
-    void Update(RenderData_Default&);
+    void Update(RenderDataDefault&);
     void Record(VkCommandBuffer, uint32_t);
 };
 
@@ -50,7 +50,7 @@ void StateDefault::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void StateDefault::Update(RenderData_Default& rd)
+void StateDefault::Update(RenderDataDefault& rd)
 {
     uniforms.Update(rd);
 }
@@ -59,6 +59,7 @@ void StateDefault::Update(RenderData_Default& rd)
 
 void StateDefault::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
 {
+    //TODO move out, update once
     uniforms.metaData.data.windowWidth  = app::glo::windowWidth;
     uniforms.metaData.data.windowHeight = app::glo::windowHeight;
 

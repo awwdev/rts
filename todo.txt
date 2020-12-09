@@ -1,4 +1,4 @@
-move stuff to heap so exe is not bloated (might be debug info?)
+dynamic claim block so it can be used for eg vulkan
 
 
 string class
@@ -10,4 +10,4 @@ blur
 IsPointInsideRect
 
 
-- linuxx static linkage test
+- linux static linkage test

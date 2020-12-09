@@ -28,7 +28,7 @@ enum class PostUniformEnum : u32
 struct PostUniforms
 {
     UniformInfo infos [enum_cast(PostUniformEnum::ENUM_END)];
-    PushConstants<PushConstantsPost> pushConstants;
+    PushConstants<PushConstantsPost, VK_SHADER_STAGE_VERTEX_BIT> pushConstants;
     VkSampler sampler; 
     Descriptors descriptors;
 

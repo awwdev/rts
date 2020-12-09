@@ -13,7 +13,7 @@ layout(location = 0) out vec4 outCol;
 
 ///////////////////////////////////////////////////////////
 
-layout(binding = 0) uniform sampler2DArray textures;
+layout(binding = 1) uniform sampler2DArray textures;
 
 ///////////////////////////////////////////////////////////
 

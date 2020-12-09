@@ -8,12 +8,19 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-template<typename T>
+template<typename T, VkShaderStageFlags STAGE>
 struct PushConstants
 {
-    T data;
-    VkPushConstantRange rangeInfo;
     static constexpr auto SIZE = sizeof(T);
+
+    T data;
+    
+    VkPushConstantRange rangeInfo
+    {
+        .stageFlags = STAGE,
+        .offset = 0,
+        .size = SIZE,
+    };
 };
 
 ///////////////////////////////////////////////////////////
