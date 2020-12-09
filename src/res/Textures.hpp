@@ -12,17 +12,24 @@ namespace rts::res {
 
 ///////////////////////////////////////////////////////////
 
+template<auto WIDTH_T, auto HEIGHT_T, auto CHANNELS>
 struct Texture
 {
-    static constexpr auto SIZE = 32*32*4;
+    static constexpr auto WIDTH  = WIDTH_T;
+    static constexpr auto HEIGHT = HEIGHT_T;
+    static constexpr auto SIZE = WIDTH * HEIGHT * CHANNELS;
     char buffer [SIZE];
 };
+
+using RGBA_32x32 = Texture<32, 32, 4>;
+using GRAY_16x16 = Texture<16, 16, 1>;
 
 ///////////////////////////////////////////////////////////
 
 struct Textures
 {
-    com::POD_Array<Texture, 10> sprites;
+    com::POD_Array<RGBA_32x32,  10> sprites;
+    com::POD_Array<GRAY_16x16, 128> font;
     void Load();
 };
 
@@ -30,14 +37,24 @@ struct Textures
 
 void Textures::Load()
 {
+    auto LoadFn = [](std::filesystem::path const& path, char* buffer, size_t size)
+    {
+        std::ifstream file { path, std::ios::binary };
+        com::Assert(file.is_open(), "cannot open file");
+        file.read(buffer, size);
+    };
+
     for(auto& it : std::filesystem::directory_iterator("res/Textures/sprites/")) 
     {
-        com::Print("loading", it.path());
         auto& texture = sprites.Append();
-        std::ifstream file { it.path(), std::ios::binary };
-        com::Assert(file.is_open(), "cannot open file");
-        file.read(texture.buffer, texture.SIZE);
+        LoadFn(it.path(), texture.buffer, texture.SIZE);
     }    
+
+    for(auto& it : std::filesystem::directory_iterator("res/Textures/font/")) 
+    {
+        auto& texture = font.Append();
+        LoadFn(it.path(), texture.buffer, texture.SIZE);
+    }  
 }
 
 ///////////////////////////////////////////////////////////

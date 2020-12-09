@@ -68,15 +68,15 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
     };
 
     //? texture array
-    u32 layerCount = resources.textures.sprites.count;
-    spriteArray.Create(cmdPool, VK_FORMAT_R8G8B8A8_SRGB, 
+    auto& textureArray = resources.textures.sprites;
+    auto& texture = textureArray[0];
+
+    spriteArray.Create(cmdPool, VK_FORMAT_R8G8B8A8_SRGB,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
         VK_IMAGE_VIEW_TYPE_2D_ARRAY,
-        32, 32, layerCount, true); 
+        texture.WIDTH, texture.HEIGHT, textureArray.count, true); 
 
-    auto& textureArrayHost = resources.textures.sprites;
-    auto& textureSize = textureArrayHost[0].SIZE;
-    spriteArray.Store(cmdPool, textureArrayHost.data, textureSize, textureArrayHost.count); 
+    spriteArray.Store(cmdPool, textureArray.data, texture.SIZE, textureArray.count); 
     spriteArray.Bake(cmdPool);
     CreateSamplerPixelPerfect(spriteArraySampler);
 

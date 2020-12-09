@@ -20,6 +20,6 @@ layout(binding = 1) uniform sampler2DArray textures;
 void main() 
 {
     vec3 uv = vec3(inTex.x, inTex.y, inTexId);
-    vec4 col = texture(textures, uv);
-    outCol = col;
+    float alpha = texture(textures, uv).r;
+    outCol = vec4(inCol.r, inCol.g, inCol.b, inCol.a * alpha);
 }

@@ -20,9 +20,6 @@ struct Scene
     app::Lockstep lockstep;
     gui::GUI_Stats guiStats;
 
-    //test
-    //ecs::TransformComponent* transformComponent;
-
     Scene();
     void Update();
 };
@@ -31,14 +28,6 @@ struct Scene
 
 Scene::Scene()
 {
-    //test
-    //auto ID = ecs.AddEntity();
-    //ecs.arrays.Add<ecs::RenderComponent>(ID);
-    //transformComponent = &ecs.arrays.Add<ecs::TransformComponent>(ID);
-    //transformComponent->position  = { 32, 32 };
-    //transformComponent->positionTarget = transformComponent->position;
-    //transformComponent->size = { 32, 32 };
-
     for(auto i = 0; i < 4; ++i)
     {
         auto ID = ecs.AddEntity();
@@ -57,28 +46,43 @@ Scene::Scene()
 
 void Scene::Update()
 {
+    //? CLEAR
     renderData.Clear();
-    
-    //test
-    //FOR_ARRAY(app::glo::events, i)
-    {
-        //auto& event = app::events[i];
-        //if (event.eventEnum == app::EventEnum::MB_LEFT_DOWN)
-        //{
-           //transformComponent->positionTarget = { event.xpos, event.ypos };
-        //}
-    }
 
+    //? ECS
     if (lockstep.Update())
-    {
         ecs.Step();
-    }
     ecs.Render(renderData, lockstep);
-    guiStats.Update(renderData);
 
-    //UI
+    //? UI
+    guiStats.Render(renderData);
 }
 
 ///////////////////////////////////////////////////////////
 
 }//ns
+
+
+
+
+
+/*
+//ecs::TransformComponent* transformComponent;
+
+//auto ID = ecs.AddEntity();
+//ecs.arrays.Add<ecs::RenderComponent>(ID);
+//transformComponent = &ecs.arrays.Add<ecs::TransformComponent>(ID);
+//transformComponent->position  = { 32, 32 };
+//transformComponent->positionTarget = transformComponent->position;
+//transformComponent->size = { 32, 32 };
+
+//FOR_ARRAY(app::glo::events, i)
+{
+//auto& event = app::events[i];
+//if (event.eventEnum == app::EventEnum::MB_LEFT_DOWN)
+//{
+//transformComponent->positionTarget = { event.xpos, event.ypos };
+//}
+}
+
+*/

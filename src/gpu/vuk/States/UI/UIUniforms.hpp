@@ -68,13 +68,15 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
     };
 
     //? font array
-    u32 layerCount = 1; //TODO
-    fontArray.Create(cmdPool, VK_FORMAT_R8_SRGB, //grey
+    auto& textureArray = resources.textures.font;
+    auto& texture = textureArray[0];
+
+    fontArray.Create(cmdPool, VK_FORMAT_R8_SRGB,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
         VK_IMAGE_VIEW_TYPE_2D_ARRAY,
-        32, 32, layerCount, true); 
+        texture.WIDTH, texture.HEIGHT, textureArray.count, true); 
 
-    //TODO store textures
+    fontArray.Store(cmdPool, textureArray.data, texture.SIZE, textureArray.count); 
     fontArray.Bake(cmdPool);
     CreateSamplerPixelPerfect(fontArraySampler);
 

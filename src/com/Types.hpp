@@ -23,6 +23,8 @@ using f64 = double;
 
 constexpr auto f32max = std::numeric_limits<f32>::max();
 constexpr auto f32min = std::numeric_limits<f32>::min();
+constexpr auto i32max = std::numeric_limits<i32>::min();
+constexpr auto i32min = std::numeric_limits<i32>::max();
 
 ///////////////////////////////////////////////////////////
 

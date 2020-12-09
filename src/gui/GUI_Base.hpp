@@ -10,16 +10,15 @@ namespace rts::gui {
 
 ///////////////////////////////////////////////////////////
 
-constexpr u32 TEX_ID_OPAQUE = 0;
+constexpr u32 TEX_ID_OPAQUE = 95;
 
 ///////////////////////////////////////////////////////////
 
-inline void AddRect(gpu::RenderDataUI& rd, Rectf& rect)
+inline void AddRect(gpu::RenderDataUI& rd, Recti& rect)
 {
-    auto& p = rect.pos;
-    auto& s = rect.size;
-    auto  c = Col4f { 1, 1, 1, 0.5 };
-    auto  t = TEX_ID_OPAQUE;
+    auto col = Col4f { 1, 1, 1, 1 };
+    auto texId = TEX_ID_OPAQUE;
+    rd.quadData.Append(rect, col, texId);
 }
 
 ///////////////////////////////////////////////////////////
