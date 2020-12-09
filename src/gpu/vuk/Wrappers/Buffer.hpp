@@ -57,11 +57,6 @@ void Buffer::Destroy()
 
 void Buffer::Store(void const* data, size_t size, size_t offset)
 {
-    if (size == 0)
-    {
-        com::PrintWarning("memcpy size 0");
-        return;
-    }
     std::memcpy((char*)memPtr + offset, data, size);
 }
 

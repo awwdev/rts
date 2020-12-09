@@ -59,10 +59,6 @@ void StateDefault::Update(RenderDataDefault& rd)
 
 void StateDefault::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
 {
-    //TODO move out, update once
-    uniforms.metaData.data.windowWidth  = app::glo::windowWidth;
-    uniforms.metaData.data.windowHeight = app::glo::windowHeight;
-
     vkCmdBeginRenderPass    (cmdBuffer, &renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
     vkCmdPushConstants      (cmdBuffer, pipeline.layout, VK_SHADER_STAGE_VERTEX_BIT, 0, 

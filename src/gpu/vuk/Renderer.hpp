@@ -43,7 +43,7 @@ void Renderer::RecreateSwapchain(res::Resources& resources, RenderData& renderDa
     context.surface.UpdateSurfaceCapabilities(context.physical);
     context.swapchain.Create(context.device, context.surface);
     commands.Create(context.physical.queueIndex, context.swapchain);
-    states.Create(context, commands, resources); 
+    states.Create(context, commands, resources, renderData); 
 }
 
 ///////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ Renderer::Renderer(WindowHandle const& wndHandle, res::Resources& resources, Ren
 {
     context.Create(wndHandle);
     commands.Create(context.physical.queueIndex, context.swapchain);
-    states.Create(context, commands, resources); 
+    states.Create(context, commands, resources, renderData); 
     sync.Create(context.swapchain);
     
     PrintPhysicalAPI();

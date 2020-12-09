@@ -47,8 +47,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     mem::PrintAlloc();
 
     wnd::Window window { hInst, "mini window", 600, 400, 64, 64 };
-    std::jthread appThread { AppMain, gpu::vuk::WindowHandle { window.hInstance, window.hWnd } };
+    std::thread appThread { AppMain, gpu::vuk::WindowHandle { window.hInstance, window.hWnd } };
     window.BlockingPollEvents(); 
+    appThread.join();
 
     mem::Deallocate();
     return EXIT_SUCCESS;

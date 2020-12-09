@@ -49,6 +49,7 @@ void BlockPtr<T>::Free()
 {
     if (ptr == nullptr) return;
     ptr->~T(); 
+    ptr = nullptr;
     FreeBlock(blockIdx);
 }
 

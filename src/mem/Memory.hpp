@@ -57,8 +57,9 @@ static auto ClaimBlock(auto... args)
 
 ////////////////////////////////////////////////////////////
 
-static void FreeBlock(idx_t)
+static void FreeBlock(idx_t blockIdx)
 {
+    blocksUsed.Set(blockIdx, false);
     com::Print("FreeBlock");
 }
 
