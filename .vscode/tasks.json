@@ -52,7 +52,7 @@
         "type": "shell",
         "options": {
             "env": {
-                "res": "${workspaceFolder}\\res\\Textures",
+                "Textures": "${workspaceFolder}\\res\\Textures",
                 "magick": "I:\\programs\\ImageMagick"
             }
         },

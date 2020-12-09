@@ -30,7 +30,7 @@ struct Textures
 
 void Textures::Load()
 {
-    for(auto& it : std::filesystem::directory_iterator("res/Textures/rgba/")) 
+    for(auto& it : std::filesystem::directory_iterator("res/Textures/sprites/")) 
     {
         com::Print("loading", it.path());
         auto& texture = sprites.Append();

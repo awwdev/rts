@@ -1,5 +1,5 @@
 @echo off
-pushd %res%
-mkdir %res%\\rgba
-%magick%\\mogrify -set colorspace RGB -format rgba -path "rgba" *.png
+pushd %Textures%
+mkdir %Textures%\\sprites
+%magick%\\mogrify -set colorspace RGB -format rgba -path "sprites" *.png
 popd
