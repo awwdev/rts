@@ -13,4 +13,6 @@
 2020-12-04 post state (resolution scaling and potential post fx, offscreen), basic fixed step, interpolation, basic animation, color space
 2020-12-05 input thread (event buffer), responsive wnd, gui impl begin, swapchain resize fix with threading
 2020-12-06 vuk state UI, surface resize fix, basic ui (wnd, text, draggable, resize), decided for UBO only approach, 
-2020-12-08 mem claim block, moving huge object to heap, font, 
+2020-12-08 mem claim block, moving huge object to heap
+2020-12-09 string, ui state, render data, font texture
+2020-12-10 widget window, string add render data, fps stats

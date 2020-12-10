@@ -11,7 +11,7 @@ namespace rts::gui {
 
 struct GUI_Stats
 {
-    Widget_Window wndStats { 32, 32, 128, 64 };
+    Widget_Window wndStats { .rect { 32, 32, 128, 128 } };
 
     void Render(gpu::RenderData&);
 };

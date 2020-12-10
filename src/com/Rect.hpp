@@ -12,8 +12,23 @@ namespace rts {
 template<typename T>
 struct Rect
 {
-    Vec2<T> pos;
-    Vec2<T> size;
+    T x, y, w, h;
+
+    Rect() = default;
+
+    Rect(T pX, T pY, T pW, T pH)
+    : x { pX }
+    , y { pY }   
+    , w { pW }   
+    , h { pH }   
+    {}
+
+    Rect(Vec2<T> const& pos, Vec2<T> const& size)
+    : x { pos.x }
+    , y { pos.y }   
+    , w { size.x }   
+    , h { size.y }   
+    {}
 };
 
 ///////////////////////////////////////////////////////////

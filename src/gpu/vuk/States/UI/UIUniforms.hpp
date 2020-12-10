@@ -107,6 +107,7 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
 void UIUniforms::Update(RenderDataUI& rd)
 {
+    //TODO only update when actually changed (atomic)
     metaData.data.windowWidth = app::glo::windowWidth;
     metaData.data.windowHeight = app::glo::windowHeight;
 

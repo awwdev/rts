@@ -13,8 +13,8 @@ struct RenderDataUI
 {
     struct PushMeta
     {
-        i32 windowHeight;
         i32 windowWidth;
+        i32 windowHeight;
     };
 
     struct UniformQuadData

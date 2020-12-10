@@ -107,6 +107,7 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
 void DefaultUniforms::Update(RenderDataDefault& rd)
 {
+    //TODO only update when actually changed (atomic)
     metaData.data.windowWidth  = app::glo::windowWidth;
     metaData.data.windowHeight = app::glo::windowHeight;
 

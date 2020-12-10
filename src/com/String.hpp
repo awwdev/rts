@@ -16,9 +16,9 @@ namespace rts::com {
 
 ///////////////////////////////////////////////////////////
 
-constexpr idx_t StrLen(char const* ptr)
+constexpr i32 StrLen(char const* ptr)
 {
-    idx_t count = 0;
+    i32 count = 0;
     while(*ptr != '\0') 
     {
         count++;
@@ -32,8 +32,6 @@ constexpr idx_t StrLen(char const* ptr)
 TEMPLATE
 struct String
 {
-    using COM_STRING = void*;
-
     char data [N] {};
     idx_t length = 0;
     
@@ -43,6 +41,7 @@ struct String
     void operator=(auto);
 
 private:
+    using COM_STRING = void*;
     void AppendCString(chars_t);
     void AppendArithmetic(auto);
     void AppendComString(auto);

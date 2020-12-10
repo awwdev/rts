@@ -13,7 +13,7 @@ namespace rts::gui {
 
 struct Widget_Window 
 {
-    static constexpr i32 BAR_H = 20;
+    static constexpr i32 BAR_H = 32;
     Recti rect;
     Recti limits { 32, 32, i32min, i32max };
     com::String<100> title { "Window" };
@@ -25,12 +25,30 @@ struct Widget_Window
 
 void Widget_Window::Render(gpu::RenderDataUI& rd)
 {
-    AddRect(rd, rect);
-}
+    AddRect
+    (
+        rd, 
+        rect, 
+        TEX_ID_OPAQUE, 
+        { 0.f, 0.f, 0.f, 0.25 }
+    );
 
-//https://github.com/awwdev/rpg/blob/master/src/gui/Widgets/Widget_Window.hpp
-//https://github.com/awwdev/rpg/blob/master/src/gui/GUI_Base.hpp
-//https://github.com/awwdev/rpg/tree/master/src/gui/Editor
+    AddRect
+    (
+        rd, 
+        { rect.x, rect.y, rect.w, BAR_H },
+        TEX_ID_OPAQUE, 
+        { 0.1, 0.1, 0.1, 1.f }
+    );
+
+    AddText
+    (
+        rd, 
+        { rect.x, rect.y, rect.w, BAR_H },
+        title.data,
+        { 1, 1, 1, 1 }
+    );
+}
 
 ///////////////////////////////////////////////////////////
 
