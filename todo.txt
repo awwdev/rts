@@ -1,13 +1,6 @@
 dynamic claim block so it can be used for eg vulkan
-
-
-string class
-renderer onto heap (mem)
-text rendering
-renderpass dependency
-window 
+ 
 blur
 IsPointInsideRect
 
-
-- linux static linkage test
+linux static linkage test

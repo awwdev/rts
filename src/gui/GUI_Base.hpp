@@ -11,6 +11,7 @@ namespace rts::gui {
 
 ///////////////////////////////////////////////////////////
 
+//TODO too specialized, should be more according to editor font only
 constexpr u32 TEX_ID_OPAQUE = 0;
 constexpr i32 FONT_HEIGHT = 9;
 constexpr i32 FONT_WIDTH = 7;
@@ -18,44 +19,55 @@ constexpr i32 FONT_SPACING = 0;
 
 ///////////////////////////////////////////////////////////
 
-inline void AddRect(
-gpu::RenderDataUI& rd, 
-Recti const& rect, 
-u32 texId = TEX_ID_OPAQUE, 
-Col4f col = { 1, 1, 1, 1 })
+namespace Colors
 {
-    rd.quadData.Append(rect, col, texId);
+    constexpr Col4f AlmostWhite = { 0.95, 0.95, 0.95, 1 };
+    constexpr Col4f Orange      = { 255/255.f, 160/255.f, 80/255.f, 1.0 };
 }
 
 ///////////////////////////////////////////////////////////
 
-inline void AddText(
-gpu::RenderDataUI& rd, 
-i32 xpos, i32 ypos, 
-chars_t text,
-Col4f col = { 1, 1, 1, 1 })
+struct ColorText
 {
-    auto len = com::StrLen(text);
-    for(i32 i = 0; i < len; ++i)
+    com::String<100> str;
+    Col4f color = Colors::AlmostWhite;
+    i32 x = 0;
+    i32 y = 0;
+
+    void Center(Recti const& rect)
     {
-        Recti glyph { xpos + i * FONT_WIDTH + FONT_SPACING, ypos, FONT_WIDTH, FONT_HEIGHT };
-        u32 texId = text[i] - 31; //32 is space, 0 is opaque
-        AddRect(rd, glyph, texId, col);
+        x = rect.x + (rect.w / 2 - (FONT_WIDTH * str.length) / 2);
+        y = rect.y + (rect.h / 2 - (FONT_HEIGHT) / 2);
     }
+};
+
+///////////////////////////////////////////////////////////
+
+struct ColorRect
+{
+    Recti rect  = {};
+    Col4f color = Colors::AlmostWhite;
+    u32 texId   = TEX_ID_OPAQUE;
+    //pretty much the same as UniformQuadData
+};
+
+///////////////////////////////////////////////////////////
+
+static void AddRect(gpu::RenderDataUI& rd, ColorRect const& rect)
+{
+    rd.quadData.Append(rect.rect, rect.color, rect.texId);
 }
 
 ///////////////////////////////////////////////////////////
 
-inline void AddTextCentered(
-gpu::RenderDataUI& rd, 
-Recti rect, 
-chars_t text,
-Col4f col = { 1, 1, 1, 1 })
+static void AddText(gpu::RenderDataUI& rd, ColorText const& text)
 {
-    auto len = com::StrLen(text);
-    i32 xpos = rect.x + (rect.w / 2 - (FONT_WIDTH * len) / 2);
-    i32 ypos = rect.y + (rect.h / 2 - (FONT_HEIGHT) / 2);
-    AddText(rd, xpos, ypos, text, col);
+    FOR_STRING(text.str, i)
+    {
+        Recti glyph { text.x + (i32)i * FONT_WIDTH + FONT_SPACING, text.y, FONT_WIDTH, FONT_HEIGHT };
+        u32 texId = text.str[i] - 31; //32 is space, 0 is opaque
+        AddRect(rd, { glyph, text.color, texId });
+    }
 }
 
 ///////////////////////////////////////////////////////////

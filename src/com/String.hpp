@@ -13,6 +13,7 @@ namespace rts::com {
 ///////////////////////////////////////////////////////////
 
 #define TEMPLATE template<auto N>
+#define FOR_STRING(str, i) for(idx_t i = 0; i < str.length; ++i)
 
 ///////////////////////////////////////////////////////////
 
@@ -37,15 +38,34 @@ struct String
     
     String() = default;
     String(auto);
-    void Append(auto);
+    void Append(auto&&);
     void operator=(auto);
+    auto& operator[](idx_t);
+    auto& operator[](idx_t) const;
 
 private:
-    using COM_STRING = void*;
+    using COM_STRING = void*; //to identify this class when appending
     void AppendCString(chars_t);
     void AppendArithmetic(auto);
-    void AppendComString(auto);
 };
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE
+auto& String<N>::operator[](idx_t i)
+{
+    com::Assert(i < length, "string out of bounds");
+    return data[i];
+}
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE
+auto& String<N>::operator[](idx_t i) const
+{
+    com::Assert(i < length, "string out of bounds");
+    return data[i];
+}
 
 ///////////////////////////////////////////////////////////
 
@@ -67,9 +87,9 @@ void String<N>::operator=(auto any)
 ///////////////////////////////////////////////////////////
 
 TEMPLATE
-void String<N>::Append(auto any)
+void String<N>::Append(auto&& any)
 {
-    using T = decltype(any);
+    using T = std::decay_t<decltype(any)>;
 
     if constexpr(std::is_same_v<T, const char*>)
         AppendCString(any);
@@ -78,7 +98,7 @@ void String<N>::Append(auto any)
         AppendArithmetic(any);
 
     if constexpr (requires { typename decltype(any)::COM_STRING; })
-        AppendComString(any);
+        AppendCString(any.data);
 }
 
 ///////////////////////////////////////////////////////////
@@ -96,22 +116,14 @@ void String<N>::AppendCString(chars_t src)
 ///////////////////////////////////////////////////////////
 
 TEMPLATE
-void String<N>::AppendArithmetic(auto src)
+void String<N>::AppendArithmetic(auto arithmetic)
 {
     auto capacity = N - length - 1;
-    auto [end, res] = std::to_chars(data + length, data + capacity, src);
+    auto [end, res] = std::to_chars(data + length, data + capacity, arithmetic);
     com::Assert(res == std::errc(), "string conversion failed");
     auto delta = end - (data + length);
     length += delta;
     data[length] = '\0';
-}
-
-///////////////////////////////////////////////////////////
-
-TEMPLATE
-void String<N>::AppendComString(auto src)
-{
-    AppendCString(src.data);
 }
 
 ///////////////////////////////////////////////////////////

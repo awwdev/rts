@@ -15,4 +15,5 @@
 2020-12-06 vuk state UI, surface resize fix, basic ui (wnd, text, draggable, resize), decided for UBO only approach, 
 2020-12-08 mem claim block, moving huge object to heap
 2020-12-09 string, ui state, render data, font texture
-2020-12-10 widget window, string add render data, fps stats
+2020-12-10 widget window, string add render data
+2020-12-13 text centered, font, draggable window, stats

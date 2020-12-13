@@ -11,7 +11,11 @@ namespace rts::gui {
 
 struct GUI_Stats
 {
-    Widget_Window wndStats { .rect { 32, 32, 128, 128 } };
+    Widget_Window wndStats 
+    { 
+        .rect  { 32, 32, 128, 128 },
+        .title { "Stats", Colors::Orange }
+    };
 
     void Render(gpu::RenderData&);
 };
