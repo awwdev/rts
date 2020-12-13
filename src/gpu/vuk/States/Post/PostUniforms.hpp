@@ -41,7 +41,7 @@ struct PostUniforms
 
 void PostUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, Image& defaultOffscreen)
 {
-    CreateSamplerPixelPerfect(sampler);
+    CreateSamplerNearest(sampler);
 
     infos[enum_cast(PostUniformEnum::OffscreenSampler)] =
     {

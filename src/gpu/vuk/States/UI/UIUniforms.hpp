@@ -78,7 +78,7 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
     fontArray.Store(cmdPool, textureArray.data, texture.SIZE, textureArray.count); 
     fontArray.Bake(cmdPool);
-    CreateSamplerPixelPerfect(fontArraySampler);
+    CreateSamplerNearest(fontArraySampler);
 
     infos[enum_cast(UIUniformsEnum::FontArray)] =
     {

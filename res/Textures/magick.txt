@@ -1,0 +1,1 @@
+convert PATH/NAME.bmp -crop WxH -format GRAY PATH/%02d.GRAY

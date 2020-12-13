@@ -13,7 +13,7 @@ namespace rts::gui {
 
 struct Widget_Window 
 {
-    static constexpr i32 BAR_H = 32;
+    static constexpr i32 BAR_H = 24;
     Recti rect;
     Recti limits { 32, 32, i32min, i32max };
     com::String<100> title { "Window" };
@@ -41,7 +41,7 @@ void Widget_Window::Render(gpu::RenderDataUI& rd)
         { 0.1, 0.1, 0.1, 1.f }
     );
 
-    AddText
+    AddTextCentered
     (
         rd, 
         { rect.x, rect.y, rect.w, BAR_H },

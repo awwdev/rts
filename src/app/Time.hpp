@@ -32,7 +32,7 @@ inline void UpdateTime()
     if (secTimer >= 1)
     {
         app::glo::hasSecondPassed = true;
-        secTimer = 0;
+        secTimer -= 1;
         app::glo::fps = frames;
         frames = 0;
     }

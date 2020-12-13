@@ -78,7 +78,7 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
     spriteArray.Store(cmdPool, textureArray.data, texture.SIZE, textureArray.count); 
     spriteArray.Bake(cmdPool);
-    CreateSamplerPixelPerfect(spriteArraySampler);
+    CreateSamplerNearest(spriteArraySampler);
 
     infos[enum_cast(DefaultUniformsEnum::SpriteArray)] =
     {

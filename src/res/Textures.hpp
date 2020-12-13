@@ -23,13 +23,14 @@ struct Texture
 
 using RGBA_32x32 = Texture<32, 32, 4>;
 using GRAY_16x16 = Texture<16, 16, 1>;
+using GRAY_08x16 = Texture< 8, 16, 1>;
 
 ///////////////////////////////////////////////////////////
 
 struct Textures
 {
-    com::POD_Array<RGBA_32x32,  10> sprites;
-    com::POD_Array<GRAY_16x16, 128> font;
+    com::POD_Array<RGBA_32x32, 10> sprites;
+    com::POD_Array<Texture<7, 9, 1>, 128> font;
     void Load();
 };
 
