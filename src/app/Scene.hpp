@@ -28,7 +28,7 @@ struct Scene
 
 Scene::Scene()
 {
-    for(auto i = 0; i < 4; ++i)
+    for(auto i = 0; i < 100; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);

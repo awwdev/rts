@@ -26,7 +26,7 @@ TEMPLATE struct POD_Array
     auto& operator[](idx_t);
     auto& operator[](idx_t) const;
 
-    auto& Append(auto... args);
+    auto& Append(auto const&... args);
     auto& Pop();
     T* Contains(T const&);
 };
@@ -49,7 +49,7 @@ TEMPLATE auto& POD_Array<T, N>::operator[](idx_t i) const
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE auto& POD_Array<T, N>::Append(auto... args)
+TEMPLATE auto& POD_Array<T, N>::Append(auto const&... args)
 {
     com::Assert((count + 1) <= N, "array exhausted");
     data[count] = { args... };

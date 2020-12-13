@@ -17,7 +17,7 @@ struct PostVertices
     VkDeviceSize offsets = 0;
 
     static VkVertexInputBindingDescription   bindings   [1];
-    static VkVertexInputAttributeDescription attributes [2];
+    static VkVertexInputAttributeDescription attributes [3];
 
     void Create(VkCommandPool);
     void Destroy();
@@ -37,7 +37,7 @@ VkVertexInputBindingDescription PostVertices::bindings [1] =
 
 ///////////////////////////////////////////////////////////
 
-VkVertexInputAttributeDescription PostVertices::attributes [2] =
+VkVertexInputAttributeDescription PostVertices::attributes [3] =
 {
     {
         .location   = 0,
@@ -51,6 +51,12 @@ VkVertexInputAttributeDescription PostVertices::attributes [2] =
         .format     = VK_FORMAT_R32G32_SFLOAT,
         .offset     = offsetof(Vertex, tex),
     },
+    {
+        .location   = 2,
+        .binding    = 0, 
+        .format     = VK_FORMAT_R32_SINT,
+        .offset     = offsetof(Vertex, blur),
+    },
 };
 
 ///////////////////////////////////////////////////////////
@@ -58,18 +64,6 @@ VkVertexInputAttributeDescription PostVertices::attributes [2] =
 void PostVertices::Create(VkCommandPool pool)
 {
     vbo.Create();
-
-    //fullscreen triangle
-    f32 scale = 1; //resolution scale
-    auto uv0 = Vec2f { (0 << 1) & 2, 0 & 2 };
-    auto uv1 = Vec2f { (1 << 1) & 2, 1 & 2 };
-    auto uv2 = Vec2f { (2 << 1) & 2, 2 & 2 };
-    auto p0  = Vec2f { uv0.x * 2 * scale - 1, uv0.y * scale * 2 - 1 };
-    auto p1  = Vec2f { uv1.x * 2 * scale - 1, uv1.y * scale * 2 - 1 };
-    auto p2  = Vec2f { uv2.x * 2 * scale - 1, uv2.y * scale * 2 - 1 };
-    vbo.Append({ p0, uv0 });
-    vbo.Append({ p1, uv1 });
-    vbo.Append({ p2, uv2 });
 }
 
 ///////////////////////////////////////////////////////////
@@ -83,7 +77,8 @@ void PostVertices::Destroy()
 
 void PostVertices::Update(RenderDataPost& rd)
 {
-
+    vbo.count = 0;
+    vbo.Append(rd.vertices.data, rd.vertices.count);
 }
 
 ///////////////////////////////////////////////////////////

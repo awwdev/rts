@@ -45,7 +45,7 @@ void RenderSystem::Update(ComponentArrays& arrays, gpu::RenderData& renderData, 
         auto  entityID = renderComponents.GetEntity(denseID);
         auto& transformComponent = transformComponents.GetComponent(entityID);
 
-        Recti rect { transformComponent.position, transformComponent.size };
+        com::Recti rect { transformComponent.position, transformComponent.size };
         Col4f COLOR = { 1, 1, 1, 1 };
         auto texId = renderComponent.texIndex;
 
@@ -82,7 +82,7 @@ void RenderSystem::Update(ComponentArrays& arrays, gpu::RenderData& renderData, 
                 
             auto  p = transformComponent.InterpolatedPosition(time, lockstep.stepTimePrev);
             auto& s = transformComponent.size;
-            Recti rect { p, s };
+            com::Recti rect { p, s };
 
             auto& renderComponent = arrays.renderComponents.GetComponent(entityID);
             renderComponent.Animate();

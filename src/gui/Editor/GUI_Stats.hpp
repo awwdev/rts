@@ -13,7 +13,7 @@ struct GUI_Stats
 {
     Widget_Window wndStats 
     { 
-        .rect  { 32, 32, 128, 128 },
+        .rect  { 32, 32, 300, 300 },
         .title { "Stats", Colors::Orange }
     };
 
@@ -24,8 +24,7 @@ struct GUI_Stats
 
 void GUI_Stats::Render(gpu::RenderData& renderData)
 {
-    auto& renderDataUI = renderData.renderDataUI;
-    wndStats.Render(renderDataUI);
+    wndStats.Render(renderData);
 }
 
 ///////////////////////////////////////////////////////////
