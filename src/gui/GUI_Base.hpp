@@ -11,18 +11,33 @@ namespace rts::gui {
 
 ///////////////////////////////////////////////////////////
 
-//TODO too specialized, should be more according to editor font only
 constexpr u32 TEX_ID_OPAQUE = 0;
-constexpr i32 FONT_HEIGHT = 9;
-constexpr i32 FONT_WIDTH = 7;
-constexpr i32 FONT_SPACING = 0;
+constexpr u32 ASCII_OFFSET = 31;
+
+///////////////////////////////////////////////////////////
+
+struct Font
+{
+    i32 heigth;
+    i32 width;
+    i32 spacing;
+};
+
+///////////////////////////////////////////////////////////
+
+constexpr Font EDITOR_FONT
+{
+    .heigth  = 14,
+    .width   = 14,
+    .spacing = -4,
+};
 
 ///////////////////////////////////////////////////////////
 
 namespace Colors
 {
-    constexpr Col4f AlmostWhite = { 0.95, 0.95, 0.95, 1 };
-    constexpr Col4f Orange      = { 255/255.f, 160/255.f, 80/255.f, 1.0 };
+    constexpr Col4n AlmostWhite = { 0.95, 0.95, 0.95, 1 };
+    constexpr Col4n Orange      = { 255/255.f, 160/255.f, 80/255.f, 1.0 };
 }
 
 ///////////////////////////////////////////////////////////
@@ -30,14 +45,15 @@ namespace Colors
 struct Text
 {
     com::String<100> str;
-    Col4f color = Colors::AlmostWhite;
+    Col4n color = Colors::AlmostWhite;
+    Font font;
     i32 x = 0;
     i32 y = 0;
 
     void Center(com::Recti const& rect)
     {
-        x = rect.x + (rect.w / 2 - (FONT_WIDTH * str.length) / 2);
-        y = rect.y + (rect.h / 2 - (FONT_HEIGHT) / 2);
+        x = rect.x + rect.w / 2 - ((font.width + font.spacing) * str.length) / 2;
+        y = rect.y + rect.h / 2 - (font.heigth) / 2;
     }
 };
 
@@ -46,7 +62,7 @@ struct Text
 struct Rect
 {
     com::Recti rect  = {};
-    Col4f color = Colors::AlmostWhite;
+    Col4n color = Colors::AlmostWhite;
     u32 texId = TEX_ID_OPAQUE;
     //pretty much the same as UniformQuadData
 };
@@ -64,8 +80,8 @@ static void AddText(gpu::RenderDataUI& rd, Text const& text)
 {
     FOR_STRING(text.str, i)
     {
-        com::Recti glyph { text.x + (i32)i * FONT_WIDTH + FONT_SPACING, text.y, FONT_WIDTH, FONT_HEIGHT };
-        u32 texId = text.str[i] - 31; //32 is space, 0 is opaque
+        com::Recti glyph { text.x + (i32)i * (text.font.width + text.font.spacing), text.y, text.font.width, text.font.heigth };
+        u32 texId = text.str[i] - ASCII_OFFSET;
         AddRect(rd, { glyph, text.color, texId });
     }
 }
@@ -74,10 +90,10 @@ static void AddText(gpu::RenderDataUI& rd, Text const& text)
 
 static void AddRectBlur(gpu::RenderDataPost& rd, com::Recti const& rect)
 {
-    Vec2f uv0 { (f32)rect.x / app::glo::windowWidth, (f32)rect.y / app::glo::windowHeight };
-    Vec2f uv1 { (f32)rect.x / app::glo::windowWidth, (f32)(rect.y + rect.h) / app::glo::windowHeight };
+    Vec2f uv0 { (f32) rect.x / app::glo::windowWidth, (f32) rect.y / app::glo::windowHeight };
+    Vec2f uv1 { (f32) rect.x / app::glo::windowWidth, (f32)(rect.y + rect.h) / app::glo::windowHeight };
     Vec2f uv2 { (f32)(rect.x + rect.w) / app::glo::windowWidth, (f32)(rect.y + rect.h) / app::glo::windowHeight };
-    Vec2f uv3 { (f32)(rect.x + rect.w) / app::glo::windowWidth, (f32)rect.y / app::glo::windowHeight };
+    Vec2f uv3 { (f32)(rect.x + rect.w) / app::glo::windowWidth, (f32) rect.y / app::glo::windowHeight };
 
     Vec2f p0 { uv0.x * 2 - 1, uv0.y * 2 - 1 };
     Vec2f p1 { uv1.x * 2 - 1, uv1.y * 2 - 1 };

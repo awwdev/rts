@@ -9,7 +9,11 @@ namespace rts::com {
 
 ///////////////////////////////////////////////////////////
 
-template<typename T>
+#define TEMPLATE template<typename T>
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE
 struct Rect
 {
     T x, y, w, h;
@@ -29,7 +33,19 @@ struct Rect
     , w { size.x }   
     , h { size.y }   
     {}
+
+    bool IsPointInside(auto x, auto y);
 };
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE
+bool Rect<T>::IsPointInside(auto px, auto py)
+{
+    return 
+    px > x && px < x+w &&
+    py > y && py < y+h;
+}
 
 ///////////////////////////////////////////////////////////
 
@@ -37,5 +53,7 @@ using Rectf = Rect<f32>;
 using Recti = Rect<i32>;
 
 ///////////////////////////////////////////////////////////
+
+#undef TEMPLATE
 
 }//ns

@@ -55,6 +55,17 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         ///////////////////////////////////////////////////////////
 
+        case WM_MOUSEMOVE:
+        {
+            auto xPos = GET_X_LPARAM(lParam); 
+            auto yPos = GET_Y_LPARAM(lParam); 
+            app::glo::atomic_mouse_x.store(xPos, std::memory_order::relaxed);
+            app::glo::atomic_mouse_y.store(yPos, std::memory_order::relaxed);
+        }
+        break;
+
+        ///////////////////////////////////////////////////////////
+
         case WM_SIZE:
         app::glo::windowWidth  = LOWORD(lParam);
         app::glo::windowHeight = HIWORD(lParam);    

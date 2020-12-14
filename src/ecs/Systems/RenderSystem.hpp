@@ -46,7 +46,7 @@ void RenderSystem::Update(ComponentArrays& arrays, gpu::RenderData& renderData, 
         auto& transformComponent = transformComponents.GetComponent(entityID);
 
         com::Recti rect { transformComponent.position, transformComponent.size };
-        Col4f COLOR = { 1, 1, 1, 1 };
+        Col4n COLOR = { 1, 1, 1, 1 };
         auto texId = renderComponent.texIndex;
 
         renderData.renderDataDefault.ubo.Append(rect, COLOR, texId);
@@ -88,7 +88,7 @@ void RenderSystem::Update(ComponentArrays& arrays, gpu::RenderData& renderData, 
             renderComponent.Animate();
             auto& t = renderComponent.texIndex;
 
-            constexpr Col4f COLOR = { 1, 1, 1, 1 };
+            constexpr Col4n COLOR = { 1, 1, 1, 1 };
             renderData.renderDataDefault.quadData.Append(rect, COLOR, t);
         }
     }

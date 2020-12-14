@@ -20,7 +20,7 @@ struct RenderDataUI
     struct UniformQuadData
     {
         com::Recti rect;
-        Col4f col;
+        Col4n col;
         u32   texId;
     };
 

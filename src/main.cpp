@@ -26,6 +26,7 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 
     while(app::glo::isAppRunning)
     {
+        app::glo::UpdateMousePos();
         app::glo::eventBuffer.Poll();
 
         ptrScene->Update();
