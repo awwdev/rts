@@ -27,13 +27,22 @@ namespace glo
 
     inline std::atomic<i32> atomic_mouse_x;
     inline std::atomic<i32> atomic_mouse_y;
+    inline std::atomic<i32> atomic_mouse_state;
+
     inline i32 mouse_x;
     inline i32 mouse_y;
+    inline i32 mouse_state;
 
-    static void UpdateMousePos()
+    static void UpdateMouse()
     {
         mouse_x = atomic_mouse_x.load(std::memory_order_relaxed);
         mouse_y = atomic_mouse_y.load(std::memory_order_relaxed);
+        mouse_state = atomic_mouse_state.load(std::memory_order_relaxed);
+    }
+
+    static bool HasMouseSate(MouseState state)
+    {
+        return mouse_state & enum_cast(state);
     }
 }
 

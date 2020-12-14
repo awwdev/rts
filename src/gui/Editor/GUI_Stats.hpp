@@ -17,14 +17,14 @@ struct GUI_Stats
         .title { "Stats", Colors::Orange, EDITOR_FONT },
     };
 
-    void Render(gpu::RenderData&);
+    void Update(gpu::RenderData&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void GUI_Stats::Render(gpu::RenderData& renderData)
+void GUI_Stats::Update(gpu::RenderData& renderData)
 {
-    wndStats.Render(renderData);
+    wndStats.Update(renderData);
 }
 
 ///////////////////////////////////////////////////////////

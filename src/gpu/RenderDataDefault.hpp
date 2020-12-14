@@ -2,6 +2,7 @@
 
 #include "com/POD_Array.hpp"
 #include "com/Rect.hpp"
+#include "com/Color.hpp"
 
 #include "ecs/EntityID.hpp"
 

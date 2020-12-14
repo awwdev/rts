@@ -84,4 +84,13 @@ void EventBuffer::Append(Event const& ev)
 
 ///////////////////////////////////////////////////////////
 
+enum class MouseState : i32
+{
+    LeftButtonDown   = 1 << 0,
+    RightButtonDown  = 1 << 1,
+    MiddleButtonDown = 1 << 2,
+};
+
+///////////////////////////////////////////////////////////
+
 }//ns

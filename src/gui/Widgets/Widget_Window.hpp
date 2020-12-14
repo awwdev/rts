@@ -2,6 +2,7 @@
 
 #include "gui/GUI_Base.hpp"
 #include "com/Rect.hpp"
+#include "com/Color.hpp"
 #include "gpu/RenderData.hpp"
 #include "com/String.hpp"
 
@@ -25,12 +26,12 @@ struct Widget_Window
     com::Recti limits { BAR_H, BAR_H, i32min, i32max };
     Text title;
 
-    void Render(gpu::RenderData&);
+    void Update(gpu::RenderData&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void Widget_Window::Render(gpu::RenderData& rd)
+void Widget_Window::Update(gpu::RenderData& rd)
 {
     com::Recti wndBar  { rect.x, rect.y, rect.w, BAR_H };
     com::Recti btnSize { rect.x + rect.w - RESIZE_BTN, rect.y + rect.h - RESIZE_BTN, RESIZE_BTN, RESIZE_BTN };
@@ -40,6 +41,11 @@ void Widget_Window::Render(gpu::RenderData& rd)
     bool onBtnSize = btnSize.IsPointInside(app::glo::mouse_x, app::glo::mouse_y);
     bool onBtnMin  = btnMin.IsPointInside(app::glo::mouse_x, app::glo::mouse_y);
     bool onWndBar  = wndBar.IsPointInside(app::glo::mouse_x, app::glo::mouse_y) && !onBtnMin;
+
+    if (onWndBar && app::glo::HasMouseSate(app::MouseState::LeftButtonDown))
+    {
+        com::Print("dragging");
+    }
 
     AddRect(rd.renderDataUI, { rect,    WND_COL_BACK });
     AddRect(rd.renderDataUI, { wndBar,  onWndBar  ? WND_COL_BAR.Highlighted() : WND_COL_BAR });

@@ -3,6 +3,7 @@
 #include "gpu/RenderDataUI.hpp"
 #include "com/Rect.hpp"
 #include "com/Vec.hpp"
+#include "com/Color.hpp"
 #include "com/String.hpp"
 
 ///////////////////////////////////////////////////////////

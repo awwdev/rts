@@ -55,7 +55,7 @@ void Scene::Update()
     ecs.Render(renderData, lockstep);
 
     //? UI
-    guiStats.Render(renderData);
+    guiStats.Update(renderData);
 }
 
 ///////////////////////////////////////////////////////////

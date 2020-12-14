@@ -5,6 +5,10 @@
 #include "app/Time.hpp"
 #include "com/Print.hpp"
 
+
+#include "app/_EventBuffer.hpp"
+rts::app2::EventBuffer buf;
+
 ///////////////////////////////////////////////////////////
 
 namespace rts::wnd {
@@ -45,6 +49,14 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         event.eventEnum = app::EventEnum::MB_LEFT_DOWN;
         event.xpos = LOWORD(lParam);
         event.ypos = HIWORD(lParam);
+
+        app::glo::atomic_mouse_state |= enum_cast(app::MouseState::LeftButtonDown);
+        break;
+
+        ///////////////////////////////////////////////////////////
+
+        case WM_LBUTTONUP:
+        app::glo::atomic_mouse_state &= ~enum_cast(app::MouseState::LeftButtonDown);
         break;
 
         ///////////////////////////////////////////////////////////

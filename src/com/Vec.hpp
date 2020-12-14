@@ -53,22 +53,4 @@ std::ostream& operator<<(std::ostream& os, Vec2<T> const& vec)
 
 ///////////////////////////////////////////////////////////
 
-struct Col4n
-{
-    f32 r, g, b, a;
-
-    auto Highlighted() const 
-    {
-        return Col4n
-        { 
-            com::Min(1, r + 0.15f), 
-            com::Min(1, g + 0.15f), 
-            com::Min(1, b + 0.15f), 
-            a 
-        };
-    }
-};
-
-///////////////////////////////////////////////////////////
-
 }//ns
