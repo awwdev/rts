@@ -9,29 +9,11 @@ namespace rts::app2 {
 
 ///////////////////////////////////////////////////////////
 
-struct EventDataWindow
-{
-    i32 xpos;
-    i32 ypos;
-    i32 width;
-    i32 height;
-};
-
-///////////////////////////////////////////////////////////
-
-struct EventDataMouse
-{
-    i32 xpos;
-    i32 ypos;
-};
-
-///////////////////////////////////////////////////////////
-
 struct Events
 {
-    inline static com::POD_Array<Key, 10> keys;
-    inline static EventDataWindow window;
-    inline static EventDataMouse mouse;
+    inline static com::POD_Array<MouseButton, 10> keys;
+    inline static Window window;
+    inline static MouseButton mouse;
     inline static bool appShouldClose;
     inline static void Clear();
 };
@@ -46,6 +28,8 @@ void Events::Clear()
         auto& key = keys[i];
         key.Update();
     }
+    window.Update();
+    mouse.Update();
 }
 
 ///////////////////////////////////////////////////////////

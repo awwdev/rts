@@ -14,37 +14,57 @@ enum class EventType
     WM_Size,
     WM_Move,
     WM_Quit,
-
     Keyboard,
-
-    MB_Left,
-    MB_Right,
-    MB_Middle,
+    Mouse,
 };
 
 ///////////////////////////////////////////////////////////
 
-enum class KeyButtonState
+struct Window
 {
-    None,
-    Pressed,
-    Held,
-    Released,
+    enum State { Begin, Continued, End, None } state;
+    enum Type  { Move, Size } type;
+    i32 x;
+    i32 y;
+
+    void Update()
+    {
+        if (state == Begin)
+            state =  Continued;
+        if (state == End)
+            state =  None;
+    }
 };
 
 ///////////////////////////////////////////////////////////
 
-struct Key
+struct KeyboardKey
 {
-    KeyButtonState state;
+    enum State { Pressed, Released, Held, None } state;
     u8 asciiValue;
 
     void Update()
     {
-        if (state == KeyButtonState::Pressed)
-            state =  KeyButtonState::Held;
-        if (state == KeyButtonState::Released)
-            state =  KeyButtonState::None;
+        if (state == Pressed)
+            state =  Held;
+        if (state == Released)
+            state =  None;
+    }
+};
+
+///////////////////////////////////////////////////////////
+
+struct MouseButton
+{
+    enum State { Pressed, Released, Held, None } state;
+    enum Type { Left, Middle, Right } type;
+
+    void Update()
+    {
+        if (state == Pressed)
+            state =  Held;
+        if (state == Released)
+            state =  None;
     }
 };
 
@@ -55,8 +75,9 @@ struct Event
     EventType type;
     union
     {
-        struct { i32 x, y; } coord;
-        Key key;
+        MouseButton button;
+        KeyboardKey key;   
+        Window window;   
     };
 };
 

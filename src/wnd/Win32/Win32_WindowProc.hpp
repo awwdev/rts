@@ -7,7 +7,7 @@
 
 
 #include "app/_EventBuffer.hpp"
-rts::app2::EventBuffer buf;
+
 
 ///////////////////////////////////////////////////////////
 
@@ -18,6 +18,7 @@ namespace rts::wnd {
 static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     app::Event event {};
+    app2::Event event2 {};
     
     switch(uMsg)
     {
@@ -26,43 +27,59 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_DESTROY:
         case WM_CLOSE:
         case WM_QUIT:
-        app::glo::isAppRunning = false;  
+        event2.type = app2::EventType::WM_Quit;
+        //TODO remove
+        app::glo::isAppRunning = false; 
         break;
 
         ///////////////////////////////////////////////////////////
 
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
-        
-        switch(wParam)
+    
+        //TODO remove
+        switch(wParam) 
         {
             case VK_ESCAPE: 
             event.eventEnum = app::EventEnum::KEY_DOWN_ESCAPE; break;
             default: break;
         };
 
-        break;
-
-        ///////////////////////////////////////////////////////////
-
-        case WM_LBUTTONDOWN:
-        event.eventEnum = app::EventEnum::MB_LEFT_DOWN;
-        event.xpos = LOWORD(lParam);
-        event.ypos = HIWORD(lParam);
-
-        app::glo::atomic_mouse_state |= enum_cast(app::MouseState::LeftButtonDown);
-        break;
-
-        ///////////////////////////////////////////////////////////
-
-        case WM_LBUTTONUP:
-        app::glo::atomic_mouse_state &= ~enum_cast(app::MouseState::LeftButtonDown);
+        event2.type = app2::EventType::Keyboard;
+        event2.key.asciiValue = wParam;
+        event2.key.state = event2.key.Pressed;
         break;
 
         ///////////////////////////////////////////////////////////
 
         case WM_KEYUP:
         case WM_SYSKEYUP:
+        event2.type = app2::EventType::Keyboard;
+        event2.key.asciiValue = wParam;
+        event2.key.state = event2.key.Released;
+        break;
+
+        ///////////////////////////////////////////////////////////
+
+        case WM_LBUTTONDOWN:
+        //TODO REMOVE
+        event.eventEnum = app::EventEnum::MB_LEFT_DOWN;
+        event.xpos = LOWORD(lParam);
+        event.ypos = HIWORD(lParam);
+        app::glo::atomic_mouse_state |= enum_cast(app::MouseState::LeftButtonDown);
+
+        event2.button.state = event2.button.Pressed;
+        event2.button.type = event2.button.Left;
+        break;
+
+        ///////////////////////////////////////////////////////////
+
+        case WM_LBUTTONUP:
+        //TODO REMOVE
+        app::glo::atomic_mouse_state &= ~enum_cast(app::MouseState::LeftButtonDown);
+
+        event2.button.state = event2.button.Released;
+        event2.button.type = event2.button.Left;
         break;
 
         ///////////////////////////////////////////////////////////
@@ -71,6 +88,8 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             auto xPos = GET_X_LPARAM(lParam); 
             auto yPos = GET_Y_LPARAM(lParam); 
+
+            //TODO REMOVE
             app::glo::atomic_mouse_x.store(xPos, std::memory_order::relaxed);
             app::glo::atomic_mouse_y.store(yPos, std::memory_order::relaxed);
         }
@@ -81,6 +100,12 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_SIZE:
         app::glo::windowWidth  = LOWORD(lParam);
         app::glo::windowHeight = HIWORD(lParam);    
+
+        event2.type = app2::EventType::WM_Size;
+        event2.window.x = LOWORD(lParam);
+        event2.window.y = HIWORD(lParam);
+        event2.window.state = event2.window.Begin;
+
         switch(wParam)
         {
             case SIZE_MAXIMIZED:
@@ -109,9 +134,23 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         break;
 
+        ///////////////////////////////////////////////////////////
+
+        //case WM_MOVE:
+        //event2.type = app2::EventType::WM_Move;
+        //event2.coord.x = LOWORD(lParam);
+        //event2.coord.y = HIWORD(lParam);
+        //break;
+
+        ///////////////////////////////////////////////////////////
+
         case WM_EXITSIZEMOVE:
+        //TODO REMOVE
         app::glo::isWndResized = false;
         event.eventEnum = app::EventEnum::WND_MOVESIZE_END;
+
+        event2.type = app2::EventType::WM_Size;
+        event2.window.state = event2.window.End;
         break;
 
         ///////////////////////////////////////////////////////////
@@ -121,6 +160,7 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
 
     app::glo::eventBuffer.Append(event);
+    app2::EventBuffer::PushEvent(event2);
     return 0;    
 }
 

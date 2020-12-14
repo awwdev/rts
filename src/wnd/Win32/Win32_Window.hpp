@@ -65,8 +65,16 @@ i32 ypos   = CW_USEDEFAULT)
         hInstance,                        //hInstance
         0                                 //lpParam
     );
-    app::glo::isWndResized = false; //since create will post WM_SIZE
     WinCheck(hWnd);  
+
+    //TODO REMOVE
+    app::glo::isWndResized = false; //since create will post WM_SIZE
+
+    app2::Event event {};
+    event.type = app2::EventType::WM_Size;
+    event.window.state = app2::Window::End;
+    app2::EventBuffer::PushEvent(event);
+
 }
 
 ///////////////////////////////////////////////////////////

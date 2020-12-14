@@ -74,13 +74,21 @@ Renderer::~Renderer()
 
 void Renderer::Update(RenderData& renderData, res::Resources& resources)
 {
+    if (app2::Events::window.state == app2::Events::window.Begin || 
+        app2::Events::window.state == app2::Events::window.Continued)
+        return;
+    
+    if (app2::Events::window.state == app2::Events::window.End)
+        RecreateSwapchain(resources, renderData);
+
+    /*
     if (app::glo::windowHeight <= 0 || 
         app::glo::windowWidth  <= 0 ||
         app::glo::isWndResized)
         return;
-
     if (app::HasEvent(app::EventEnum::WND_MOVESIZE_END))
         RecreateSwapchain(resources, renderData);
+    */
 
     if (vkWaitForFences(g_devicePtr, 1, &sync.fences[currentFrame], VK_FALSE, 0) != VK_SUCCESS)
         return;

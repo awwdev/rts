@@ -10,6 +10,7 @@
 #include "app/Time.hpp"
 
 #include "com/String.hpp"
+#include "app/_EventBuffer.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -24,10 +25,11 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
     auto ptrRenderer  = mem::ClaimBlock<gpu::vuk::Renderer>(wndHandle, *ptrResources, ptrScene->renderData);
     net::Network network;
 
-    while(app::glo::isAppRunning)
+    while(!app2::Events::appShouldClose)
     {
         app::glo::UpdateMouse();
         app::glo::eventBuffer.Poll();
+        app2::EventBuffer::PollEvents();
 
         ptrScene->Update();
         ptrRenderer->Update(ptrScene->renderData, *ptrResources);

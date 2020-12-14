@@ -13,24 +13,27 @@ namespace rts::app2 {
 
 struct EventBuffer
 {
-    static constexpr auto RING_BUFFER_MAX = 10;
-    Event ringBuffer [RING_BUFFER_MAX];
+    inline static constexpr auto RING_BUFFER_MAX = 10;
+    inline static Event ringBuffer [RING_BUFFER_MAX];
 
-    std::atomic<i8> wndThreadCounter = 0;
-    std::atomic<i8> appThreadCounter = 0;
+    inline static std::atomic<i8> wndThreadCounter;
+    inline static std::atomic<i8> appThreadCounter;
 
-    void PushEvent(Event const&); //wnd thread
-    void PollEvents(); //app thread
+    inline static void PushEvent(Event const&); //wnd thread
+    inline static void PollEvents(); //app thread
 
 private:
-    void StoreEvent(Event const&); //app thread
+    inline static void StoreEvent(Event const&); //app thread
 };
 
 ///////////////////////////////////////////////////////////
 
 void EventBuffer::PushEvent(Event const& event)
 {
-
+    auto wndCount = wndThreadCounter.load(std::memory_order_relaxed);
+    ringBuffer[wndCount] = event;
+    wndCount = (wndCount + 1) % RING_BUFFER_MAX;
+    wndThreadCounter.store(wndCount, std::memory_order_relaxed);
 }
 
 ///////////////////////////////////////////////////////////
@@ -42,6 +45,9 @@ void EventBuffer::PollEvents()
     auto wndCount = wndThreadCounter.load(std::memory_order_relaxed);
     auto appCount = appThreadCounter.load(std::memory_order_relaxed);
 
+    if (wndCount == appCount)
+        return;
+
     auto delta = (wndCount > appCount)
         ? wndCount - appCount
         : wndCount + RING_BUFFER_MAX - appCount;
@@ -52,6 +58,9 @@ void EventBuffer::PollEvents()
         auto& event = ringBuffer[ringIdx];
         StoreEvent(event);
     }
+
+    appCount = (appCount + delta) % RING_BUFFER_MAX;
+    appThreadCounter.store(appCount, std::memory_order_relaxed);
 }
 
 ///////////////////////////////////////////////////////////
@@ -61,21 +70,29 @@ void EventBuffer::StoreEvent(Event const& event)
     switch(event.type)
     {
         case EventType::Keyboard:
-        Events::keys.Append(event.key);
+        Events::keys.Append(event.button);
         break;
 
         ///////////////////////////////////////////////////////////
 
         case EventType::WM_Move:
-        Events::window.xpos = event.coord.x;
-        Events::window.ypos = event.coord.y;
+        break;
+
+        ///////////////////////////////////////////////////////////
+
+        case EventType::Mouse:
+        //! has both movement and button
         break;
 
         ///////////////////////////////////////////////////////////
 
         case EventType::WM_Size:
-        Events::window.width = event.coord.x;
-        Events::window.height = event.coord.y;
+        if (event.window.state == Window::Begin)
+        {   
+            Events::window.x  = event.window.x;
+            Events::window.y = event.window.y;
+        }
+        Events::window.state = (app2::Window::State)event.window.state;
         break;
 
         ///////////////////////////////////////////////////////////
