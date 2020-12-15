@@ -5,7 +5,7 @@
 #include <X11/keysym.h>
 #include "com/Types.hpp"
 #include "com/Print.hpp"
-#include "app/Global.hpp"
+#include "app/_Old/Global.hpp"
 
 ///////////////////////////////////////////////////////////
 

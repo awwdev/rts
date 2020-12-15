@@ -30,4 +30,22 @@ struct Input
 
 ///////////////////////////////////////////////////////////
 
+struct Inputs
+{
+    static WindowInput   window;
+    static KeyboardInput keyboard;
+    static MouseInput    mouse;
+
+    static void UpdateStates()
+    {
+        window.UpdateStates();
+        keyboard.UpdateStates();
+        mouse.UpdateStates();
+        //TODO dont overwrite begin with continued
+        //TODO but instead let that do updateStates (so no information loss)
+    }
+};  
+
+///////////////////////////////////////////////////////////
+
 }//ns

@@ -12,21 +12,30 @@ struct WindowInput
 {
     enum State
     {
-        SizeBegin,
-        Sizing,
-        SizeEnd,
-        MoveBegin,
-        Moving,
-        MoveEnd,
-        Quit
+        Begin,
+        Continued,
+        End,
     };
 
-    State state;
+    State moveState;
+    State sizeState;
+
     i32 xpos;
     i32 ypos;
     i32 width;
     i32 height;
+
+    bool shouldClose;
+
+    void UpdateStates();
 };
+
+///////////////////////////////////////////////////////////
+
+void WindowInput::UpdateStates()
+{
+
+}
 
 ///////////////////////////////////////////////////////////
 

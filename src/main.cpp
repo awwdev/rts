@@ -6,11 +6,12 @@
 #include "gpu/vuk/Renderer.hpp"
 #include "net/Network.hpp"
 #include "app/Scene.hpp"
-#include "app/Global.hpp"
+#include "app/_Old/Global.hpp"
 #include "app/Time.hpp"
 
 #include "com/String.hpp"
-#include "app/_EventBuffer.hpp"
+#include "app/_Old/_EventBuffer.hpp"
+#include "app/Input/InputBuffer.hpp"
 
 ///////////////////////////////////////////////////////////
 

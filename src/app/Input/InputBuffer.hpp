@@ -1,34 +1,32 @@
 #pragma once
 
 #include <atomic>
-#include "com/Types.hpp"
-#include "com/Print.hpp"
-#include "app/_Events.hpp"
+#include "app/Input/Input.hpp"
 
 ///////////////////////////////////////////////////////////
 
-namespace rts::app2 {
+namespace rts::app {
 
 ///////////////////////////////////////////////////////////
 
-struct EventBuffer
+struct InputBuffer
 {
     inline static constexpr auto RING_BUFFER_MAX = 10;
-    inline static Event ringBuffer [RING_BUFFER_MAX];
+    inline static Input ringBuffer [RING_BUFFER_MAX] {};
 
     inline static std::atomic<i8> wndThreadCounter;
     inline static std::atomic<i8> appThreadCounter;
 
-    inline static void PushEvent(Event const&); //wnd thread
-    inline static void PollEvents(); //app thread
+    inline static void PushInput(Input const&); //wnd thread
+    inline static void PollInputs(); //app thread
 
 private:
-    inline static void StoreEvent(Event const&); //app thread
+    inline static void StoreEvent(Input const&); //app thread
 };
 
 ///////////////////////////////////////////////////////////
 
-void EventBuffer::PushEvent(Event const& event)
+void InputBuffer::PushInput(Input const& event)
 {
     auto wndCount = wndThreadCounter.load(std::memory_order_relaxed);
     ringBuffer[wndCount] = event;
@@ -38,9 +36,9 @@ void EventBuffer::PushEvent(Event const& event)
 
 ///////////////////////////////////////////////////////////
 
-void EventBuffer::PollEvents()
+void InputBuffer::PollInputs()
 {
-    Events::Clear();
+    Inputs::UpdateStates();
 
     auto wndCount = wndThreadCounter.load(std::memory_order_relaxed);
     auto appCount = appThreadCounter.load(std::memory_order_relaxed);
@@ -65,44 +63,10 @@ void EventBuffer::PollEvents()
 
 ///////////////////////////////////////////////////////////
 
-void EventBuffer::StoreEvent(Event const& event)
+void InputBuffer::StoreEvent(Input const& input)
 {
-    switch(event.type)
+    switch(input.type)
     {
-        case EventType::Keyboard:
-        Events::keys.Append(event.button);
-        break;
-
-        ///////////////////////////////////////////////////////////
-
-        case EventType::WM_Move:
-        break;
-
-        ///////////////////////////////////////////////////////////
-
-        case EventType::Mouse:
-        //! has both movement and button
-        break;
-
-        ///////////////////////////////////////////////////////////
-
-        case EventType::WM_Size:
-        if (event.window.state == Window::Begin)
-        {   
-            Events::window.x  = event.window.x;
-            Events::window.y = event.window.y;
-        }
-        Events::window.state = (app2::Window::State)event.window.state;
-        break;
-
-        ///////////////////////////////////////////////////////////
-
-        case EventType::WM_Quit:
-        Events::appShouldClose = true;
-        break;
-
-        ///////////////////////////////////////////////////////////
-
         default: 
         com::PrintWarning("Event not handled in EventBuffer");
         break;
@@ -110,7 +74,5 @@ void EventBuffer::StoreEvent(Event const& event)
 }
 
 ///////////////////////////////////////////////////////////
-
-//TODO using enum
 
 }//ns

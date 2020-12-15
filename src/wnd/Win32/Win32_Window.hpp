@@ -4,7 +4,7 @@
 #include "wnd/Win32/Win32_WindowProc.hpp"
 #include "com/Types.hpp"
 #include "com/Print.hpp"
-#include "app/Global.hpp"
+#include "app/_Old/Global.hpp"
 
 ///////////////////////////////////////////////////////////
 
