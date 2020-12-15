@@ -16,4 +16,5 @@
 2020-12-08 mem claim block, moving huge object to heap
 2020-12-09 string, ui state, render data, font texture
 2020-12-10 widget window, string add render data
-2020-12-13 text centered, font, draggable window, stats
+2020-12-13 text centered, font, stats, point in rect
+2020-12-14 better event system, 

@@ -19,7 +19,7 @@ namespace glo
     inline std::atomic<bool> isWndMinMax  = false;
     inline EventBuffer eventBuffer;
 
-    inline f64  dt;
+    inline f64  dt; //TODO into struct Time{}
     inline i32  fps;
     inline bool hasSecondPassed;
     inline std::atomic<i32> windowWidth;

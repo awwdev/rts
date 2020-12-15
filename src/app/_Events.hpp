@@ -23,7 +23,7 @@ struct Events
 void Events::Clear()
 {
     keys.count = 0;
-    FOR_ARRAY(keys, i)
+    FOR_ARRAY(keys, i) //! wrong
     {
         auto& key = keys[i];
         key.Update();
