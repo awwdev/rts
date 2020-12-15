@@ -14,65 +14,87 @@ struct InputBuffer
     inline static constexpr auto RING_BUFFER_MAX = 10;
     inline static Input ringBuffer [RING_BUFFER_MAX] {};
 
-    inline static std::atomic<i8> wndThreadCounter;
-    inline static std::atomic<i8> appThreadCounter;
+    inline static std::atomic<i8> atomicWriteCount;
+    inline static i8 readCount;
 
-    inline static void PushInput(Input const&); //wnd thread
-    inline static void PollInputs(); //app thread
-
+    inline static void WriteInput(Input const&);
+    inline static void ReadInputs();
 private:
-    inline static void StoreEvent(Input const&); //app thread
+    inline static void StoreInput(Input const&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void InputBuffer::PushInput(Input const& event)
+void InputBuffer::WriteInput(Input const& event)
 {
-    auto wndCount = wndThreadCounter.load(std::memory_order_relaxed);
-    ringBuffer[wndCount] = event;
-    wndCount = (wndCount + 1) % RING_BUFFER_MAX;
-    wndThreadCounter.store(wndCount, std::memory_order_relaxed);
+    auto writeCount = atomicWriteCount.load(std::memory_order_relaxed);
+    ringBuffer[writeCount] = event;
+    writeCount = (writeCount + 1) % RING_BUFFER_MAX;
+    atomicWriteCount.store(writeCount, std::memory_order_relaxed);
 }
 
 ///////////////////////////////////////////////////////////
 
-void InputBuffer::PollInputs()
+void InputBuffer::ReadInputs()
 {
-    Inputs::UpdateStates();
-
-    auto wndCount = wndThreadCounter.load(std::memory_order_relaxed);
-    auto appCount = appThreadCounter.load(std::memory_order_relaxed);
-
-    if (wndCount == appCount)
+    auto writeCount = atomicWriteCount.load(std::memory_order_relaxed);
+    if (writeCount == readCount)
         return;
 
-    auto delta = (wndCount > appCount)
-        ? wndCount - appCount
-        : wndCount + RING_BUFFER_MAX - appCount;
+    auto delta = (writeCount > readCount)
+        ? writeCount - readCount
+        : writeCount + RING_BUFFER_MAX - readCount;
 
     for(auto i = 0; i < delta; ++i)
     {
-        auto ringIdx = (appCount + i) % RING_BUFFER_MAX;
+        auto ringIdx = (readCount + i) % RING_BUFFER_MAX;
         auto& event = ringBuffer[ringIdx];
-        StoreEvent(event);
+        StoreInput(event);
     }
 
-    appCount = (appCount + delta) % RING_BUFFER_MAX;
-    appThreadCounter.store(appCount, std::memory_order_relaxed);
+    readCount = (readCount + delta) % RING_BUFFER_MAX;
 }
 
 ///////////////////////////////////////////////////////////
 
-void InputBuffer::StoreEvent(Input const& input)
+void InputBuffer::StoreInput(Input const& input)
 {
     switch(input.type)
     {
-        default: 
-        com::PrintWarning("Event not handled in EventBuffer");
+        case Input::Window:
+
+        if (input.window.sizeState == app::WindowInput::Continued)
+        {
+            if (Inputs::window.sizeState == app::WindowInput::Begin)
+                Inputs::window.sizeState  = app::WindowInput::Continued;
+            if (Inputs::window.sizeState == app::WindowInput::None)
+                Inputs::window.sizeState  = app::WindowInput::Begin;
+        }
+        if (input.window.sizeState == app::WindowInput::End)
+            Inputs::window.sizeState = app::WindowInput::End;
+
+        if (Inputs::window.sizeState == app::WindowInput::Begin || 
+            Inputs::window.sizeState == app::WindowInput::Continued)
+        {
+            Inputs::window.width  = input.window.width;
+            Inputs::window.height = input.window.height;
+        }
+        break;
+
+        ///////////////////////////////////////////////////////////
+
+        case Input::Keyboard:
+        break;
+
+        ///////////////////////////////////////////////////////////
+
+        case Input::Mouse:
         break;
     }
 }
 
 ///////////////////////////////////////////////////////////
+
+//! what when wndThreadCount surpasses appThreadCount
 
 }//ns

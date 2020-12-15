@@ -6,7 +6,7 @@
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
 
-#include "app/_Old/Global.hpp"
+#include "app/Input/Input.hpp"
 #include "res/Resources.hpp"
 #include "gpu/RenderDataDefault.hpp"
 
@@ -107,9 +107,8 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
 void DefaultUniforms::Update(RenderDataDefault& rd)
 {
-    //TODO only update when actually changed (atomic)
-    metaData.data.windowWidth  = app::glo::windowWidth;
-    metaData.data.windowHeight = app::glo::windowHeight;
+    metaData.data.windowWidth  = app::Inputs::window.width;
+    metaData.data.windowHeight = app::Inputs::window.height;
 
     quadData.count = 0;
     quadData.Append(rd.quadData.data, rd.quadData.count);

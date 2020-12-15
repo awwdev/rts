@@ -56,9 +56,6 @@ i32 ypos   = 64)
 
     wmDeleteWindow = XInternAtom(display, "WM_DELETE_WINDOW", false);
     XSetWMProtocols(display, window, &wmDeleteWindow, 1);
-
-    app::glo::windowWidth = width;
-    app::glo::windowHeight = height;
 }
 
 ///////////////////////////////////////////////////////////
@@ -91,7 +88,7 @@ void X11_Window::PollEvents()
 
         XWindowAttributes attributes;
         XGetWindowAttributes(display, window, &attributes);
-        app::glo::windowWidth = attributes.width;
+        app::glo:: = attributes.width;
         app::glo::windowHeight = attributes.height;
 
         app::Event event {};

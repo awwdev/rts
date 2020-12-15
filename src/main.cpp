@@ -21,26 +21,27 @@ using namespace rts;
 
 inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 {  
+    mem::Allocate();
+    mem::PrintAlloc();
+
     auto ptrResources = mem::ClaimBlock<res::Resources>();
     auto ptrScene     = mem::ClaimBlock<app::Scene>();
     auto ptrRenderer  = mem::ClaimBlock<gpu::vuk::Renderer>(wndHandle, *ptrResources, ptrScene->renderData);
     net::Network network;
 
-    while(!app2::Events::appShouldClose)
+    while(!app::Inputs::window.shouldClose)
     {
-        app::glo::UpdateMouse();
-        app::glo::eventBuffer.Poll();
-        app2::EventBuffer::PollEvents();
+        app::Inputs::UpdateStates();
+        app::InputBuffer::ReadInputs();
 
         ptrScene->Update();
         ptrRenderer->Update(ptrScene->renderData, *ptrResources);
         
         app::UpdateTime();
-        app::PrintFps();
-
-        if (app::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
-            app::glo::isAppRunning = false;
+        //app::PrintFps();
     }
+
+    mem::Deallocate();
 }
 
 ///////////////////////////////////////////////////////////
@@ -49,15 +50,10 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 {
     wnd::Console console { 600, 400, 64, 400 + 64 };
-    mem::Allocate();
-    mem::PrintAlloc();
-
     wnd::Window window { hInst, "mini window", 600, 400, 64, 64 };
     std::thread appThread { AppMain, gpu::vuk::WindowHandle { window.hInstance, window.hWnd } };
     window.BlockingPollEvents(); 
     appThread.join();
-
-    mem::Deallocate();
     return EXIT_SUCCESS;
 }
 #endif

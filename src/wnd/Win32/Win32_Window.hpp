@@ -67,14 +67,17 @@ i32 ypos   = CW_USEDEFAULT)
     );
     WinCheck(hWnd);  
 
-    //TODO REMOVE
-    app::glo::isWndResized = false; //since create will post WM_SIZE
+    //retrive size immediately since the wnd message is already threaded
+    RECT rect;
+    WinCheck(GetClientRect(hWnd, &rect));
+    app::Inputs::window.width  = rect.right;
+    app::Inputs::window.height = rect.bottom;
 
-    app2::Event event {};
-    event.type = app2::EventType::WM_Size;
-    event.window.state = app2::Window::End;
-    app2::EventBuffer::PushEvent(event);
-
+    //win creation pushes a size but no sizeend message
+    app::Input resizeInput {};
+    resizeInput.type = app::Input::Window;
+    resizeInput.window.sizeState = app::WindowInput::End;
+    app::InputBuffer::WriteInput(resizeInput);
 }
 
 ///////////////////////////////////////////////////////////

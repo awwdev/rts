@@ -12,6 +12,7 @@ struct WindowInput
 {
     enum State
     {
+        None,
         Begin,
         Continued,
         End,

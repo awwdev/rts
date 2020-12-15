@@ -107,9 +107,8 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
 void UIUniforms::Update(RenderDataUI& rd)
 {
-    //TODO only update when actually changed (atomic)
-    metaData.data.windowWidth = app::glo::windowWidth;
-    metaData.data.windowHeight = app::glo::windowHeight;
+    metaData.data.windowWidth  = app::Inputs::window.width;
+    metaData.data.windowHeight = app::Inputs::window.height;
 
     quadData.count = 0;
     quadData.Append(rd.quadData.data, rd.quadData.count);

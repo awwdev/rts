@@ -32,9 +32,9 @@ struct Input
 
 struct Inputs
 {
-    static WindowInput   window;
-    static KeyboardInput keyboard;
-    static MouseInput    mouse;
+    inline static WindowInput   window;
+    inline static KeyboardInput keyboard;
+    inline static MouseInput    mouse;
 
     static void UpdateStates()
     {

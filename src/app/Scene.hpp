@@ -32,8 +32,8 @@ Scene::Scene()
     {
         auto ID = ecs.AddEntity();
         auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);
-        auto x = rand() % app::glo::windowWidth;
-        auto y = rand() % app::glo::windowHeight;
+        auto x = rand() % 600;
+        auto y = rand() % 400;
         transformComponent.position = { x, y };
         transformComponent.positionTarget = { x, y };
         transformComponent.size = { 64, 64 }; //double scale 
