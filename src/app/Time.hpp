@@ -1,7 +1,7 @@
 #pragma once
 
 #include <chrono>
-#include "app/_Old/Global.hpp"
+
 #include "com/Types.hpp"
 #include "com/Print.hpp"
 
@@ -11,39 +11,50 @@ namespace rts::app {
 
 ///////////////////////////////////////////////////////////
 
-using clock_t = std::chrono::high_resolution_clock;
-using dur_t   = std::chrono::duration<f64>;
+struct Time
+{
+    using clock_t = std::chrono::high_resolution_clock;
+    using dur_t   = std::chrono::duration<f64>;
 
-inline i32 frames;
-inline clock_t::time_point t1 = clock_t::now();
-inline f64 secTimer;
+    inline static f64 dt;
+    inline static i32 fps;
+    inline static bool hasSecondPassed;
+
+    static void Update();
+    static void PrintFps();
+
+private:
+    inline static i32 frames;
+    inline static clock_t::time_point t1 = clock_t::now();
+    inline static f64 secTimer;
+};
 
 ///////////////////////////////////////////////////////////
 
-inline void UpdateTime()
+void Time::Update()
 {
     auto t2 = clock_t::now();
     dur_t dur = t2 - t1;
     t1 = t2;
-    app::glo::dt = dur.count();
-    secTimer += app::glo::dt;
+    dt = dur.count();
+    secTimer += dt;
     frames += 1;
-    app::glo::hasSecondPassed = false;
+    hasSecondPassed = false;
     if (secTimer >= 1)
     {
-        app::glo::hasSecondPassed = true;
+        hasSecondPassed = true;
         secTimer -= 1;
-        app::glo::fps = frames;
+        fps = frames;
         frames = 0;
     }
 }
 
 ///////////////////////////////////////////////////////////
 
-inline void PrintFps()
+void Time::PrintFps()
 {
-    if (app::glo::hasSecondPassed)
-        com::Print("fps", app::glo::fps, "dt", app::glo::dt);
+    if (hasSecondPassed)
+        com::Print("fps", fps, "dt", dt);
 }
 
 ///////////////////////////////////////////////////////////

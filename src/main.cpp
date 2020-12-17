@@ -5,10 +5,10 @@
 #include "res/Resources.hpp"
 #include "gpu/vuk/Renderer.hpp"
 #include "net/Network.hpp"
+
 #include "app/Scene.hpp"
 #include "app/Time.hpp"
-#include "com/String.hpp"
-#include "app/Input/Inputs.hpp"
+#include "app/Inputs.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -25,11 +25,11 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 
     while(!app::Inputs::window.shouldClose)
     {
+        app::Time::Update();
+        //app::Time::PrintFps();
         app::Inputs::Update();
         ptrScene->Update();
         ptrRenderer->Update(ptrScene->renderData, *ptrResources);
-        app::UpdateTime();
-        //app::PrintFps();
     }   
 }
 

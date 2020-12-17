@@ -3,7 +3,7 @@
 #include "com/Windows.hpp"
 #include "app/Time.hpp"
 #include "com/Print.hpp"
-#include "app/Input/Inputs.hpp"
+#include "app/Inputs.hpp"
 
 ///////////////////////////////////////////////////////////
 

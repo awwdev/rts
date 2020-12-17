@@ -16,14 +16,14 @@ namespace rts::com {
 TEMPLATE
 struct AtomicRingBuffer
 {
-    inline static constexpr auto RING_BUFFER_MAX = N;
-    inline static T data [RING_BUFFER_MAX] {};
+    static constexpr auto RING_BUFFER_MAX = N;
+    T data [RING_BUFFER_MAX] {};
 
-    inline static std::atomic<i32> atomicWriteCount;
-    inline static std::atomic<i32> atomicReadCount;
+    std::atomic<i32> atomicWriteCount;
+    std::atomic<i32> atomicReadCount;
 
-    inline static void Write(T const&);
-    inline static auto Read();
+    void Write(T const&);
+    auto Read();
 };
 
 ///////////////////////////////////////////////////////////

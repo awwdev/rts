@@ -1,7 +1,7 @@
 #pragma once
 
 #include "com/Vec.hpp"
-#include "app/_Old/Global.hpp"
+#include "app/Time.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -23,7 +23,7 @@ struct RenderComponent
 
 void RenderComponent::Animate()
 {
-    time += app::glo::dt;
+    time += app::Time::dt;
     if (time > frameTime)
     {
         time = 0;

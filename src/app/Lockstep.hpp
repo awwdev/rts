@@ -1,7 +1,7 @@
 #pragma once
 
 #include "com/Types.hpp"
-#include "app/_Old/Global.hpp"
+#include "app/Time.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -24,7 +24,7 @@ struct Lockstep
 bool Lockstep::Update()
 {
     nextStep = false;
-    stepTime += app::glo::dt;
+    stepTime += app::Time::dt;
     if (stepTime > stepTimeMax)
     {
         stepTimePrev = stepTime;
