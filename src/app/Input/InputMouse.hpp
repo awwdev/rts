@@ -30,24 +30,7 @@ struct InputMouse
     i32 xpos;
     i32 ypos;
     i32 scroll;
-
-    void StoreState(InputMouse const&);
-    void UpdateStates();
 };
-
-///////////////////////////////////////////////////////////
-
-void InputMouse::StoreState(InputMouse const&)
-{
-    
-}
-
-///////////////////////////////////////////////////////////
-
-void InputMouse::UpdateStates()
-{
-
-}
 
 ///////////////////////////////////////////////////////////
 

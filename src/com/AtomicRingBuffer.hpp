@@ -45,13 +45,13 @@ void AtomicRingBuffer<T, N>::Write(T const& event)
 TEMPLATE
 auto AtomicRingBuffer<T, N>::Read()
 {
+    com::POD_Array<T, RING_BUFFER_MAX> buffer;
+
     auto writeCount = atomicWriteCount.load();
     auto readCount  = atomicReadCount.load();
 
     if (writeCount == readCount)
-        return;
-
-    com::POD_Array<T, RING_BUFFER_MAX> elements;
+        return buffer;
 
     auto delta = (writeCount > readCount)
         ? writeCount - readCount
@@ -61,10 +61,12 @@ auto AtomicRingBuffer<T, N>::Read()
     {
         auto ringIdx = (readCount + i) % RING_BUFFER_MAX;
         auto& element = data[ringIdx];
-        elements.Append(element);
+        buffer.Append(element);
     }
 
     atomicReadCount = (readCount + delta) % RING_BUFFER_MAX;
+
+    return buffer;
 }
 
 ///////////////////////////////////////////////////////////

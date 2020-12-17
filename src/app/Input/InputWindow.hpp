@@ -28,25 +28,7 @@ struct InputWindow
 
     bool shouldClose;
     bool minmax;
-
-    void StoreState(InputWindow const&);
-    void UpdateStates();
 };
-
-///////////////////////////////////////////////////////////
-
-void InputWindow::StoreState(InputWindow const&)
-{
-
-}
-
-///////////////////////////////////////////////////////////
-
-void InputWindow::UpdateStates()
-{
-    if (sizeState == State::End)
-        sizeState = State::None;
-}
 
 ///////////////////////////////////////////////////////////
 

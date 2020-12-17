@@ -20,12 +20,12 @@ struct Input
     };
 
     Type type;
-    union
-    {
-        InputWindow   window;
-        InputKeyboard keyboard;
-        InputMouse    mouse;
-    };
+    //union
+    //{
+    //    InputWindow   window {};
+    //    InputKeyboard keyboard;
+    //    InputMouse    mouse;
+    //};
 };
 
 ///////////////////////////////////////////////////////////

@@ -24,16 +24,23 @@ struct Inputs
 
 void Inputs::Update()
 {
-    //window.UpdateStates();
-    //keyboard.UpdateStates();
-    //mouse.UpdateStates();
+    auto buffer = inputBuffer.Read();
 
-    //switch(input.type)
-    //{
-    //    case Input::Window:   Inputs::window.StoreState(input.window); break;
-    //    case Input::Mouse:    Inputs::mouse.StoreState(input.mouse); break;
-    //    case Input::Keyboard: Inputs::keyboard.StoreState(input.keyboard); break;
-    //}
+    FOR_ARRAY(buffer, i)
+    {
+        auto& input = buffer[i];
+        switch(input.type)
+        {
+            case Input::Window:
+            break;
+
+            case Input::Mouse:
+            break;
+
+            case Input::Keyboard:
+            break;
+        }
+    }    
 }
 
 ///////////////////////////////////////////////////////////
