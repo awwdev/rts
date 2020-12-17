@@ -8,7 +8,7 @@ namespace rts::app {
 
 ///////////////////////////////////////////////////////////
 
-struct MouseInput
+struct InputMouse
 {
     enum Button
     {
@@ -31,12 +31,20 @@ struct MouseInput
     i32 ypos;
     i32 scroll;
 
+    void StoreState(InputMouse const&);
     void UpdateStates();
 };
 
 ///////////////////////////////////////////////////////////
 
-void MouseInput::UpdateStates()
+void InputMouse::StoreState(InputMouse const&)
+{
+    
+}
+
+///////////////////////////////////////////////////////////
+
+void InputMouse::UpdateStates()
 {
 
 }

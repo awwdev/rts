@@ -8,7 +8,7 @@ namespace rts::app {
 
 ///////////////////////////////////////////////////////////
 
-struct WindowInput
+struct InputWindow
 {
     enum State
     {
@@ -27,15 +27,25 @@ struct WindowInput
     i32 height;
 
     bool shouldClose;
+    bool minmax;
 
+    void StoreState(InputWindow const&);
     void UpdateStates();
 };
 
 ///////////////////////////////////////////////////////////
 
-void WindowInput::UpdateStates()
+void InputWindow::StoreState(InputWindow const&)
 {
 
+}
+
+///////////////////////////////////////////////////////////
+
+void InputWindow::UpdateStates()
+{
+    if (sizeState == State::End)
+        sizeState = State::None;
 }
 
 ///////////////////////////////////////////////////////////

@@ -3,7 +3,7 @@
 #include "com/Windows.hpp"
 #include "app/Time.hpp"
 #include "com/Print.hpp"
-#include "app/Input/InputBuffer.hpp"
+#include "app/Input/Inputs.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -14,7 +14,7 @@ namespace rts::wnd {
 static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     app::Input input {};
-    
+
     switch(uMsg)
     {
         ///////////////////////////////////////////////////////////
@@ -22,6 +22,8 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_DESTROY:
         case WM_CLOSE:
         case WM_QUIT:
+        input.type = app::Input::Window;
+        input.window.shouldClose = true;
         break;
 
         ///////////////////////////////////////////////////////////
@@ -57,7 +59,7 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_SIZE:
         input.type = app::Input::Window;
-        input.window.sizeState = app::WindowInput::Continued;
+        input.window.sizeState = app::InputWindow::Continued;
         input.window.width  = LOWORD(lParam);
         input.window.height = HIWORD(lParam);
 
@@ -65,8 +67,13 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             case SIZE_MAXIMIZED:
             case SIZE_MINIMIZED:
+            static bool minmax = false;
+            minmax = true;
             break;
             case SIZE_RESTORED:
+            if (minmax == true)
+                input.window.sizeState = app::InputWindow::End;
+            minmax = false;
             break;
             default: 
             break;
@@ -77,8 +84,7 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_EXITSIZEMOVE:
         input.type = app::Input::Window;
-        input.window.sizeState = app::WindowInput::End;
-        input.window.moveState = app::WindowInput::End;
+        input.window.sizeState = app::InputWindow::End;
         break;
 
         ///////////////////////////////////////////////////////////
@@ -87,7 +93,7 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 
-    app::InputBuffer::WriteInput(input);
+    //app::AtomicRingBuffer::WriteInput(input);
     return 0;    
 }
 

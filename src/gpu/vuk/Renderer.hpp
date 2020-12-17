@@ -76,11 +76,10 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
 {
     if (app::Inputs::window.width <= 0 || app::Inputs::window.height <= 0)
         return;
-    //if (app::Inputs::window.sizeState == app::WindowInput::End)
-    //    RecreateSwapchain(resources, renderData);
-    //if (app::Inputs::window.sizeState != app::WindowInput::None)
-    //    return;
-
+    if (app::Inputs::window.sizeState == app::InputWindow::End)
+        RecreateSwapchain(resources, renderData);
+    if (app::Inputs::window.sizeState != app::InputWindow::None)
+        return;
 
     if (vkWaitForFences(g_devicePtr, 1, &sync.fences[currentFrame], VK_FALSE, 0) != VK_SUCCESS)
         return;

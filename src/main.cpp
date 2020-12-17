@@ -6,12 +6,9 @@
 #include "gpu/vuk/Renderer.hpp"
 #include "net/Network.hpp"
 #include "app/Scene.hpp"
-#include "app/_Old/Global.hpp"
 #include "app/Time.hpp"
-
 #include "com/String.hpp"
-#include "app/_Old/_EventBuffer.hpp"
-#include "app/Input/InputBuffer.hpp"
+#include "app/Input/Inputs.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -21,9 +18,6 @@ using namespace rts;
 
 inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 {  
-    mem::Allocate();
-    mem::PrintAlloc();
-
     auto ptrResources = mem::ClaimBlock<res::Resources>();
     auto ptrScene     = mem::ClaimBlock<app::Scene>();
     auto ptrRenderer  = mem::ClaimBlock<gpu::vuk::Renderer>(wndHandle, *ptrResources, ptrScene->renderData);
@@ -31,17 +25,12 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 
     while(!app::Inputs::window.shouldClose)
     {
-        app::Inputs::UpdateStates();
-        app::InputBuffer::ReadInputs();
-
+        app::Inputs::Update();
         ptrScene->Update();
         ptrRenderer->Update(ptrScene->renderData, *ptrResources);
-        
         app::UpdateTime();
         //app::PrintFps();
-    }
-
-    mem::Deallocate();
+    }   
 }
 
 ///////////////////////////////////////////////////////////
@@ -49,11 +38,14 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 #ifdef _WIN32
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 {
+    mem::Allocate();
+    mem::PrintAlloc();
     wnd::Console console { 600, 400, 64, 400 + 64 };
     wnd::Window window { hInst, "mini window", 600, 400, 64, 64 };
     std::thread appThread { AppMain, gpu::vuk::WindowHandle { window.hInstance, window.hWnd } };
     window.BlockingPollEvents(); 
     appThread.join();
+    mem::Deallocate();
     return EXIT_SUCCESS;
 }
 #endif

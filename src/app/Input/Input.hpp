@@ -22,29 +22,11 @@ struct Input
     Type type;
     union
     {
-        WindowInput window;
-        KeyboardInput keyboard;
-        MouseInput mouse;
+        InputWindow   window;
+        InputKeyboard keyboard;
+        InputMouse    mouse;
     };
 };
-
-///////////////////////////////////////////////////////////
-
-struct Inputs
-{
-    inline static WindowInput   window;
-    inline static KeyboardInput keyboard;
-    inline static MouseInput    mouse;
-
-    static void UpdateStates()
-    {
-        window.UpdateStates();
-        keyboard.UpdateStates();
-        mouse.UpdateStates();
-        //TODO dont overwrite begin with continued
-        //TODO but instead let that do updateStates (so no information loss)
-    }
-};  
 
 ///////////////////////////////////////////////////////////
 

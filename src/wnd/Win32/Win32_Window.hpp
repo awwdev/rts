@@ -4,7 +4,7 @@
 #include "wnd/Win32/Win32_WindowProc.hpp"
 #include "com/Types.hpp"
 #include "com/Print.hpp"
-#include "app/_Old/Global.hpp"
+#include "app/Input/Inputs.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -73,11 +73,7 @@ i32 ypos   = CW_USEDEFAULT)
     app::Inputs::window.width  = rect.right;
     app::Inputs::window.height = rect.bottom;
 
-    //win creation pushes a size but no sizeend message
-    app::Input resizeInput {};
-    resizeInput.type = app::Input::Window;
-    resizeInput.window.sizeState = app::WindowInput::End;
-    app::InputBuffer::WriteInput(resizeInput);
+    PostMessage(hWnd, WM_EXITSIZEMOVE, 0, 0);
 }
 
 ///////////////////////////////////////////////////////////
@@ -97,9 +93,8 @@ void Win32_Window::BlockingPollEvents()
     while((rtn = GetMessage(&message, NULL, 0, 0)))
     {
         WinCheck(rtn != -1, "GetMessage Error");
-        if (!app::glo::isAppRunning)
+        if (app::Inputs::window.shouldClose)
             break;
-
         TranslateMessage(&message);
         DispatchMessage(&message);
     } 

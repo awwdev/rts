@@ -6,7 +6,7 @@
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
 
-#include "app/Input/Input.hpp"
+#include "app/Input/Inputs.hpp"
 #include "res/Resources.hpp"
 #include "gpu/RenderDataDefault.hpp"
 
