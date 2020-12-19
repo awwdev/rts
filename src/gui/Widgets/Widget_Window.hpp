@@ -1,6 +1,5 @@
 #pragma once
 
-#include "gui/GUI_Base.hpp"
 #include "com/Rect.hpp"
 #include "com/Print.hpp"
 #include "com/Color.hpp"
@@ -18,15 +17,15 @@ struct Widget_Window
     static constexpr i32 BAR_H = 24;
     static constexpr i32 ROW_H = 24;
     static constexpr i32 ROW_PADDING = 4;
+    static constexpr i32 RESIZE_BTN = 8;
+
     static constexpr Col4n WND_COL_BACK     { 0.f, 0.f, 0.f, 0.25 };
     static constexpr Col4n WND_COL_BAR      { 0.1, 0.1, 0.1, 1.f };
     static constexpr Col4n WND_COL_SIZE_BTN { 0.1, 0.1, 0.1, 1.f };
     static constexpr Col4n WND_COL_MIN_BTN  { 0.2, 0.2, 0.2, 1.f };
     static constexpr Col4n WND_COL_ACTIVE   { 0.8, 0.2, 0.2, 1.f };
-    static constexpr i32 RESIZE_BTN = 8;
 
     com::Recti rect;
-    com::Recti limits { BAR_H, BAR_H, i32min, i32max };
     Text title;
     bool isDragged;
     bool isMini;
@@ -37,6 +36,11 @@ struct Widget_Window
 
     void Update(gpu::RenderData&);
     void UpdateText(gpu::RenderDataUI&, Text&);
+
+private:
+    void UpdateDrag(bool);
+    void UpdateSize(bool);
+    void UpdateMinMax(bool);
 };
 
 ///////////////////////////////////////////////////////////
@@ -52,11 +56,33 @@ void Widget_Window::Update(gpu::RenderData& rd)
     title.Center(wndBar);
 
     using namespace app;
-    bool onBtnSize = btnSize.IsPointInside(Inputs::mouse.pos);
     bool onBtnMin  = btnMin.IsPointInside (Inputs::mouse.pos);
     bool onWndBar  = wndBar.IsPointInside (Inputs::mouse.pos) && !onBtnMin;
+    bool onBtnSize = btnSize.IsPointInside(Inputs::mouse.pos);
 
-    //? drag
+    UpdateMinMax(onBtnMin);
+    UpdateDrag(onWndBar);
+    UpdateSize(onBtnSize);
+
+    auto& rdui   = rd.renderDataUI;
+    auto& rdpost = rd.renderDataPost;
+    rdui.AddQuad({ wndBar, onWndBar ? WND_COL_BAR.Highlighted() : WND_COL_BAR });
+    rdui.AddText(title);
+    rdui.AddQuad({ btnMin, onBtnMin ? WND_COL_ACTIVE : WND_COL_MIN_BTN });
+
+    if (!isMini)
+    {
+        rdui.AddQuad({ wndBack, WND_COL_BACK });
+        rdui.AddQuad({ btnSize, onBtnSize ? WND_COL_ACTIVE : WND_COL_SIZE_BTN });
+        rdpost.AddBlurQuad(rect);
+    }
+}
+
+///////////////////////////////////////////////////////////
+
+void Widget_Window::UpdateDrag(bool onWndBar)
+{
+    using namespace app;
     if (onWndBar && Inputs::mouse.IsPressed(InputMouse::Left))
     {
         isDragged = true;
@@ -73,8 +99,13 @@ void Widget_Window::Update(gpu::RenderData& rd)
     {
         isDragged = false;
     }
+}
 
-    //? size
+///////////////////////////////////////////////////////////
+
+void Widget_Window::UpdateSize(bool onBtnSize)
+{
+    using namespace app;
     if (onBtnSize && Inputs::mouse.IsPressed(InputMouse::Left))
     {
         isSize = true;
@@ -90,22 +121,16 @@ void Widget_Window::Update(gpu::RenderData& rd)
     if (isSize && Inputs::mouse.IsReleased(InputMouse::Left))
     {
         isSize = false;
-    }
+    }   
+}
 
-    //? minmax
+///////////////////////////////////////////////////////////
+
+void Widget_Window::UpdateMinMax(bool onBtnMin)
+{
+    using namespace app;
     if (onBtnMin && Inputs::mouse.IsPressed(InputMouse::Left))
         isMini = !isMini; 
-
-    AddRect(rd.renderDataUI, { wndBar, onWndBar ? WND_COL_BAR.Highlighted() : WND_COL_BAR });
-    AddText(rd.renderDataUI, title);
-    AddRect(rd.renderDataUI, { btnMin, onBtnMin ? WND_COL_ACTIVE : WND_COL_MIN_BTN });
-
-    if (!isMini)
-    {
-        AddRect(rd.renderDataUI, { wndBack, WND_COL_BACK });
-        AddRect(rd.renderDataUI, { btnSize, onBtnSize ? WND_COL_ACTIVE : WND_COL_SIZE_BTN });
-        AddRectBlur(rd.renderDataPost, rect);
-    }
 }
 
 ///////////////////////////////////////////////////////////
@@ -118,7 +143,7 @@ void Widget_Window::UpdateText(gpu::RenderDataUI& rd, Text& text)
     text.x = rect.x + ROW_PADDING;
     text.y = rect.y + ROW_PADDING + BAR_H + rowCount * ROW_H;
     rowCount++;
-    AddText(rd, text);
+    rd.AddText(text);
 }
 
 ///////////////////////////////////////////////////////////

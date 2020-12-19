@@ -18,4 +18,4 @@
 2020-12-10 widget window, string add render data
 2020-12-13 text centered, font, stats, point in rect
 2020-12-14 better event system
-2020-12-19 input system, UI
+2020-12-19 input system, minmax, drag

@@ -26,7 +26,6 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
     while(!app::Inputs::window.shouldClose)
     {
         app::Time::Update();
-        //app::Time::PrintFps();
         app::Inputs::Update();
         ptrScene->Update();
         ptrRenderer->Update(ptrScene->renderData, *ptrResources);
