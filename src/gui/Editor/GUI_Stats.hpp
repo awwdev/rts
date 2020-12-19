@@ -14,7 +14,7 @@ struct GUI_Stats
 {
     Widget_Window wndStats 
     { 
-        .rect  { 32, 32, 300, 300 },
+        .rect  { 32, 32, 300, 128 },
         .title { "Stats", Colors::Orange },
     };
     Text fpsText { "fps" };

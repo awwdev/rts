@@ -30,8 +30,10 @@ struct Widget_Window
     Text title;
     bool isDragged;
     bool isMini;
+    bool isSize;
     i32 rowCount;
     com::Vec2i dragOffset;
+    com::Vec2i sizeOffset;
 
     void Update(gpu::RenderData&);
     void UpdateText(gpu::RenderDataUI&, Text&);
@@ -58,16 +60,36 @@ void Widget_Window::Update(gpu::RenderData& rd)
     if (onWndBar && Inputs::mouse.IsPressed(InputMouse::Left))
     {
         isDragged = true;
-        dragOffset = Inputs::mouse.pos - com::Vec2i { rect.x, rect.y };
+        dragOffset = Inputs::mouse.pos;
     }
     if (isDragged)
     {
-        rect.x = app::Inputs::mouse.pos.x - dragOffset.x;
-        rect.y = app::Inputs::mouse.pos.y - dragOffset.y;
+        auto delta = Inputs::mouse.pos - dragOffset;
+        rect.x += delta.x;
+        rect.y += delta.y;
+        dragOffset = Inputs::mouse.pos;
     }
     if (isDragged && Inputs::mouse.IsReleased(InputMouse::Left))
     {
         isDragged = false;
+    }
+
+    //? size
+    if (onBtnSize && Inputs::mouse.IsPressed(InputMouse::Left))
+    {
+        isSize = true;
+        sizeOffset = Inputs::mouse.pos;
+    }
+    if (isSize)
+    {
+        auto delta = Inputs::mouse.pos - sizeOffset;
+        rect.w += delta.x;
+        rect.h += delta.y;
+        sizeOffset = Inputs::mouse.pos;
+    }
+    if (isSize && Inputs::mouse.IsReleased(InputMouse::Left))
+    {
+        isSize = false;
     }
 
     //? minmax
