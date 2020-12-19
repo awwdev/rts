@@ -26,7 +26,24 @@ struct InputKeyboard
 
     KeyState keys [Key::ENUM_END];
     com::POD_Array<Key, Key::ENUM_END> keysPressed;
+
+    void Advance();
+    void Update(InputKeyboard const&);
 };
+
+///////////////////////////////////////////////////////////
+
+void InputKeyboard::Advance()
+{
+
+}
+
+///////////////////////////////////////////////////////////
+
+void InputKeyboard::Update(InputKeyboard const& input)
+{
+
+}
 
 ///////////////////////////////////////////////////////////
 

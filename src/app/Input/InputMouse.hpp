@@ -30,7 +30,24 @@ struct InputMouse
     i32 xpos;
     i32 ypos;
     i32 scroll;
+
+    void Advance();
+    void Update(InputMouse const&);
 };
+
+///////////////////////////////////////////////////////////
+
+void InputMouse::Advance()
+{
+
+}
+
+///////////////////////////////////////////////////////////
+
+void InputMouse::Update(InputMouse const& input)
+{
+
+}
 
 ///////////////////////////////////////////////////////////
 

@@ -13,13 +13,12 @@ struct InputWindow
     enum State
     {
         None,
-        Begin,
         Continued,
         End,
     };
 
-    State moveState;
-    State sizeState;
+    State moveState = None;
+    State sizeState = None;
 
     i32 xpos;
     i32 ypos;
@@ -28,7 +27,31 @@ struct InputWindow
 
     bool shouldClose;
     bool minmax;
+
+    void Advance();
+    void Update(InputWindow const&);
 };
+
+///////////////////////////////////////////////////////////
+
+void InputWindow::Advance()
+{
+    if (sizeState == InputWindow::End)
+        sizeState = InputWindow::None;
+}
+
+///////////////////////////////////////////////////////////
+
+void InputWindow::Update(InputWindow const& input)
+{
+    shouldClose = input.shouldClose;
+    sizeState = input.sizeState;
+    if (sizeState != InputWindow::None)
+    {
+        width = input.width;
+        height = input.height;
+    }    
+}
 
 ///////////////////////////////////////////////////////////
 

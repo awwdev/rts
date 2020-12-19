@@ -13,7 +13,8 @@ namespace rts::wnd {
 
 static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    app::Input input {};
+    using namespace app;
+    Input input {};
 
     switch(uMsg)
     {
@@ -22,51 +23,33 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_DESTROY:
         case WM_CLOSE:
         case WM_QUIT:
-        input.type = app::Input::Window;
-        break;
-
-        ///////////////////////////////////////////////////////////
-
-        case WM_KEYDOWN:
-        case WM_SYSKEYDOWN:
-        input.type = app::Input::Keyboard;
-        break;
-
-        ///////////////////////////////////////////////////////////
-
-        case WM_KEYUP:
-        case WM_SYSKEYUP:
-        input.type = app::Input::Keyboard;
-        break;
-
-        ///////////////////////////////////////////////////////////
-
-        case WM_LBUTTONDOWN:
-        input.type = app::Input::Mouse;
-        break;
-
-        ///////////////////////////////////////////////////////////
-
-        case WM_LBUTTONUP:
-        input.type = app::Input::Mouse;
-        break;
-
-        ///////////////////////////////////////////////////////////
-
-        case WM_MOUSEMOVE:
-        input.type = app::Input::Mouse;
+        input.type = Input::Window;
+        input.window.shouldClose = true;
         break;
 
         ///////////////////////////////////////////////////////////
 
         case WM_SIZE:
-        input.type = app::Input::Window;
+        static bool sizing;
+        sizing = true;
+        input.type = Input::Window;
+        input.window.sizeState = InputWindow::Continued;
+        input.window.width = LOWORD(lParam);
+        input.window.height = HIWORD(lParam);
         switch(wParam)
         {
             case SIZE_MAXIMIZED:
             case SIZE_MINIMIZED:
+            static bool minmax;
+            minmax = true;
+            input.window.sizeState = InputWindow::End;
             break;
             case SIZE_RESTORED:
+            if (minmax)
+            {
+                input.window.sizeState = InputWindow::End;
+                minmax = false;
+            }
             break;
             default: 
             break;
@@ -76,7 +59,48 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         ///////////////////////////////////////////////////////////
 
         case WM_EXITSIZEMOVE:
-        input.type = app::Input::Window;
+        input.type = Input::Window;
+        if (sizing)
+        {
+            input.window.sizeState = InputWindow::End;
+            sizing = false;
+            RECT rect;
+            WinCheck(GetClientRect(hWnd, &rect));
+            input.window.width  = rect.right;
+            input.window.height = rect.bottom;
+        }
+        break;
+
+        ///////////////////////////////////////////////////////////
+
+        case WM_KEYDOWN:
+        case WM_SYSKEYDOWN:
+        input.type = Input::Keyboard;
+        break;
+
+        ///////////////////////////////////////////////////////////
+
+        case WM_KEYUP:
+        case WM_SYSKEYUP:
+        input.type = Input::Keyboard;
+        break;
+
+        ///////////////////////////////////////////////////////////
+
+        case WM_LBUTTONDOWN:
+        input.type = Input::Mouse;
+        break;
+
+        ///////////////////////////////////////////////////////////
+
+        case WM_LBUTTONUP:
+        input.type = Input::Mouse;
+        break;
+
+        ///////////////////////////////////////////////////////////
+
+        case WM_MOUSEMOVE:
+        input.type = Input::Mouse;
         break;
 
         ///////////////////////////////////////////////////////////
@@ -85,7 +109,7 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 
-    app::Inputs::inputBuffer.Write(input);
+    Inputs::inputBuffer.Write(input);
     return 0;    
 }
 

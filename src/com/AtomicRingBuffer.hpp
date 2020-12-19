@@ -19,8 +19,8 @@ struct AtomicRingBuffer
     static constexpr auto RING_BUFFER_MAX = N;
     T data [RING_BUFFER_MAX] {};
 
-    std::atomic<i32> atomicWriteCount;
-    std::atomic<i32> atomicReadCount;
+    std::atomic<i32> atomicWriteCount = 0;
+    std::atomic<i32> atomicReadCount = 0;
 
     void Write(T const&);
     auto Read();
@@ -36,7 +36,8 @@ void AtomicRingBuffer<T, N>::Write(T const& event)
 
     data[writeCount] = event;
     writeCount = (writeCount + 1) % RING_BUFFER_MAX;
-    com::Assert(writeCount + 1 != readCount, "AtomicRingBuffer write count surpasses read count");
+    if (writeCount == readCount)
+        com::PrintWarning("AtomicRingBuffer write count surpasses read count");
     atomicWriteCount.store(writeCount);
 }
 
