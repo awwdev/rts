@@ -44,13 +44,13 @@ void Textures::Load()
         file.read(buffer, size);
     };
 
-    for(auto& it : std::filesystem::directory_iterator("res/Textures/sprites/")) 
+    for(auto& it : std::filesystem::directory_iterator("res/Textures/Sprites/")) 
     {
         auto& texture = sprites.Append();
         LoadFn(it.path(), texture.buffer, texture.SIZE);
     }    
 
-    for(auto& it : std::filesystem::directory_iterator("res/Textures/font/")) 
+    for(auto& it : std::filesystem::directory_iterator("res/Textures/Font/EditorBold")) 
     {
         auto& texture = font.Append();
         LoadFn(it.path(), texture.buffer, texture.SIZE);

@@ -5,6 +5,7 @@
 
 #include "com/Types.hpp"
 #include "com/Assert.hpp"
+#include "com/Utils.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -120,11 +121,24 @@ TEMPLATE
 void String<N>::AppendArithmetic(auto arithmetic)
 {
     auto capacity = N - length - 1;
-    auto [end, res] = std::to_chars(data + length, data + capacity, arithmetic);
-    com::Assert(res == std::errc(), "string conversion failed");
-    auto delta = end - (data + length);
-    length += delta;
-    data[length] = '\0';
+    using A = decltype(arithmetic);
+
+    if constexpr(std::is_integral_v<A>)
+    {
+        auto [end, res] = std::to_chars(data + length, data + capacity, arithmetic);  
+        com::Assert(res == std::errc(), "string conversion failed");
+        auto delta = end - (data + length);
+        length += delta;
+        data[length] = '\0';
+    }
+    
+    if constexpr(std::is_floating_point_v<A>)
+    {
+        auto delta = snprintf(data + length, capacity, "%f", arithmetic);
+        com::Assert(delta >= 0, "string conversion failed");
+        delta = com::Min(capacity, (unsigned)delta);
+        length += delta;
+    }
 }
 
 ///////////////////////////////////////////////////////////
