@@ -42,6 +42,7 @@ struct String
     void operator=(auto);
     auto& operator[](idx_t);
     auto& operator[](idx_t) const;
+    void Clear();
 
 private:
     using COM_STRING = void*; //to identify this class when appending
@@ -124,6 +125,15 @@ void String<N>::AppendArithmetic(auto arithmetic)
     auto delta = end - (data + length);
     length += delta;
     data[length] = '\0';
+}
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE
+void String<N>::Clear()
+{
+    length = 0;
+    data[0] = 0;
 }
 
 ///////////////////////////////////////////////////////////

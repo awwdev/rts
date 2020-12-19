@@ -19,6 +19,7 @@ g++ ^
 -Wno-unused-variable ^
 -Wno-unused-but-set-variable ^
 -Wno-unused-local-typedefs ^
+-Wno-missing-field-initializers ^
 -I %src_hpp% ^
 -I %ext_hpp% ^
 -L %ext_lib% ^

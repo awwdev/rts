@@ -6,7 +6,6 @@
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
 
-#include "app/_Old/Global.hpp"
 #include "res/Resources.hpp"
 #include "gpu/RenderDataUI.hpp"
 
@@ -110,7 +109,7 @@ void UIUniforms::Update(RenderDataUI& rd)
     metaData.data.windowWidth  = app::Inputs::window.width;
     metaData.data.windowHeight = app::Inputs::window.height;
 
-    quadData.count = 0;
+    quadData.Clear();
     quadData.Append(rd.quadData.data, rd.quadData.count);
 }
 

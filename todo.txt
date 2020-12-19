@@ -1,6 +1,3 @@
+additional smaller window font 
 dynamic claim block so it can be used for eg vulkan
- 
-blur
-IsPointInsideRect
-
 linux static linkage test

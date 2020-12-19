@@ -17,17 +17,12 @@ struct InputWindow
         End,
     };
 
-    State moveState = None;
     State sizeState = None;
-
-    i32 xpos;
-    i32 ypos;
     i32 width;
     i32 height;
 
     bool shouldClose;
-    bool minmax;
-
+    
     void Advance();
     void Update(InputWindow const&);
 };

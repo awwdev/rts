@@ -77,7 +77,7 @@ void PostVertices::Destroy()
 
 void PostVertices::Update(RenderDataPost& rd)
 {
-    vbo.count = 0;
+    vbo.Clear();
     vbo.Append(rd.vertices.data, rd.vertices.count);
 }
 

@@ -56,6 +56,9 @@ void Scene::Update()
 
     //? UI
     guiStats.Update(renderData);
+
+    if (app::Inputs::keyboard.keys[27])
+        app::Inputs::window.shouldClose = true;
 }
 
 ///////////////////////////////////////////////////////////

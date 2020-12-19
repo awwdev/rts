@@ -76,6 +76,8 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
         input.type = Input::Keyboard;
+        input.key.state = InputKey::Down;
+        input.key.value = wParam;
         break;
 
         ///////////////////////////////////////////////////////////
@@ -83,24 +85,34 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_KEYUP:
         case WM_SYSKEYUP:
         input.type = Input::Keyboard;
+        input.key.state = InputKey::Up;
+        input.key.value = wParam;
         break;
 
         ///////////////////////////////////////////////////////////
 
         case WM_LBUTTONDOWN:
         input.type = Input::Mouse;
+        input.mouse.pos.x = GET_X_LPARAM(lParam); 
+        input.mouse.pos.y = GET_Y_LPARAM(lParam); 
+        input.mouse.buttons[InputMouse::Left] = InputMouse::Pressed;
         break;
 
         ///////////////////////////////////////////////////////////
 
         case WM_LBUTTONUP:
         input.type = Input::Mouse;
+        input.mouse.pos.x = GET_X_LPARAM(lParam); 
+        input.mouse.pos.y = GET_Y_LPARAM(lParam); 
+        input.mouse.buttons[InputMouse::Left] = InputMouse::Released;
         break;
 
         ///////////////////////////////////////////////////////////
 
         case WM_MOUSEMOVE:
         input.type = Input::Mouse;
+        input.mouse.pos.x = GET_X_LPARAM(lParam); 
+        input.mouse.pos.y = GET_Y_LPARAM(lParam); 
         break;
 
         ///////////////////////////////////////////////////////////

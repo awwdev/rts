@@ -35,6 +35,7 @@ struct Rect
     {}
 
     bool IsPointInside(auto x, auto y);
+    bool IsPointInside(auto vec);
 };
 
 ///////////////////////////////////////////////////////////
@@ -45,6 +46,16 @@ bool Rect<T>::IsPointInside(auto px, auto py)
     return 
     px > x && px < x+w &&
     py > y && py < y+h;
+}
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE
+bool Rect<T>::IsPointInside(auto vec)
+{
+    return 
+    vec.x > x && vec.x < x+w &&
+    vec.x > y && vec.y < y+h;
 }
 
 ///////////////////////////////////////////////////////////

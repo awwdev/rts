@@ -16,8 +16,8 @@ constexpr auto VERTEX_COUNT_MAX_POST = 300;
 
 struct VertexPost
 {
-    Vec2f pos;
-    Vec2f tex;
+    com::Vec2f pos;
+    com::Vec2f tex;
     i32   blur;
 };
 
@@ -37,6 +37,8 @@ struct RenderDataPost
 
     RenderDataPost()
     {
+        using namespace com;
+
         f32 scale = 1; //resolution scale
         auto uv0 = Vec2f { (0 << 1) & 2, 0 & 2 };
         auto uv1 = Vec2f { (1 << 1) & 2, 1 & 2 };

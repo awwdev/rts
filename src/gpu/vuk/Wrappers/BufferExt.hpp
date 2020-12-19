@@ -27,6 +27,7 @@ TEMPLATE struct BufferExt
 
     void Create();
     void Destroy();
+    void Clear();
     void Bake(VkCommandPool);
     void Append(T const& element);
     void Append(T const* elements, idx_t elementCount);
@@ -35,7 +36,8 @@ TEMPLATE struct BufferExt
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void BUFFER_EXT::Create()
+TEMPLATE 
+void BUFFER_EXT::Create()
 {
     cpuBuffer.Create(
         BUFFER_USAGE | VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
@@ -48,7 +50,8 @@ TEMPLATE void BUFFER_EXT::Create()
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void BUFFER_EXT::Destroy()
+TEMPLATE 
+void BUFFER_EXT::Destroy()
 {
     if (cpuBuffer.buffer) cpuBuffer.Destroy();
     if (gpuBuffer.buffer) gpuBuffer.Destroy();
@@ -58,7 +61,17 @@ TEMPLATE void BUFFER_EXT::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void BUFFER_EXT::Append(T const& element)
+TEMPLATE 
+void BUFFER_EXT::Clear()
+{
+    count = 0;
+    memset(activeBuffer->memPtr, 0, BYTE_SIZE);
+}
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE 
+void BUFFER_EXT::Append(T const& element)
 {
     activeBuffer->Store((void*)&element, sizeof(T), CurrentByteSize());
     count += 1;
@@ -66,7 +79,8 @@ TEMPLATE void BUFFER_EXT::Append(T const& element)
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void BUFFER_EXT::Append(T const* elements, idx_t elementCount)
+TEMPLATE 
+void BUFFER_EXT::Append(T const* elements, idx_t elementCount)
 {
     activeBuffer->Store((void*)elements, elementCount * sizeof(T), CurrentByteSize());
     count += elementCount;
@@ -74,7 +88,8 @@ TEMPLATE void BUFFER_EXT::Append(T const* elements, idx_t elementCount)
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void BUFFER_EXT::Bake(VkCommandPool cmdPool)
+TEMPLATE 
+void BUFFER_EXT::Bake(VkCommandPool cmdPool)
 {
     if (gpuBuffer.buffer) {
         VkCheck(vkQueueWaitIdle(g_contextPtr->device.queue));

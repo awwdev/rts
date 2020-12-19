@@ -26,7 +26,14 @@ struct Font
 
 ///////////////////////////////////////////////////////////
 
-constexpr Font EDITOR_FONT
+constexpr Font EDITOR_BOLD_FONT
+{
+    .heigth  = 14,
+    .width   = 14,
+    .spacing = -4,
+};
+
+constexpr Font EDITOR_DEFAULT_FONT
 {
     .heigth  = 14,
     .width   = 14,
@@ -47,7 +54,7 @@ struct Text
 {
     com::String<100> str;
     Col4n color = Colors::AlmostWhite;
-    Font font;
+    Font font = EDITOR_BOLD_FONT;
     i32 x = 0;
     i32 y = 0;
 
@@ -91,6 +98,8 @@ static void AddText(gpu::RenderDataUI& rd, Text const& text)
 
 static void AddRectBlur(gpu::RenderDataPost& rd, com::Recti const& rect)
 {
+    using namespace com;
+    
     Vec2f uv0 { (f32) rect.x / app::Inputs::window.width, (f32) rect.y / app::Inputs::window.height };
     Vec2f uv1 { (f32) rect.x / app::Inputs::window.width, (f32)(rect.y + rect.h) / app::Inputs::window.height };
     Vec2f uv2 { (f32)(rect.x + rect.w) / app::Inputs::window.width, (f32)(rect.y + rect.h) / app::Inputs::window.height };

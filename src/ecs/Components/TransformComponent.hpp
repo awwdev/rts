@@ -1,7 +1,6 @@
 #pragma once
 
 #include "com/Vec.hpp"
-#include "app/_Old/Global.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -11,10 +10,10 @@ namespace rts::ecs {
 
 struct TransformComponent
 {
-    Vec2i position;
-    Vec2i positionPrev = position;
-    Vec2i positionTarget = position;
-    Vec2i size;
+    com::Vec2i position;
+    com::Vec2i positionPrev = position;
+    com::Vec2i positionTarget = position;
+    com::Vec2i size;
 
     void MoveToTarget();
     auto InterpolatedPosition(double time, double timeMax);
@@ -74,7 +73,7 @@ auto TransformComponent::InterpolatedPosition(double time, double timeMax)
 {
     i32 x = positionPrev.x + (position.x - positionPrev.x) * (time / timeMax);
     i32 y = positionPrev.y + (position.y - positionPrev.y) * (time / timeMax);
-    return Vec2i { x, y };
+    return com::Vec2i { x, y };
 }
 
 ///////////////////////////////////////////////////////////

@@ -110,7 +110,7 @@ void DefaultUniforms::Update(RenderDataDefault& rd)
     metaData.data.windowWidth  = app::Inputs::window.width;
     metaData.data.windowHeight = app::Inputs::window.height;
 
-    quadData.count = 0;
+    quadData.Clear();
     quadData.Append(rd.quadData.data, rd.quadData.count);
 }
 
