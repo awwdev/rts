@@ -21,8 +21,8 @@ struct RenderDataUI
     struct UniformQuadData
     {
         com::Recti rect;
-        Col4n col;
-        u32   texId;
+        com::Col4n col;
+        u32 texId;
     };
 
     static constexpr auto QUAD_COUNT_MAX = 1000;

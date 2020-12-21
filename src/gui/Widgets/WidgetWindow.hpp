@@ -12,18 +12,18 @@ namespace rts::gui {
 
 ///////////////////////////////////////////////////////////
 
-struct Widget_Window 
+struct WidgetWindow 
 {
     static constexpr i32 BAR_H = 24;
     static constexpr i32 ROW_H = 24;
     static constexpr i32 ROW_PADDING = 4;
     static constexpr i32 RESIZE_BTN = 8;
 
-    static constexpr Col4n WND_COL_BACK     { 0.f, 0.f, 0.f, 0.25 };
-    static constexpr Col4n WND_COL_BAR      { 0.1, 0.1, 0.1, 1.f };
-    static constexpr Col4n WND_COL_SIZE_BTN { 0.1, 0.1, 0.1, 1.f };
-    static constexpr Col4n WND_COL_MIN_BTN  { 0.2, 0.2, 0.2, 1.f };
-    static constexpr Col4n WND_COL_ACTIVE   { 0.8, 0.2, 0.2, 1.f };
+    static constexpr com::Col4n WND_COL_BACK     { 0.f, 0.f, 0.f, 0.25 };
+    static constexpr com::Col4n WND_COL_BAR      { 0.1, 0.1, 0.1, 1.f };
+    static constexpr com::Col4n WND_COL_SIZE_BTN { 0.1, 0.1, 0.1, 1.f };
+    static constexpr com::Col4n WND_COL_MIN_BTN  { 0.2, 0.2, 0.2, 1.f };
+    static constexpr com::Col4n WND_COL_ACTIVE   { 0.8, 0.2, 0.2, 1.f };
 
     com::Recti rect;
     Text title;
@@ -45,7 +45,7 @@ private:
 
 ///////////////////////////////////////////////////////////
 
-void Widget_Window::Update(gpu::RenderData& rd)
+void WidgetWindow::Update(gpu::RenderData& rd)
 {
     rowCount = 0;
 
@@ -80,7 +80,7 @@ void Widget_Window::Update(gpu::RenderData& rd)
 
 ///////////////////////////////////////////////////////////
 
-void Widget_Window::UpdateDrag(bool onWndBar)
+void WidgetWindow::UpdateDrag(bool onWndBar)
 {
     using namespace app;
     if (onWndBar && Inputs::mouse.IsPressed(InputMouse::Left))
@@ -103,7 +103,7 @@ void Widget_Window::UpdateDrag(bool onWndBar)
 
 ///////////////////////////////////////////////////////////
 
-void Widget_Window::UpdateSize(bool onBtnSize)
+void WidgetWindow::UpdateSize(bool onBtnSize)
 {
     using namespace app;
     if (onBtnSize && Inputs::mouse.IsPressed(InputMouse::Left))
@@ -126,7 +126,7 @@ void Widget_Window::UpdateSize(bool onBtnSize)
 
 ///////////////////////////////////////////////////////////
 
-void Widget_Window::UpdateMinMax(bool onBtnMin)
+void WidgetWindow::UpdateMinMax(bool onBtnMin)
 {
     using namespace app;
     if (onBtnMin && Inputs::mouse.IsPressed(InputMouse::Left))
@@ -135,7 +135,7 @@ void Widget_Window::UpdateMinMax(bool onBtnMin)
 
 ///////////////////////////////////////////////////////////
 
-void Widget_Window::UpdateText(gpu::RenderDataUI& rd, Text& text)
+void WidgetWindow::UpdateText(gpu::RenderDataUI& rd, Text& text)
 {
     if (isMini) 
         return;

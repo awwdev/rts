@@ -43,7 +43,7 @@ struct String
     void operator=(auto);
     auto& operator[](idx_t);
     auto& operator[](idx_t) const;
-    void Clear();
+    void Clear(idx_t start = 0);
 
 private:
     using COM_STRING = void*; //to identify this class when appending
@@ -82,7 +82,7 @@ String<N>::String(auto any)
 TEMPLATE
 void String<N>::operator=(auto any)
 {
-    length = 0;
+    Clear();
     Append(any);
 }
 
@@ -144,10 +144,10 @@ void String<N>::AppendArithmetic(auto arithmetic)
 ///////////////////////////////////////////////////////////
 
 TEMPLATE
-void String<N>::Clear()
+void String<N>::Clear(idx_t start)
 {
-    length = 0;
-    data[0] = 0;
+    length = start - 1;
+    data[start] = 0;
 }
 
 ///////////////////////////////////////////////////////////

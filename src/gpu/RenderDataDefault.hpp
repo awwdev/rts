@@ -23,8 +23,8 @@ struct RenderDataDefault
     struct UniformQuadData
     {
         com::Recti rect;
-        Col4n col;
-        u32   texId;
+        com::Col4n col;
+        u32 texId;
     };
 
     com::POD_Array<UniformQuadData, ecs::ENTITY_COUNT_MAX> quadData;

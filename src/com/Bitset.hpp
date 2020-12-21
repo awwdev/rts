@@ -15,7 +15,8 @@ namespace rts::com {
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE struct Bitset
+TEMPLATE 
+struct Bitset
 {
     static constexpr idx_t BIT_COUNT  = N;
     static constexpr idx_t BYTE_COUNT = (BIT_COUNT + 7) / 8;
@@ -35,7 +36,8 @@ TEMPLATE struct Bitset
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void Bitset<N>::Set(idx_t idx, bool setTrue)
+TEMPLATE 
+void Bitset<N>::Set(idx_t idx, bool setTrue)
 {
     com::Assert(idx < BIT_COUNT, "index out of bitset bounds");
 
@@ -46,7 +48,8 @@ TEMPLATE void Bitset<N>::Set(idx_t idx, bool setTrue)
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE bool Bitset<N>::Test(idx_t idx) const
+TEMPLATE 
+bool Bitset<N>::Test(idx_t idx) const
 {
     com::Assert(idx < BIT_COUNT, "index out of bitset bounds");
     return bytes[Byte(idx)] & (1 << Bit(idx));
@@ -54,7 +57,8 @@ TEMPLATE bool Bitset<N>::Test(idx_t idx) const
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void Bitset<N>::Flip(idx_t idx)
+TEMPLATE 
+void Bitset<N>::Flip(idx_t idx)
 {
     com::Assert(idx < BIT_COUNT, "index out of bitset bounds");
     bytes[Byte(idx)] ^= 1 << Bit(idx);
@@ -62,18 +66,20 @@ TEMPLATE void Bitset<N>::Flip(idx_t idx)
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE void Bitset<N>::Clear()
+TEMPLATE 
+void Bitset<N>::Clear()
 {
     std::memset(bytes, 0, BYTE_COUNT);
 }
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE Optional<idx_t> Bitset<N>::FindFirstFreeBit(idx_t startAt)
+TEMPLATE 
+Optional<idx_t> Bitset<N>::FindFirstFreeBit(idx_t startAt)
 {
     for(idx_t i = startAt; i < BIT_COUNT; ++i)
     {   
-        const auto bit = bytes[Byte(i)] & (1 << Bit(i));
+        auto bit = bytes[Byte(i)] & (1 << Bit(i));
         if (bit == 0) 
             return i;
     }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "com/Types.hpp"
+#include "com/Assert.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -20,6 +21,19 @@ inline auto Max(auto a, auto b)
 {
     using T = std::common_type_t<decltype(a), decltype(b)>;
     return static_cast<T>(a > b ? a : b);
+}
+
+///////////////////////////////////////////////////////////
+
+template<typename T, auto N>
+inline void Swap(T (&arr)[N], idx_t idx1, idx_t idx2)
+{
+    com::Assert(idx1 < N, "array access out of bounds");
+    com::Assert(idx2 < N, "array access out of bounds");
+
+    auto tmp  = arr[idx2];
+    arr[idx2] = arr[idx1];
+    arr[idx1] = tmp;
 }
 
 ///////////////////////////////////////////////////////////

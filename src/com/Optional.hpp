@@ -13,7 +13,8 @@ namespace rts::com {
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE struct Optional
+TEMPLATE 
+struct Optional
 {
     bool hasData;
     union 
@@ -32,14 +33,16 @@ TEMPLATE struct Optional
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE Optional<T>::Optional()
+TEMPLATE 
+Optional<T>::Optional()
     : hasData   { false }
     , unionData { .uninit {} }
 {}
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE Optional<T>::Optional(auto const&... args)
+TEMPLATE 
+Optional<T>::Optional(auto const&... args)
     : hasData   { true }
     , unionData { .data { args... } }
 {}

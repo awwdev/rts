@@ -5,7 +5,7 @@
 
 #include "ecs/ComponentArrays.hpp"
 #include "gpu/RenderData.hpp"
-#include "app/Lockstep.hpp"
+#include "cmd/Lockstep.hpp"
 #include "com/Bitset.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -19,12 +19,10 @@ struct ECS
     com::Bitset<ENTITY_COUNT_MAX> entities;
     ComponentArrays arrays;
 
-    RenderSystem renderSystem;
-
     auto AddEntity();
     void RemoveEntity();
-    void Step();
-    void Render(gpu::RenderData&, app::Lockstep&);
+    void Update();
+    void Render(gpu::RenderData&, cmd::Lockstep&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -46,16 +44,16 @@ void ECS::RemoveEntity()
 
 ///////////////////////////////////////////////////////////
 
-void ECS::Step()
+void ECS::Update()
 {
-    TransformSystem(arrays);
+
 }
 
 ///////////////////////////////////////////////////////////
 
-void ECS::Render(gpu::RenderData& renderData, app::Lockstep& lockstep)
+void ECS::Render(gpu::RenderData& renderData, cmd::Lockstep& lockstep)
 {
-    renderSystem.Update(arrays, renderData, lockstep);
+    RenderSystem(arrays, renderData.renderDataDefault);
 }
 
 ///////////////////////////////////////////////////////////

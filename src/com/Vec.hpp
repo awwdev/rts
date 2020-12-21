@@ -10,7 +10,11 @@ namespace rts::com {
 
 ///////////////////////////////////////////////////////////
 
-template<typename T>
+#define TEMPLATE template<typename T>
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE
 struct Vec2
 {
     T x, y;
@@ -18,7 +22,7 @@ struct Vec2
 
 ///////////////////////////////////////////////////////////
 
-template<typename T>
+TEMPLATE
 auto operator==(Vec2<T> const& v1, Vec2<T> const& v2)
 {
     return v1.x == v2.x && v1.y == v2.y;
@@ -26,7 +30,7 @@ auto operator==(Vec2<T> const& v1, Vec2<T> const& v2)
 
 ///////////////////////////////////////////////////////////
 
-template<typename T>
+TEMPLATE
 auto operator-(Vec2<T> const& v1, Vec2<T> const& v2)
 {
     return Vec2<T>
@@ -44,12 +48,16 @@ using Vec2u = Vec2<u32>;
 
 ///////////////////////////////////////////////////////////
 
-template<typename T>
+TEMPLATE
 std::ostream& operator<<(std::ostream& os, Vec2<T> const& vec)
 {
     os << '(' << vec.x << '|' << vec.y << ')';
     return os;
 }
+
+///////////////////////////////////////////////////////////
+
+#undef TEMPLATE
 
 ///////////////////////////////////////////////////////////
 

@@ -3,7 +3,7 @@
 #include "ecs/ECS.hpp"
 #include "gpu/RenderData.hpp"
 #include "cmd/Timeline.hpp"
-#include "app/Lockstep.hpp"
+#include "cmd/Lockstep.hpp"
 #include "gui/Editor/GUI_Stats.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -12,50 +12,48 @@ namespace rts::app {
 
 ///////////////////////////////////////////////////////////
 
-struct Scene 
+struct GameScene 
 {
-    ecs::ECS ecs; //could be optional (optionally initialized)
-    gpu::RenderData renderData;
+    ecs::ECS ecs;
     cmd::Timeline timeline;
-    app::Lockstep lockstep;
+    cmd::Lockstep lockstep;
+    gpu::RenderData renderData;
     gui::GUI_Stats guiStats;
 
-    Scene();
+    GameScene();
     void Update();
 };
 
 ///////////////////////////////////////////////////////////
 
-Scene::Scene()
+GameScene::GameScene()
 {
-    for(auto i = 0; i < 100; ++i)
+    for(auto i = 0; i < 1'000; ++i)
     {
         auto ID = ecs.AddEntity();
-        auto& transformComponent = ecs.arrays.Add<ecs::TransformComponent>(ID);
+        auto& mainComponent = ecs.arrays.Add<ecs::MainComponent>(ID);
         auto x = rand() % 600;
         auto y = rand() % 400;
-        transformComponent.position = { x, y };
-        transformComponent.positionTarget = { x, y };
-        transformComponent.size = { 64, 64 }; //double scale 
-        auto& renderComponent = ecs.arrays.Add<ecs::RenderComponent>(ID);
-        renderComponent.texIndex = 0;
+        mainComponent.pos  = { x, y };
+        mainComponent.size = { 64, 64 };
+        mainComponent.texIdx = 0;
     }
 }
 
 ///////////////////////////////////////////////////////////
 
-void Scene::Update()
+void GameScene::Update()
 {
     //? CLEAR
     renderData.Clear();
 
     //? ECS
     if (lockstep.Update())
-        ecs.Step();
+        ecs.Update();
     ecs.Render(renderData, lockstep);
 
     //? UI
-    guiStats.Update(renderData);
+    guiStats.Update(renderData, timeline);
 
     if (app::Inputs::keyboard.keys[27])
         app::Inputs::window.shouldClose = true;

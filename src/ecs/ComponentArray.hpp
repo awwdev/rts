@@ -2,6 +2,7 @@
 
 #include "ecs/EntityID.hpp"
 #include "com/POD_Array.hpp"
+#include "com/Utils.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -24,6 +25,8 @@ struct ComponentArray
     void  Remove(ID entityID);
     auto  GetEntity(ID denseID) const;
     auto& GetComponent(ID entityID);
+
+    void Swap(ID, ID);
 };
 
 ///////////////////////////////////////////////////////////
@@ -64,6 +67,15 @@ auto& ComponentArray<T, N>::GetComponent(ID entityID)
 
 ///////////////////////////////////////////////////////////
 
+TEMPLATE
+void ComponentArray<T, N>::Swap(ID idx1, ID idx2)
+{
+    com::Swap(dense.data, idx1, idx2);
+    com::Swap(denseLookup, entityLookup[idx1], entityLookup[idx2]);
+    com::Swap(entityLookup, idx1, idx2);
+}
+
+///////////////////////////////////////////////////////////
 
 #undef TEMPLATE
 

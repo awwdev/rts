@@ -15,7 +15,8 @@ namespace rts::com {
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE struct POD_Array
+TEMPLATE 
+struct POD_Array
 {
     idx_t count = 0;
     T data [N];
@@ -33,7 +34,8 @@ TEMPLATE struct POD_Array
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE auto& POD_Array<T, N>::operator[](idx_t i)
+TEMPLATE 
+auto& POD_Array<T, N>::operator[](idx_t i)
 {
     com::Assert(i < count, "array access out of bounds");
     return data[i];
@@ -41,7 +43,8 @@ TEMPLATE auto& POD_Array<T, N>::operator[](idx_t i)
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE auto& POD_Array<T, N>::operator[](idx_t i) const
+TEMPLATE 
+auto& POD_Array<T, N>::operator[](idx_t i) const
 {
     com::Assert(i < count, "array access out of bounds");
     return data[i];
@@ -49,7 +52,8 @@ TEMPLATE auto& POD_Array<T, N>::operator[](idx_t i) const
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE auto& POD_Array<T, N>::Append(auto const&... args)
+TEMPLATE 
+auto& POD_Array<T, N>::Append(auto const&... args)
 {
     com::Assert((count + 1) <= N, "array exhausted");
     data[count] = { args... };
@@ -59,7 +63,8 @@ TEMPLATE auto& POD_Array<T, N>::Append(auto const&... args)
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE POD_Array<T, N>::POD_Array(auto... elements)
+TEMPLATE 
+POD_Array<T, N>::POD_Array(auto... elements)
     : count { sizeof...(elements) }
     , data  { elements... }
 {
@@ -73,7 +78,8 @@ POD_Array(T, Ts...) -> POD_Array<T, sizeof...(Ts) + 1>;
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE T* POD_Array<T, N>::Contains(T const& other)
+TEMPLATE 
+T* POD_Array<T, N>::Contains(T const& other)
 {
     FOR_ARRAY((*this), i)
     {
@@ -86,7 +92,8 @@ TEMPLATE T* POD_Array<T, N>::Contains(T const& other)
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE auto& POD_Array<T, N>::Pop()
+TEMPLATE 
+auto& POD_Array<T, N>::Pop()
 {
     com::Assert(count > 0, "array access out of bounds");
     count--;

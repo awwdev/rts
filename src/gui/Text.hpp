@@ -12,8 +12,8 @@ namespace rts::gui {
 
 namespace Colors
 {
-    constexpr Col4n AlmostWhite = { 0.95, 0.95, 0.95, 1 };
-    constexpr Col4n Orange      = { 255/255.f, 160/255.f, 80/255.f, 1.0 };
+    constexpr com::Col4n AlmostWhite = { 0.95, 0.95, 0.95, 1 };
+    constexpr com::Col4n Orange      = { 255/255.f, 160/255.f, 80/255.f, 1.0 };
 }
 
 ///////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ constexpr Font EDITOR_DEFAULT_FONT
 struct Text
 {
     com::String<100> str;
-    Col4n color = Colors::AlmostWhite;
+    com::Col4n color = Colors::AlmostWhite;
     Font font = EDITOR_BOLD_FONT;
     i32 x = 0;
     i32 y = 0;
