@@ -28,14 +28,16 @@ struct GameScene
 
 GameScene::GameScene()
 {
-    for(auto i = 0; i < 1; ++i)
+    for(auto i = 0; i < 1'000; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& mainComponent = ecs.arrays.Add<ecs::MainComponent>(ID);
         auto x = rand() % 600;
         auto y = rand() % 400;
         mainComponent.transform.pos  = { x, y };
+        mainComponent.transform.posPrev = mainComponent.transform.pos;
         mainComponent.transform.posTarget = mainComponent.transform.pos;
+        //TODO set pos method
         mainComponent.transform.size = { 64, 64 };
         mainComponent.sprite.texIdx = 0;
         mainComponent.sprite.time = (rand() % 100) / 100.f;
@@ -50,12 +52,19 @@ void GameScene::Update()
     renderData.Clear();
 
     //? ECS
+    static f32 stepTime;
+    stepTime += app::Time::dt;
+    stepTime = com::Clamp(stepTime, 0, 0.1);//TODO right place
+    auto stepProgress = stepTime / 0.1;
+
+    ecs.Render(renderData, lockstep, stepProgress);
     if (lockstep.Update())
     {
         ecs.Update(timeline.stepIdx);
         timeline.stepIdx++;
+        stepTime = 0;
     }
-    ecs.Render(renderData, lockstep);
+    
 
     //? UI
     guiStats.Update(renderData, timeline);

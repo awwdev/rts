@@ -9,7 +9,7 @@ namespace rts::ecs {
 
 ///////////////////////////////////////////////////////////
 
-static void RenderSystem(ComponentArrays& arrays, gpu::RenderDataDefault& rd)
+static void RenderSystem(ComponentArrays& arrays, gpu::RenderDataDefault& rd, f32 stepProgress)
 {
     auto& mainComponents = arrays.mainComponents;
     auto& dense = mainComponents.dense;
@@ -22,7 +22,8 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderDataDefault& rd)
     }
 
     //?shadow
-    rd.shadowData.rotation += app::Time::dt;
+    //rd.shadowData.rotation += app::Time::dt;
+    rd.shadowData.rotation = 5;
     rd.shadowData.strength = 0.5;
 
     //?sort
@@ -42,8 +43,9 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderDataDefault& rd)
     {
         auto& mainComponent = dense[i];
         auto& trans  = mainComponent.transform;
+        auto lerpPos = trans.posPrev + (trans.pos - trans.posPrev) * stepProgress;
         auto& sprite = mainComponent.sprite;
-        com::Recti rect { trans.pos, trans.size }; 
+        com::Rectf rect { lerpPos, trans.size }; 
         com::Col4n COLOR { 1, 1, 1, 1 };
         rd.quadData.Append(rect, COLOR, com::Vec2f { 0.5, 0.5 }, sprite.texIdx, trans.rot);
     }

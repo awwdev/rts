@@ -20,18 +20,19 @@ struct Rect
 
     Rect() = default;
 
-    Rect(T pX, T pY, T pW, T pH)
-    : x { pX }
-    , y { pY }   
-    , w { pW }   
-    , h { pH }   
+    Rect(auto pX, auto pY, auto pW, auto pH)
+        : x { (T) pX }
+        , y { (T) pY }   
+        , w { (T) pW }   
+        , h { (T) pH }   
     {}
 
-    Rect(Vec2<T> const& pos, Vec2<T> const& size)
-    : x { pos.x }
-    , y { pos.y }   
-    , w { size.x }   
-    , h { size.y }   
+    template<typename T1, typename T2>
+    Rect(Vec2<T1> const& pos, Vec2<T2> const& size)
+        : x { (T) pos.x }
+        , y { (T) pos.y }   
+        , w { (T) size.x }   
+        , h { (T) size.y }   
     {}
 
     bool IsPointInside(auto x, auto y);

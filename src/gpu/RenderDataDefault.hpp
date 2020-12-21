@@ -22,7 +22,7 @@ struct RenderDataDefault
 
     struct UniformQuadData
     {
-        com::Recti rect;
+        com::Rectf rect;
         com::Col4n col;
         com::Vec2f origin;
         u32 texId;

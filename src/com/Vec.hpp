@@ -42,6 +42,28 @@ auto operator-(Vec2<T> const& v1, Vec2<T> const& v2)
 
 ///////////////////////////////////////////////////////////
 
+template<typename T1, typename T2>
+auto operator+(Vec2<T1> const& v1, Vec2<T2> const& v2)
+{
+    using C = std::common_type_t<T1, T2>;
+    return Vec2<C>
+    { 
+        v1.x + v2.x, 
+        v1.y + v2.y,
+    };
+}
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE
+auto operator*(Vec2<T> const& vec, auto scalar)
+{
+    using C = std::common_type_t<T, decltype(scalar)>;
+    return Vec2<C> { vec.x * scalar, vec.y * scalar };
+}
+
+///////////////////////////////////////////////////////////
+
 using Vec2f = Vec2<f32>;
 using Vec2i = Vec2<i32>;
 using Vec2u = Vec2<u32>;

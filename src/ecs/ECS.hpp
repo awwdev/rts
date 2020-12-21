@@ -22,7 +22,7 @@ struct ECS
     auto AddEntity();
     void RemoveEntity();
     void Update(idx_t);
-    void Render(gpu::RenderData&, cmd::Lockstep&);
+    void Render(gpu::RenderData&, cmd::Lockstep&, f32);
 };
 
 ///////////////////////////////////////////////////////////
@@ -51,9 +51,9 @@ void ECS::Update(idx_t stepIdx)
 
 ///////////////////////////////////////////////////////////
 
-void ECS::Render(gpu::RenderData& renderData, cmd::Lockstep& lockstep)
+void ECS::Render(gpu::RenderData& renderData, cmd::Lockstep& lockstep, f32 stepProgress)
 {
-    RenderSystem(arrays, renderData.renderDataDefault);
+    RenderSystem(arrays, renderData.renderDataDefault, stepProgress);
 }
 
 ///////////////////////////////////////////////////////////

@@ -39,6 +39,15 @@ inline auto Sign(auto val)
 
 ///////////////////////////////////////////////////////////
 
+inline auto Clamp(auto val, auto min, auto max)
+{
+    val = Max(min, val);
+    val = Min(max, val);
+    return val;
+}
+
+///////////////////////////////////////////////////////////
+
 template<typename T, auto N>
 inline void Swap(T (&arr)[N], idx_t idx1, idx_t idx2)
 {
