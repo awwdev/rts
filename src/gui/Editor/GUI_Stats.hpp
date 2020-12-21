@@ -19,7 +19,7 @@ struct GUI_Stats
         .title { "Stats", Colors::Orange },
     };
     Text fpsText { "fps:  " };
-    Text dtText  { "dt:   " };
+    Text dtText  { "ftm:  " };
     Text stepText{ "step: " };
 
     void Update(gpu::RenderData&, cmd::Timeline&);
@@ -31,14 +31,10 @@ void GUI_Stats::Update(gpu::RenderData& rd, cmd::Timeline& timeline)
 {
     wndStats.Update(rd);
 
-    if (app::Time::hasSecondPassed)
-    {   
-        fpsText.str.Clear(6);
-        fpsText.str.Append(app::Time::fps);
-        dtText.str.Clear(6);
-        dtText.str.Append(app::Time::dt);
-    }
-
+    fpsText.str.Clear(6);
+    fpsText.str.Append(app::Time::fps);
+    dtText.str.Clear(6);
+    dtText.str.Append(app::Time::frameTime);
     stepText.str.Clear(6);
     stepText.str.Append(timeline.stepIdx);
 

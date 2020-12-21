@@ -1,6 +1,5 @@
 additional smaller window font 
 widget label
 useclaim block on shader
-
 dynamic claim block so it can be used for eg vulkan
 linux static linkage test

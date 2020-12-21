@@ -28,7 +28,7 @@ struct GameScene
 
 GameScene::GameScene()
 {
-    for(auto i = 0; i < 1'000; ++i)
+    for(auto i = 0; i < 1'00; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& mainComponent = ecs.arrays.Add<ecs::MainComponent>(ID);

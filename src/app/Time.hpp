@@ -16,9 +16,10 @@ struct Time
     using clock_t = std::chrono::high_resolution_clock;
     using dur_t   = std::chrono::duration<f64>;
 
-    inline static f64 dt;
+    inline static f32 dt;
     inline static i32 fps;
     inline static bool hasSecondPassed;
+    inline static f32 frameTime;
 
     static void Update();
     static void PrintFps();
@@ -26,7 +27,7 @@ struct Time
 private:
     inline static i32 frames;
     inline static clock_t::time_point t1 = clock_t::now();
-    inline static f64 secTimer;
+    inline static f32 secTimer;
 };
 
 ///////////////////////////////////////////////////////////
@@ -42,6 +43,7 @@ void Time::Update()
     hasSecondPassed = false;
     if (secTimer >= 1)
     {
+        frameTime = secTimer / frames;
         hasSecondPassed = true;
         secTimer -= 1;
         fps = frames;
