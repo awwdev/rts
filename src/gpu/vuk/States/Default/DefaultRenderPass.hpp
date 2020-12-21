@@ -1,6 +1,8 @@
 #pragma once
 
 #include "gpu/vuk/Wrappers/RenderPass.hpp"
+#include "gpu/vuk/Context/Swapchain.hpp"
+#include "gpu/vuk/Renderer/Commands.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -8,24 +10,46 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void CreateRenderPassDefault(VkCommandPool cmdPool, RenderPass& rp, Swapchain& swapchain)
+struct DefaultRenderPass : RenderPass
 {
-    rp.clear = { VkClearValue { .color { 155/255.f, 186/255.f, 94/255.f, 1.f } } }; //!
-    rp.width  = swapchain.width;
-    rp.height = swapchain.height;
-    rp.format = swapchain.format;
+    Image shadows;
+    com::POD_Array<VkFramebuffer, 4> shadowFrameBuffers;
+    com::POD_Array<VkRenderPassBeginInfo, 4> shadowBeginInfos;
 
-     rp.offscreen.Create(cmdPool, rp.format, 
+    Image offscreen;
+    VkClearValue clear;
+    VkClearValue shadowClears;
+    void Create(VkCommandPool, Swapchain&);
+    void Destroy();
+};
+
+///////////////////////////////////////////////////////////
+
+void DefaultRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
+{
+    clear = { VkClearValue { .color { 155/255.f, 186/255.f, 94/255.f, 1.f } } };
+    shadowClears = { VkClearValue { .color { } } };
+
+    width  = swapchain.width;
+    height = swapchain.height;
+    format = swapchain.format;
+
+    shadows.Create(cmdPool, format, 
         VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
         VK_IMAGE_VIEW_TYPE_2D,
-        rp.width, rp.height, 1
-    );//would need more images per swapchain image but that is hard to work out with uniforms
-    //so without dependencies probably UB
+        width, height, 1
+    );
+
+    offscreen.Create(cmdPool, format, 
+        VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
+        VK_IMAGE_VIEW_TYPE_2D,
+        width, height, 1
+    );
 
     VkAttachmentDescription colorDesc
     {
         .flags          = 0,
-        .format         = rp.format, 
+        .format         = format, 
         .samples        = VK_SAMPLE_COUNT_1_BIT,
         .loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR, //!
         .storeOp        = VK_ATTACHMENT_STORE_OP_STORE,
@@ -34,7 +58,8 @@ inline void CreateRenderPassDefault(VkCommandPool cmdPool, RenderPass& rp, Swapc
         .initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED,
         .finalLayout    = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL //!
     };
-    rp.offscreen.layout = colorDesc.finalLayout;
+    offscreen.layout = colorDesc.finalLayout;
+    shadows.layout = colorDesc.finalLayout;
 
     VkAttachmentReference colorRef
     {
@@ -79,11 +104,11 @@ inline void CreateRenderPassDefault(VkCommandPool cmdPool, RenderPass& rp, Swapc
         .dependencyCount = 1,
         .pDependencies   = &dependency,
     };
-    VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &rp.renderPass));
+    VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &renderPass));
 
     auto count = swapchain.images.count;
-    rp.framebuffers.count = count;
-    rp.beginInfos.count = count;
+    framebuffers.count = count;
+    beginInfos.count = count;
 
     for(uint32_t i = 0; i < count; ++i)
     {
@@ -92,29 +117,86 @@ inline void CreateRenderPassDefault(VkCommandPool cmdPool, RenderPass& rp, Swapc
             .sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
             .pNext           = nullptr,
             .flags           = 0,
-            .renderPass      = rp.renderPass,
+            .renderPass      = renderPass,
             .attachmentCount = 1,
-            .pAttachments    = &rp.offscreen.view,
-            .width           = rp.width,
-            .height          = rp.height,
+            .pAttachments    = &offscreen.view,
+            .width           = width,
+            .height          = height,
             .layers          = 1
         };
-        VkCheck(vkCreateFramebuffer(g_devicePtr, &framebufferInfo, GetVkAlloc(), &rp.framebuffers[i]));
+        VkCheck(vkCreateFramebuffer(g_devicePtr, &framebufferInfo, GetVkAlloc(), &framebuffers[i]));
 
-        rp.beginInfos[i] = 
+        beginInfos[i] = 
         {
             .sType          = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
             .pNext          = nullptr, 
-            .renderPass     = rp.renderPass,
-            .framebuffer    = rp.framebuffers[i],
+            .renderPass     = renderPass,
+            .framebuffer    = framebuffers[i],
             .renderArea     = {
                 .offset     = VkOffset2D {0, 0},
-                .extent     = { rp.width, rp.height }
+                .extent     = { width, height }
             },
             .clearValueCount= 1,
-            .pClearValues   = &rp.clear,
+            .pClearValues   = &clear,
         };
     }
+
+    //shadow
+    count = swapchain.images.count;
+    shadowFrameBuffers.count = count;
+    shadowBeginInfos.count = count;
+
+    for(uint32_t i = 0; i < count; ++i)
+    {
+        VkFramebufferCreateInfo framebufferInfo 
+        {
+            .sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
+            .pNext           = nullptr,
+            .flags           = 0,
+            .renderPass      = renderPass,
+            .attachmentCount = 1,
+            .pAttachments    = &shadows.view,
+            .width           = width,
+            .height          = height,
+            .layers          = 1
+        };
+        VkCheck(vkCreateFramebuffer(g_devicePtr, &framebufferInfo, GetVkAlloc(), &shadowFrameBuffers[i]));
+
+        shadowBeginInfos[i] = 
+        {
+            .sType          = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+            .pNext          = nullptr, 
+            .renderPass     = renderPass,
+            .framebuffer    = shadowFrameBuffers[i],
+            .renderArea     = {
+                .offset     = VkOffset2D {0, 0},
+                .extent     = { width, height }
+            },
+            .clearValueCount= 1,
+            .pClearValues   = &shadowClears,
+        };
+    }
+}
+
+///////////////////////////////////////////////////////////
+
+void DefaultRenderPass::Destroy()
+{
+    RenderPass::Destroy();
+    shadows.Destroy();
+    offscreen.Destroy();
+
+    FOR_ARRAY(shadowFrameBuffers, i)
+    {
+        vkDestroyFramebuffer(g_devicePtr, shadowFrameBuffers[i], GetVkAlloc());
+        shadowFrameBuffers[i] = nullptr;
+    }
+    shadowFrameBuffers.count = 0;
+    FOR_ARRAY(shadowBeginInfos, i)
+    {
+        shadowBeginInfos[i] = {};
+    }
+    shadowBeginInfos.count = 0;
 }
 
 ///////////////////////////////////////////////////////////

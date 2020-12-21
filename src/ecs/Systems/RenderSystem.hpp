@@ -22,20 +22,8 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderDataDefault& rd)
     }
 
     //?shadow
-    static f32 shadowRot = 3.14 * 3.f;
-    shadowRot += app::Time::dt;
-
-    FOR_ARRAY(dense, i)
-    {
-        auto& mainComponent = dense[i];
-        auto& trans  = mainComponent.transform;
-        auto& sprite = mainComponent.sprite;
-
-        com::Vec2i pos { trans.pos.x, trans.pos.y + 10 };
-        com::Recti rect { pos, trans.size }; 
-        com::Col4n COLOR { 0, 0, 0, 1 };
-        rd.quadData.Append(rect, COLOR, com::Vec2f { 0.5, 0.75 }, sprite.texIdx, shadowRot);
-    }
+    rd.shadowData.rotation += app::Time::dt;
+    rd.shadowData.strength = 0.5;
 
     //?sort
     for(idx_t i = 0; i < dense.count - 1; ++i)

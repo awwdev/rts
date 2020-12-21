@@ -5,10 +5,12 @@
 #include "gpu/vuk/Wrappers/Sampler.hpp"
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
+#include "gpu/vuk/States/Default/DefaultRenderPass.hpp"
 
 #include "app/Inputs.hpp"
 #include "res/Resources.hpp"
 #include "gpu/RenderDataDefault.hpp"
+#include "app/Time.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -20,6 +22,8 @@ enum class DefaultUniformsEnum : u32
 {
     QuadData, 
     SpriteArray,
+    ShadowData,
+    ShadowOffscreen,
     ENUM_END
 };
 
@@ -36,15 +40,17 @@ struct DefaultUniforms
     VkSampler spriteArraySampler; 
     Image spriteArray;
     StorageBuffer<RD::UniformQuadData, ecs::ENTITY_COUNT_MAX> quadData;
-
-    void Create(VkCommandPool, res::Resources&);
+    UniformBuffer<RD::UniformShadowData, 1> shadowData;
+    VkSampler shadowOffscreenSampler;
+    
+    void Create(VkCommandPool, res::Resources&, DefaultRenderPass&);
     void Destroy();
     void Update(RenderDataDefault&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
+void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, DefaultRenderPass& renderPass)
 {
     //? uniform
     quadData.Create();
@@ -64,6 +70,47 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
             .buffer = quadData.activeBuffer->buffer,
             .offset = 0,
             .range  = VK_WHOLE_SIZE,
+        }
+    };
+
+    //? uniform
+    shadowData.Create();
+    infos[enum_cast(DefaultUniformsEnum::ShadowData)] =
+    {
+        .type = UniformInfo::Buffer,
+        .binding 
+        {
+            .binding            = enum_cast(DefaultUniformsEnum::ShadowData),
+            .descriptorType     = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+            .descriptorCount    = 1,
+            .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
+            .pImmutableSamplers = nullptr,
+        },
+        .bufferInfo
+        {
+            .buffer = shadowData.activeBuffer->buffer,
+            .offset = 0,
+            .range  = VK_WHOLE_SIZE,
+        }
+    };
+
+    CreateSamplerNearest(shadowOffscreenSampler);
+    infos[enum_cast(DefaultUniformsEnum::ShadowOffscreen)] =
+    {
+        .type = UniformInfo::Image,
+        .binding 
+        {
+            .binding            = enum_cast(DefaultUniformsEnum::ShadowOffscreen),
+            .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+            .descriptorCount    = 1,
+            .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
+            .pImmutableSamplers = nullptr,
+        },
+        .imageInfo 
+        {
+            .sampler        = shadowOffscreenSampler,
+            .imageView      = renderPass.shadows.view,
+            .imageLayout    = renderPass.shadows.layout,
         }
     };
 
@@ -110,6 +157,8 @@ void DefaultUniforms::Update(RenderDataDefault& rd)
     metaData.data.windowWidth  = app::Inputs::window.width;
     metaData.data.windowHeight = app::Inputs::window.height;
 
+    shadowData.Clear();
+    shadowData.Append(rd.shadowData);
     quadData.Clear();
     quadData.Append(rd.quadData.data, rd.quadData.count);
 }
@@ -121,7 +170,9 @@ void DefaultUniforms::Destroy()
     descriptors.Destroy();
     spriteArray.Destroy();
     vkDestroySampler(g_devicePtr, spriteArraySampler, GetVkAlloc());
+    vkDestroySampler(g_devicePtr, shadowOffscreenSampler, GetVkAlloc());
     quadData.Destroy();
+    shadowData.Destroy();
 }
 
 ///////////////////////////////////////////////////////////

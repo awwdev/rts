@@ -16,7 +16,7 @@ namespace rts::gpu::vuk {
 struct StateUI
 {
     Pipeline pipeline;
-    RenderPass renderPass;
+    UIRenderPass renderPass;
     Shader shader;
     UIUniforms uniforms;
 
@@ -31,8 +31,8 @@ struct StateUI
 void StateUI::Create(Context& context, Commands& commands, res::Resources& resources)
 {
     uniforms.Create(commands.pool, resources);
+    renderPass.Create(context.swapchain);
     CreateShaderUI(shader);
-    CreateRenderPassUI(renderPass, context.swapchain);
     CreatePipelineUI(pipeline, uniforms, shader, renderPass);
 }
 

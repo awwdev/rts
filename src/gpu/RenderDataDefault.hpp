@@ -29,7 +29,14 @@ struct RenderDataDefault
         f32 rot;
     };
 
+    struct UniformShadowData
+    {
+        f32 rotation;
+        f32 strength;
+    };
+
     com::POD_Array<UniformQuadData, ecs::ENTITY_COUNT_MAX> quadData;
+    UniformShadowData shadowData;
     void Clear();
 };
 

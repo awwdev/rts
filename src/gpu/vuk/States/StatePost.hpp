@@ -20,8 +20,8 @@ namespace rts::gpu::vuk {
 struct StatePost
 {
     Pipeline pipeline;
-    RenderPass renderPass;
     Shader shader;
+    PostRenderPass renderPass;
     PostUniforms uniforms;
     PostVertices vertices;
 
@@ -37,8 +37,8 @@ void StatePost::Create(Context& context, Commands& commands, res::Resources& res
 {
     uniforms.Create(commands.pool, resources, defaultState.renderPass.offscreen);
     vertices.Create(commands.pool);
+    renderPass.Create(context.swapchain);
     CreateShaderPost(shader);
-    CreateRenderPassPost(renderPass, context.swapchain);
     CreatePipelinePost(pipeline, vertices, uniforms, shader, renderPass);
 }
 

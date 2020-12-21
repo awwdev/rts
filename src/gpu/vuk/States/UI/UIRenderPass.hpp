@@ -8,16 +8,24 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void CreateRenderPassUI(RenderPass& rp, Swapchain& swapchain)
+struct UIRenderPass : RenderPass
 {
-    rp.width  = swapchain.width;
-    rp.height = swapchain.height;
-    rp.format = swapchain.format;
+    void Create(Swapchain& swapchain);
+    void Destroy();
+};
+
+///////////////////////////////////////////////////////////
+
+inline void UIRenderPass::Create(Swapchain& swapchain)
+{
+    width  = swapchain.width;
+    height = swapchain.height;
+    format = swapchain.format;
 
     VkAttachmentDescription colorDesc
     {
         .flags          = 0,
-        .format         = rp.format, 
+        .format         = format, 
         .samples        = VK_SAMPLE_COUNT_1_BIT,
         .loadOp         = VK_ATTACHMENT_LOAD_OP_LOAD, //!
         .storeOp        = VK_ATTACHMENT_STORE_OP_STORE,
@@ -70,11 +78,11 @@ inline void CreateRenderPassUI(RenderPass& rp, Swapchain& swapchain)
         .dependencyCount = 1,
         .pDependencies   = &dependency
     };
-    VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &rp.renderPass));
+    VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &renderPass));
 
     auto count = swapchain.images.count;
-    rp.framebuffers.count = count;
-    rp.beginInfos.count = count;
+    framebuffers.count = count;
+    beginInfos.count = count;
 
     for(uint32_t i = 0; i < count; ++i)
     {
@@ -83,29 +91,36 @@ inline void CreateRenderPassUI(RenderPass& rp, Swapchain& swapchain)
             .sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
             .pNext           = nullptr,
             .flags           = 0,
-            .renderPass      = rp.renderPass,
+            .renderPass      = renderPass,
             .attachmentCount = 1,
             .pAttachments    = &swapchain.views[i],
-            .width           = rp.width,
-            .height          = rp.height,
+            .width           = width,
+            .height          = height,
             .layers          = 1
         };
-        VkCheck(vkCreateFramebuffer(g_devicePtr, &framebufferInfo, GetVkAlloc(), &rp.framebuffers[i]));
+        VkCheck(vkCreateFramebuffer(g_devicePtr, &framebufferInfo, GetVkAlloc(), &framebuffers[i]));
 
-        rp.beginInfos[i] = 
+        beginInfos[i] = 
         {
             .sType          = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
             .pNext          = nullptr, 
-            .renderPass     = rp.renderPass,
-            .framebuffer    = rp.framebuffers[i],
+            .renderPass     = renderPass,
+            .framebuffer    = framebuffers[i],
             .renderArea     = {
                 .offset     = VkOffset2D {0, 0},
-                .extent     = { rp.width, rp.height }
+                .extent     = { width, height }
             },
             .clearValueCount= 0,
             .pClearValues   = nullptr,
         };
     }
+}
+
+///////////////////////////////////////////////////////////
+
+void UIRenderPass::Destroy()
+{
+    RenderPass::Destroy();
 }
 
 ///////////////////////////////////////////////////////////
