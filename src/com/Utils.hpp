@@ -25,6 +25,20 @@ inline auto Max(auto a, auto b)
 
 ///////////////////////////////////////////////////////////
 
+inline auto Abs(auto val)
+{
+    return val >= 0 ? val : -val;
+}
+
+///////////////////////////////////////////////////////////
+
+inline auto Sign(auto val)
+{
+    return val >= 0 ? 1 : -1;
+}
+
+///////////////////////////////////////////////////////////
+
 template<typename T, auto N>
 inline void Swap(T (&arr)[N], idx_t idx1, idx_t idx2)
 {

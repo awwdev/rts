@@ -19,4 +19,4 @@
 2020-12-13 text centered, font, stats, point in rect
 2020-12-14 better event system
 2020-12-19 input system, minmax, drag, 
-2020-12-21 sprite shadows, main component
+2020-12-21 sprite shadows, main component, shadow offscreen pass, 

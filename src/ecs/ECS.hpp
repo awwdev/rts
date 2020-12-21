@@ -21,7 +21,7 @@ struct ECS
 
     auto AddEntity();
     void RemoveEntity();
-    void Update();
+    void Update(idx_t);
     void Render(gpu::RenderData&, cmd::Lockstep&);
 };
 
@@ -44,9 +44,9 @@ void ECS::RemoveEntity()
 
 ///////////////////////////////////////////////////////////
 
-void ECS::Update()
+void ECS::Update(idx_t stepIdx)
 {
-    TransformSystem(arrays);
+    TransformSystem(arrays, stepIdx);
 }
 
 ///////////////////////////////////////////////////////////

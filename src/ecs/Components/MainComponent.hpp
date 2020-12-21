@@ -12,8 +12,13 @@ namespace rts::ecs {
 struct Transform
 {
     com::Vec2i pos;
+    com::Vec2i posTarget;
+    com::Vec2i delta;
     com::Vec2i size;
     f32 rot;
+    i32 xspd;
+    i32 yspd;
+    i32 spd = 10; //1px/step
 };
 
 ///////////////////////////////////////////////////////////
