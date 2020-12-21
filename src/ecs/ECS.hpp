@@ -46,7 +46,7 @@ void ECS::RemoveEntity()
 
 void ECS::Update()
 {
-
+    TransformSystem(arrays);
 }
 
 ///////////////////////////////////////////////////////////

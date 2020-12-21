@@ -15,13 +15,17 @@ struct Uniform
     int y;
     int w;
     int h;
-    
+
     float r;
     float g;
     float b;
     float a;
 
+    float xo;
+    float yo;
+
     uint texId;
+    float rot;
 };
 
 ///////////////////////////////////////////////////////////  
@@ -50,7 +54,7 @@ const vec2 quad [6] =
     vec2(1, 0),
 };
 
-///////////////////////////////////////////////////////////   
+///////////////////////////////////////////////////////////    
 
 void main() 
 {
@@ -58,9 +62,15 @@ void main()
     Uniform uni = sbo.array[gl_VertexIndex / 6];
     vec2 q = quad[gl_VertexIndex % 6];
 
+    //rotation
+    float c = cos(uni.rot);
+    float s = sin(uni.rot);
+    mat2 rotMat = mat2(c, -s, s, c);
+    vec2 rotVec = rotMat * vec2(q.x - uni.xo, q.y - uni.yo);
+
     //position
-    float x_px = uni.x + q.x * uni.w;
-    float y_px = uni.y + q.y * uni.h;
+    float x_px = uni.x + rotVec.x * uni.w;
+    float y_px = uni.y + rotVec.y * uni.h;
     float x_dc = x_px / meta.windowWidth  * 2 - 1;
     float y_dc = y_px / meta.windowHeight * 2 - 1;
     gl_Position = vec4(x_dc, y_dc, 0, 1);

@@ -1,0 +1,22 @@
+#pragma once
+
+#include "ecs/ComponentArrays.hpp"
+
+///////////////////////////////////////////////////////////
+
+namespace rts::ecs {
+
+///////////////////////////////////////////////////////////
+
+static void TransformSystem(ComponentArrays& arrays)
+{
+    auto& mainComponents = arrays.mainComponents;
+    auto& dense = mainComponents.dense;
+
+    
+
+}
+
+///////////////////////////////////////////////////////////
+
+}//ns

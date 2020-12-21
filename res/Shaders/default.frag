@@ -18,5 +18,5 @@ void main()
 {
     vec3 uv = vec3(inTex.x, inTex.y, inTexId);
     vec4 col = texture(textures, uv);
-    outCol = col;
+    outCol = col * inCol;
 }

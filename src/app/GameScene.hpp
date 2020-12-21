@@ -28,15 +28,16 @@ struct GameScene
 
 GameScene::GameScene()
 {
-    for(auto i = 0; i < 1'000; ++i)
+    for(auto i = 0; i < 10; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& mainComponent = ecs.arrays.Add<ecs::MainComponent>(ID);
         auto x = rand() % 600;
         auto y = rand() % 400;
-        mainComponent.pos  = { x, y };
-        mainComponent.size = { 64, 64 };
-        mainComponent.texIdx = 0;
+        mainComponent.transform.pos  = { x, y };
+        mainComponent.transform.size = { 64, 64 };
+        mainComponent.sprite.texIdx = 0;
+        mainComponent.sprite.time = (rand() % 100) / 100.f;
     }
 }
 

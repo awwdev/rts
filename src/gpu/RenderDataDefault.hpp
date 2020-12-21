@@ -24,7 +24,9 @@ struct RenderDataDefault
     {
         com::Recti rect;
         com::Col4n col;
+        com::Vec2f origin;
         u32 texId;
+        f32 rot;
     };
 
     com::POD_Array<UniformQuadData, ecs::ENTITY_COUNT_MAX> quadData;
