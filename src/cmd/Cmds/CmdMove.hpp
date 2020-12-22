@@ -12,7 +12,8 @@ namespace rts::cmd {
 
 struct CmdMove 
 {
-    com::POD_Array<ecs::ID, 10> entities;
+    static constexpr auto MAX_SELECTION = 1'000;
+    com::POD_Array<ecs::ID, MAX_SELECTION> entities;
     com::Vec2i pos;
     void Execute(ecs::ECS&);
 };

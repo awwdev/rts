@@ -28,7 +28,7 @@ struct GameScene
 
 GameScene::GameScene()
 {
-    for(auto i = 0; i < 10; ++i)
+    for(auto i = 0; i < 1'00; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& mainComponent = ecs.arrays.Add<ecs::MainComponent>(ID);
@@ -69,7 +69,8 @@ void GameScene::Update()
         cmd::Command cmd {};
         cmd.type = cmd::CmdEnum::Move;
         using namespace ecs;
-        cmd.cmdUnion.cmdMove.entities = { (ID)0, (ID)1, (ID)2, (ID)3, (ID)4, (ID)5, (ID)6, (ID)7, (ID)8, (ID)9 }; //test
+        for(ecs::ID id = 0; id < 10; ++id)
+            cmd.cmdUnion.cmdMove.entities.Append(id);
         cmd.cmdUnion.cmdMove.pos = app::Inputs::mouse.pos;
         cmds.Append(cmd);
         timeline.Store(cmds, 0.1, timeline.stepIdx + 2);
