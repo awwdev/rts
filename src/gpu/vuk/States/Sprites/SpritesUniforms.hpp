@@ -5,11 +5,11 @@
 #include "gpu/vuk/Wrappers/Sampler.hpp"
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
-#include "gpu/vuk/States/Default/DefaultRenderPass.hpp"
+#include "gpu/vuk/States/Sprites/SpritesRenderPass.hpp"
 
 #include "app/Inputs.hpp"
 #include "res/Resources.hpp"
-#include "gpu/RenderDataDefault.hpp"
+#include "gpu/RenderDataSprites.hpp"
 #include "app/Time.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -18,7 +18,7 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-enum class DefaultUniformsEnum : u32
+enum class SpritesUniformsEnum : u32
 {
     QuadData, 
     SpriteArray,
@@ -29,11 +29,11 @@ enum class DefaultUniformsEnum : u32
 
 ///////////////////////////////////////////////////////////
 
-struct DefaultUniforms
+struct SpritesUniforms
 {
-    using RD = RenderDataDefault;
+    using RD = RenderDataSprites;
 
-    UniformInfo infos [enum_cast(DefaultUniformsEnum::ENUM_END)];
+    UniformInfo infos [enum_cast(SpritesUniformsEnum::ENUM_END)];
     Descriptors descriptors;
 
     PushConstants<RD::PushMeta, VK_SHADER_STAGE_VERTEX_BIT> metaData;
@@ -43,23 +43,23 @@ struct DefaultUniforms
     UniformBuffer<RD::UniformShadowData, 1> shadowData;
     VkSampler shadowOffscreenSampler;
     
-    void Create(VkCommandPool, res::Resources&, DefaultRenderPass&);
+    void Create(VkCommandPool, res::Resources&, SpritesRenderPass&);
     void Destroy();
-    void Update(RenderDataDefault&);
+    void Update(RenderDataSprites&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, DefaultRenderPass& renderPass)
+void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, SpritesRenderPass& renderPass)
 {
     //? uniform
     quadData.Create();
-    infos[enum_cast(DefaultUniformsEnum::QuadData)] =
+    infos[enum_cast(SpritesUniformsEnum::QuadData)] =
     {
         .type = UniformInfo::Buffer,
         .binding 
         {
-            .binding            = enum_cast(DefaultUniformsEnum::QuadData),
+            .binding            = enum_cast(SpritesUniformsEnum::QuadData),
             .descriptorType     = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
             .descriptorCount    = 1,
             .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
@@ -75,12 +75,12 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, D
 
     //? uniform
     shadowData.Create();
-    infos[enum_cast(DefaultUniformsEnum::ShadowData)] =
+    infos[enum_cast(SpritesUniformsEnum::ShadowData)] =
     {
         .type = UniformInfo::Buffer,
         .binding 
         {
-            .binding            = enum_cast(DefaultUniformsEnum::ShadowData),
+            .binding            = enum_cast(SpritesUniformsEnum::ShadowData),
             .descriptorType     = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
             .descriptorCount    = 1,
             .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
@@ -95,12 +95,12 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, D
     };
 
     CreateSamplerNearest(shadowOffscreenSampler);
-    infos[enum_cast(DefaultUniformsEnum::ShadowOffscreen)] =
+    infos[enum_cast(SpritesUniformsEnum::ShadowOffscreen)] =
     {
         .type = UniformInfo::Image,
         .binding 
         {
-            .binding            = enum_cast(DefaultUniformsEnum::ShadowOffscreen),
+            .binding            = enum_cast(SpritesUniformsEnum::ShadowOffscreen),
             .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
             .descriptorCount    = 1,
             .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
@@ -127,12 +127,12 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, D
     spriteArray.Bake(cmdPool);
     CreateSamplerNearest(spriteArraySampler);
 
-    infos[enum_cast(DefaultUniformsEnum::SpriteArray)] =
+    infos[enum_cast(SpritesUniformsEnum::SpriteArray)] =
     {
         .type = UniformInfo::Image,
         .binding 
         {
-            .binding            = enum_cast(DefaultUniformsEnum::SpriteArray),
+            .binding            = enum_cast(SpritesUniformsEnum::SpriteArray),
             .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
             .descriptorCount    = 1,
             .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
@@ -152,7 +152,7 @@ void DefaultUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, D
 
 ///////////////////////////////////////////////////////////
 
-void DefaultUniforms::Update(RenderDataDefault& rd)
+void SpritesUniforms::Update(RenderDataSprites& rd)
 {
     metaData.data.windowWidth  = app::Inputs::window.width;
     metaData.data.windowHeight = app::Inputs::window.height;
@@ -165,7 +165,7 @@ void DefaultUniforms::Update(RenderDataDefault& rd)
 
 ///////////////////////////////////////////////////////////
 
-void DefaultUniforms::Destroy()
+void SpritesUniforms::Destroy()
 {
     descriptors.Destroy();
     spriteArray.Destroy();

@@ -12,7 +12,7 @@ namespace rts::gpu {
 
 ///////////////////////////////////////////////////////////
 
-struct RenderDataDefault
+struct RenderDataSprites
 {
     struct PushMeta
     {
@@ -27,6 +27,7 @@ struct RenderDataDefault
         com::Vec2f origin;
         u32 texId;
         f32 rot;
+        bool flipped;
     };
 
     struct UniformShadowData
@@ -42,7 +43,7 @@ struct RenderDataDefault
 
 ///////////////////////////////////////////////////////////
 
-void RenderDataDefault::Clear()
+void RenderDataSprites::Clear()
 {
     quadData.count = 0;
 }

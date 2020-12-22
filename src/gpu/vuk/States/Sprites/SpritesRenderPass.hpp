@@ -10,7 +10,7 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct DefaultRenderPass : RenderPass
+struct SpritesRenderPass : RenderPass
 {
     Image shadows;
     com::POD_Array<VkFramebuffer, 4> shadowFrameBuffers;
@@ -25,7 +25,7 @@ struct DefaultRenderPass : RenderPass
 
 ///////////////////////////////////////////////////////////
 
-void DefaultRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
+void SpritesRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
 {
     clear = { VkClearValue { .color { 155/255.f, 186/255.f, 94/255.f, 1.f } } };
     shadowClears = { VkClearValue { .color { } } };
@@ -180,7 +180,7 @@ void DefaultRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
 
 ///////////////////////////////////////////////////////////
 
-void DefaultRenderPass::Destroy()
+void SpritesRenderPass::Destroy()
 {
     RenderPass::Destroy();
     shadows.Destroy();

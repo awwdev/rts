@@ -64,8 +64,8 @@ void WidgetWindow::Update(gpu::RenderData& rd)
     UpdateDrag(onWndBar);
     UpdateSize(onBtnSize);
 
-    auto& rdui   = rd.renderDataUI;
-    auto& rdpost = rd.renderDataPost;
+    auto& rdui   = rd.ui;
+    auto& rdpost = rd.post;
     rdui.AddQuad({ wndBar, onWndBar ? WND_COL_BAR.Highlighted() : WND_COL_BAR });
     rdui.AddText(title);
     rdui.AddQuad({ btnMin, onBtnMin ? WND_COL_ACTIVE : WND_COL_MIN_BTN });

@@ -38,9 +38,9 @@ void GUI_Stats::Update(gpu::RenderData& rd, cmd::Timeline& timeline)
     stepText.str.Clear(6);
     stepText.str.Append(timeline.stepIdx);
 
-    wndStats.UpdateText(rd.renderDataUI, fpsText);
-    wndStats.UpdateText(rd.renderDataUI, dtText); 
-    wndStats.UpdateText(rd.renderDataUI, stepText); 
+    wndStats.UpdateText(rd.ui, fpsText);
+    wndStats.UpdateText(rd.ui, dtText); 
+    wndStats.UpdateText(rd.ui, stepText); 
 }
 
 ///////////////////////////////////////////////////////////

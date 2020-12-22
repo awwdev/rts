@@ -30,7 +30,7 @@ struct Input
 
 struct Inputs
 {
-    inline static com::AtomicRingBuffer<Input, 20> inputBuffer;
+    inline static com::AtomicRingBuffer<Input, 50> inputBuffer;
 
     inline static InputWindow   window;
     inline static InputKeyboard keyboard;

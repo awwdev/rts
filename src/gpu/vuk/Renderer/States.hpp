@@ -2,7 +2,7 @@
 
 #include "gpu/vuk/Renderer/Commands.hpp"
 
-#include "gpu/vuk/States/StateDefault.hpp"
+#include "gpu/vuk/States/StateSprites.hpp"
 #include "gpu/vuk/States/StatePost.hpp"
 #include "gpu/vuk/States/StateUI.hpp"
 
@@ -17,9 +17,9 @@ namespace rts::gpu::vuk {
 
 struct States
 {
-    StateDefault stateDefault;
-    StatePost    statePost;
-    StateUI      stateUI;
+    StateSprites sprites;
+    StatePost    post;
+    StateUI      ui;
 
     void Create(Context&, Commands&, res::Resources&, RenderData&);
     void Destroy();
@@ -31,9 +31,9 @@ struct States
 
 void States::Create(Context& context, Commands& commands, res::Resources& resources, RenderData& rd)
 {
-    stateDefault.Create(context, commands, resources);
-    statePost.Create(context, commands, resources, stateDefault);
-    stateUI.Create(context, commands, resources);
+    sprites.Create(context, commands, resources);
+    post.Create(context, commands, resources, sprites);
+    ui.Create(context, commands, resources);
 
     //? record once
     for(idx_t i = 0; i < context.swapchain.images.count; ++i)
@@ -47,18 +47,18 @@ void States::Create(Context& context, Commands& commands, res::Resources& resour
 
 void States::Destroy()
 {
-    statePost.Destroy();
-    stateDefault.Destroy();
-    stateUI.Destroy();
+    post.Destroy();
+    sprites.Destroy();
+    ui.Destroy();
 }
 
 ///////////////////////////////////////////////////////////
 
 void States::Update(RenderData& rd)
 {
-    stateDefault.Update(rd.renderDataDefault);
-    statePost.Update(rd.renderDataPost);
-    stateUI.Update(rd.renderDataUI);
+    sprites.Update(rd.sprites);
+    post.Update(rd.post);
+    ui.Update(rd.ui);
 }
 
 ///////////////////////////////////////////////////////////
@@ -68,9 +68,9 @@ void States::Record(Commands& commands, uint32_t imageIndex)
     auto cmdBuffer = commands.buffers[imageIndex];
     auto beginInfo = CreateCmdBeginInfo();
     VkCheck(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
-    stateDefault.Record(cmdBuffer, imageIndex);
-    statePost.Record(cmdBuffer, imageIndex);
-    stateUI.Record(cmdBuffer, imageIndex);
+    sprites.Record(cmdBuffer, imageIndex);
+    post.Record(cmdBuffer, imageIndex);
+    ui.Record(cmdBuffer, imageIndex);
     VkCheck(vkEndCommandBuffer(cmdBuffer));
 }
 

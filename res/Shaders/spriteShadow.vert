@@ -26,6 +26,7 @@ struct Uniform
 
     uint texId;
     float rot;
+    bool flipped;
 };
 
 ///////////////////////////////////////////////////////////  
@@ -63,6 +64,18 @@ const vec2 quad [6] =
     vec2(1, 0),
 };
 
+///////////////////////////////////////////////////////////
+
+const vec2 flipped [6] =
+{
+    vec2(1, 0),
+    vec2(1, 1),
+    vec2(0, 1),
+    vec2(1, 0),
+    vec2(0, 1),
+    vec2(0, 0),
+};
+
 ///////////////////////////////////////////////////////////    
 
 void main() 
@@ -86,6 +99,9 @@ void main()
 
     //other
     outCol = vec4(0, 0, 0, uni.a);
-    outTex = q;
+    if (uni.flipped) 
+        outTex = flipped[gl_VertexIndex % 6];
+    else
+        outTex = q;
     outTexId = uni.texId;
 }

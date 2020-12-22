@@ -28,7 +28,7 @@ struct GameScene
 
 GameScene::GameScene()
 {
-    for(auto i = 0; i < 1'00; ++i)
+    for(auto i = 0; i < 1'000; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& mainComponent = ecs.arrays.Add<ecs::MainComponent>(ID);
@@ -39,6 +39,7 @@ GameScene::GameScene()
         mainComponent.transform.posTarget = mainComponent.transform.pos;
         //TODO set pos method
         mainComponent.transform.size = { 64, 64 };
+        mainComponent.transform.spd = 2 + rand() % 8;
         mainComponent.sprite.texIdx = 0;
         mainComponent.sprite.time = (rand() % 100) / 100.f;
     }

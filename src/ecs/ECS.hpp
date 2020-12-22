@@ -53,7 +53,7 @@ void ECS::Update(idx_t stepIdx)
 
 void ECS::Render(gpu::RenderData& renderData, cmd::Lockstep& lockstep, f32 stepProgress)
 {
-    RenderSystem(arrays, renderData.renderDataDefault, stepProgress);
+    RenderSystem(arrays, renderData.sprites, stepProgress);
 }
 
 ///////////////////////////////////////////////////////////

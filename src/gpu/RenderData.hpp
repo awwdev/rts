@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gpu/RenderDataDefault.hpp"
+#include "gpu/RenderDataSprites.hpp"
 #include "gpu/RenderDataUI.hpp"
 #include "gpu/RenderDataPost.hpp"
 
@@ -12,10 +12,9 @@ namespace rts::gpu {
 
 struct RenderData 
 {
-    RenderDataDefault renderDataDefault;
-    RenderDataPost     renderDataPost;
-    RenderDataUI       renderDataUI;
-
+    RenderDataSprites sprites;
+    RenderDataPost    post;
+    RenderDataUI      ui;
     void Clear();
 };
 
@@ -23,9 +22,9 @@ struct RenderData
 
 void RenderData::Clear()
 {
-    renderDataDefault.Clear();
-    renderDataPost.Clear();
-    renderDataUI.Clear();
+    sprites.Clear();
+    post.Clear();
+    ui.Clear();
 }
 
 ///////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gpu/vuk/Wrappers/Pipeline.hpp"
-#include "gpu/vuk/States/Default/DefaultUniforms.hpp"
+#include "gpu/vuk/States/Sprites/SpritesUniforms.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -9,9 +9,9 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-inline void CreatePipelineDefault(
+inline void CreatePipelineSprites(
 Pipeline& pipeline, 
-DefaultUniforms& uniforms,
+SpritesUniforms& uniforms,
 Shader& shader, 
 RenderPass& renderPass)
 {
@@ -34,9 +34,9 @@ RenderPass& renderPass)
 
 ///////////////////////////////////////////////////////////
 
-inline void CreatePipelineDefaultShadow(
+inline void CreatePipelineSpritesShadow(
 Pipeline& pipeline, 
-DefaultUniforms& uniforms,
+SpritesUniforms& uniforms,
 Shader& shader, 
 RenderPass& renderPass)
 {
@@ -59,9 +59,9 @@ RenderPass& renderPass)
 
 ///////////////////////////////////////////////////////////
 
-inline void CreatePipelineDefaultShadowOff(
+inline void CreatePipelineShadows(
 Pipeline& pipeline, 
-DefaultUniforms& uniforms,
+SpritesUniforms& uniforms,
 Shader& shader, 
 RenderPass& renderPass)
 {

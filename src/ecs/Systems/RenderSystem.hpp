@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ecs/ComponentArrays.hpp"
-#include "gpu/RenderDataDefault.hpp"
+#include "gpu/RenderDataSprites.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -9,7 +9,7 @@ namespace rts::ecs {
 
 ///////////////////////////////////////////////////////////
 
-static void RenderSystem(ComponentArrays& arrays, gpu::RenderDataDefault& rd, f32 stepProgress)
+static void RenderSystem(ComponentArrays& arrays, gpu::RenderDataSprites& rd, f32 stepProgress)
 {
     auto& mainComponents = arrays.mainComponents;
     auto& dense = mainComponents.dense;
@@ -47,7 +47,8 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderDataDefault& rd, f3
         auto& sprite = mainComponent.sprite;
         com::Rectf rect { lerpPos, trans.size }; 
         com::Col4n COLOR { 1, 1, 1, 1 };
-        rd.quadData.Append(rect, COLOR, com::Vec2f { 0.5, 0.5 }, sprite.texIdx, trans.rot);
+        bool flipped = trans.delta.x < 0;
+        rd.quadData.Append(rect, COLOR, com::Vec2f { 0.5, 0.5 }, sprite.texIdx, trans.rot, flipped);
     }
 }
 

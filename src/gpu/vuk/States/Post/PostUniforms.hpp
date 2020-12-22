@@ -38,7 +38,7 @@ struct PostUniforms
 
 ///////////////////////////////////////////////////////////
 
-void PostUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, Image& defaultOffscreen)
+void PostUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, Image& spritesOffscreen)
 {
     CreateSamplerNearest(sampler);
 
@@ -56,8 +56,8 @@ void PostUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, Imag
         .imageInfo 
         {
             .sampler        = sampler,
-            .imageView      = defaultOffscreen.view,
-            .imageLayout    = defaultOffscreen.layout,
+            .imageView      = spritesOffscreen.view,
+            .imageLayout    = spritesOffscreen.layout,
         }
     };
 

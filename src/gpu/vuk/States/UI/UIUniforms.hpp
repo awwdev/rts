@@ -47,12 +47,12 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 {
     //? uniform
     quadData.Create();
-    infos[enum_cast(DefaultUniformsEnum::QuadData)] =
+    infos[enum_cast(SpritesUniformsEnum::QuadData)] =
     {
         .type = UniformInfo::Buffer,
         .binding 
         {
-            .binding            = enum_cast(DefaultUniformsEnum::QuadData),
+            .binding            = enum_cast(SpritesUniformsEnum::QuadData),
             .descriptorType     = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
             .descriptorCount    = 1,
             .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
