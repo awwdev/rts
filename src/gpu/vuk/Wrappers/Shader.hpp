@@ -3,6 +3,7 @@
 #include "gpu/vuk/Vulkan.hpp"
 #include "com/Types.hpp"
 #include "com/Assert.hpp"
+#include "mem/Memory.hpp"
 #include <fstream>
 
 ///////////////////////////////////////////////////////////
@@ -50,10 +51,13 @@ VkShaderModule Shader::LoadShaderModule(chars_t path)
     std::ifstream file(path, std::ios::ate | std::ios::binary);
     com::Assert(file.is_open(), "cannot open shader file");
 
+    struct Arr { char buffer [10'000]; }; //capacity based
+    auto ptr = rts::mem::ClaimBlock<Arr>();
+
     auto size = file.tellg();
-    char* buffer = new char[size];
+    com::Assert((size_t)size < sizeof(Arr::buffer), "shader read exhausted");
     file.seekg(std::ios::beg);
-    file.read(buffer, size);
+    file.read(ptr->buffer, size);
 
     VkShaderModuleCreateInfo moduleInfo 
     {
@@ -61,11 +65,10 @@ VkShaderModule Shader::LoadShaderModule(chars_t path)
         .pNext      = nullptr,
         .flags      = 0,
         .codeSize   = (uint32_t)size,
-        .pCode      = reinterpret_cast<uint32_t const*>(buffer)
+        .pCode      = reinterpret_cast<uint32_t const*>(ptr->buffer)
     };
     VkCheck(vkCreateShaderModule(g_devicePtr, &moduleInfo, GetVkAlloc(), &mod));
 
-    delete[] buffer;
     return mod;
 }
 

@@ -12,22 +12,30 @@ namespace rts::mem {
 struct BlockArrayInfo
 {
     const idx_t blockSize;
-    const idx_t count;
+    const idx_t count = 1;
 };
 
 ///////////////////////////////////////////////////////////
 //!define application memory demand here
 ///////////////////////////////////////////////////////////
 
+//constexpr auto s = sizeof(gpu::vuk::Renderer);
+//constexpr auto s = sizeof(app::GameScene);
+//constexpr auto s = sizeof(res::Resources);
+//constexpr auto s = sizeof(net::Network);
+constexpr auto SIZE_RENDERER = 6'000;
+constexpr auto SIZE_GAME_SCENE = 2'000'000;
+constexpr auto SIZE_RESOURCES = 80'000;
+constexpr auto SIZE_NETWORK = 2'000;
+
 constexpr BlockArrayInfo BLOCK_ARRAY_INFOS [] 
 {
-    { .blockSize =        100, .count = 1000 },
-    { .blockSize =      1'000, .count = 1000 },
-    { .blockSize =     10'000, .count = 5    },
-    { .blockSize =    100'000, .count = 5    },
-    { .blockSize =  1'000'000, .count = 5    },
-    { .blockSize =  5'000'000, .count = 5    },
-    { .blockSize = 25'000'000, .count = 1    },
+    { .blockSize =  1'000, .count = 100 },
+    { .blockSize = 20'000, .count = 100 },
+    { .blockSize = SIZE_NETWORK },
+    { .blockSize = SIZE_RENDERER },
+    { .blockSize = SIZE_RESOURCES },
+    { .blockSize = SIZE_GAME_SCENE },
 };
 
 ///////////////////////////////////////////////////////////
