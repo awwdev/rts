@@ -28,16 +28,13 @@ struct GameScene
 
 GameScene::GameScene()
 {
-    for(auto i = 0; i < 1'000; ++i)
+    for(auto i = 0; i < 10; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& mainComponent = ecs.arrays.Add<ecs::MainComponent>(ID);
         auto x = rand() % 600;
         auto y = rand() % 400;
-        mainComponent.transform.pos  = { x, y };
-        mainComponent.transform.posPrev = mainComponent.transform.pos;
-        mainComponent.transform.posTarget = mainComponent.transform.pos;
-        //TODO set pos method
+        mainComponent.transform.SetPosition({x, y});
         mainComponent.transform.size = { 64, 64 };
         mainComponent.transform.spd = 2 + rand() % 8;
         mainComponent.sprite.texIdx = 0;
@@ -53,52 +50,32 @@ void GameScene::Update()
     renderData.Clear();
 
     //? ECS
-    static f32 stepTime;
-    stepTime += app::Time::dt;
-    stepTime = com::Clamp(stepTime, 0, 0.1);//TODO right place
-    auto stepProgress = stepTime / 0.1;
-
-    ecs.Render(renderData, lockstep, stepProgress);
+    ecs.Render(renderData, lockstep, lockstep.StepLerpProgress());
     if (lockstep.Update())
     {
         ecs.Update(timeline.stepIdx);
-        timeline.stepIdx++;
-        stepTime = 0;
+        timeline.Execute(ecs);
     }
-    
 
     //? UI
     guiStats.Update(renderData, timeline);
-
     if (app::Inputs::keyboard.keys[27])
         app::Inputs::window.shouldClose = true;
+
+    //test
+    if (app::Inputs::mouse.IsPressed(app::InputMouse::Left))
+    {
+        cmd::CmdsPerStep cmds; //TODO somewhere else
+        cmd::Command cmd {};
+        cmd.type = cmd::CmdEnum::Move;
+        using namespace ecs;
+        cmd.cmdUnion.cmdMove.entities = { (ID)0, (ID)1, (ID)2, (ID)3, (ID)4, (ID)5, (ID)6, (ID)7, (ID)8, (ID)9 }; //test
+        cmd.cmdUnion.cmdMove.pos = app::Inputs::mouse.pos;
+        cmds.Append(cmd);
+        timeline.Store(cmds, 0.1, timeline.stepIdx + 2);
+    }
 }
 
 ///////////////////////////////////////////////////////////
 
 }//ns
-
-
-
-
-
-/*
-//ecs::TransformComponent* transformComponent;
-
-//auto ID = ecs.AddEntity();
-//ecs.arrays.Add<ecs::RenderComponent>(ID);
-//transformComponent = &ecs.arrays.Add<ecs::TransformComponent>(ID);
-//transformComponent->position  = { 32, 32 };
-//transformComponent->positionTarget = transformComponent->position;
-//transformComponent->size = { 32, 32 };
-
-//FOR_ARRAY(app::glo::events, i)
-{
-//auto& event = app::events[i];
-//if (event.eventEnum == app::EventEnum::MB_LEFT_DOWN)
-//{
-//transformComponent->positionTarget = { event.xpos, event.ypos };
-//}
-}
-
-*/

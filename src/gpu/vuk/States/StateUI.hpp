@@ -62,7 +62,7 @@ void StateUI::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
                              uniforms.metaData.SIZE, &uniforms.metaData.data);
     vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 
                              uniforms.descriptors.sets.count, uniforms.descriptors.sets.data, 0, nullptr);
-    vkCmdDraw               (cmdBuffer, uniforms.quadData.COUNT_MAX * 6, 1, 0, 0); //draw max since one time recording
+    vkCmdDraw               (cmdBuffer, uniforms.quadData.COUNT_MAX * 6, 1, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
 }
 

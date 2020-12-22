@@ -22,14 +22,24 @@ struct POD_Array
     T data [N];
 
     POD_Array() = default;
-    POD_Array(auto... elements);
+    POD_Array(auto const&...);
+    auto& Append(auto const&...);
+
+    template<typename T2, auto N2>
+    void AppendArray(POD_Array<T2, N2> const& other)
+    {
+        FOR_ARRAY(other, i)
+        {
+            auto& element = other[i];
+            Append(element);
+        }
+    }
 
     auto& operator[](idx_t);
     auto& operator[](idx_t) const;
 
-    auto& Append(auto const&... args);
-    auto& Pop();
     T* Contains(T const&);
+    auto& Pop();
 };
 
 ///////////////////////////////////////////////////////////
@@ -64,7 +74,7 @@ auto& POD_Array<T, N>::Append(auto const&... args)
 ///////////////////////////////////////////////////////////
 
 TEMPLATE 
-POD_Array<T, N>::POD_Array(auto... elements)
+POD_Array<T, N>::POD_Array(auto const&... elements)
     : count { sizeof...(elements) }
     , data  { elements... }
 {

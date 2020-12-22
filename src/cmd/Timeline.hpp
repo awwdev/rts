@@ -19,7 +19,7 @@ using CmdsPerStep = com::POD_Array<Command, CMDS_PER_STEP_MAX>;
 struct Step
 {
     CmdsPerStep cmds;
-    double stepDuration;
+    f32 stepDuration;
 };
 
 ///////////////////////////////////////////////////////////
@@ -30,33 +30,28 @@ struct Timeline
     idx_t stepIdx = 0;
 
     void Execute(ecs::ECS&);
-    void Store(CmdsPerStep const&, double);
+    void Store(CmdsPerStep const&, f32, idx_t);
 };
 
 ///////////////////////////////////////////////////////////
 
 void Timeline::Execute(ecs::ECS& ecs)
 {
-    /*
-    com::Print("execute step", stepIdx);
     auto& step = steps[stepIdx];
-    FOR_SIMPLE_ARRAY(step.cmds, i)
+    FOR_ARRAY(step.cmds, i)
     {
         auto& cmd = step.cmds[i];
         cmd.Execute(ecs);
     }
     stepIdx += 1;
-    */
 }
 
 ///////////////////////////////////////////////////////////
 
-void Timeline::Store(CmdsPerStep const& cmds, double stepDuration)
+void Timeline::Store(CmdsPerStep const& cmds, f32 stepDuration, idx_t idx)
 {
-    /*
-    steps[stepIdx].cmds.Append(cmds);
-    steps[stepIdx].stepDuration = stepDuration;
-    */
+    steps[idx].cmds.AppendArray(cmds);
+    steps[idx].stepDuration = stepDuration;
 }
 
 ///////////////////////////////////////////////////////////

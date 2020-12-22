@@ -11,12 +11,12 @@ namespace rts::cmd {
 
 struct Lockstep 
 {
-    double stepTime = 0;
-    double stepTimeMax = 0.100;
-    double stepTimePrev = 0;
+    f32 stepTime = 0;
+    f32 stepTimeMax = 0.100;
+    f32 stepTimePrev = 0;
     bool nextStep = false;
-
     bool Update();
+    f32 StepLerpProgress() const { return stepTime / stepTimeMax; };
 };
 
 ///////////////////////////////////////////////////////////

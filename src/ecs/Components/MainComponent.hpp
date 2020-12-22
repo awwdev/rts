@@ -20,7 +20,29 @@ struct Transform
     i32 xspd;
     i32 yspd;
     i32 spd;
+    void SetPosition(com::Vec2i const&);
+    void CalculateDelta();
 };
+
+///////////////////////////////////////////////////////////
+
+void Transform::SetPosition(com::Vec2i const& pos)
+{
+    this->pos = pos;
+    this->posPrev = pos;
+    this->posTarget = pos;
+}
+
+///////////////////////////////////////////////////////////
+
+void Transform::CalculateDelta()
+{
+    using namespace com;
+    delta = posTarget - pos;
+    auto m = Max(Abs(delta.x), Abs(delta.y));
+    if (delta.x != 0) xspd = m / delta.x;
+    if (delta.y != 0) yspd = m / delta.y;
+}
 
 ///////////////////////////////////////////////////////////
 
