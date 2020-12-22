@@ -1,6 +1,5 @@
 #pragma once
 
-#include "gpu/vuk/States/Post/PostShader.hpp"
 #include "gpu/vuk/States/Post/PostPipeline.hpp"
 #include "gpu/vuk/States/Post/PostRenderPass.hpp"
 #include "gpu/vuk/States/Post/PostVertices.hpp"
@@ -38,7 +37,7 @@ void StatePost::Create(Context& context, Commands& commands, res::Resources& res
     uniforms.Create(commands.pool, resources, stateSprites.renderPass.offscreen);
     vertices.Create(commands.pool);
     renderPass.Create(context.swapchain);
-    CreateShaderPost(shader);
+    shader.Create("res/Shaders/spv/post.vert.spv", "res/Shaders/spv/post.frag.spv");
     CreatePipelinePost(pipeline, vertices, uniforms, shader, renderPass);
 }
 

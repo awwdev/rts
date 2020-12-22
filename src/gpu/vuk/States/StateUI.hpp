@@ -1,6 +1,5 @@
 #pragma once
 
-#include "gpu/vuk/States/UI/UIShader.hpp"
 #include "gpu/vuk/States/UI/UIPipeline.hpp"
 #include "gpu/vuk/States/UI/UIRenderPass.hpp"
 #include "gpu/vuk/States/UI/UIUniforms.hpp"
@@ -32,7 +31,7 @@ void StateUI::Create(Context& context, Commands& commands, res::Resources& resou
 {
     uniforms.Create(commands.pool, resources);
     renderPass.Create(context.swapchain);
-    CreateShaderUI(shader);
+    shader.Create("res/Shaders/spv/ui.vert.spv", "res/Shaders/spv/ui.frag.spv");
     CreatePipelineUI(pipeline, uniforms, shader, renderPass);
 }
 
