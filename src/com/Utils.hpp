@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstring>
 #include "com/Types.hpp"
 #include "com/Assert.hpp"
 
@@ -57,6 +58,22 @@ inline void Swap(T (&arr)[N], idx_t idx1, idx_t idx2)
     auto tmp  = arr[idx2];
     arr[idx2] = arr[idx1];
     arr[idx1] = tmp;
+}
+
+///////////////////////////////////////////////////////////
+
+inline float FastSqrt(float number)
+{
+    //from quake
+    float x2 = number * 0.5f;
+    float y  = number;
+
+    u32 i;
+    std::memcpy(&i, &y, sizeof(float));
+    i = 0x5f3759df - (i >> 1);
+    std::memcpy(&y, &i, sizeof(float));
+
+    return number * (y * (1.5f - (x2 * y * y)));
 }
 
 ///////////////////////////////////////////////////////////

@@ -5,6 +5,7 @@
 #include <windowsx.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#include <shellapi.h>
 #include "com/WindowsUndef.hpp"
 #include "com/Print.hpp"
 #include "com/Types.hpp"

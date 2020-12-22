@@ -20,4 +20,4 @@
 2020-12-14 better event system
 2020-12-19 input system, minmax, drag, 
 2020-12-21 sprite shadows, main component, shadow offscreen pass, 
-2020-12-22 sprite flip, primitive restart with ibo test, 
+2020-12-22 sprite flip, primitive restart with ibo test, client setup, 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include "net/Network.hpp"
 #include "com/Types.hpp"
 
@@ -34,6 +35,14 @@ inline auto CreateIpAddress(sockaddr_in const& addr)
     inet_ntop(AF_INET, &(addr.sin_addr), ip.str, INET_ADDRSTRLEN);
     ip.port = ntohs(addr.sin_port);
     return ip;
+}
+
+///////////////////////////////////////////////////////////
+
+std::ostream& operator<<(std::ostream& os, IpAddress const& ip)
+{
+    os << ip.str << ':' << ip.port;
+    return os;
 }
 
 ///////////////////////////////////////////////////////////

@@ -57,6 +57,17 @@
             }
         },
         "problemMatcher": []
+    },
+    {
+        "label": "clients",
+        "command": "${workspaceFolder}\\shell\\Windows\\clients.bat",
+        "type": "shell",
+        "options": {
+            "env": {
+                "build": "${workspaceFolder}\\build\\mini-d.exe",
+            }
+        },
+        "problemMatcher": []
     }
 ]
 }

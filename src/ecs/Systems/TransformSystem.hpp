@@ -9,6 +9,8 @@ namespace rts::ecs {
 
 ///////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////
+
 static void TransformSystem(ComponentArrays& arrays, idx_t stepIdx)
 {
     using namespace com;
@@ -35,6 +37,24 @@ static void TransformSystem(ComponentArrays& arrays, idx_t stepIdx)
         };
         moveFn(stepIdx, trans.xspd, trans.delta.x, trans.pos.x, trans.posTarget.x, trans.spd);
         moveFn(stepIdx, trans.yspd, trans.delta.y, trans.pos.y, trans.posTarget.y, trans.spd);
+
+        //don't get stuck
+        if (trans.delta == 0)
+        {
+            FOR_ARRAY(dense, j)
+            {
+                if (i == j) continue;
+                auto& other = dense[j];
+                auto delta = other.transform.pos - trans.pos;
+                auto dist = Magnitude(delta);
+                if (dist < 8)
+                {
+                    trans.posTarget = trans.posTarget - delta;
+                    trans.CalculateDelta();
+                }
+            }
+        }
+        
     }
 
 }

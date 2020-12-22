@@ -6,6 +6,7 @@
 #include "gpu/vuk/Renderer.hpp"
 #include "net/Network.hpp"
 
+#include "app/CmdArgs.hpp"
 #include "app/GameScene.hpp"
 #include "app/Time.hpp"
 #include "app/Inputs.hpp"
@@ -16,7 +17,7 @@ using namespace rts;
 
 ///////////////////////////////////////////////////////////
 
-inline void AppMain(gpu::vuk::WindowHandle wndHandle)
+inline void AppMain(gpu::vuk::WindowHandle wndHandle, app::CmdArgs const& cmdArgs)
 {  
     mem::Allocate();
     mem::PrintAlloc();
@@ -24,7 +25,7 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
         auto ptrResources = mem::ClaimBlock<res::Resources>();
         auto ptrScene     = mem::ClaimBlock<app::GameScene>();
         auto ptrRenderer  = mem::ClaimBlock<gpu::vuk::Renderer>(wndHandle, *ptrResources, ptrScene->renderData);
-        auto ptrNetwork   = mem::ClaimBlock<net::Network>();
+        auto ptrNetwork   = mem::ClaimBlock<net::Network>(cmdArgs);
         
         while(!app::Inputs::window.shouldClose)
         {
@@ -40,11 +41,12 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle)
 ///////////////////////////////////////////////////////////
 
 #ifdef _WIN32
-int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
-{
-    wnd::Console console { 600, 400, 64, 400 + 64 };
-    wnd::Window window { hInst, "mini window", 600, 400, 64, 64 };
-    std::thread appThread { AppMain, gpu::vuk::WindowHandle { window.hInstance, window.hWnd } };
+int main(int argc, char** argv)
+{   
+    app::CmdArgs cmdArgs { argc, argv };
+    wnd::Console console { cmdArgs };
+    wnd::Window window { GetModuleHandle(NULL), "mini window", cmdArgs };
+    std::thread appThread { AppMain, gpu::vuk::WindowHandle { window.hInstance, window.hWnd }, cmdArgs };
     window.BlockingPollEvents(); 
     appThread.join();
     return EXIT_SUCCESS;

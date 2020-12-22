@@ -11,8 +11,8 @@ echo.
 
 g++ ^
 -g ^
--mwindows ^
 -std=c++2a ^
+-mwindows ^
 -Wall -Wextra -Wpedantic ^
 -Wno-unused-parameter ^
 -Wno-unused-function ^

@@ -25,7 +25,8 @@ void CmdMove::Execute(ecs::ECS& ecs)
     {
         auto& entityID = entities[i];
         auto& mainComponent = ecs.arrays.mainComponents.GetComponent(entityID);
-        mainComponent.transform.posTarget = pos + com::Vec2i { -8 + rand() % 16, -8 + rand() % 16 }; //dont stack for testing
+        mainComponent.transform.posTarget = pos + com::Vec2i { -8 + rand() % 16, -8 + rand() % 16 };
+        //add randomness to prevent stacking
         mainComponent.transform.CalculateDelta();       
     } 
 }

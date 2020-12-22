@@ -18,7 +18,16 @@ TEMPLATE
 struct Vec2
 {
     T x, y;
+    bool operator==(T const& val) { return x == val && y == val; }
 };
+
+///////////////////////////////////////////////////////////
+
+TEMPLATE
+auto Magnitude(Vec2<T> const& vec)
+{
+    return FastSqrt(vec.x*vec.x + vec.y*vec.y);
+}
 
 ///////////////////////////////////////////////////////////
 

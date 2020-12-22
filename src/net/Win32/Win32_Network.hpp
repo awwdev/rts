@@ -6,6 +6,7 @@
 #include "com/Types.hpp"
 #include "com/Assert.hpp"
 #include "com/Print.hpp"
+#include "app/CmdArgs.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -17,7 +18,7 @@ struct Win32_Network
 {
     Win32_UdpSocket socket;
 
-    Win32_Network();
+    Win32_Network(app::CmdArgs const&);
     ~Win32_Network();
 
     void Connect(IpAddress const&);
@@ -26,15 +27,20 @@ struct Win32_Network
 
 ///////////////////////////////////////////////////////////
 
-Win32_Network::Win32_Network()
+Win32_Network::Win32_Network(app::CmdArgs const& args)
 {
     WSADATA wsaData;
     WinSockCheck(WSAStartup(MAKEWORD(2, 2), &wsaData));
     com::PrintColored(com::ConsoleColor::Magenta, "Winsock", 
     (i32)LOBYTE(wsaData.wVersion), (i32)HIBYTE(wsaData.wVersion));
 
+    u16 localPort = 27015;
+    args.GetLocalPort(localPort);
+    IpAddress ip { "127.0.0.1", localPort };
+    com::PrintColored(com::ConsoleColor::Magenta, ip);
+
     socket.Init();
-    Connect(IpAddress{ "127.0.0.1", 27015 });
+    Connect(ip);
 }
 
 ////////////////////////////////////////////////////////////

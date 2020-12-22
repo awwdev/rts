@@ -5,6 +5,7 @@
 #include "com/Types.hpp"
 #include "com/Print.hpp"
 #include "app/Inputs.hpp"
+#include "app/CmdArgs.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -18,22 +19,25 @@ struct Win32_Window
     HWND hWnd = NULL;
     chars_t wndClassName = "wnd";
 
-    Win32_Window(HINSTANCE, chars_t, i32, i32, i32, i32);
+    Win32_Window(HINSTANCE, chars_t, app::CmdArgs const&);
     ~Win32_Window();
     void BlockingPollEvents();
 };
 
 ///////////////////////////////////////////////////////////
 
-Win32_Window::Win32_Window(
-HINSTANCE pInst = GetModuleHandle(NULL),
-chars_t title = "Window",
-i32 width  = CW_USEDEFAULT,
-i32 height = CW_USEDEFAULT,
-i32 xpos   = CW_USEDEFAULT,
-i32 ypos   = CW_USEDEFAULT)
-    : hInstance { pInst }
+Win32_Window::Win32_Window(HINSTANCE pInst, chars_t title, app::CmdArgs const& args)
+: hInstance { pInst }
 {
+    i32 width  = 600;
+    i32 height = 400;
+    i32 xpos   = 64;
+    i32 ypos   = 64;
+    args.GetWindowWidth(width);
+    args.GetWindowHeight(height);
+    args.GetWindowPosX(xpos);
+    args.GetWindowPosY(ypos);
+
     WNDCLASSEX wndClass 
     {
         .cbSize         = sizeof(WNDCLASSEX),
