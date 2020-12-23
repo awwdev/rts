@@ -23,10 +23,10 @@ struct BlockArrayInfo
 //constexpr auto s = sizeof(app::GameScene);
 //constexpr auto s = sizeof(res::Resources);
 //constexpr auto s = sizeof(net::Network);
-constexpr auto SIZE_RENDERER = 6'000;
-constexpr auto SIZE_GAME_SCENE = 20'000'000;
-constexpr auto SIZE_RESOURCES = 80'000;
-constexpr auto SIZE_NETWORK = 2'000;
+constexpr auto SIZE_NETWORK    = 2'000;
+constexpr auto SIZE_RENDERER   = 6'000;
+constexpr auto SIZE_RESOURCES  = 80'000;
+constexpr auto SIZE_GAME_SCENE = 1'500'000'000;
 
 constexpr BlockArrayInfo BLOCK_ARRAY_INFOS [] 
 {

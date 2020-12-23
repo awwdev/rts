@@ -5,7 +5,6 @@
 
 #include "ecs/ComponentArrays.hpp"
 #include "gpu/RenderData.hpp"
-#include "cmd/Lockstep.hpp"
 #include "com/Bitset.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -22,7 +21,7 @@ struct ECS
     auto AddEntity();
     void RemoveEntity();
     void Update(idx_t);
-    void Render(gpu::RenderData&, cmd::Lockstep&, f32);
+    void Render(gpu::RenderData&, f32);
 };
 
 ///////////////////////////////////////////////////////////
@@ -51,7 +50,7 @@ void ECS::Update(idx_t stepIdx)
 
 ///////////////////////////////////////////////////////////
 
-void ECS::Render(gpu::RenderData& renderData, cmd::Lockstep& lockstep, f32 stepProgress)
+void ECS::Render(gpu::RenderData& renderData, f32 stepProgress)
 {
     RenderSystem(arrays, renderData.sprites, stepProgress);
 }

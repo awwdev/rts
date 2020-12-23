@@ -3,6 +3,7 @@
 #include "com/POD_Array.hpp"
 #include "cmd/Command.hpp"
 #include "ecs/ECS.hpp"
+#include "cmd/Lockstep.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -10,8 +11,6 @@ namespace rts::cmd {
 
 ///////////////////////////////////////////////////////////
 
-constexpr auto STEPS_MAX = 1'000;
-constexpr auto CMDS_PER_STEP_MAX = 5;
 using CmdsPerStep = com::POD_Array<Command, CMDS_PER_STEP_MAX>;
 
 ///////////////////////////////////////////////////////////
@@ -26,12 +25,35 @@ struct Step
 
 struct Timeline 
 {
-    Step  steps [STEPS_MAX];
+    Step steps [STEPS_MAX];
     idx_t stepIdx = 0;
 
+    f32 stepTime = 0;
+    f32 stepTimePrev = 0;
+    auto StepTimePrevLerp() const { return stepTimePrev / STEP_TIME_SEC; }
+    //TODO store actual prev step time 
+
+    bool Update();
     void Execute(ecs::ECS&);
-    void Store(CmdsPerStep const&, f32, idx_t);
+    void Store(Command const&, idx_t);
 };
+
+///////////////////////////////////////////////////////////
+
+bool Timeline::Update()
+{
+    stepTimePrev += app::Time::dt; //used for interpolation
+    stepTimePrev = com::Clamp(stepTimePrev, 0.f, STEP_TIME_SEC);
+
+    stepTime += app::Time::dt;
+    if (stepTime > STEP_TIME_SEC)
+    {
+        stepTime = 0;
+        stepTimePrev = 0;
+        return true;
+    }
+    return false;
+}
 
 ///////////////////////////////////////////////////////////
 
@@ -44,14 +66,14 @@ void Timeline::Execute(ecs::ECS& ecs)
         cmd.Execute(ecs);
     }
     stepIdx += 1;
+    com::Assert(stepIdx < STEPS_MAX, "steps array exhausted");
 }
 
 ///////////////////////////////////////////////////////////
 
-void Timeline::Store(CmdsPerStep const& cmds, f32 stepDuration, idx_t idx)
+void Timeline::Store(Command const& cmd, idx_t idx)
 {
-    steps[idx].cmds.AppendArray(cmds);
-    steps[idx].stepDuration = stepDuration;
+    steps[idx].cmds.Append(cmd);
 }
 
 ///////////////////////////////////////////////////////////

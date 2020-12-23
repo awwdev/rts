@@ -2,12 +2,11 @@
 
 #include "ecs/ComponentArrays.hpp"
 #include "com/Utils.hpp"
+#include "cmd/Lockstep.hpp"
 
 ///////////////////////////////////////////////////////////
 
 namespace rts::ecs {
-
-///////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////
 
@@ -29,7 +28,7 @@ static void TransformSystem(ComponentArrays& arrays, idx_t stepIdx)
             if (coord != 0 && stepIdx % Abs(coord) == 0 && delta != 0)
             {
                 auto sign1 = Sign(delta);
-                pos += sign1 * spd;
+                pos += sign1 * (spd / cmd::STEPS_PER_SEC); //!
                 auto sign2 = Sign(target - pos);
                 if (sign1 != sign2)
                     pos = target;

@@ -3,7 +3,6 @@
 #include "ecs/ECS.hpp"
 #include "gpu/RenderData.hpp"
 #include "cmd/Timeline.hpp"
-#include "cmd/Lockstep.hpp"
 #include "gui/Editor/GUI_Stats.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -16,7 +15,6 @@ struct GameScene
 {
     ecs::ECS ecs;
     cmd::Timeline timeline;
-    cmd::Lockstep lockstep;
     gpu::RenderData renderData;
     gui::GUI_Stats guiStats;
 
@@ -36,7 +34,8 @@ GameScene::GameScene()
         auto y = rand() % 400;
         mainComponent.transform.SetPosition({x, y});
         mainComponent.transform.size = { 64, 64 };
-        mainComponent.transform.spd = 2 + rand() % 8;
+        constexpr auto PX_PER_SEC = 32;
+        mainComponent.transform.spd = PX_PER_SEC;
         mainComponent.sprite.texIdx = 0;
         mainComponent.sprite.time = (rand() % 100) / 100.f;
     }
@@ -50,8 +49,8 @@ void GameScene::Update()
     renderData.Clear();
 
     //? ECS
-    ecs.Render(renderData, lockstep, lockstep.StepLerpProgress());
-    if (lockstep.Update())
+    ecs.Render(renderData, timeline.StepTimePrevLerp());
+    if (timeline.Update())
     {
         ecs.Update(timeline.stepIdx);
         timeline.Execute(ecs);
@@ -65,15 +64,13 @@ void GameScene::Update()
     //test
     if (app::Inputs::mouse.IsPressed(app::InputMouse::Left))
     {
-        cmd::CmdsPerStep cmds; //TODO somewhere else
         cmd::Command cmd {};
         cmd.type = cmd::CmdEnum::Move;
         using namespace ecs;
         for(ecs::ID id = 0; id < 10; ++id)
             cmd.cmdUnion.cmdMove.entities.Append(id);
         cmd.cmdUnion.cmdMove.pos = app::Inputs::mouse.pos;
-        cmds.Append(cmd);
-        timeline.Store(cmds, 0.1, timeline.stepIdx + 2);
+        timeline.Store(cmd, timeline.stepIdx + 2);
     }
 }
 
