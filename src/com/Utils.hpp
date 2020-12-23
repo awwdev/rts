@@ -78,4 +78,28 @@ inline float FastSqrt(float number)
 
 ///////////////////////////////////////////////////////////
 
+inline auto CountDigits(as_integral auto num)
+{
+    auto digits = 1;
+    while(1)
+    {
+        num /= 10;
+        if (num == 0)
+            return digits;
+        digits++;
+    }  
+}
+
+///////////////////////////////////////////////////////////
+
+inline auto Pow(auto base, auto exponent)
+{
+    decltype(base) res = base;
+    for(auto i = 1; i < exponent; ++i)
+        res *= base;
+    return res;
+}
+
+///////////////////////////////////////////////////////////
+
 }//ns

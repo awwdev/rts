@@ -3,6 +3,7 @@
 #include "ecs/ECS.hpp"
 #include "gpu/RenderData.hpp"
 #include "cmd/Timeline.hpp"
+#include "com/Random.hpp"
 #include "gui/Editor/GUI_Stats.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -30,14 +31,15 @@ GameScene::GameScene()
     {
         auto ID = ecs.AddEntity();
         auto& mainComponent = ecs.arrays.Add<ecs::MainComponent>(ID);
-        auto x = rand() % 600;
-        auto y = rand() % 400;
+        auto x = com::GetRandomNumber(0, 600);
+        auto y = com::GetRandomNumber(0, 400);
+        com::Print(x, y);
         mainComponent.transform.SetPosition({x, y});
         mainComponent.transform.size = { 64, 64 };
         constexpr auto PX_PER_SEC = 32;
         mainComponent.transform.spd = PX_PER_SEC;
         mainComponent.sprite.texIdx = 0;
-        mainComponent.sprite.time = (rand() % 100) / 100.f;
+        mainComponent.sprite.frameTime = (com::GetRandomNumber(0, 100)) / 100.f;
     }
 }
 

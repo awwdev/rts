@@ -50,7 +50,7 @@ struct Sprite
 {
     u32 texIdx;
     u32 texIdxEnd = 4;
-    f32 time;
+    f32 frameTime;
     void Animate();
 };
 
@@ -58,11 +58,11 @@ struct Sprite
 
 void Sprite::Animate()
 {
-    time += app::Time::dt;
-    if (time >= 0.1f)
+    frameTime += app::Time::dt;
+    if (frameTime >= 0.1f)
     {
         texIdx = (texIdx + 1) % texIdxEnd;
-        time -= 0.1f;  
+        frameTime -= 0.1f;  
     }   
 }
 

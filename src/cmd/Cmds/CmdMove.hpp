@@ -3,6 +3,7 @@
 #include "com/Types.hpp"
 #include "com/Vec.hpp"
 #include "ecs/ECS.hpp"
+#include "com/Random.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -26,8 +27,8 @@ void CmdMove::Execute(ecs::ECS& ecs)
     {
         auto& entityID = entities[i];
         auto& mainComponent = ecs.arrays.mainComponents.GetComponent(entityID);
-        mainComponent.transform.posTarget = pos + com::Vec2i { -8 + rand() % 16, -8 + rand() % 16 };
-        //add randomness to prevent stacking
+        com::Vec2i rnd { com::GetRandomNumber(-8, 8), com::GetRandomNumber(-8, 8) };
+        mainComponent.transform.posTarget = pos + rnd;
         mainComponent.transform.CalculateDelta();       
     } 
 }
