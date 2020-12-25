@@ -14,4 +14,4 @@ g++ \
 -L $ext_lib \
 $src_cpp \
 -o $build_dir/$build_name \
--lX11 -lvulkan
+-lX11 -lvulkan -lpthread

@@ -5,7 +5,6 @@
 #include <X11/keysym.h>
 #include "com/Types.hpp"
 #include "com/Print.hpp"
-#include "app/_Old/Global.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -78,9 +77,9 @@ void X11_Window::PollEvents()
             {
                 if (e.xkey.keycode == 0x9) //ascii
                 {
-                    app::Event event {};
-                    event.eventEnum = app::EventEnum::KEY_DOWN_ESCAPE;
-                    app::eventBuffer.Append(event);
+                    //app::Event event {};
+                    //event.eventEnum = app::EventEnum::KEY_DOWN_ESCAPE;
+                    //app::eventBuffer.Append(event);
                 }
             } 
             break;
@@ -88,23 +87,23 @@ void X11_Window::PollEvents()
 
         XWindowAttributes attributes;
         XGetWindowAttributes(display, window, &attributes);
-        app::glo:: = attributes.width;
-        app::glo::windowHeight = attributes.height;
+        //app::glo:: = attributes.width;
+        //app::glo::windowHeight = attributes.height;
 
-        app::Event event {};
-        event.eventEnum = app::EventEnum::WND_MOVE_SIZE;
-        event.width = attributes.width;
-        event.height = attributes.height;
-        if (app::eventBuffer.Contains(event) == nullptr)
-            app::eventBuffer.Append(event);
+        //app::Event event {};
+        //event.eventEnum = app::EventEnum::WND_MOVE_SIZE;
+        //event.width = attributes.width;
+        //event.height = attributes.height;
+        //if (app::eventBuffer.Contains(event) == nullptr)
+        //    app::eventBuffer.Append(event);
     }
 
     if (XCheckTypedWindowEvent(display, window, ClientMessage, &e))
     {
         if ((unsigned long)e.xclient.data.l[0] == wmDeleteWindow)
         {
-            com::Print("Close");
-            app::isAppRunning = false;
+            //com::Print("Close");
+            //app::isAppRunning = false;
         }
     }
 }

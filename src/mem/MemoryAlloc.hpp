@@ -6,6 +6,7 @@
 
 #ifdef __linux__
 #include <sys/mman.h>
+#include <errno.h>
 #endif
 
 #include "mem/MemoryInfo.hpp"
@@ -29,10 +30,12 @@ static void Allocate()
     #ifdef _WIN32
     blockArrayPtrs[0] = (i8*) VirtualAlloc
     (NULL, ALLOCATION_SIZE, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+    com::Assert(blockArrayPtrs[0] != nullptr, "VirtualAlloc failed");
     #endif
 
     #ifdef __linux__
-    blockArrayPtrs[0] = (i8*) mmap(NULL, ALLOCATION_SIZE, PROT_READ | PROT_WRITE, 0, 0, 0);
+    blockArrayPtrs[0] = (i8*) mmap(NULL, ALLOCATION_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+    com::Assert(blockArrayPtrs[0] != MAP_FAILED, "mmap failed");
     #endif
 
     for(idx_t i = 1; i < BLOCK_ARRAY_COUNT; ++i)

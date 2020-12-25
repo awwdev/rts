@@ -3,13 +3,13 @@
 #include "wnd/Window.hpp"
 #include "mem/Memory.hpp"
 #include "res/Resources.hpp"
-#include "gpu/vuk/Renderer.hpp"
+//#include "gpu/vuk/Renderer.hpp"
 #include "net/Network.hpp"
 
 #include "app/CmdArgs.hpp"
-#include "app/GameScene.hpp"
+//#include "app/GameScene.hpp"
 #include "app/Time.hpp"
-#include "app/Inputs.hpp"
+//#include "app/Inputs.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -17,22 +17,26 @@ using namespace rts;
 
 ///////////////////////////////////////////////////////////
 
-inline void AppMain(gpu::vuk::WindowHandle wndHandle, app::CmdArgs const& cmdArgs)
+inline void AppMain(/*gpu::vuk::WindowHandle wndHandle, */app::CmdArgs const& cmdArgs)
 {  
     mem::Allocate();
     mem::PrintAlloc();
     {
         auto ptrResources = mem::ClaimBlock<res::Resources>();
+        /*
         auto ptrScene     = mem::ClaimBlock<app::GameScene>();
         auto ptrRenderer  = mem::ClaimBlock<gpu::vuk::Renderer>(wndHandle, *ptrResources, ptrScene->renderData);
         auto ptrNetwork   = mem::ClaimBlock<net::Network>(cmdArgs);
-        
-        while(!app::Inputs::window.shouldClose)
+        */
+
+        while(true)//!app::Inputs::window.shouldClose)
         {
+            /*
             app::Time::Update();
             app::Inputs::Update();
             ptrScene->Update();
             ptrRenderer->Update(ptrScene->renderData, *ptrResources);
+            */
         } 
     }
     mem::Deallocate();
@@ -56,25 +60,12 @@ int main(int argc, char** argv)
 ///////////////////////////////////////////////////////////
 
 #ifdef __linux__
-int main()
+int main(int argc, char** argv)
 {
+    app::CmdArgs cmdArgs { argc, argv };
     wnd::Window window { "mini window", 600, 400, 64, 64 };
-    gpu::vuk Renderer renderer { { window.display, window.window } };
-
-    //TODO socket
-    //TODO mem
-
-    while(app::isAppRunning)
-    {
-        window.PollEvents();
-        renderer.Update();
-
-        app::UpdateTime();
-        app::PrintFps();
-
-        if (app::HasEvent(app::EventEnum::KEY_DOWN_ESCAPE))
-            app::isAppRunning = false;
-    }   
+    std::thread appThread { AppMain, cmdArgs }; 
+    appThread.join();
 }
 #endif
 
