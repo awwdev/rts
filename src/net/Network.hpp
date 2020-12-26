@@ -13,5 +13,9 @@ namespace rts::net
 ///////////////////////////////////////////////////////////
 
 #ifdef __linux__
-    //using Network = X11_Network;
+#include "net/X11/Linux_Network.hpp"
+namespace rts::net
+{
+    using Network = Linux_Network;
+}
 #endif

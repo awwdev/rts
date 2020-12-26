@@ -28,7 +28,7 @@ struct Win32_UdpSocket
 
 void Win32_UdpSocket::Init()
 {
-    sock = socket(AF_INET, SOCK_DGRAM, 0);
+    sock = socket(AF_INET, SOCK_DGRAM, 0); //TODO SOCK_NONBLOCK ?
     WinSockCheck(sock != INVALID_SOCKET);
     u_long nonBlocking = 1;
     WinSockCheck(ioctlsocket(sock, FIONBIO, &nonBlocking));

@@ -1,4 +1,7 @@
-
+- beautify vector/sort usage on resource iteration
+- no use of input buffer on linux since threading is not necessary
+- basic networking linux too
+- don't use win32 window and using but just the actual class 
 
 font texture into one file
 additional smaller window font 
