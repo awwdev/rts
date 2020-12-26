@@ -1,10 +1,9 @@
 #pragma once
 
-#include <X11/Xlib.h>
-#include <X11/keysymdef.h>
-#include <X11/keysym.h>
+#include "com/Linux.hpp"
 #include "com/Types.hpp"
 #include "com/Print.hpp"
+#include "app/Inputs.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -50,60 +49,94 @@ i32 ypos   = 64)
 
     XStoreName(display, window, title);
 
-    XSelectInput(display, window, ExposureMask | KeyPressMask);
+    XSelectInput(display, window, 
+    ExposureMask | KeyPressMask | ButtonPressMask | ButtonReleaseMask | PointerMotionMask);
     XMapWindow(display, window);
 
     wmDeleteWindow = XInternAtom(display, "WM_DELETE_WINDOW", false);
     XSetWMProtocols(display, window, &wmDeleteWindow, 1);
+
+    app::Inputs::window.width = width;
+    app::Inputs::window.height = height;
 }
 
 ///////////////////////////////////////////////////////////
 
 X11_Window::~X11_Window()
 {
-    //XCloseDisplay(display);
+    XDestroyWindow(display, window);
 }
 
 ///////////////////////////////////////////////////////////
 
 void X11_Window::PollEvents()
 {
-    XEvent e;
-    while(XCheckWindowEvent(display, window, 0xFFFFFFFF, &e))
+    XEvent event;
+    while(XCheckWindowEvent(display, window, 0xFFFFFFFF, &event))
     {
-        switch(e.type)
+        app::Input input {};
+        XWindowAttributes attributes;
+
+        //TODO: NO NEED FOR INPUT BUFFER, JUST WRITE INTO THE GLOBAL STRUCT
+
+        switch(event.type)
         {
             case KeyPress:
-            {
-                if (e.xkey.keycode == 0x9) //ascii
-                {
-                    //app::Event event {};
-                    //event.eventEnum = app::EventEnum::KEY_DOWN_ESCAPE;
-                    //app::eventBuffer.Append(event);
-                }
-            } 
+                input.type = app::Input::Keyboard;
+                input.key.value = event.xkey.keycode;
+                input.key.state = app::InputKey::Down;
+                app::Inputs::inputBuffer.Write(input);
+            break;
+
+            case Expose:
+                XGetWindowAttributes(display, window, &attributes);
+                input.type = app::Input::Window;
+                input.window.sizeState = app::InputWindow::End;
+                input.window.width = attributes.width;
+                input.window.height = attributes.height;
+                app::Inputs::inputBuffer.Write(input);
+            break;
+
+            case ButtonPress:
+                input.type = app::Input::Mouse;
+                input.mouse.buttons[app::InputMouse::Left] = app::InputMouse::Pressed;
+                input.mouse.pos.x = event.xbutton.x;
+                input.mouse.pos.y = event.xbutton.y;
+                app::Inputs::inputBuffer.Write(input);
+            break;
+
+            case ButtonRelease:
+                input.type = app::Input::Mouse;
+                input.mouse.buttons[app::InputMouse::Left] = app::InputMouse::Released;
+                input.mouse.pos.x = event.xbutton.x;
+                input.mouse.pos.y = event.xbutton.y;
+                app::Inputs::inputBuffer.Write(input);
+            break;
+
+            case MotionNotify:
+                input.type = app::Input::Mouse;
+                input.mouse.pos.x = event.xbutton.x;
+                input.mouse.pos.y = event.xbutton.y;
+                app::Inputs::inputBuffer.Write(input);
             break;
         }
-
-        XWindowAttributes attributes;
-        XGetWindowAttributes(display, window, &attributes);
-        //app::glo:: = attributes.width;
-        //app::glo::windowHeight = attributes.height;
-
-        //app::Event event {};
-        //event.eventEnum = app::EventEnum::WND_MOVE_SIZE;
-        //event.width = attributes.width;
-        //event.height = attributes.height;
-        //if (app::eventBuffer.Contains(event) == nullptr)
-        //    app::eventBuffer.Append(event);
     }
 
-    if (XCheckTypedWindowEvent(display, window, ClientMessage, &e))
+    //int a, b, c, d;
+    //unsigned f;
+    //Window w1, w2;
+    //XQueryPointer(display, window, &w1, &w2, &a, &b, &c, &d, &f);
+    //com::Print(a,b,c,d,f);
+
+    //close button
+    if (XCheckTypedWindowEvent(display, window, ClientMessage, &event))
     {
-        if ((unsigned long)e.xclient.data.l[0] == wmDeleteWindow)
+        if ((unsigned long)event.xclient.data.l[0] == wmDeleteWindow)
         {
-            //com::Print("Close");
-            //app::isAppRunning = false;
+            app::Input input {};
+            input.type = app::Input::Window;
+            input.window.shouldClose = true;
+            app::Inputs::inputBuffer.Write(input);
         }
     }
 }

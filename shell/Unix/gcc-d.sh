@@ -9,6 +9,8 @@ g++ \
 -std=c++2a \
 -Wall -Wextra -Wpedantic \
 -Wno-unused-parameter \
+-Wno-missing-field-initializers \
+-Wno-unused-variable \
 -I $src_hpp \
 -I $ext_hpp \
 -L $ext_lib \

@@ -33,7 +33,7 @@ GameScene::GameScene()
         auto& mainComponent = ecs.arrays.Add<ecs::MainComponent>(ID);
         auto x = com::GetRandomNumber(0, 600);
         auto y = com::GetRandomNumber(0, 400);
-        com::Print(x, y);
+        //com::Print(x, y);
         mainComponent.transform.SetPosition({x, y});
         mainComponent.transform.size = { 64, 64 };
         constexpr auto PX_PER_SEC = 32;

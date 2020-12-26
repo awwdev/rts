@@ -88,7 +88,7 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
     auto res = vkAcquireNextImageKHR(
         context.device.device, 
         context.swapchain.swapchain, 
-        0, 
+        UINT64_MAX, 
         sync.imageAcquired[currentFrame], 
         VK_NULL_HANDLE, 
         &imageIndex
