@@ -3,6 +3,8 @@
 - basic networking linux too
 - don't use win32 window and using but just the actual class 
 
+TODO some flickering due to renderpass storing
+
 font texture into one file
 additional smaller window font 
 widget label

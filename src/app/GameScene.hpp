@@ -36,7 +36,7 @@ GameScene::GameScene()
         //com::Print(x, y);
         mainComponent.transform.SetPosition({x, y});
         mainComponent.transform.size = { 64, 64 };
-        constexpr auto PX_PER_SEC = 32;
+        constexpr auto PX_PER_SEC = 64;
         mainComponent.transform.spd = PX_PER_SEC;
         mainComponent.sprite.texIdx = 0;
         mainComponent.sprite.frameTime = (com::GetRandomNumber(0, 100)) / 100.f;
