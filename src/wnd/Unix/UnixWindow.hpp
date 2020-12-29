@@ -1,6 +1,6 @@
 #pragma once
 
-#include "com/Linux.hpp"
+#include "com/Unix.hpp"
 #include "com/Types.hpp"
 #include "com/Print.hpp"
 #include "app/Inputs.hpp"
@@ -11,21 +11,21 @@ namespace rts::wnd {
 
 ///////////////////////////////////////////////////////////
 
-struct X11_Window
+struct UnixWindow
 {
     ::Window window;
     ::Display* display;
     int screen;
     Atom wmDeleteWindow;
 
-    X11_Window(chars_t, i32, i32, i32, i32);
-    ~X11_Window();
+    UnixWindow(chars_t, i32, i32, i32, i32);
+    ~UnixWindow();
     void PollEvents();
 };
 
 ///////////////////////////////////////////////////////////
     
-X11_Window::X11_Window(
+UnixWindow::UnixWindow(
 chars_t title  = "Window",
 i32 width  = 600,
 i32 height = 400,
@@ -62,14 +62,14 @@ i32 ypos   = 64)
 
 ///////////////////////////////////////////////////////////
 
-X11_Window::~X11_Window()
+UnixWindow::~UnixWindow()
 {
     XDestroyWindow(display, window);
 }
 
 ///////////////////////////////////////////////////////////
 
-void X11_Window::PollEvents()
+void UnixWindow::PollEvents()
 {
     XEvent event;
     while(XCheckWindowEvent(display, window, 0xFFFFFFFF, &event))
