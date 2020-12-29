@@ -24,7 +24,7 @@ struct States
     void Create(Context&, Commands&, res::Resources&, RenderData&);
     void Destroy();
     void Record(Commands&, uint32_t);
-    void Update(RenderData&);
+    void Update(RenderData&, uint32_t);
 };
 
 ///////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ void States::Create(Context& context, Commands& commands, res::Resources& resour
     //? record once
     for(idx_t i = 0; i < context.swapchain.images.count; ++i)
     {
-        Update(rd); //so push constants are updated
+        Update(rd, i); //so push constants are updated
         Record(commands, i);   
     }
 }
@@ -54,9 +54,9 @@ void States::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void States::Update(RenderData& rd)
+void States::Update(RenderData& rd, u32 imageIndex)
 {
-    sprites.Update(rd.sprites);
+    sprites.Update(rd.sprites, imageIndex);
     post.Update(rd.post);
     ui.Update(rd.ui);
 }

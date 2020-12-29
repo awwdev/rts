@@ -40,13 +40,13 @@ struct SpritesUniforms
     PushConstants<RD::PushMeta, VK_SHADER_STAGE_VERTEX_BIT> metaData;
     VkSampler spriteArraySampler; 
     Image spriteArray;
-    StorageBuffer<RD::UniformQuadData, ecs::ENTITY_COUNT_MAX> quadData;
+    com::Array<StorageBuffer<RD::UniformQuadData, ecs::ENTITY_COUNT_MAX>, 4> quadData;
     UniformBuffer<RD::UniformShadowData, 1> shadowData;
     VkSampler shadowOffscreenSampler;
     
     void Create(VkCommandPool, res::Resources&, ShadowRenderPass&);
     void Destroy();
-    void Update(RenderDataSprites&);
+    void Update(RenderDataSprites&, u32);
 };
 
 ///////////////////////////////////////////////////////////
@@ -54,7 +54,9 @@ struct SpritesUniforms
 void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, ShadowRenderPass& shadowPass)
 {
     //? uniform
-    quadData.Create();
+    quadData.count = 4;
+    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+        quadData[i].Create();
     infos[enum_cast(SpritesUniformsEnum::QuadData)] =
     {
         .type = UniformInfo::Buffer,
@@ -70,7 +72,7 @@ void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, S
     for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
     {
         infos[enum_cast(SpritesUniformsEnum::QuadData)].bufferInfos.Append(
-            quadData.activeBuffer->buffer,
+            quadData[i].activeBuffer->buffer,
             0u,
             VK_WHOLE_SIZE
         );
@@ -161,15 +163,15 @@ void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, S
 
 ///////////////////////////////////////////////////////////
 
-void SpritesUniforms::Update(RenderDataSprites& rd)
+void SpritesUniforms::Update(RenderDataSprites& rd, u32 imageIndex)
 {
     metaData.data.windowWidth  = app::Inputs::window.width;
     metaData.data.windowHeight = app::Inputs::window.height;
 
     shadowData.Clear();
     shadowData.Append(rd.shadowData);
-    quadData.Clear();
-    quadData.Append(rd.quadData.data, rd.quadData.count);
+    quadData[imageIndex].Clear();
+    quadData[imageIndex].Append(rd.quadData.data, rd.quadData.count);
 }
 
 ///////////////////////////////////////////////////////////
@@ -180,7 +182,8 @@ void SpritesUniforms::Destroy()
     spriteArray.Destroy();
     vkDestroySampler(g_devicePtr, spriteArraySampler, GetVkAlloc());
     vkDestroySampler(g_devicePtr, shadowOffscreenSampler, GetVkAlloc());
-    quadData.Destroy();
+    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+        quadData[i].Destroy();
     shadowData.Destroy();
 }
 

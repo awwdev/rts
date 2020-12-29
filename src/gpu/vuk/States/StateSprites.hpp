@@ -29,7 +29,7 @@ struct StateSprites
 
     void Create(Context&, Commands&, res::Resources&);
     void Destroy();
-    void Update(RenderDataSprites&);
+    void Update(RenderDataSprites&, uint32_t);
     void Record(VkCommandBuffer, uint32_t);
 };
 
@@ -65,9 +65,9 @@ void StateSprites::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void StateSprites::Update(RenderDataSprites& rd)
+void StateSprites::Update(RenderDataSprites& rd, u32 imageIndex)
 {
-    uniforms.Update(rd);
+    uniforms.Update(rd, imageIndex);
 }
 
 ///////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ void StateSprites::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
     //sprite shadows
     vkCmdBeginRenderPass    (cmdBuffer, &shadowPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineSpritesShadows.pipeline);
-    vkCmdDraw               (cmdBuffer, uniforms.quadData.COUNT_MAX * 6, 1, 0, 0);
+    vkCmdDraw               (cmdBuffer, uniforms.quadData[imageIndex].COUNT_MAX * 6, 1, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
     //shadows
     vkCmdBeginRenderPass    (cmdBuffer, &renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
@@ -89,7 +89,7 @@ void StateSprites::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
     vkCmdDraw               (cmdBuffer, 3, 1, 0, 0);
     //sprites
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineSprites.pipeline);
-    vkCmdDraw               (cmdBuffer, uniforms.quadData.COUNT_MAX * 6, 1, 0, 0);
+    vkCmdDraw               (cmdBuffer, uniforms.quadData[imageIndex].COUNT_MAX * 6, 1, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
 }
 

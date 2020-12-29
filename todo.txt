@@ -1,3 +1,6 @@
+- swapchain img count method
+- for swapchain loop and structs
+
 - beautify vector/sort usage on resource iteration
 - no use of input buffer on linux since threading is not necessary
 - basic networking linux too

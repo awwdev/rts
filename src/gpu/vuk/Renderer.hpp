@@ -105,7 +105,7 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
     VkCheck(vkResetFences(g_devicePtr, 1, &sync.fences[currentFrame]));
 
     ///////////////////////////////////////////////////////////
-    states.Update(renderData);
+    states.Update(renderData, imageIndex);
     ///////////////////////////////////////////////////////////
 
     VkPipelineStageFlags waitStages = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
