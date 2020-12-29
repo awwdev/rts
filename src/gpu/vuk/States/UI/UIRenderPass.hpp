@@ -62,7 +62,9 @@ inline void UIRenderPass::Create(Swapchain& swapchain)
         .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
         .dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
         .srcAccessMask = 0,
-        .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+        .dstAccessMask = 
+            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
+            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT,
         .dependencyFlags = 0
     };
 
@@ -75,7 +77,7 @@ inline void UIRenderPass::Create(Swapchain& swapchain)
         .pAttachments    = &colorDesc,
         .subpassCount    = 1,
         .pSubpasses      = &subpass,
-        .dependencyCount = 1,
+        .dependencyCount = 0,//1,
         .pDependencies   = &dependency
     };
     VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &renderPass));

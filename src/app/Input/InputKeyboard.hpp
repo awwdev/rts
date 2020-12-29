@@ -1,6 +1,6 @@
 #pragma once
 
-#include "com/POD_Array.hpp"
+#include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -27,7 +27,7 @@ struct InputKeyboard
     };
 
     KeyState keys [128];
-    com::POD_Array<i64, 128> keysPressed;
+    com::Array<i64, 128> keysPressed;
 
     void Advance();
     void Update(InputKey const&);

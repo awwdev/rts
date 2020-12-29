@@ -1,6 +1,8 @@
 #pragma once
 
 #include "gpu/vuk/Wrappers/RenderPass.hpp"
+#include "gpu/vuk/Context/Swapchain.hpp"
+#include "gpu/vuk/Renderer/Commands.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -8,20 +10,29 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct PostRenderPass : RenderPass
+struct ShadowRenderPass : RenderPass
 {
-    VkClearValue clear {};
-    void Create(Swapchain& swapchain);
+    Image image;
+    VkClearValue clear;
+    void Create(VkCommandPool, Swapchain&);
     void Destroy();
 };
 
 ///////////////////////////////////////////////////////////
 
-void PostRenderPass::Create(Swapchain& swapchain)
+void ShadowRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
 {
+    clear = VkClearValue { .color { 0,0,0,0 } };
+
     width  = swapchain.width;
     height = swapchain.height;
     format = swapchain.format;
+
+    image.Create(cmdPool, format, 
+        VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
+        VK_IMAGE_VIEW_TYPE_2D,
+        width, height, 1
+    );
 
     VkAttachmentDescription colorDesc
     {
@@ -29,13 +40,13 @@ void PostRenderPass::Create(Swapchain& swapchain)
         .format         = format, 
         .samples        = VK_SAMPLE_COUNT_1_BIT,
         .loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR, //!
-        //.loadOp         = VK_ATTACHMENT_LOAD_OP_DONT_CARE, //!
         .storeOp        = VK_ATTACHMENT_STORE_OP_STORE,
         .stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE,
         .stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE,
         .initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED,
-        .finalLayout    = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, //! 
+        .finalLayout    = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL //!
     };
+    image.layout = colorDesc.finalLayout;
 
     VkAttachmentReference colorRef
     {
@@ -57,18 +68,23 @@ void PostRenderPass::Create(Swapchain& swapchain)
         .pPreserveAttachments    = nullptr
     };
 
-    VkSubpassDependency dependency 
-    {
-        .srcSubpass = VK_SUBPASS_EXTERNAL,
-        .dstSubpass = 0,
-        .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-        .dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-        .srcAccessMask = 0,
-        .dstAccessMask = 
-            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
-            VK_ACCESS_COLOR_ATTACHMENT_READ_BIT,
-        .dependencyFlags = 0
-    };
+    VkSubpassDependency dependencies [2] {};
+    
+dependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL;
+dependencies[0].dstSubpass = 0;
+dependencies[0].srcStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+dependencies[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+dependencies[0].srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+dependencies[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+dependencies[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+dependencies[1].srcSubpass = 0;
+dependencies[1].dstSubpass =  VK_SUBPASS_EXTERNAL;
+dependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+dependencies[1].dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+dependencies[1].dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
     VkRenderPassCreateInfo renderPassInfo 
     {
@@ -79,8 +95,8 @@ void PostRenderPass::Create(Swapchain& swapchain)
         .pAttachments    = &colorDesc,
         .subpassCount    = 1,
         .pSubpasses      = &subpass,
-        .dependencyCount = 0,//1,
-        .pDependencies   = &dependency
+        .dependencyCount = 2,
+        .pDependencies   = dependencies,
     };
     VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &renderPass));
 
@@ -97,7 +113,7 @@ void PostRenderPass::Create(Swapchain& swapchain)
             .flags           = 0,
             .renderPass      = renderPass,
             .attachmentCount = 1,
-            .pAttachments    = &swapchain.views[i],
+            .pAttachments    = &image.view,
             .width           = width,
             .height          = height,
             .layers          = 1
@@ -122,9 +138,10 @@ void PostRenderPass::Create(Swapchain& swapchain)
 
 ///////////////////////////////////////////////////////////
 
-void PostRenderPass::Destroy()
+void ShadowRenderPass::Destroy()
 {
     RenderPass::Destroy();
+    image.Destroy();
 }
 
 ///////////////////////////////////////////////////////////

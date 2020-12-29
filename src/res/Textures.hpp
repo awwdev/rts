@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "com/Assert.hpp"
-#include "com/POD_Array.hpp"
+#include "com/Array.hpp"
 #include "com/Print.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -30,8 +30,8 @@ using GRAY_14x14 = Texture<14, 14, 1>;
 
 struct Textures
 {
-    com::POD_Array<RGBA_32x32, 10> sprites;
-    com::POD_Array<GRAY_14x14, 128> font;
+    com::Array<RGBA_32x32, 10> sprites;
+    com::Array<GRAY_14x14, 128> font;
     void Load();
 };
 

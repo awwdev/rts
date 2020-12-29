@@ -1,6 +1,6 @@
 #pragma once
 
-#include "com/POD_Array.hpp"
+#include "com/Array.hpp"
 #include "cmd/Command.hpp"
 #include "ecs/ECS.hpp"
 #include "cmd/Lockstep.hpp"
@@ -11,7 +11,7 @@ namespace rts::cmd {
 
 ///////////////////////////////////////////////////////////
 
-using CmdsPerStep = com::POD_Array<Command, CMDS_PER_STEP_MAX>;
+using CmdsPerStep = com::Array<Command, CMDS_PER_STEP_MAX>;
 
 ///////////////////////////////////////////////////////////
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "com/POD_Array.hpp"
+#include "com/Array.hpp"
 #include "com/Rect.hpp"
 #include "com/Color.hpp"
 
@@ -36,7 +36,7 @@ struct RenderDataSprites
         f32 strength;
     };
 
-    com::POD_Array<UniformQuadData, ecs::ENTITY_COUNT_MAX> quadData;
+    com::Array<UniformQuadData, ecs::ENTITY_COUNT_MAX> quadData;
     UniformShadowData shadowData;
     void Clear();
 };

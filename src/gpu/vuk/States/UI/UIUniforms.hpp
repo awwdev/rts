@@ -58,13 +58,15 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
             .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
             .pImmutableSamplers = nullptr,
         },
-        .bufferInfo
-        {
-            .buffer = quadData.activeBuffer->buffer,
-            .offset = 0,
-            .range  = VK_WHOLE_SIZE,
-        }
     };
+    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    {
+        infos[enum_cast(UIUniformsEnum::QuadData)].bufferInfos.Append(
+            quadData.activeBuffer->buffer,
+            0u,
+            VK_WHOLE_SIZE
+        );
+    }
 
     //? font array
     auto& textureArray = resources.textures.font;
@@ -90,13 +92,15 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
             .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
             .pImmutableSamplers = nullptr,
         },
-        .imageInfo 
-        {
-            .sampler        = fontArraySampler,
-            .imageView      = fontArray.view,
-            .imageLayout    = fontArray.layout,
-        }
     };
+    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    {
+        infos[enum_cast(UIUniformsEnum::FontArray)].imageInfos.Append(
+            fontArraySampler,
+            fontArray.view,
+            fontArray.layout
+        );
+    }
 
     //? write
     descriptors.Create(infos);

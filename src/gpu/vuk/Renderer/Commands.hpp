@@ -3,7 +3,7 @@
 #include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Renderer/CommandsExt.hpp"
 #include "gpu/vuk/Context/Swapchain.hpp"
-#include "com/POD_Array.hpp"
+#include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -14,7 +14,7 @@ namespace rts::gpu::vuk {
 struct Commands 
 {
     VkCommandPool pool;
-    com::POD_Array<VkCommandBuffer, 4> buffers;
+    com::Array<VkCommandBuffer, 4> buffers;
     void Create(uint32_t, Swapchain&);
     void Destroy();
 };

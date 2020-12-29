@@ -1,6 +1,6 @@
 #pragma once
 
-#include "com/POD_Array.hpp"
+#include "com/Array.hpp"
 #include "com/Rect.hpp"
 #include "gui/Text.hpp"
 
@@ -26,7 +26,7 @@ struct RenderDataUI
     };
 
     static constexpr auto QUAD_COUNT_MAX = 1000;
-    com::POD_Array<UniformQuadData, QUAD_COUNT_MAX> quadData;
+    com::Array<UniformQuadData, QUAD_COUNT_MAX> quadData;
 
     void Clear();
     void AddText(gui::Text const&);

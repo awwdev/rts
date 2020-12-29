@@ -34,17 +34,18 @@ void Instance::Create()
         .apiVersion             = VK_API_VERSION_1_0,
     };
 
-    com::POD_Array<chars_t, 4> layers
+    com::Array<chars_t, 4> layers
     {
         #ifdef _WIN32
         "VK_LAYER_KHRONOS_validation"
         #endif
         #ifdef __linux__
-        "VK_LAYER_LUNARG_standard_validation"
+        "VK_LAYER_LUNARG_standard_validation",
+        //"VK_LAYER_MESA_overlay"
         #endif 
     };
 
-    com::POD_Array extensions
+    com::Array extensions
     {
         VK_EXT_DEBUG_UTILS_EXTENSION_NAME,
         VK_KHR_SURFACE_EXTENSION_NAME,

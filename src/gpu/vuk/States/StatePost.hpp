@@ -68,7 +68,7 @@ void StatePost::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
     vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, &vertices.vbo.activeBuffer->buffer, &vertices.offsets);
     vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 
-                             uniforms.descriptors.sets.count, uniforms.descriptors.sets.data, 0, nullptr);
+                             1, &uniforms.descriptors.sets[imageIndex], 0, nullptr);
     vkCmdDraw               (cmdBuffer, vertices.vbo.COUNT_MAX, 1, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
 }

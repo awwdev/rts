@@ -16,17 +16,17 @@ namespace rts::com {
 ///////////////////////////////////////////////////////////
 
 TEMPLATE 
-struct POD_Array
+struct Array
 {
     idx_t count = 0;
     T data [N];
 
-    POD_Array() = default;
-    POD_Array(auto const&...);
+    Array() = default;
+    Array(auto const&...);
     auto& Append(auto const&...);
 
     template<typename T2, auto N2>
-    void AppendArray(POD_Array<T2, N2> const& other)
+    void AppendArray(Array<T2, N2> const& other)
     {
         FOR_ARRAY(other, i)
         {
@@ -45,7 +45,7 @@ struct POD_Array
 ///////////////////////////////////////////////////////////
 
 TEMPLATE 
-auto& POD_Array<T, N>::operator[](idx_t i)
+auto& Array<T, N>::operator[](idx_t i)
 {
     com::Assert(i < count, "array access out of bounds");
     return data[i];
@@ -54,7 +54,7 @@ auto& POD_Array<T, N>::operator[](idx_t i)
 ///////////////////////////////////////////////////////////
 
 TEMPLATE 
-auto& POD_Array<T, N>::operator[](idx_t i) const
+auto& Array<T, N>::operator[](idx_t i) const
 {
     com::Assert(i < count, "array access out of bounds");
     return data[i];
@@ -63,7 +63,7 @@ auto& POD_Array<T, N>::operator[](idx_t i) const
 ///////////////////////////////////////////////////////////
 
 TEMPLATE 
-auto& POD_Array<T, N>::Append(auto const&... args)
+auto& Array<T, N>::Append(auto const&... args)
 {
     com::Assert((count + 1) <= N, "array exhausted");
     data[count] = { args... };
@@ -74,7 +74,7 @@ auto& POD_Array<T, N>::Append(auto const&... args)
 ///////////////////////////////////////////////////////////
 
 TEMPLATE 
-POD_Array<T, N>::POD_Array(auto const&... elements)
+Array<T, N>::Array(auto const&... elements)
     : count { sizeof...(elements) }
     , data  { elements... }
 {
@@ -84,12 +84,12 @@ POD_Array<T, N>::POD_Array(auto const&... elements)
 ///////////////////////////////////////////////////////////
 
 template<typename T, class... Ts>
-POD_Array(T, Ts...) -> POD_Array<T, sizeof...(Ts) + 1>;
+Array(T, Ts...) -> Array<T, sizeof...(Ts) + 1>;
 
 ///////////////////////////////////////////////////////////
 
 TEMPLATE 
-T* POD_Array<T, N>::Contains(T const& other)
+T* Array<T, N>::Contains(T const& other)
 {
     FOR_ARRAY((*this), i)
     {
@@ -103,7 +103,7 @@ T* POD_Array<T, N>::Contains(T const& other)
 ///////////////////////////////////////////////////////////
 
 TEMPLATE 
-auto& POD_Array<T, N>::Pop()
+auto& Array<T, N>::Pop()
 {
     com::Assert(count > 0, "array access out of bounds");
     count--;

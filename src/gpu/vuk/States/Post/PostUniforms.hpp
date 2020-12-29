@@ -53,13 +53,15 @@ void PostUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, Imag
             .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
             .pImmutableSamplers = nullptr,
         },
-        .imageInfo 
-        {
-            .sampler        = sampler,
-            .imageView      = spritesOffscreen.view,
-            .imageLayout    = spritesOffscreen.layout,
-        }
     };
+    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    {
+        infos[enum_cast(PostUniformEnum::OffscreenSampler)].imageInfos.Append(
+            sampler,
+            spritesOffscreen.view,
+            spritesOffscreen.layout
+        );
+    }
 
     descriptors.Create(infos);
 }

@@ -6,6 +6,7 @@
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
 #include "gpu/vuk/States/Sprites/SpritesRenderPass.hpp"
+#include "gpu/vuk/States/Sprites/ShadowRenderPass.hpp"
 
 #include "app/Inputs.hpp"
 #include "res/Resources.hpp"
@@ -43,14 +44,14 @@ struct SpritesUniforms
     UniformBuffer<RD::UniformShadowData, 1> shadowData;
     VkSampler shadowOffscreenSampler;
     
-    void Create(VkCommandPool, res::Resources&, SpritesRenderPass&);
+    void Create(VkCommandPool, res::Resources&, ShadowRenderPass&);
     void Destroy();
     void Update(RenderDataSprites&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, SpritesRenderPass& renderPass)
+void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, ShadowRenderPass& shadowPass)
 {
     //? uniform
     quadData.Create();
@@ -65,13 +66,15 @@ void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, S
             .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
             .pImmutableSamplers = nullptr,
         },
-        .bufferInfo
-        {
-            .buffer = quadData.activeBuffer->buffer,
-            .offset = 0,
-            .range  = VK_WHOLE_SIZE,
-        }
     };
+    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    {
+        infos[enum_cast(SpritesUniformsEnum::QuadData)].bufferInfos.Append(
+            quadData.activeBuffer->buffer,
+            0u,
+            VK_WHOLE_SIZE
+        );
+    }
 
     //? uniform
     shadowData.Create();
@@ -86,13 +89,15 @@ void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, S
             .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
             .pImmutableSamplers = nullptr,
         },
-        .bufferInfo
-        {
-            .buffer = shadowData.activeBuffer->buffer,
-            .offset = 0,
-            .range  = VK_WHOLE_SIZE,
-        }
     };
+    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    {
+        infos[enum_cast(SpritesUniformsEnum::ShadowData)].bufferInfos.Append(
+            shadowData.activeBuffer->buffer,
+            0u,
+            VK_WHOLE_SIZE
+        );
+    }
 
     CreateSamplerNearest(shadowOffscreenSampler);
     infos[enum_cast(SpritesUniformsEnum::ShadowOffscreen)] =
@@ -106,13 +111,15 @@ void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, S
             .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
             .pImmutableSamplers = nullptr,
         },
-        .imageInfo 
-        {
-            .sampler        = shadowOffscreenSampler,
-            .imageView      = renderPass.shadows.view,
-            .imageLayout    = renderPass.shadows.layout,
-        }
     };
+    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    {
+        infos[enum_cast(SpritesUniformsEnum::ShadowOffscreen)].imageInfos.Append(
+            shadowOffscreenSampler,
+            shadowPass.image.view,
+            shadowPass.image.layout
+        );
+    }
 
     //? texture array
     auto& textureArray = resources.textures.sprites;
@@ -138,13 +145,15 @@ void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, S
             .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
             .pImmutableSamplers = nullptr,
         },
-        .imageInfo 
-        {
-            .sampler        = spriteArraySampler,
-            .imageView      = spriteArray.view,
-            .imageLayout    = spriteArray.layout,
-        }
     };
+    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    {
+        infos[enum_cast(SpritesUniformsEnum::SpriteArray)].imageInfos.Append(
+            spriteArraySampler,
+            spriteArray.view,
+            spriteArray.layout
+        );
+    }
 
     //? write
     descriptors.Create(infos);

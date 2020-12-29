@@ -3,7 +3,7 @@
 #include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Context/Device.hpp"
 #include "gpu/vuk/Context/Surface.hpp"
-#include "com/POD_Array.hpp"
+#include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -14,8 +14,8 @@ namespace rts::gpu::vuk {
 struct Swapchain
 {
     VkSwapchainKHR swapchain;
-    com::POD_Array<VkImage, 4> images;
-    com::POD_Array<VkImageView, 4> views;
+    com::Array<VkImage, 4> images;
+    com::Array<VkImageView, 4> views;
     uint32_t width;
     uint32_t height;
     VkFormat format = VK_FORMAT_B8G8R8A8_UNORM;//VK_FORMAT_B8G8R8A8_SRGB;//VK_FORMAT_B8G8R8A8_UNORM

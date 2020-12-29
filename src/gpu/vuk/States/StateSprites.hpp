@@ -2,6 +2,7 @@
 
 #include "gpu/vuk/States/Sprites/SpritesPipeline.hpp"
 #include "gpu/vuk/States/Sprites/SpritesRenderPass.hpp"
+#include "gpu/vuk/States/Sprites/ShadowRenderPass.hpp"
 #include "gpu/vuk/States/Sprites/SpritesUniforms.hpp"
 
 #include "gpu/vuk/Renderer/Commands.hpp"
@@ -22,6 +23,7 @@ struct StateSprites
     Shader shaderSprites;
     Shader shaderSpritesShadows;
     Shader shaderShadows;
+    ShadowRenderPass shadowPass;
     SpritesRenderPass renderPass;
     SpritesUniforms uniforms;
 
@@ -36,7 +38,8 @@ struct StateSprites
 void StateSprites::Create(Context& context, Commands& commands, res::Resources& resources)
 {
     renderPass.Create(commands.pool, context.swapchain);
-    uniforms.Create(commands.pool, resources, renderPass);
+    shadowPass.Create(commands.pool, context.swapchain);
+    uniforms.Create(commands.pool, resources, shadowPass);
     shaderSprites.Create("res/Shaders/spv/sprite.vert.spv", "res/Shaders/spv/sprite.frag.spv");
     shaderSpritesShadows.Create("res/Shaders/spv/spriteShadow.vert.spv", "res/Shaders/spv/spriteShadow.frag.spv");
     shaderShadows.Create("res/Shaders/spv/shadows.vert.spv", "res/Shaders/spv/shadows.frag.spv");
@@ -54,6 +57,7 @@ void StateSprites::Destroy()
     pipelineSpritesShadows.Destroy();
     pipelineShadows.Destroy();
     renderPass.Destroy();
+    shadowPass.Destroy();
     shaderSprites.Destroy();
     shaderSpritesShadows.Destroy();
     shaderShadows.Destroy();
@@ -73,9 +77,9 @@ void StateSprites::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
     vkCmdPushConstants      (cmdBuffer, pipelineSprites.layout, VK_SHADER_STAGE_VERTEX_BIT, 0, 
                              uniforms.metaData.SIZE, &uniforms.metaData.data);
     vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineSprites.layout, 0, 
-                             uniforms.descriptors.sets.count, uniforms.descriptors.sets.data, 0, nullptr);
+                             1, &uniforms.descriptors.sets[imageIndex], 0, nullptr);
     //sprite shadows
-    vkCmdBeginRenderPass    (cmdBuffer, &renderPass.shadowBeginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdBeginRenderPass    (cmdBuffer, &shadowPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineSpritesShadows.pipeline);
     vkCmdDraw               (cmdBuffer, uniforms.quadData.COUNT_MAX * 6, 1, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);

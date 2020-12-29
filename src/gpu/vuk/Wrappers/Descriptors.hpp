@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gpu/vuk/Renderer/Context.hpp"
-#include "com/POD_Array.hpp"
+#include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -13,11 +13,12 @@ struct UniformInfo
 {
     enum Type { Buffer, Image } type;
     VkDescriptorSetLayoutBinding binding;
-    union 
-    {
-        VkDescriptorBufferInfo bufferInfo;
-        VkDescriptorImageInfo  imageInfo;
-    };
+    
+    //union 
+    //{
+        com::Array<VkDescriptorBufferInfo, 4> bufferInfos;
+        com::Array<VkDescriptorImageInfo, 4>  imageInfos;
+    //};
 };
 
 ///////////////////////////////////////////////////////////
@@ -25,8 +26,8 @@ struct UniformInfo
 struct Descriptors
 {
     VkDescriptorPool pool;
-    VkDescriptorSetLayout layout;
-    com::POD_Array<VkDescriptorSet, 10> sets;
+    com::Array<VkDescriptorSetLayout, 4> layouts;
+    com::Array<VkDescriptorSet, 4> sets; //!
 
     void Destroy();
 
@@ -39,22 +40,26 @@ struct Descriptors
             bindings[i] = uniformInfos[i].binding;
         }
 
-        VkDescriptorSetLayoutCreateInfo descSetLayoutInfo
+        layouts.count = g_contextPtr->swapchain.images.count;
+        for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
         {
-            .sType          = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-            .pNext          = nullptr,
-            .flags          = 0,
-            .bindingCount   = array_extent(bindings),
-            .pBindings      = bindings
-        };
-        VkCheck(vkCreateDescriptorSetLayout(g_devicePtr, &descSetLayoutInfo, GetVkAlloc(), &layout));
-
+            VkDescriptorSetLayoutCreateInfo descSetLayoutInfo
+            {
+                .sType          = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+                .pNext          = nullptr,
+                .flags          = 0,
+                .bindingCount   = array_extent(bindings),
+                .pBindings      = bindings
+            };
+            VkCheck(vkCreateDescriptorSetLayout(g_devicePtr, &descSetLayoutInfo, GetVkAlloc(), &layouts[i]));
+        }
+        
         //pool
         VkDescriptorPoolSize poolSizes [UNIFORM_COUNT];
         for(uint32_t i = 0; i < UNIFORM_COUNT; ++i) {
             poolSizes[i] = {
                 .type = bindings[i].descriptorType,
-                .descriptorCount = 1
+                .descriptorCount = g_contextPtr->swapchain.images.count //!
             };
         }
 
@@ -63,42 +68,46 @@ struct Descriptors
             .sType          = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
             .pNext          = nullptr,
             .flags          = 0,
-            .maxSets        = g_contextPtr->swapchain.images.count,
+            .maxSets        = g_contextPtr->swapchain.images.count,//!
             .poolSizeCount  = array_extent(poolSizes),
             .pPoolSizes     = poolSizes
         };
         VkCheck(vkCreateDescriptorPool(g_devicePtr, &poolInfo, GetVkAlloc(), &pool));
 
         //allocation
-        sets.count = 1;
+        sets.count = g_contextPtr->swapchain.images.count;
         VkDescriptorSetAllocateInfo allocInfo
         {
             .sType              = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
             .pNext              = nullptr,
             .descriptorPool     = pool,
-            .descriptorSetCount = sets.count,
-            .pSetLayouts        = &layout
+            .descriptorSetCount = g_contextPtr->swapchain.images.count, //!
+            .pSetLayouts        = layouts.data
         };
         VkCheck(vkAllocateDescriptorSets(g_devicePtr, &allocInfo, sets.data));
 
         //write
-        VkWriteDescriptorSet writes [UNIFORM_COUNT];
-        FOR_C_ARRAY(writes, i)
+        VkWriteDescriptorSet writes [UNIFORM_COUNT * 4];
+        for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
         {
-            writes[i] = VkWriteDescriptorSet {
-                .sType              = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                .pNext              = nullptr,
-                .dstSet             = sets.data[0],
-                .dstBinding         = uniformInfos[i].binding.binding,
-                .dstArrayElement    = 0,
-                .descriptorCount    = 1,
-                .descriptorType     = uniformInfos[i].binding.descriptorType,
-                .pImageInfo         = uniformInfos[i].type == UniformInfo::Image  ? &uniformInfos[i].imageInfo  : nullptr,
-                .pBufferInfo        = uniformInfos[i].type == UniformInfo::Buffer ? &uniformInfos[i].bufferInfo : nullptr,
-                .pTexelBufferView   = nullptr
-            };
+            for(idx_t j = 0; j < UNIFORM_COUNT; ++j)
+            {
+                writes[i*UNIFORM_COUNT + j] =
+                {
+                    .sType              = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                    .pNext              = nullptr,
+                    .dstSet             = sets.data[i],//!
+                    .dstBinding         = uniformInfos[j].binding.binding,
+                    .dstArrayElement    = 0,
+                    .descriptorCount    = 1,
+                    .descriptorType     = uniformInfos[j].binding.descriptorType,
+                    .pImageInfo         = uniformInfos[j].type == UniformInfo::Image  ? &uniformInfos[j].imageInfos[i]  : nullptr,
+                    .pBufferInfo        = uniformInfos[j].type == UniformInfo::Buffer ? &uniformInfos[j].bufferInfos[i] : nullptr,
+                    .pTexelBufferView   = nullptr
+                };
+            }
         }
-        vkUpdateDescriptorSets(g_devicePtr, array_extent(writes), writes, 0, nullptr);   
+        vkUpdateDescriptorSets(g_devicePtr, UNIFORM_COUNT * g_contextPtr->swapchain.images.count, writes, 0, nullptr);   
     }
 };
 
@@ -106,7 +115,8 @@ struct Descriptors
 
 void Descriptors::Destroy()
 {
-    vkDestroyDescriptorSetLayout(g_devicePtr, layout, GetVkAlloc());
+    FOR_ARRAY(layouts, i)
+        vkDestroyDescriptorSetLayout(g_devicePtr, layouts[i], GetVkAlloc());
     vkDestroyDescriptorPool(g_devicePtr, pool, GetVkAlloc());
     sets.count = 0;
 }

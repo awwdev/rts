@@ -35,7 +35,7 @@
         }
     },
     {
-        "label": "glslc",
+        "label": "glslc.bat",
         "command": "${workspaceFolder}\\shell\\Windows\\glslc.bat",
         "type": "shell",
         "options": {
@@ -44,7 +44,17 @@
                 "glslc": "I:\\programs\\Vulkan 1.2.154.1\\Bin32"
             }
         },
-        "problemMatcher": []
+    },
+    {
+        "label": "glslc.sh",
+        "command": "${workspaceFolder}/shell/Unix/glslc.sh",
+        "type": "shell",
+        "options": {
+            "env": {
+                "res": "${workspaceFolder}/res/Shaders",
+                "glslc": "/home/programmer/Documents/1.2.154.0/x86_64/bin"
+            }
+        },
     },
     {
         "label": "magick",

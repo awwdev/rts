@@ -12,13 +12,8 @@ namespace rts::gpu::vuk {
 
 struct SpritesRenderPass : RenderPass
 {
-    Image shadows;
-    com::POD_Array<VkFramebuffer, 4> shadowFrameBuffers;
-    com::POD_Array<VkRenderPassBeginInfo, 4> shadowBeginInfos;
-
     Image offscreen;
     VkClearValue clear;
-    VkClearValue shadowClears;
     void Create(VkCommandPool, Swapchain&);
     void Destroy();
 };
@@ -28,17 +23,10 @@ struct SpritesRenderPass : RenderPass
 void SpritesRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
 {
     clear = { VkClearValue { .color { 155/255.f, 186/255.f, 94/255.f, 1.f } } };
-    shadowClears = { VkClearValue { .color { } } };
 
     width  = swapchain.width;
     height = swapchain.height;
     format = swapchain.format;
-
-    shadows.Create(cmdPool, format, 
-        VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
-        VK_IMAGE_VIEW_TYPE_2D,
-        width, height, 1
-    );
 
     offscreen.Create(cmdPool, format, 
         VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
@@ -59,7 +47,6 @@ void SpritesRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
         .finalLayout    = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL //!
     };
     offscreen.layout = colorDesc.finalLayout;
-    shadows.layout = colorDesc.finalLayout;
 
     VkAttachmentReference colorRef
     {
@@ -81,16 +68,22 @@ void SpritesRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
         .pPreserveAttachments    = nullptr
     };
 
-    VkSubpassDependency dependency 
-    {
-        .srcSubpass = VK_SUBPASS_EXTERNAL,
-        .dstSubpass = 0,
-        .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-        .dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-        .srcAccessMask = 0,
-        .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-        .dependencyFlags = 0
-    };
+    VkSubpassDependency dependencies [2] {};
+    dependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL;
+    dependencies[0].dstSubpass = 0;
+    dependencies[0].srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    dependencies[0].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependencies[0].srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    dependencies[0].dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    dependencies[0].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+
+    dependencies[1].srcSubpass = 0;
+    dependencies[1].dstSubpass = VK_SUBPASS_EXTERNAL;
+    dependencies[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependencies[1].dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    dependencies[1].srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    dependencies[1].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
     VkRenderPassCreateInfo renderPassInfo 
     {
@@ -101,8 +94,8 @@ void SpritesRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
         .pAttachments    = &colorDesc,
         .subpassCount    = 1,
         .pSubpasses      = &subpass,
-        .dependencyCount = 1,
-        .pDependencies   = &dependency,
+        .dependencyCount = 0,//2,
+        .pDependencies   = dependencies,
     };
     VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &renderPass));
 
@@ -140,42 +133,6 @@ void SpritesRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
             .pClearValues   = &clear,
         };
     }
-
-    //shadow
-    count = swapchain.images.count;
-    shadowFrameBuffers.count = count;
-    shadowBeginInfos.count = count;
-
-    for(uint32_t i = 0; i < count; ++i)
-    {
-        VkFramebufferCreateInfo framebufferInfo 
-        {
-            .sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
-            .pNext           = nullptr,
-            .flags           = 0,
-            .renderPass      = renderPass,
-            .attachmentCount = 1,
-            .pAttachments    = &shadows.view,
-            .width           = width,
-            .height          = height,
-            .layers          = 1
-        };
-        VkCheck(vkCreateFramebuffer(g_devicePtr, &framebufferInfo, GetVkAlloc(), &shadowFrameBuffers[i]));
-
-        shadowBeginInfos[i] = 
-        {
-            .sType          = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-            .pNext          = nullptr, 
-            .renderPass     = renderPass,
-            .framebuffer    = shadowFrameBuffers[i],
-            .renderArea     = {
-                .offset     = VkOffset2D {0, 0},
-                .extent     = { width, height }
-            },
-            .clearValueCount= 1,
-            .pClearValues   = &shadowClears,
-        };
-    }
 }
 
 ///////////////////////////////////////////////////////////
@@ -183,20 +140,7 @@ void SpritesRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
 void SpritesRenderPass::Destroy()
 {
     RenderPass::Destroy();
-    shadows.Destroy();
     offscreen.Destroy();
-
-    FOR_ARRAY(shadowFrameBuffers, i)
-    {
-        vkDestroyFramebuffer(g_devicePtr, shadowFrameBuffers[i], GetVkAlloc());
-        shadowFrameBuffers[i] = nullptr;
-    }
-    shadowFrameBuffers.count = 0;
-    FOR_ARRAY(shadowBeginInfos, i)
-    {
-        shadowBeginInfos[i] = {};
-    }
-    shadowBeginInfos.count = 0;
 }
 
 ///////////////////////////////////////////////////////////

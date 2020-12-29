@@ -61,7 +61,7 @@ void StateUI::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
     vkCmdPushConstants      (cmdBuffer, pipeline.layout, VK_SHADER_STAGE_VERTEX_BIT, 0, 
                              uniforms.metaData.SIZE, &uniforms.metaData.data);
     vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 
-                             uniforms.descriptors.sets.count, uniforms.descriptors.sets.data, 0, nullptr);
+                             1, &uniforms.descriptors.sets[imageIndex], 0, nullptr);
     vkCmdDraw               (cmdBuffer, uniforms.quadData.COUNT_MAX * 6, 1, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
 }

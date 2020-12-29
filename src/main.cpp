@@ -26,6 +26,7 @@ inline void AppMain(gpu::vuk::WindowHandle wndHandle, app::CmdArgs const& cmdArg
         auto ptrScene     = mem::ClaimBlock<app::GameScene>();
         auto ptrRenderer  = mem::ClaimBlock<gpu::vuk::Renderer>(wndHandle, *ptrResources, ptrScene->renderData);
         auto ptrNetwork   = mem::ClaimBlock<net::Network>(cmdArgs);
+        
 
         while(!app::Inputs::window.shouldClose)
         {
@@ -69,6 +70,8 @@ int main(int argc, char** argv)
         auto ptrRenderer  = mem::ClaimBlock<gpu::vuk::Renderer>
         (gpu::vuk::WindowHandle { window.display, window.window }, *ptrResources, ptrScene->renderData);
         auto ptrNetwork   = mem::ClaimBlock<net::Network>(cmdArgs);
+
+        //gpu::vuk::PrintInstanceLayers();
 
         while(!app::Inputs::window.shouldClose)
         {

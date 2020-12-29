@@ -1,7 +1,7 @@
 #pragma once
 
 #include "com/Vec.hpp"
-#include "com/POD_Array.hpp"
+#include "com/Array.hpp"
 #include "ecs/EntityID.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ struct PushConstantsPost
 
 struct RenderDataPost
 {
-    com::POD_Array<VertexPost, VERTEX_COUNT_MAX_POST> vertices;
+    com::Array<VertexPost, VERTEX_COUNT_MAX_POST> vertices;
     void Clear();
     void AddBlurQuad(com::Recti const&);
 

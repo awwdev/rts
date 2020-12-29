@@ -25,7 +25,7 @@ RenderPass& renderPass)
     pipelineInfo.depthStencil  = DepthStencil();
     pipelineInfo.blendState    = BlendStateInfo();
     pipelineInfo.layoutInfo    = PipelineLayout(
-        &uniforms.descriptors.layout, 1,
+         uniforms.descriptors.layouts.data, uniforms.descriptors.layouts.count,
         &uniforms.metaData.rangeInfo, 1
     );
 

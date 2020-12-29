@@ -17,8 +17,7 @@ void main()
 {
     if (inBlur == 0)
     {
-        vec3 col = texture(offscreen, inTex).rgb;
-        outCol = vec4(col.rgb, 1);
+        outCol = vec4(texture(offscreen, inTex).rgb, 1);
     }
     else
     {

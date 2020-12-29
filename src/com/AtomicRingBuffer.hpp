@@ -1,7 +1,7 @@
 #pragma once
 
 #include <atomic>
-#include "com/POD_Array.hpp"
+#include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -46,7 +46,7 @@ void AtomicRingBuffer<T, N>::Write(T const& event)
 TEMPLATE
 auto AtomicRingBuffer<T, N>::Read()
 {
-    com::POD_Array<T, RING_BUFFER_MAX> buffer;
+    com::Array<T, RING_BUFFER_MAX> buffer;
 
     auto writeCount = atomicWriteCount.load();
     auto readCount  = atomicReadCount.load();
