@@ -14,7 +14,7 @@ namespace rts::gpu::vuk {
 struct Commands 
 {
     VkCommandPool pool;
-    com::Array<VkCommandBuffer, 4> buffers;
+    SwapResource<VkCommandBuffer> buffers;
     void Create(uint32_t, Swapchain&);
     void Destroy();
 };
@@ -38,9 +38,9 @@ void Commands::Create(uint32_t queueIdx, Swapchain& swapchain)
         .pNext              = nullptr,
         .commandPool        = pool,
         .level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-        .commandBufferCount = swapchain.images.count
+        .commandBufferCount = swapchain.Count()
     };
-    buffers.count = swapchain.images.count;
+    buffers.count = swapchain.Count();
     VkCheck(vkAllocateCommandBuffers(g_devicePtr, &allocInfo, buffers.data));
 }
 

@@ -99,7 +99,7 @@ void SpritesRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
     };
     VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &renderPass));
 
-    auto count = swapchain.images.count;
+    auto count = swapchain.Count();
     framebuffers.count = count;
     beginInfos.count = count;
 

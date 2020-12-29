@@ -54,7 +54,7 @@ void PostUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, Imag
             .pImmutableSamplers = nullptr,
         },
     };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
     {
         infos[enum_cast(PostUniformEnum::OffscreenSampler)].imageInfos.Append(
             sampler,

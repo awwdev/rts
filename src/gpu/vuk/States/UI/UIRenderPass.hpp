@@ -82,7 +82,7 @@ inline void UIRenderPass::Create(Swapchain& swapchain)
     };
     VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &renderPass));
 
-    auto count = swapchain.images.count;
+    auto count = swapchain.Count();
     framebuffers.count = count;
     beginInfos.count = count;
 

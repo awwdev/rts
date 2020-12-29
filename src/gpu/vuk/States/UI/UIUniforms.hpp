@@ -59,7 +59,7 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
             .pImmutableSamplers = nullptr,
         },
     };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
     {
         infos[enum_cast(UIUniformsEnum::QuadData)].bufferInfos.Append(
             quadData.activeBuffer->buffer,
@@ -93,7 +93,7 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
             .pImmutableSamplers = nullptr,
         },
     };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
     {
         infos[enum_cast(UIUniformsEnum::FontArray)].imageInfos.Append(
             fontArraySampler,

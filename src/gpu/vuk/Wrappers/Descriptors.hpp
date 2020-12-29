@@ -16,8 +16,8 @@ struct UniformInfo
     
     //union 
     //{
-        com::Array<VkDescriptorBufferInfo, 4> bufferInfos;
-        com::Array<VkDescriptorImageInfo, 4>  imageInfos;
+        SwapResource<VkDescriptorBufferInfo> bufferInfos;
+        SwapResource<VkDescriptorImageInfo>  imageInfos;
     //};
 };
 
@@ -26,8 +26,8 @@ struct UniformInfo
 struct Descriptors
 {
     VkDescriptorPool pool;
-    com::Array<VkDescriptorSetLayout, 4> layouts;
-    com::Array<VkDescriptorSet, 4> sets; //!
+    SwapResource<VkDescriptorSetLayout> layouts;
+    SwapResource<VkDescriptorSet> sets; //!
 
     void Destroy();
 
@@ -40,8 +40,8 @@ struct Descriptors
             bindings[i] = uniformInfos[i].binding;
         }
 
-        layouts.count = g_contextPtr->swapchain.images.count;
-        for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+        layouts.count = g_contextPtr->swapchain.Count();
+        for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
         {
             VkDescriptorSetLayoutCreateInfo descSetLayoutInfo
             {
@@ -59,7 +59,7 @@ struct Descriptors
         for(uint32_t i = 0; i < UNIFORM_COUNT; ++i) {
             poolSizes[i] = {
                 .type = bindings[i].descriptorType,
-                .descriptorCount = g_contextPtr->swapchain.images.count //!
+                .descriptorCount = g_contextPtr->swapchain.Count() //!
             };
         }
 
@@ -68,27 +68,27 @@ struct Descriptors
             .sType          = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
             .pNext          = nullptr,
             .flags          = 0,
-            .maxSets        = g_contextPtr->swapchain.images.count,//!
+            .maxSets        = g_contextPtr->swapchain.Count(),//!
             .poolSizeCount  = array_extent(poolSizes),
             .pPoolSizes     = poolSizes
         };
         VkCheck(vkCreateDescriptorPool(g_devicePtr, &poolInfo, GetVkAlloc(), &pool));
 
         //allocation
-        sets.count = g_contextPtr->swapchain.images.count;
+        sets.count = g_contextPtr->swapchain.Count();
         VkDescriptorSetAllocateInfo allocInfo
         {
             .sType              = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
             .pNext              = nullptr,
             .descriptorPool     = pool,
-            .descriptorSetCount = g_contextPtr->swapchain.images.count, //!
+            .descriptorSetCount = g_contextPtr->swapchain.Count(), //!
             .pSetLayouts        = layouts.data
         };
         VkCheck(vkAllocateDescriptorSets(g_devicePtr, &allocInfo, sets.data));
 
         //write
         VkWriteDescriptorSet writes [UNIFORM_COUNT * 4];
-        for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+        for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
         {
             for(idx_t j = 0; j < UNIFORM_COUNT; ++j)
             {
@@ -107,7 +107,7 @@ struct Descriptors
                 };
             }
         }
-        vkUpdateDescriptorSets(g_devicePtr, UNIFORM_COUNT * g_contextPtr->swapchain.images.count, writes, 0, nullptr);   
+        vkUpdateDescriptorSets(g_devicePtr, UNIFORM_COUNT * g_contextPtr->swapchain.Count(), writes, 0, nullptr);   
     }
 };
 

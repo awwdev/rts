@@ -100,7 +100,7 @@ dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
     };
     VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &renderPass));
 
-    auto count = swapchain.images.count;
+    auto count = swapchain.Count();
     framebuffers.count = count;
     beginInfos.count = count;
 

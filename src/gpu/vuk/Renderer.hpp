@@ -140,7 +140,7 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
         com::PrintWarning("vkQueuePresentKHR not success", res2);
     }
 
-    currentFrame = (currentFrame + 1) % (context.swapchain.images.count - 1);
+    currentFrame = (currentFrame + 1) % (context.swapchain.Count() - 1);
 }
 
 ///////////////////////////////////////////////////////////

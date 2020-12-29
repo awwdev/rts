@@ -11,10 +11,10 @@ namespace rts::gpu::vuk {
 
 struct Sync
 {
-    com::Array<VkSemaphore, 4> imageAcquired;
-    com::Array<VkSemaphore, 4> imageFinished;
-    com::Array<VkFence, 4> fences;
-    com::Array<VkFence, 4> inFlight {};
+    SwapResource<VkSemaphore> imageAcquired;
+    SwapResource<VkSemaphore> imageFinished;
+    SwapResource<VkFence> fences;
+    SwapResource<VkFence> inFlight {};
 
     void Create(Swapchain&);
     void Destroy();
@@ -24,10 +24,10 @@ struct Sync
 
 void Sync::Create(Swapchain& swapchain)
 {
-    imageAcquired.count = swapchain.images.count;
-    imageFinished.count = swapchain.images.count;
-    fences.count = swapchain.images.count;
-    inFlight.count = swapchain.images.count;
+    imageAcquired.count = swapchain.Count();
+    imageFinished.count = swapchain.Count();
+    fences.count = swapchain.Count();
+    inFlight.count = swapchain.Count();
 
     VkSemaphoreCreateInfo semaphoreInfo 
     {

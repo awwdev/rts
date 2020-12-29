@@ -36,7 +36,7 @@ void States::Create(Context& context, Commands& commands, res::Resources& resour
     ui.Create(context, commands, resources);
 
     //? record once
-    for(idx_t i = 0; i < context.swapchain.images.count; ++i)
+    for(idx_t i = 0; i < context.swapchain.Count(); ++i)
     {
         Update(rd, i); //so push constants are updated
         Record(commands, i);   

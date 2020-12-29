@@ -11,6 +11,7 @@
 #include "vulkan.h"
 #include "com/Print.hpp"
 #include "com/Assert.hpp"
+#include "com/Array.hpp"
 #include <cstring>
 
 ///////////////////////////////////////////////////////////
@@ -20,6 +21,9 @@ namespace rts::gpu::vuk {
 ///////////////////////////////////////////////////////////
 
 constexpr bool ENABLE_VK_CHECK = true;
+
+template<typename T>
+using SwapResource = com::Array<T, 4>;
 
 //alignas(8) inline char buffer [10'000'000]; 
 //alignas(8) inline char* bufferPtr = buffer;

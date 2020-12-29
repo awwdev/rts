@@ -40,7 +40,7 @@ struct SpritesUniforms
     PushConstants<RD::PushMeta, VK_SHADER_STAGE_VERTEX_BIT> metaData;
     VkSampler spriteArraySampler; 
     Image spriteArray;
-    com::Array<StorageBuffer<RD::UniformQuadData, ecs::ENTITY_COUNT_MAX>, 4> quadData;
+    SwapResource<StorageBuffer<RD::UniformQuadData, ecs::ENTITY_COUNT_MAX>> quadData;
     UniformBuffer<RD::UniformShadowData, 1> shadowData;
     VkSampler shadowOffscreenSampler;
     
@@ -55,7 +55,7 @@ void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, S
 {
     //? uniform
     quadData.count = 4;
-    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
         quadData[i].Create();
     infos[enum_cast(SpritesUniformsEnum::QuadData)] =
     {
@@ -69,7 +69,7 @@ void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, S
             .pImmutableSamplers = nullptr,
         },
     };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
     {
         infos[enum_cast(SpritesUniformsEnum::QuadData)].bufferInfos.Append(
             quadData[i].activeBuffer->buffer,
@@ -92,7 +92,7 @@ void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, S
             .pImmutableSamplers = nullptr,
         },
     };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
     {
         infos[enum_cast(SpritesUniformsEnum::ShadowData)].bufferInfos.Append(
             shadowData.activeBuffer->buffer,
@@ -114,7 +114,7 @@ void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, S
             .pImmutableSamplers = nullptr,
         },
     };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
     {
         infos[enum_cast(SpritesUniformsEnum::ShadowOffscreen)].imageInfos.Append(
             shadowOffscreenSampler,
@@ -148,7 +148,7 @@ void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, S
             .pImmutableSamplers = nullptr,
         },
     };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
     {
         infos[enum_cast(SpritesUniformsEnum::SpriteArray)].imageInfos.Append(
             spriteArraySampler,
@@ -182,7 +182,7 @@ void SpritesUniforms::Destroy()
     spriteArray.Destroy();
     vkDestroySampler(g_devicePtr, spriteArraySampler, GetVkAlloc());
     vkDestroySampler(g_devicePtr, shadowOffscreenSampler, GetVkAlloc());
-    for(idx_t i = 0; i < g_contextPtr->swapchain.images.count; ++i)
+    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
         quadData[i].Destroy();
     shadowData.Destroy();
 }

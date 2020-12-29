@@ -15,8 +15,8 @@ struct RenderPass
     uint32_t width;
     uint32_t height;
     VkFormat format;
-    com::Array<VkFramebuffer, 4> framebuffers;
-    com::Array<VkRenderPassBeginInfo, 4> beginInfos;
+    SwapResource<VkFramebuffer> framebuffers;
+    SwapResource<VkRenderPassBeginInfo> beginInfos;
     void Destroy();
 };
 

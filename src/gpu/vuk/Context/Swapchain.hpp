@@ -3,7 +3,6 @@
 #include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Context/Device.hpp"
 #include "gpu/vuk/Context/Surface.hpp"
-#include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -14,17 +13,19 @@ namespace rts::gpu::vuk {
 struct Swapchain
 {
     VkSwapchainKHR swapchain;
-    com::Array<VkImage, 4> images;
-    com::Array<VkImageView, 4> views;
+    SwapResource<VkImage> images;
+    SwapResource<VkImageView> views;
     uint32_t width;
     uint32_t height;
-    VkFormat format = VK_FORMAT_B8G8R8A8_UNORM;//VK_FORMAT_B8G8R8A8_SRGB;//VK_FORMAT_B8G8R8A8_UNORM
+    VkFormat format = VK_FORMAT_B8G8R8A8_UNORM;
 
     VkPresentModeKHR presentMode = VK_PRESENT_MODE_IMMEDIATE_KHR;
     //VkPresentModeKHR presentMode = VK_PRESENT_MODE_FIFO_KHR;
 
     void Create(Device&, Surface&);
     void Destroy(VkDevice);
+
+    auto Count() const { return images.count; }
 };
 
 ///////////////////////////////////////////////////////////
