@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "net/Network.hpp"
+#include "net/Win32/Win32_Network.hpp"
 #include "com/Types.hpp"
 
 ///////////////////////////////////////////////////////////

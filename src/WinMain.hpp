@@ -48,7 +48,6 @@ static void AppMain(CmdArgs const& cmdArgs)
     std::thread appThread { AppThread, gpu::vuk::WindowHandle { window.hInstance, window.hWnd }, cmdArgs };
     window.BlockingPollEvents(); 
     appThread.join();
-    return EXIT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "net/Network.hpp"
+#include "net/Win32/Win32_Network.hpp"
 #include "com/Types.hpp"
 #include "com/Assert.hpp"
 #include <cstring>
