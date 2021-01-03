@@ -20,9 +20,9 @@ struct StatePost
 {
     Pipeline pipeline;
     Shader shader;
-    PostRenderPass renderPass;
-    PostUniforms uniforms;
-    PostVertices vertices;
+    RenderPassPost renderPass;
+    UniformsPost uniforms;
+    VerticesPost vertices;
 
     void Create(Context&, Commands&, res::Resources&, StateSprites&);
     void Destroy();

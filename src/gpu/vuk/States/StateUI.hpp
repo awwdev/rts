@@ -15,9 +15,9 @@ namespace rts::gpu::vuk {
 struct StateUI
 {
     Pipeline pipeline;
-    UIRenderPass renderPass;
+    RenderPassUI renderPass;
     Shader shader;
-    UIUniforms uniforms;
+    UniformsUI uniforms;
 
     void Create(Context&, Commands&, res::Resources&);
     void Destroy();

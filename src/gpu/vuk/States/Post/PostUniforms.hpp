@@ -24,7 +24,7 @@ enum class PostUniformEnum : u32
 
 ///////////////////////////////////////////////////////////
 
-struct PostUniforms
+struct UniformsPost
 {
     UniformInfo infos [enum_cast(PostUniformEnum::ENUM_END)];
     PushConstants<PushConstantsPost, VK_SHADER_STAGE_VERTEX_BIT> pushConstants;
@@ -38,7 +38,7 @@ struct PostUniforms
 
 ///////////////////////////////////////////////////////////
 
-void PostUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, Image& spritesOffscreen)
+void UniformsPost::Create(VkCommandPool cmdPool, res::Resources& resources, Image& spritesOffscreen)
 {
     CreateSamplerNearest(sampler);
 
@@ -68,14 +68,14 @@ void PostUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, Imag
 
 ///////////////////////////////////////////////////////////
 
-void PostUniforms::Update(RenderDataPost& rd)
+void UniformsPost::Update(RenderDataPost& rd)
 {
     
 }
 
 ///////////////////////////////////////////////////////////
 
-void PostUniforms::Destroy()
+void UniformsPost::Destroy()
 {
     descriptors.Destroy();
     vkDestroySampler(g_devicePtr, sampler, GetVkAlloc());

@@ -10,7 +10,7 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct SpritesRenderPass : RenderPass
+struct RenderPassSprites : RenderPass
 {
     Image offscreen;
     VkClearValue clear;
@@ -20,7 +20,7 @@ struct SpritesRenderPass : RenderPass
 
 ///////////////////////////////////////////////////////////
 
-void SpritesRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
+void RenderPassSprites::Create(VkCommandPool cmdPool, Swapchain& swapchain)
 {
     clear = { VkClearValue { .color { 155/255.f, 186/255.f, 94/255.f, 1.f } } };
 
@@ -137,7 +137,7 @@ void SpritesRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
 
 ///////////////////////////////////////////////////////////
 
-void SpritesRenderPass::Destroy()
+void RenderPassSprites::Destroy()
 {
     RenderPass::Destroy();
     offscreen.Destroy();

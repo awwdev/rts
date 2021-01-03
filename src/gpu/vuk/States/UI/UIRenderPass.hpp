@@ -8,7 +8,7 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct UIRenderPass : RenderPass
+struct RenderPassUI : RenderPass
 {
     void Create(Swapchain& swapchain);
     void Destroy();
@@ -16,7 +16,7 @@ struct UIRenderPass : RenderPass
 
 ///////////////////////////////////////////////////////////
 
-inline void UIRenderPass::Create(Swapchain& swapchain)
+inline void RenderPassUI::Create(Swapchain& swapchain)
 {
     width  = swapchain.width;
     height = swapchain.height;
@@ -120,7 +120,7 @@ inline void UIRenderPass::Create(Swapchain& swapchain)
 
 ///////////////////////////////////////////////////////////
 
-void UIRenderPass::Destroy()
+void RenderPassUI::Destroy()
 {
     RenderPass::Destroy();
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gpu/vuk/Wrappers/BufferExt.hpp"
-#include "gpu/RenderDataPost.hpp"
+#include "gpu/RenderDataWire.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -9,24 +9,24 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct VerticesPost
+struct VerticesWire
 {
-    using Vertex = VertexPost;
-
-    VertexBuffer<Vertex, VERTEX_COUNT_MAX_POST> vbo;
+    using Vertex = VertexWire;
+    VertexBuffer<Vertex, VERTEX_COUNT_MAX_WIRE> vbo;
     VkDeviceSize offsets = 0;
 
     static VkVertexInputBindingDescription   bindings   [1];
-    static VkVertexInputAttributeDescription attributes [3];
+    static VkVertexInputAttributeDescription attributes [2];
 
-    void Create(VkCommandPool);
-    void Destroy();
-    void Update(RenderDataPost&);
+    void Create(VkCommandPool)      { vbo.Create();  }
+    void Destroy()                  { vbo.Destroy(); }
+    void Update(RenderDataWire&);
 };
 
 ///////////////////////////////////////////////////////////
 
-VkVertexInputBindingDescription VerticesPost::bindings [1] =
+VkVertexInputBindingDescription 
+VerticesWire::bindings [1] =
 {
     {
         .binding    = 0,
@@ -37,7 +37,8 @@ VkVertexInputBindingDescription VerticesPost::bindings [1] =
 
 ///////////////////////////////////////////////////////////
 
-VkVertexInputAttributeDescription VerticesPost::attributes [3] =
+VkVertexInputAttributeDescription 
+VerticesWire::attributes [2] =
 {
     {
         .location   = 0,
@@ -48,34 +49,14 @@ VkVertexInputAttributeDescription VerticesPost::attributes [3] =
     {
         .location   = 1,
         .binding    = 0, 
-        .format     = VK_FORMAT_R32G32_SFLOAT,
-        .offset     = offsetof(Vertex, tex),
-    },
-    {
-        .location   = 2,
-        .binding    = 0, 
-        .format     = VK_FORMAT_R32_SINT,
-        .offset     = offsetof(Vertex, blur),
+        .format     = VK_FORMAT_R32G32B32A32_SFLOAT,
+        .offset     = offsetof(Vertex, col),
     },
 };
 
 ///////////////////////////////////////////////////////////
 
-void VerticesPost::Create(VkCommandPool pool)
-{
-    vbo.Create();
-}
-
-///////////////////////////////////////////////////////////
-
-void VerticesPost::Destroy()
-{
-    vbo.Destroy();
-}
-
-///////////////////////////////////////////////////////////
-
-void VerticesPost::Update(RenderDataPost& rd)
+void VerticesWire::Update(RenderDataWire& rd)
 {
     vbo.Clear();
     vbo.Append(rd.vertices.data, rd.vertices.count);

@@ -8,7 +8,7 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct PostRenderPass : RenderPass
+struct RenderPassPost : RenderPass
 {
     VkClearValue clear {};
     void Create(Swapchain& swapchain);
@@ -17,7 +17,7 @@ struct PostRenderPass : RenderPass
 
 ///////////////////////////////////////////////////////////
 
-void PostRenderPass::Create(Swapchain& swapchain)
+void RenderPassPost::Create(Swapchain& swapchain)
 {
     width  = swapchain.width;
     height = swapchain.height;
@@ -122,7 +122,7 @@ void PostRenderPass::Create(Swapchain& swapchain)
 
 ///////////////////////////////////////////////////////////
 
-void PostRenderPass::Destroy()
+void RenderPassPost::Destroy()
 {
     RenderPass::Destroy();
 }

@@ -24,7 +24,7 @@ enum class UIUniformsEnum : u32
 
 ///////////////////////////////////////////////////////////
 
-struct UIUniforms
+struct UniformsUI
 {
     using RD = RenderDataUI;
 
@@ -43,7 +43,7 @@ struct UIUniforms
 
 ///////////////////////////////////////////////////////////
 
-void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
+void UniformsUI::Create(VkCommandPool cmdPool, res::Resources& resources)
 {
     //? uniform
     quadData.Create();
@@ -108,7 +108,7 @@ void UIUniforms::Create(VkCommandPool cmdPool, res::Resources& resources)
 
 ///////////////////////////////////////////////////////////
 
-void UIUniforms::Update(RenderDataUI& rd)
+void UniformsUI::Update(RenderDataUI& rd)
 {
     metaData.data.windowWidth  = app::Inputs::window.width;
     metaData.data.windowHeight = app::Inputs::window.height;
@@ -119,7 +119,7 @@ void UIUniforms::Update(RenderDataUI& rd)
 
 ///////////////////////////////////////////////////////////
 
-void UIUniforms::Destroy()
+void UniformsUI::Destroy()
 {
     descriptors.Destroy();
     fontArray.Destroy();

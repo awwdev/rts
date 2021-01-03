@@ -10,7 +10,7 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-struct ShadowRenderPass : RenderPass
+struct RenderPassShadow : RenderPass
 {
     Image image;
     VkClearValue clear;
@@ -20,7 +20,7 @@ struct ShadowRenderPass : RenderPass
 
 ///////////////////////////////////////////////////////////
 
-void ShadowRenderPass::Create(VkCommandPool cmdPool, Swapchain& swapchain)
+void RenderPassShadow::Create(VkCommandPool cmdPool, Swapchain& swapchain)
 {
     clear = VkClearValue { .color { 0,0,0,0 } };
 
@@ -138,7 +138,7 @@ dependencies[1].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
 ///////////////////////////////////////////////////////////
 
-void ShadowRenderPass::Destroy()
+void RenderPassShadow::Destroy()
 {
     RenderPass::Destroy();
     image.Destroy();

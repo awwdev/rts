@@ -122,7 +122,10 @@ inline auto Multisampling()
 
 ///////////////////////////////////////////////////////////
 
-inline auto Rasterization()
+inline auto Rasterization(
+VkPolygonMode mode = VK_POLYGON_MODE_FILL, 
+VkCullModeFlags cull = VK_CULL_MODE_NONE,
+f32 lineWidth = 1.f)
 {
     return VkPipelineRasterizationStateCreateInfo 
     {
@@ -131,14 +134,14 @@ inline auto Rasterization()
         .flags                   = 0,
         .depthClampEnable        = VK_FALSE,
         .rasterizerDiscardEnable = VK_FALSE,
-        .polygonMode             = VK_POLYGON_MODE_FILL,
-        .cullMode                = VK_CULL_MODE_NONE,//VK_CULL_MODE_BACK_BIT
+        .polygonMode             = mode,
+        .cullMode                = cull,
         .frontFace               = VK_FRONT_FACE_COUNTER_CLOCKWISE,
         .depthBiasEnable         = VK_FALSE,
         .depthBiasConstantFactor = 0.f,
         .depthBiasClamp          = 0.f,
         .depthBiasSlopeFactor    = 0.f,
-        .lineWidth               = 1.f
+        .lineWidth               = lineWidth
     };
 }
 

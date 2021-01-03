@@ -30,7 +30,7 @@ enum class SpritesUniformsEnum : u32
 
 ///////////////////////////////////////////////////////////
 
-struct SpritesUniforms
+struct UniformsSprites
 {
     using RD = RenderDataSprites;
 
@@ -44,14 +44,14 @@ struct SpritesUniforms
     UniformBuffer<RD::UniformShadowData, 1> shadowData;
     VkSampler shadowOffscreenSampler;
     
-    void Create(VkCommandPool, res::Resources&, ShadowRenderPass&);
+    void Create(VkCommandPool, res::Resources&, RenderPassShadow&);
     void Destroy();
     void Update(RenderDataSprites&, u32);
 };
 
 ///////////////////////////////////////////////////////////
 
-void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, ShadowRenderPass& shadowPass)
+void UniformsSprites::Create(VkCommandPool cmdPool, res::Resources& resources, RenderPassShadow& shadowPass)
 {
     //? uniform
     quadData.count = 4;
@@ -163,7 +163,7 @@ void SpritesUniforms::Create(VkCommandPool cmdPool, res::Resources& resources, S
 
 ///////////////////////////////////////////////////////////
 
-void SpritesUniforms::Update(RenderDataSprites& rd, u32 imageIndex)
+void UniformsSprites::Update(RenderDataSprites& rd, u32 imageIndex)
 {
     metaData.data.windowWidth  = app::Inputs::window.width;
     metaData.data.windowHeight = app::Inputs::window.height;
@@ -176,7 +176,7 @@ void SpritesUniforms::Update(RenderDataSprites& rd, u32 imageIndex)
 
 ///////////////////////////////////////////////////////////
 
-void SpritesUniforms::Destroy()
+void UniformsSprites::Destroy()
 {
     descriptors.Destroy();
     spriteArray.Destroy();

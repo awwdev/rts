@@ -23,9 +23,9 @@ struct StateSprites
     Shader shaderSprites;
     Shader shaderSpritesShadows;
     Shader shaderShadows;
-    ShadowRenderPass shadowPass;
-    SpritesRenderPass renderPass;
-    SpritesUniforms uniforms;
+    RenderPassShadow shadowPass;
+    RenderPassSprites renderPass;
+    UniformsSprites uniforms;
 
     void Create(Context&, Commands&, res::Resources&);
     void Destroy();

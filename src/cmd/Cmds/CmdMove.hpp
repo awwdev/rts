@@ -13,7 +13,7 @@ namespace rts::cmd {
 
 struct CmdMove 
 {
-    static constexpr auto MAX_SELECTION = 1'000;
+    static constexpr auto MAX_SELECTION = 100;
     com::Array<ecs::ID, MAX_SELECTION> entities;
     com::Vec2i pos;
     void Execute(ecs::ECS&);
@@ -34,5 +34,7 @@ void CmdMove::Execute(ecs::ECS& ecs)
 }
 
 ///////////////////////////////////////////////////////////
+
+//! probably better to use smaller selections and then aggregate commands, otherise it is bloated
 
 }//ns

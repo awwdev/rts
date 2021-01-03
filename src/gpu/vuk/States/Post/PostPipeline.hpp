@@ -12,8 +12,8 @@ namespace rts::gpu::vuk {
 
 inline void CreatePipelinePost(
 Pipeline& pipeline, 
-PostVertices& vertices,
-PostUniforms& uniforms,
+VerticesPost& vertices,
+UniformsPost& uniforms,
 Shader& shader, 
 RenderPass& renderPass)
 {

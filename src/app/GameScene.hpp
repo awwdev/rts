@@ -66,12 +66,12 @@ void GameScene::Update()
     //test
     if (app::Inputs::mouse.IsPressed(app::InputMouse::Left))
     {
-        cmd::Command cmd {};
-        cmd.type = cmd::CmdEnum::Move;
-        using namespace ecs;
+        using namespace cmd;
+        auto cmd = Command::InitUnion<CmdMove>();
+        auto& cmdMove = cmd.cmdUnion.cmdMove;
         for(ecs::ID id = 0; id < 10; ++id)
-            cmd.cmdUnion.cmdMove.entities.Append(id);
-        cmd.cmdUnion.cmdMove.pos = app::Inputs::mouse.pos;
+            cmdMove.entities.Append(id);
+        cmdMove.pos = app::Inputs::mouse.pos;
         timeline.Store(cmd, timeline.stepIdx + 2);
     }
 }
