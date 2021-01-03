@@ -18,6 +18,7 @@ struct RenderDataSprites
     {
         i32 windowWidth;
         i32 windowHeight;
+        com::Vec2i cameraOffset;
     };
 
     struct UniformQuadData
@@ -38,6 +39,7 @@ struct RenderDataSprites
 
     com::Array<UniformQuadData, ecs::ENTITY_COUNT_MAX> quadData;
     UniformShadowData shadowData;
+    PushMeta meta;
     void Clear();
 };
 

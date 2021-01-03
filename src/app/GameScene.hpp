@@ -2,8 +2,10 @@
 
 #include "ecs/ECS.hpp"
 #include "gpu/RenderData.hpp"
+#include "gpu/Camera.hpp"
 #include "cmd/Timeline.hpp"
 #include "com/Random.hpp"
+
 #include "gui/Editor/GUI_Stats.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -18,6 +20,7 @@ struct GameScene
     cmd::Timeline timeline;
     gpu::RenderData renderData;
     gui::GUI_Stats guiStats;
+    gpu::Camera camera;
 
     GameScene();
     void Update();
@@ -49,6 +52,9 @@ void GameScene::Update()
 {
     //? CLEAR
     renderData.Clear();
+
+    //? CAMERA
+    camera.Update(renderData);
 
     //? ECS
     ecs.Render(renderData, timeline.StepTimePrevLerp());

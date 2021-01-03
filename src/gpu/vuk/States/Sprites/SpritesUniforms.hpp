@@ -165,9 +165,7 @@ void UniformsSprites::Create(VkCommandPool cmdPool, res::Resources& resources, R
 
 void UniformsSprites::Update(RenderDataSprites& rd, u32 imageIndex)
 {
-    metaData.data.windowWidth  = app::Inputs::window.width;
-    metaData.data.windowHeight = app::Inputs::window.height;
-
+    metaData.data = rd.meta;
     shadowData.Clear();
     shadowData.Append(rd.shadowData);
     quadData[imageIndex].Clear();
