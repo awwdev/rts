@@ -11,7 +11,8 @@ namespace rts::gpu::vuk {
 
 struct VerticesWire
 {
-    using Vertex = VertexWire;
+    using RD = RenderDataWire;
+    using Vertex = RD::VertexWire;
     VertexBuffer<Vertex, VERTEX_COUNT_MAX_WIRE> vbo;
     VkDeviceSize offsets = 0;
 
@@ -20,7 +21,7 @@ struct VerticesWire
 
     void Create(VkCommandPool)      { vbo.Create();  }
     void Destroy()                  { vbo.Destroy(); }
-    void Update(RenderDataWire&);
+    void Update(RD&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -56,7 +57,7 @@ VerticesWire::attributes [2] =
 
 ///////////////////////////////////////////////////////////
 
-void VerticesWire::Update(RenderDataWire& rd)
+void VerticesWire::Update(RD& rd)
 {
     vbo.Clear();
     vbo.Append(rd.vertices.data, rd.vertices.count);

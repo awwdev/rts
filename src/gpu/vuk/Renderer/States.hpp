@@ -5,6 +5,7 @@
 #include "gpu/vuk/States/StateSprites.hpp"
 #include "gpu/vuk/States/StatePost.hpp"
 #include "gpu/vuk/States/StateUI.hpp"
+#include "gpu/vuk/States/StateWire.hpp"
 
 #include "gpu/RenderData.hpp"
 #include "res/Resources.hpp"
@@ -20,6 +21,7 @@ struct States
     StateSprites sprites;
     StatePost    post;
     StateUI      ui;
+    StateWire    wire;
 
     void Create(Context&, Commands&, res::Resources&, RenderData&);
     void Destroy();

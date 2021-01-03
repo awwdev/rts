@@ -23,50 +23,25 @@ struct RenderPassSprites : RenderPass
 void RenderPassSprites::Create(VkCommandPool cmdPool, Swapchain& swapchain)
 {
     clear = { VkClearValue { .color { 155/255.f, 186/255.f, 94/255.f, 1.f } } };
-
     width  = swapchain.width;
     height = swapchain.height;
-    format = swapchain.format;
 
-    offscreen.Create(cmdPool, format, 
+    offscreen.Create(cmdPool, swapchain.format, 
         VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
         VK_IMAGE_VIEW_TYPE_2D,
         width, height, 1
     );
 
-    VkAttachmentDescription colorDesc
-    {
-        .flags          = 0,
-        .format         = format, 
-        .samples        = VK_SAMPLE_COUNT_1_BIT,
-        .loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR, //!
-        .storeOp        = VK_ATTACHMENT_STORE_OP_STORE,
-        .stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE,
-        .stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE,
-        .initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED,
-        .finalLayout    = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL //!
-    };
+    auto colorDesc = AttachmentDescription(
+        swapchain.format, 
+        VK_ATTACHMENT_LOAD_OP_CLEAR, 
+        VK_IMAGE_LAYOUT_UNDEFINED,
+        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+    );
     offscreen.layout = colorDesc.finalLayout;
 
-    VkAttachmentReference colorRef
-    {
-        .attachment = 0,
-        .layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-    };
-
-    VkSubpassDescription subpass 
-    {
-        .flags                   = 0,
-        .pipelineBindPoint       = VK_PIPELINE_BIND_POINT_GRAPHICS,
-        .inputAttachmentCount    = 0,
-        .pInputAttachments       = nullptr,
-        .colorAttachmentCount    = 1,
-        .pColorAttachments       = &colorRef,
-        .pResolveAttachments     = nullptr,
-        .pDepthStencilAttachment = nullptr,
-        .preserveAttachmentCount = 0,
-        .pPreserveAttachments    = nullptr
-    };
+    auto colorRef = ColorAttachmentReference();
+    auto subpass  = SubpassDescription(colorRef);
 
     VkSubpassDependency dependencies [2] {};
     dependencies[0].srcSubpass = VK_SUBPASS_EXTERNAL;

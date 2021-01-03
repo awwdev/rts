@@ -2,6 +2,7 @@
 
 #include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Renderer/Context.hpp"
+#include "gpu/vuk/Wrappers/RenderPassExt.hpp"
 
 ///////////////////////////////////////////////////////////
 

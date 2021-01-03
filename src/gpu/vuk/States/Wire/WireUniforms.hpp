@@ -25,9 +25,6 @@ enum class UniformsEnumWire : u32
 struct UniformsWire
 {
     using RD = RenderDataWire;
-
-    UniformInfo infos [enum_cast(UniformsEnumWire::ENUM_END)];
-    Descriptors descriptors;
     PushConstants<RD::PushMeta, VK_SHADER_STAGE_VERTEX_BIT> metaData;
 
     void Create(VkCommandPool);
@@ -43,7 +40,7 @@ void UniformsWire::Create(VkCommandPool)
 
 ///////////////////////////////////////////////////////////
 
-void UniformsWire::Update(RenderDataUI& rd)
+void UniformsWire::Update(RenderDataWire& rd)
 {
     metaData.data.windowWidth  = app::Inputs::window.width;
     metaData.data.windowHeight = app::Inputs::window.height;
