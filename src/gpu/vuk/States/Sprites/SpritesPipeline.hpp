@@ -12,7 +12,7 @@ namespace rts::gpu::vuk {
 inline void CreatePipelineSprites(
 Pipeline& pipeline, 
 UniformsSprites& uniforms,
-Shader& shader, 
+FragVertShader& shader, 
 RenderPass& renderPass)
 {
     PipelineInfo pipelineInfo;

@@ -15,13 +15,13 @@ struct Pipeline
 {
     VkPipeline pipeline;
     VkPipelineLayout layout;
-    void Create(Shader&, RenderPass&, PipelineInfo&);
+    void Create(FragVertShader&, RenderPass&, PipelineInfo&);
     void Destroy();
 };
 
 ///////////////////////////////////////////////////////////
 
-void Pipeline::Create(Shader& shader, RenderPass& renderPass, PipelineInfo& pipelineInfo)
+void Pipeline::Create(FragVertShader& shader, RenderPass& renderPass, PipelineInfo& pipelineInfo)
 {
     VkCheck(vkCreatePipelineLayout(g_devicePtr, &pipelineInfo.layoutInfo, GetVkAlloc(), &layout));
 

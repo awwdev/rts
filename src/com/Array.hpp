@@ -18,6 +18,8 @@ namespace rts::com {
 TEMPLATE 
 struct Array
 {
+    static constexpr auto CAPACITY = N;
+
     idx_t count = 0;
     T data [N];
 

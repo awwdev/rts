@@ -14,7 +14,7 @@ inline void CreatePipelinePost(
 Pipeline& pipeline, 
 VerticesPost& vertices,
 UniformsPost& uniforms,
-Shader& shader, 
+FragVertShader& shader, 
 RenderPass& renderPass)
 {
     PipelineInfo pipelineInfo;

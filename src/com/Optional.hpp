@@ -9,11 +9,7 @@ namespace rts::com {
 
 ///////////////////////////////////////////////////////////
 
-#define TEMPLATE template<typename T>
-
-///////////////////////////////////////////////////////////
-
-TEMPLATE 
+template<typename T>
 struct Optional
 {
     bool hasData;
@@ -33,7 +29,7 @@ struct Optional
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE 
+template<typename T>
 Optional<T>::Optional()
     : hasData   { false }
     , unionData { .uninit {} }
@@ -41,7 +37,7 @@ Optional<T>::Optional()
 
 ///////////////////////////////////////////////////////////
 
-TEMPLATE 
+template<typename T>
 Optional<T>::Optional(auto const&... args)
     : hasData   { true }
     , unionData { .data { args... } }

@@ -12,10 +12,11 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
+template<auto N>
 struct Shader
 {
-    VkShaderModule modules [2];
-    VkPipelineShaderStageCreateInfo stageInfos [2];
+    VkShaderModule modules [N];
+    VkPipelineShaderStageCreateInfo stageInfos [N];
 
     void Create(chars_t, chars_t);
     void Destroy();
@@ -26,7 +27,12 @@ struct Shader
 
 ///////////////////////////////////////////////////////////
 
-void Shader::Create(chars_t pathVert, chars_t pathFrag)
+using FragVertShader = Shader<2>;
+
+///////////////////////////////////////////////////////////
+
+template<auto N>
+void Shader<N>::Create(chars_t pathVert, chars_t pathFrag)
 {
     modules[0] = LoadShaderModule(pathVert);
     modules[1] = LoadShaderModule(pathFrag);
@@ -36,7 +42,8 @@ void Shader::Create(chars_t pathVert, chars_t pathFrag)
 
 ///////////////////////////////////////////////////////////
 
-void Shader::Destroy()
+template<auto N>
+void Shader<N>::Destroy()
 {
     vkDestroyShaderModule(g_devicePtr, modules[0], GetVkAlloc());    
     vkDestroyShaderModule(g_devicePtr, modules[1], GetVkAlloc());    
@@ -44,7 +51,8 @@ void Shader::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-VkShaderModule Shader::LoadShaderModule(chars_t path)
+template<auto N>
+VkShaderModule Shader<N>::LoadShaderModule(chars_t path)
 {
     VkShaderModule mod;
 
@@ -74,7 +82,9 @@ VkShaderModule Shader::LoadShaderModule(chars_t path)
 
 ///////////////////////////////////////////////////////////
 
-VkPipelineShaderStageCreateInfo Shader::CreateShaderInfo(VkShaderStageFlagBits stage, VkShaderModule mod)
+template<auto N>
+VkPipelineShaderStageCreateInfo 
+Shader<N>::CreateShaderInfo(VkShaderStageFlagBits stage, VkShaderModule mod)
 {
     return {
         .sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,

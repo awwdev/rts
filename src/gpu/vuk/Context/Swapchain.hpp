@@ -62,6 +62,7 @@ void Swapchain::Create(Device& device, Surface& surface)
 
     VkCheck(vkGetSwapchainImagesKHR(device.device, swapchain, &images.count, nullptr));
     VkCheck(vkGetSwapchainImagesKHR(device.device, swapchain, &images.count, images.data));
+    com::Assert(images.count <= images.CAPACITY, "array exhausted");
     views.count = images.count;
     //com::Print("swapImagesCount", swapImagesCount);
 
@@ -100,7 +101,6 @@ void Swapchain::Destroy(VkDevice device)
     vkDestroySwapchainKHR(device, swapchain, GetVkAlloc());
     DestroySwapResource(views);
     DestroySwapResource(images);
-
 }
 
 ///////////////////////////////////////////////////////////

@@ -15,7 +15,7 @@ namespace rts::gpu::vuk {
 struct StateWire
 {
     Pipeline pipeline;
-    Shader shader;
+    FragVertShader shader;
     VerticesWire vertices;
     UniformsWire uniforms;
 

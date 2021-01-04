@@ -20,9 +20,9 @@ struct StateSprites
     Pipeline pipelineSprites;
     Pipeline pipelineSpritesShadows;
     Pipeline pipelineShadows;
-    Shader shaderSprites;
-    Shader shaderSpritesShadows;
-    Shader shaderShadows;
+    FragVertShader shaderSprites;
+    FragVertShader shaderSpritesShadows;
+    FragVertShader shaderShadows;
     RenderPassShadow shadowPass;
     RenderPassSprites renderPass;
     UniformsSprites uniforms;

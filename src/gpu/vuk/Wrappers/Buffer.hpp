@@ -13,7 +13,7 @@ namespace rts::gpu::vuk {
 
 struct Buffer
 {
-    VkBuffer buffer = VK_NULL_HANDLE;
+    VkBuffer buffer;
     VkDeviceMemory memory;
     void* memPtr;
 
@@ -50,7 +50,6 @@ void Buffer::Destroy()
 {
     vkDestroyBuffer (g_devicePtr, buffer, GetVkAlloc());
     vkFreeMemory    (g_devicePtr, memory, GetVkAlloc()); //will unmap
-    *this = {};
 }
 
 ///////////////////////////////////////////////////////////

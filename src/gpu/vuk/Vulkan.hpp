@@ -31,9 +31,7 @@ inline void VkCheck(VkResult result)
         return;
 
     if (result != VK_SUCCESS)
-    {
         com::Assert(false, "VkResult", result);
-    }   
 }
 
 ///////////////////////////////////////////////////////////

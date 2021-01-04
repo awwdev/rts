@@ -12,7 +12,7 @@ namespace rts::gpu::vuk {
 
 inline void CreatePipelineWire(
 Pipeline& pipeline, 
-Shader& shader, 
+FragVertShader& shader, 
 VerticesWire& vertices,
 UniformsWire& uniforms,
 RenderPass& renderPass)

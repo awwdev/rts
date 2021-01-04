@@ -40,7 +40,7 @@ void States::Create(Context& context, Commands& commands, res::Resources& resour
     //? record once
     for(idx_t i = 0; i < context.swapchain.Count(); ++i)
     {
-        Update(rd, i); //so push constants are updated
+        Update(rd, i);
         Record(commands, i);   
     }
 }

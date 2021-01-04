@@ -1,12 +1,8 @@
-- swapresource, monotonic create method for uniforms
+complete swapresource 
 
-
-- complete per swapresource 
-- beautify vector/sort usage on resource iteration
-- no use of input buffer on linux since threading is not necessary
-- basic networking linux too
-
+beautify vector/sort usage on resource iteration
+basic networking linux too
 font texture into one file
 additional smaller window font 
-widget label
 dynamic claim block so it can be used for eg vulkan
+widget label

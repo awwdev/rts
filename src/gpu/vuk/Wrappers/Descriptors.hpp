@@ -15,11 +15,9 @@ struct UniformInfo
     enum Type { Buffer, Image } type;
     VkDescriptorSetLayoutBinding binding;
     
-    //union 
-    //{
-        SwapResource<VkDescriptorBufferInfo> bufferInfos;
-        SwapResource<VkDescriptorImageInfo>  imageInfos;
-    //};
+    //union
+    SwapResource<VkDescriptorBufferInfo> bufferInfos;
+    SwapResource<VkDescriptorImageInfo>  imageInfos;
 };
 
 ///////////////////////////////////////////////////////////

@@ -14,7 +14,7 @@ struct Sync
     SwapResource<VkSemaphore> imageAcquired;
     SwapResource<VkSemaphore> imageFinished;
     SwapResource<VkFence> fences;
-    SwapResource<VkFence> inFlight {};
+    SwapResource<VkFence> inFlight;
 
     void Create(Swapchain&);
     void Destroy();
@@ -48,8 +48,7 @@ void Sync::Create(Swapchain& swapchain)
     FOR_ARRAY(imageFinished, i) 
         vkCreateSemaphore(g_devicePtr, &semaphoreInfo, GetVkAlloc(), &imageFinished[i]);  
     FOR_ARRAY(fences, i) 
-        vkCreateFence(g_devicePtr, &fenceInfo, GetVkAlloc(), &fences[i]);
-    
+        vkCreateFence(g_devicePtr, &fenceInfo, GetVkAlloc(), &fences[i]);  
 }
 
 ///////////////////////////////////////////////////////////

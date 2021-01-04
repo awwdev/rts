@@ -16,7 +16,7 @@ struct StateUI
 {
     Pipeline pipeline;
     RenderPassUI renderPass;
-    Shader shader;
+    FragVertShader shader;
     UniformsUI uniforms;
 
     void Create(Context&, Commands&, res::Resources&);

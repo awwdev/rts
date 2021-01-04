@@ -54,6 +54,8 @@ inline void PrintInstanceLayers()
     com::Array<VkLayerProperties, 20> layers;
     vkEnumerateInstanceLayerProperties(&layers.count, nullptr);
     vkEnumerateInstanceLayerProperties(&layers.count, layers.data);
+    com::Assert(layers.count <= layers.CAPACITY, "array exhausted");
+    
     for(uint32_t i = 0; i < layers.count; ++i)
         com::Print(layers[i].layerName);
 }

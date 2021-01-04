@@ -19,7 +19,7 @@ namespace rts::gpu::vuk {
 struct StatePost
 {
     Pipeline pipeline;
-    Shader shader;
+    FragVertShader shader;
     RenderPassPost renderPass;
     UniformsPost uniforms;
     VerticesPost vertices;

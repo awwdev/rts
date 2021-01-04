@@ -3,6 +3,7 @@
 #include "gpu/vuk/Vulkan.hpp"
 #include "gpu/vuk/Renderer/CommandsExt.hpp"
 #include "gpu/vuk/Wrappers/Buffer.hpp"
+#include "mem/Memory.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -17,8 +18,6 @@ constexpr VkComponentMapping IMAGE_COMPONENT_MAPPING_DEFAULT =
     .b = VK_COMPONENT_SWIZZLE_B,
     .a = VK_COMPONENT_SWIZZLE_A
 };
-
-static VkBufferImageCopy g_imageCopyInfos [250];
 
 ///////////////////////////////////////////////////////////
 
@@ -145,9 +144,13 @@ void Image::Store(VkCommandPool cmdPool, void const* data, u32 singleTextureSize
     tmpBuffer.Map();
     tmpBuffer.Store(data, totalSize);
 
+    struct Arr { VkBufferImageCopy data [250]; };
+    auto ptr = mem::ClaimBlock<Arr>();
+    auto& imageCopyInfos = ptr->data;
+
     for(u32 layerIdx = 0; layerIdx < layerCount; ++layerIdx)
     {
-        g_imageCopyInfos[layerIdx] = 
+        imageCopyInfos[layerIdx] = 
         {
             .bufferOffset       = layerIdx * singleTextureSize,
             .bufferRowLength    = 0,
@@ -170,7 +173,7 @@ void Image::Store(VkCommandPool cmdPool, void const* data, u32 singleTextureSize
         cmdBuffer, 
         tmpBuffer.buffer, image, 
         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
-        layerCount, g_imageCopyInfos
+        layerCount, imageCopyInfos
     );
     EndCommands_OneTime(cmdBuffer, cmdPool);
 

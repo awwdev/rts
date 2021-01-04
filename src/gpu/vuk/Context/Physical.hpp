@@ -26,11 +26,13 @@ void Physical::Create(Instance& instance)
     com::Array<VkPhysicalDevice, 10> physicals;
     VkCheck(vkEnumeratePhysicalDevices(instance.instance, &physicals.count, nullptr));
     VkCheck(vkEnumeratePhysicalDevices(instance.instance, &physicals.count, physicals.data));
+    com::Assert(physicals.count <= physicals.CAPACITY, "array exhausted");
     physical = physicals[0];
 
     com::Array<VkQueueFamilyProperties, 10> famProps;
     vkGetPhysicalDeviceQueueFamilyProperties(physical, &famProps.count, nullptr);
     vkGetPhysicalDeviceQueueFamilyProperties(physical, &famProps.count, famProps.data);
+    com::Assert(famProps.count <= famProps.CAPACITY, "array exhausted");
     FOR_ARRAY(famProps, i)
     {
         if (famProps[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
