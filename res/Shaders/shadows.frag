@@ -8,7 +8,7 @@ layout(location = 0) out vec4 outCol;
 
 ///////////////////////////////////////////////////////////
 
-layout(binding = 3) uniform sampler2D shadow;
+layout(binding = 4) uniform sampler2D shadow;
 
 ///////////////////////////////////////////////////////////
 
@@ -16,3 +16,5 @@ void main()
 {
     outCol = vec4(0, 0, 0, texture(shadow, inUV).a * 0.2);
 }
+
+//TODO shadow strength 

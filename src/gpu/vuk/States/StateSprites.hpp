@@ -75,13 +75,13 @@ void StateSprites::Update(RenderDataSprites& rd, u32 imageIndex)
 void StateSprites::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
 {
     vkCmdPushConstants      (cmdBuffer, pipelineSprites.layout, VK_SHADER_STAGE_VERTEX_BIT, 0, 
-                             uniforms.metaData.SIZE, &uniforms.metaData.data);
+                             uniforms.ctx.SIZE, &uniforms.ctx.data);
     vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineSprites.layout, 0, 
                              1, &uniforms.descriptors.sets[imageIndex], 0, nullptr);
     //sprite shadows
     vkCmdBeginRenderPass    (cmdBuffer, &shadowPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineSpritesShadows.pipeline);
-    vkCmdDraw               (cmdBuffer, uniforms.quadData[imageIndex].COUNT_MAX * 6, 1, 0, 0);
+    vkCmdDraw               (cmdBuffer, uniforms.quads[imageIndex].COUNT_MAX * 6, 1, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
     //shadows
     vkCmdBeginRenderPass    (cmdBuffer, &renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
@@ -89,7 +89,7 @@ void StateSprites::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
     vkCmdDraw               (cmdBuffer, 3, 1, 0, 0);
     //sprites
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineSprites.pipeline);
-    vkCmdDraw               (cmdBuffer, uniforms.quadData[imageIndex].COUNT_MAX * 6, 1, 0, 0);
+    vkCmdDraw               (cmdBuffer, uniforms.quads[imageIndex].COUNT_MAX * 6, 1, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
 }
 

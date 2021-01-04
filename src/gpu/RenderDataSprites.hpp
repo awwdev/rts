@@ -14,14 +14,18 @@ namespace rts::gpu {
 
 struct RenderDataSprites
 {
-    struct PushMeta
+    struct PushContext
     {
         i32 windowWidth;
         i32 windowHeight;
-        com::Vec2i cameraOffset;
     };
 
-    struct UniformQuadData
+    struct UniformMeta
+    {
+        com::Vec2i cameraPos;
+    };
+
+    struct UniformQuad
     {
         com::Rectf rect;
         com::Col4n col;
@@ -31,15 +35,15 @@ struct RenderDataSprites
         bool flipped;
     };
 
-    struct UniformShadowData
+    struct UniformSun
     {
         f32 rotation;
         f32 strength;
     };
 
-    com::Array<UniformQuadData, ecs::ENTITY_COUNT_MAX> quadData;
-    UniformShadowData shadowData;
-    PushMeta meta;
+    com::Array<UniformQuad, ecs::ENTITY_COUNT_MAX> quads;
+    UniformSun sun;
+    UniformMeta meta;
     void Clear();
 };
 
@@ -47,7 +51,7 @@ struct RenderDataSprites
 
 void RenderDataSprites::Clear()
 {
-    quadData.count = 0;
+    quads.count = 0;
 }
 
 ///////////////////////////////////////////////////////////

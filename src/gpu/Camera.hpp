@@ -12,7 +12,8 @@ namespace rts::gpu {
 
 struct Camera 
 {
-    com::Vec2i pos;
+    i32 spd = 1;
+    com::Vec2i pos {};
     void Update(RenderData&);
 };
 
@@ -20,12 +21,20 @@ struct Camera
 
 void Camera::Update(RenderData& rd)
 {
-    //TODO check key, update pos
-    rd.sprites.meta.cameraOffset = pos;
-    rd.sprites.meta.windowWidth  = app::Inputs::window.width;
-    rd.sprites.meta.windowHeight = app::Inputs::window.height;
+    if (app::IsKeyHeld('W'))
+        pos.y += 1 * spd;
+    if (app::IsKeyHeld('S'))
+        pos.y -= 1 * spd;
+    if (app::IsKeyHeld('A'))
+        pos.x += 1 * spd;
+    if (app::IsKeyHeld('D'))
+        pos.x -= 1 * spd;
+
+    rd.sprites.meta.cameraPos = pos;
 }
 
 ///////////////////////////////////////////////////////////
+
+//TODO smooth
 
 }//ns

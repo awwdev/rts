@@ -10,13 +10,13 @@ layout(location = 0) out vec4 outCol;
 
 ///////////////////////////////////////////////////////////
 
-layout(binding = 1) uniform sampler2DArray textures;
+layout(binding = 3) uniform sampler2DArray sprites;
 
 ///////////////////////////////////////////////////////////
 
 void main() 
 {
     vec3 uv = vec3(inTex.x, inTex.y, inTexId);
-    vec4 col = texture(textures, uv);
+    vec4 col = texture(sprites, uv);
     outCol = col * inCol;
 }

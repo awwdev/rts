@@ -23,8 +23,8 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderDataSprites& rd, f3
 
     //?shadow
     //rd.shadowData.rotation += app::Time::dt;
-    rd.shadowData.rotation = 5;
-    rd.shadowData.strength = 0.5;
+    rd.sun.rotation = 5;
+    rd.sun.strength = 0.5;
 
     //?sort
     for(idx_t i = 0; i < dense.count - 1; ++i)
@@ -48,7 +48,7 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderDataSprites& rd, f3
         com::Rectf rect { lerpPos, trans.size }; 
         com::Col4n COLOR { 1, 1, 1, 1 };
         bool flipped = trans.delta.x < 0;
-        rd.quadData.Append(rect, COLOR, com::Vec2f { 0.5, 0.5 }, sprite.texIdx, trans.rot, flipped);
+        rd.quads.Append(rect, COLOR, com::Vec2f { 0.5, 0.5 }, sprite.texIdx, trans.rot, flipped);
     }
 }
 

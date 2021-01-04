@@ -77,7 +77,7 @@ void GameScene::Update()
         auto& cmdMove = cmd.cmdUnion.cmdMove;
         for(ecs::ID id = 0; id < 10; ++id)
             cmdMove.entities.Append(id);
-        cmdMove.pos = app::Inputs::mouse.pos;
+        cmdMove.pos = app::Inputs::mouse.pos - camera.pos; //! applying offset here or in cmd, where ?
         timeline.Store(cmd, timeline.stepIdx + 2);
     }
 }

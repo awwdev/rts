@@ -1,15 +1,15 @@
 //////////////////////////////////////////////////////////
 
-layout(push_constant) uniform PushConstants
+layout(push_constant) uniform Context
 {
     uint windowWidth;
     uint windowHeight;
 } 
-meta;
+context;
 
 ///////////////////////////////////////////////////////////
 
-struct Uniform
+struct Quad
 {
     float x;
     float y;
@@ -31,20 +31,28 @@ struct Uniform
 
 ///////////////////////////////////////////////////////////  
 
-layout(std430, binding = 0) buffer readonly SBO
+layout(std430, binding = 0) buffer readonly Quads
 {
-    Uniform array [];
+    Quad array [];
 }
-sbo;
+quads;
+
+///////////////////////////////////////////////////////////  
+
+layout(binding = 1) uniform Meta
+{
+    ivec2 camera;
+}
+meta;
 
 ///////////////////////////////////////////////////////////
 
-layout(binding = 2) uniform UBO
+layout(binding = 2) uniform Sun
 {
     float rotation;
     float strength;
 }
-ubo;
+sun;
 
 ///////////////////////////////////////////////////////////
 
@@ -54,7 +62,7 @@ layout(location = 2) out flat uint outTexId;
 
 ///////////////////////////////////////////////////////////
 
-const vec2 quad [6] =
+const vec2 verts [6] =
 {
     vec2(0, 0),
     vec2(0, 1),
@@ -66,7 +74,7 @@ const vec2 quad [6] =
 
 ///////////////////////////////////////////////////////////
 
-const vec2 flipped [6] =
+const vec2 vertsFlipped [6] =
 {
     vec2(1, 0),
     vec2(1, 1),
@@ -81,27 +89,27 @@ const vec2 flipped [6] =
 void main() 
 {
     //index
-    Uniform uni = sbo.array[gl_VertexIndex / 6];
-    vec2 q = quad[gl_VertexIndex % 6];
+    Quad quad = quads.array[gl_VertexIndex / 6];
+    vec2 vert = verts[gl_VertexIndex % 6];
 
     //rotation
-    float c = cos(ubo.rotation);
-    float s = sin(ubo.rotation);
+    float c = cos(sun.rotation);
+    float s = sin(sun.rotation);
     mat2 rotMat = mat2(c, -s, s, c);
-    vec2 rotVec = rotMat * vec2(q.x - uni.xo, q.y - 0.25 - uni.yo);  //! hardcoded
+    vec2 rotVec = rotMat * vec2(vert.x - quad.xo, vert.y - 0.25 - quad.yo);  //! hardcoded
 
     //position
-    float x_px = uni.x + rotVec.x * uni.w;
-    float y_px = uni.y + 12 + rotVec.y * uni.h; //! hardcoded
-    float x_dc = x_px / meta.windowWidth  * 2 - 1;
-    float y_dc = y_px / meta.windowHeight * 2 - 1;
+    float x_px = vert.x + meta.camera.x + rotVec.x * quad.w;
+    float y_px = vert.y + meta.camera.y + 12 + rotVec.y * quad.h; //! hardcoded
+    float x_dc = x_px / context.windowWidth  * 2 - 1;
+    float y_dc = y_px / context.windowHeight * 2 - 1;
     gl_Position = vec4(x_dc, y_dc, 0, 1);
 
     //other
-    outCol = vec4(0, 0, 0, uni.a);
-    if (uni.flipped) 
-        outTex = flipped[gl_VertexIndex % 6];
+    outCol = vec4(0, 0, 0, quad.a);
+    if (quad.flipped) 
+        outTex = vertsFlipped[gl_VertexIndex % 6];
     else
-        outTex = q;
-    outTexId = uni.texId;
+        outTex = vert;
+    outTexId = quad.texId;
 }

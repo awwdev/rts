@@ -26,7 +26,7 @@ RenderPass& renderPass)
     pipelineInfo.blendState    = BlendStateInfo();
     pipelineInfo.layoutInfo    = PipelineLayout(
          uniforms.descriptors.layouts.data, uniforms.descriptors.layouts.count,
-        &uniforms.metaData.rangeInfo, 1
+        &uniforms.ctx.rangeInfo, 1
     );
 
     pipeline.Create(shader, renderPass, pipelineInfo);
