@@ -6,7 +6,7 @@
 
 ///////////////////////////////////////////////////////////
 
-namespace rts::gpu {
+namespace rts::app {
 
 ///////////////////////////////////////////////////////////
 
@@ -14,12 +14,12 @@ struct Camera
 {
     i32 spd = 1;
     com::Vec2i pos {};
-    void Update(RenderData&);
+    void Update(gpu::RenderData&);
 };
 
 ///////////////////////////////////////////////////////////
 
-void Camera::Update(RenderData& rd)
+void Camera::Update(gpu::RenderData& rd)
 {
     if (app::IsKeyHeld('W'))
         pos.y += 1 * spd;

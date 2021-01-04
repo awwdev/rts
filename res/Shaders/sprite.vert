@@ -90,8 +90,8 @@ void main()
     vec2 rotVec = rotMat * vec2(vert.x - quad.xo, vert.y - quad.yo); 
 
     //position
-    float x_px = vert.x + meta.camera.x + rotVec.x * quad.w;
-    float y_px = vert.y + meta.camera.y + rotVec.y * quad.h; 
+    float x_px = quad.x + meta.camera.x + rotVec.x * quad.w;
+    float y_px = quad.y + meta.camera.y + rotVec.y * quad.h; 
     float x_dc = x_px / context.windowWidth  * 2 - 1;
     float y_dc = y_px / context.windowHeight * 2 - 1;
     gl_Position = vec4(x_dc, y_dc, 0, 1);

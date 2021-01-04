@@ -2,7 +2,7 @@
 
 #include "ecs/ECS.hpp"
 #include "gpu/RenderData.hpp"
-#include "gpu/Camera.hpp"
+#include "app/Camera.hpp"
 #include "cmd/Timeline.hpp"
 #include "com/Random.hpp"
 
@@ -20,7 +20,7 @@ struct GameScene
     cmd::Timeline timeline;
     gpu::RenderData renderData;
     gui::GUI_Stats guiStats;
-    gpu::Camera camera;
+    app::Camera camera;
 
     GameScene();
     void Update();

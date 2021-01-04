@@ -195,6 +195,7 @@ void UniformsSprites::Update(RenderDataSprites& rd, u32 imageIndex)
 {
     ctx.data.windowWidth  = app::Inputs::window.width;
     ctx.data.windowHeight = app::Inputs::window.height;
+    meta[imageIndex].Clear();
     meta[imageIndex].Append(RD::UniformMeta {rd.meta.cameraPos});
     sun.Clear();
     sun.Append(rd.sun);
