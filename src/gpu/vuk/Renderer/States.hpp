@@ -2,10 +2,9 @@
 
 #include "gpu/vuk/Renderer/Commands.hpp"
 
-#include "gpu/vuk/States/StateSprites.hpp"
+#include "gpu/vuk/States/StateGeneral.hpp"
 #include "gpu/vuk/States/StatePost.hpp"
 #include "gpu/vuk/States/StateUI.hpp"
-#include "gpu/vuk/States/StateWire.hpp"
 
 #include "gpu/RenderData.hpp"
 #include "res/Resources.hpp"
@@ -18,10 +17,9 @@ namespace rts::gpu::vuk {
 
 struct States
 {
-    StateSprites sprites;
+    StateGeneral general;
     StatePost    post;
     StateUI      ui;
-    StateWire    wire;
 
     void Create(Context&, Commands&, res::Resources&, RenderData&);
     void Destroy();
@@ -33,11 +31,11 @@ struct States
 
 void States::Create(Context& context, Commands& commands, res::Resources& resources, RenderData& rd)
 {
-    sprites.Create(context, commands, resources);
-    post.Create(context, commands, resources, sprites);
+    general.Create(context, commands, resources);
+    post.Create(context, commands, resources, general);
     ui.Create(context, commands, resources);
 
-    //? record once
+    //record once
     for(idx_t i = 0; i < context.swapchain.Count(); ++i)
     {
         Update(rd, i);
@@ -50,7 +48,7 @@ void States::Create(Context& context, Commands& commands, res::Resources& resour
 void States::Destroy()
 {
     post.Destroy();
-    sprites.Destroy();
+    general.Destroy();
     ui.Destroy();
 }
 
@@ -58,7 +56,7 @@ void States::Destroy()
 
 void States::Update(RenderData& rd, u32 imageIndex)
 {
-    sprites.Update(rd.sprites, imageIndex);
+    general.Update(rd, imageIndex);
     post.Update(rd.post);
     ui.Update(rd.ui);
 }
@@ -70,7 +68,7 @@ void States::Record(Commands& commands, uint32_t imageIndex)
     auto cmdBuffer = commands.buffers[imageIndex];
     auto beginInfo = CreateCmdBeginInfo();
     VkCheck(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
-    sprites.Record(cmdBuffer, imageIndex);
+    general.Record(cmdBuffer, imageIndex);
     post.Record(cmdBuffer, imageIndex);
     ui.Record(cmdBuffer, imageIndex);
     VkCheck(vkEndCommandBuffer(cmdBuffer));

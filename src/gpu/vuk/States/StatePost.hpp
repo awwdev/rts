@@ -6,7 +6,7 @@
 #include "gpu/vuk/States/Post/PostUniforms.hpp"
 
 #include "gpu/vuk/Renderer/Commands.hpp"
-#include "gpu/vuk/States/StateSprites.hpp"
+#include "gpu/vuk/States/StateGeneral.hpp"
 #include "gpu/RenderDataPost.hpp"
 #include "res/Resources.hpp"
 
@@ -24,7 +24,7 @@ struct StatePost
     UniformsPost uniforms;
     VerticesPost vertices;
 
-    void Create(Context&, Commands&, res::Resources&, StateSprites&);
+    void Create(Context&, Commands&, res::Resources&, StateGeneral&);
     void Destroy();
     void Update(RenderDataPost&);
     void Record(VkCommandBuffer, uint32_t);
@@ -32,9 +32,9 @@ struct StatePost
 
 ///////////////////////////////////////////////////////////
 
-void StatePost::Create(Context& context, Commands& commands, res::Resources& resources, StateSprites& stateSprites)
+void StatePost::Create(Context& context, Commands& commands, res::Resources& resources, StateGeneral& stateSprites)
 {
-    uniforms.Create(commands.pool, resources, stateSprites.renderPass.offscreen);
+    uniforms.Create(commands.pool, resources, stateSprites.renderPassGeneral.offscreen);
     vertices.Create(commands.pool);
     renderPass.Create(context.swapchain);
     shader.Create("res/Shaders/spv/post.vert.spv", "res/Shaders/spv/post.frag.spv");

@@ -22,21 +22,22 @@ struct RenderDataWire
         com::Col4n col;
     };
 
-    struct PushMeta
-    {
-        i32 windowWidth;
-        i32 windowHeight;
-    };
-
     com::Array<VertexWire, VERTEX_COUNT_MAX_WIRE> vertices;
     void Clear();
+
+    RenderDataWire()
+    {
+        //test
+        vertices.Append(com::Vec2f{32, 32}, com::Col4n{1, 1, 1, 1});
+        vertices.Append(com::Vec2f{64, 32}, com::Col4n{1, 1, 1, 1});
+    }
 };
 
 ///////////////////////////////////////////////////////////
 
 void RenderDataWire::Clear()
 {
-    vertices.count = 0; 
+    vertices.count = 2; //! test
 }
 
 ///////////////////////////////////////////////////////////

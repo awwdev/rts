@@ -6,8 +6,8 @@
 #include "gpu/vuk/Wrappers/Sampler.hpp"
 #include "gpu/vuk/Wrappers/Descriptors.hpp"
 #include "gpu/vuk/Wrappers/Image.hpp"
-#include "gpu/vuk/States/Sprites/SpritesRenderPass.hpp"
-#include "gpu/vuk/States/Sprites/ShadowRenderPass.hpp"
+#include "gpu/vuk/States/General/GeneralRenderPass.hpp"
+#include "gpu/vuk/States/General/Shadow/ShadowRenderPass.hpp"
 
 #include "app/Inputs.hpp"
 #include "res/Resources.hpp"

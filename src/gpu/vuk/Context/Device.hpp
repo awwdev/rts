@@ -39,6 +39,7 @@ void Device::Create(Physical& physical)
     };
 
     VkPhysicalDeviceFeatures deviceFeatures {};
+    deviceFeatures.wideLines = VK_TRUE;
 
     VkDeviceCreateInfo deviceInfo 
     {
