@@ -21,12 +21,7 @@ namespace rts::gpu::vuk {
 ///////////////////////////////////////////////////////////
 
 constexpr bool ENABLE_VK_CHECK = true;
-
-template<typename T>
-using SwapResource = com::Array<T, 4>;
-
-//alignas(8) inline char buffer [10'000'000]; 
-//alignas(8) inline char* bufferPtr = buffer;
+inline VkDevice g_devicePtr;
 
 ///////////////////////////////////////////////////////////
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gpu/vuk/Wrappers/SwapResource.hpp"
 #include "gpu/vuk/Wrappers/PushConstants.hpp"
 #include "gpu/vuk/Wrappers/BufferExt.hpp"
 #include "gpu/vuk/Wrappers/Sampler.hpp"
@@ -211,8 +212,8 @@ void UniformsSprites::Destroy()
     spriteArray.Destroy();
     vkDestroySampler(g_devicePtr, spriteArraySampler, GetVkAlloc());
     vkDestroySampler(g_devicePtr, shadowOffscreenSampler, GetVkAlloc());
-    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
-        quads[i].Destroy();
+    DestroySwapResource(quads);
+    DestroySwapResource(meta);
     sun.Destroy();
 }
 

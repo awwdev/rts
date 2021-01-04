@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gpu/vuk/Vulkan.hpp"
+#include "gpu/vuk/Wrappers/SwapResource.hpp"
 #include "gpu/vuk/Context/Device.hpp"
 #include "gpu/vuk/Context/Surface.hpp"
 
@@ -98,17 +98,9 @@ void Swapchain::Create(Device& device, Surface& surface)
 void Swapchain::Destroy(VkDevice device)
 {
     vkDestroySwapchainKHR(device, swapchain, GetVkAlloc());
-    FOR_ARRAY(views, i)
-    {
-        vkDestroyImageView(device, views[i], GetVkAlloc());
-        views[i] = nullptr;
-    }
-    views.count = 0;
-    FOR_ARRAY(images, i)
-    {
-        images[i] = nullptr; //swapchain will destroy images
-    }
-    images.count = 0;
+    DestroySwapResource(views);
+    DestroySwapResource(images);
+
 }
 
 ///////////////////////////////////////////////////////////

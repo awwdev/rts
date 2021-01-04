@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gpu/vuk/Vulkan.hpp"
+#include "gpu/vuk/Wrappers/SwapResource.hpp"
 #include "gpu/vuk/Renderer/CommandsExt.hpp"
 #include "gpu/vuk/Context/Swapchain.hpp"
 #include "com/Array.hpp"

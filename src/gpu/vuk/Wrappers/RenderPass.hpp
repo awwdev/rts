@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gpu/vuk/Vulkan.hpp"
+#include "gpu/vuk/Wrappers/SwapResource.hpp"
 #include "gpu/vuk/Renderer/Context.hpp"
 #include "gpu/vuk/Wrappers/RenderPassExt.hpp"
 
@@ -25,19 +25,9 @@ struct RenderPass
 
 void RenderPass::Destroy()
 {
-    vkDestroyRenderPass(g_devicePtr, renderPass, GetVkAlloc());
-    FOR_ARRAY(framebuffers, i)
-    {
-        vkDestroyFramebuffer(g_devicePtr, framebuffers[i], GetVkAlloc());
-        framebuffers[i] = nullptr;
-    }
-    framebuffers.count = 0;
-
-    FOR_ARRAY(beginInfos, i)
-    {
-        beginInfos[i] = {};
-    }
-    beginInfos.count = 0;
+    vkDestroyRenderPass(g_devicePtr, renderPass, GetVkAlloc());  
+    DestroySwapResource(framebuffers);
+    DestroySwapResource(beginInfos);
 }
 
 ///////////////////////////////////////////////////////////

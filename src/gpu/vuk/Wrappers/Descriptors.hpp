@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gpu/vuk/Wrappers/SwapResource.hpp"
 #include "gpu/vuk/Renderer/Context.hpp"
 #include "com/Array.hpp"
 
@@ -115,10 +116,9 @@ struct Descriptors
 
 void Descriptors::Destroy()
 {
-    FOR_ARRAY(layouts, i)
-        vkDestroyDescriptorSetLayout(g_devicePtr, layouts[i], GetVkAlloc());
+    DestroySwapResource(layouts);
+    DestroySwapResource(sets);
     vkDestroyDescriptorPool(g_devicePtr, pool, GetVkAlloc());
-    sets.count = 0;
 }
 
 ///////////////////////////////////////////////////////////

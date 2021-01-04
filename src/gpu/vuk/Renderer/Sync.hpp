@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gpu/vuk/Vulkan.hpp"
+#include "gpu/vuk/Wrappers/SwapResource.hpp"
 #include "gpu/vuk/Context/Swapchain.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -56,17 +56,9 @@ void Sync::Create(Swapchain& swapchain)
 
 void Sync::Destroy()
 {
-    FOR_ARRAY(imageAcquired, i) 
-        vkDestroySemaphore(g_devicePtr, imageAcquired[i], GetVkAlloc());
-    FOR_ARRAY(imageFinished, i) 
-        vkDestroySemaphore(g_devicePtr, imageFinished[i], GetVkAlloc());
-    FOR_ARRAY(fences, i)        
-        vkDestroyFence(g_devicePtr, fences[i], GetVkAlloc());
-
-    imageAcquired.count = 0;
-    imageFinished.count = 0;
-    fences.count = 0;
-    inFlight.count = 0;
+    DestroySwapResource(imageAcquired);
+    DestroySwapResource(imageFinished);
+    DestroySwapResource(fences);
 }
 
 ///////////////////////////////////////////////////////////

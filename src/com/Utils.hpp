@@ -78,7 +78,7 @@ inline float FastSqrt(float number)
 
 ///////////////////////////////////////////////////////////
 
-inline auto CountDigits(as_integral auto num)
+inline auto CountDigits(std::integral auto num)
 {
     auto digits = 1;
     while(1)
