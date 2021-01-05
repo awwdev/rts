@@ -9,7 +9,7 @@
 #include "gpu/vuk/States/General/GeneralRenderPass.hpp"
 #include "gpu/vuk/States/General/Shadow/ShadowRenderPass.hpp"
 
-#include "app/Inputs.hpp"
+#include "app/Input/Inputs.hpp"
 #include "res/Resources.hpp"
 #include "gpu/RenderDataSprites.hpp"
 #include "app/Time.hpp"

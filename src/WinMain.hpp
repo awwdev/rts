@@ -10,7 +10,7 @@
 #include "net/Win32/Win32_Network.hpp"
 #include "app/GameScene.hpp"
 #include "app/Time.hpp"
-#include "app/Inputs.hpp"
+#include "app/Input/Inputs.hpp"
 
 ///////////////////////////////////////////////////////////
 

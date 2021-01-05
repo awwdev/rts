@@ -5,7 +5,7 @@
 #include "app/Camera.hpp"
 #include "cmd/Timeline.hpp"
 #include "com/Random.hpp"
-
+#include "app/GameSceneInput.hpp"
 #include "gui/Editor/GUI_Stats.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -21,15 +21,22 @@ struct GameScene
     gpu::RenderData renderData;
     gui::GUI_Stats guiStats;
     app::Camera camera;
+    app::GameSceneInput input;
 
     GameScene();
     void Update();
+
+private:
+    void UpdateInput();
+    void UpdateStep();
+    void UpdateUI();
 };
 
 ///////////////////////////////////////////////////////////
 
 GameScene::GameScene()
 {
+    //test
     for(auto i = 0; i < 1'00; ++i)
     {
         auto ID = ecs.AddEntity();
@@ -50,38 +57,44 @@ GameScene::GameScene()
 
 void GameScene::Update()
 {
-    //? CLEAR
     renderData.Clear();
+    input.Update(ecs, camera, renderData);
+    UpdateStep();
+    UpdateUI();
+}
 
-    //? CAMERA
-    camera.Update(renderData);
+///////////////////////////////////////////////////////////
 
-    //? ECS
+void GameScene::UpdateStep()
+{
     ecs.Render(renderData, timeline.StepTimePrevLerp());
     if (timeline.Update())
     {
         ecs.Update(timeline.stepIdx);
         timeline.Execute(ecs);
     }
+}
 
-    //? UI
-    guiStats.Update(renderData, timeline);
-    if (app::Inputs::keyboard.keys[27])
-        app::Inputs::window.shouldClose = true;
+///////////////////////////////////////////////////////////
 
-    //test
-    if (app::Inputs::mouse.IsPressed(app::InputMouse::Left))
-    {
-        using namespace cmd;
-        auto cmd = Command::InitUnion<CmdMove>();
-        auto& cmdMove = cmd.cmdUnion.cmdMove;
-        for(ecs::ID id = 0; id < 10; ++id)
-            cmdMove.entities.Append(id);
-        cmdMove.pos = app::Inputs::mouse.pos - camera.pos; //! applying offset here or in cmd, where ?
-        timeline.Store(cmd, timeline.stepIdx + 2);
-    }
+void GameScene::UpdateUI()
+{
+    guiStats.Update(renderData, timeline); 
 }
 
 ///////////////////////////////////////////////////////////
 
 }//ns
+
+/*
+if (app::Inputs::mouse.IsPressed(app::InputMouse::Left))
+{
+    using namespace cmd;
+    auto cmd = Command::InitUnion<CmdMove>();
+    auto& cmdMove = cmd.cmdUnion.cmdMove;
+    for(ecs::ID id = 0; id < 10; ++id)
+        cmdMove.entities.Append(id);
+    cmdMove.pos = app::Inputs::mouse.pos - camera.pos; 
+    timeline.Store(cmd, timeline.stepIdx + 2);
+}
+*/

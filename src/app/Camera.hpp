@@ -2,7 +2,7 @@
 
 #include "com/Vec.hpp"
 #include "gpu/RenderData.hpp"
-#include "app/Inputs.hpp"
+#include "app/Input/Inputs.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -21,13 +21,13 @@ struct Camera
 
 void Camera::Update(gpu::RenderData& rd)
 {
-    if (app::IsKeyHeld('W'))
+    if (app::Inputs::keyboard.IsKeyHeld('W'))
         pos.y += 1 * spd;
-    if (app::IsKeyHeld('S'))
+    if (app::Inputs::keyboard.IsKeyHeld('S'))
         pos.y -= 1 * spd;
-    if (app::IsKeyHeld('A'))
+    if (app::Inputs::keyboard.IsKeyHeld('A'))
         pos.x += 1 * spd;
-    if (app::IsKeyHeld('D'))
+    if (app::Inputs::keyboard.IsKeyHeld('D'))
         pos.x -= 1 * spd;
 
     rd.sprites.meta.cameraPos = pos;

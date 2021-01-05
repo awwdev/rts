@@ -4,7 +4,7 @@
 #include "wnd/Win32/Win32_WindowProc.hpp"
 #include "com/Types.hpp"
 #include "com/Print.hpp"
-#include "app/Inputs.hpp"
+#include "app/Input/Inputs.hpp"
 #include "app/CmdArgs.hpp"
 
 ///////////////////////////////////////////////////////////

@@ -25,11 +25,16 @@ struct RenderDataWire
     com::Array<VertexWire, VERTEX_COUNT_MAX_WIRE> vertices;
     void Clear();
 
-    RenderDataWire()
+    void AddRect(auto pos1, auto pos2, com::Col4n col = com::Col4n{ 1.f, 1.f, 1.f, 1.f })
     {
-        //test
-        vertices.Append(com::Vec2f{32, 32}, com::Col4n{1, 1, 1, 1});
-        vertices.Append(com::Vec2f{64, 32}, com::Col4n{1, 1, 1, 1});
+        vertices.Append((f32)pos1.x, (f32)pos1.y, col);
+        vertices.Append((f32)pos2.x, (f32)pos1.y, col);
+        vertices.Append((f32)pos2.x, (f32)pos1.y, col);
+        vertices.Append((f32)pos2.x, (f32)pos2.y, col);
+        vertices.Append((f32)pos2.x, (f32)pos2.y, col);
+        vertices.Append((f32)pos1.x, (f32)pos2.y, col);
+        vertices.Append((f32)pos1.x, (f32)pos2.y, col);
+        vertices.Append((f32)pos1.x, (f32)pos1.y, col);
     }
 };
 
@@ -37,7 +42,7 @@ struct RenderDataWire
 
 void RenderDataWire::Clear()
 {
-    vertices.count = 2; //! test
+    vertices.count = 0;
 }
 
 ///////////////////////////////////////////////////////////

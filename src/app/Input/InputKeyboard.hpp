@@ -31,6 +31,9 @@ struct InputKeyboard
 
     void Advance();
     void Update(InputKey const&);
+
+    //helper
+    bool IsKeyHeld(i32) const;
 };
 
 ///////////////////////////////////////////////////////////
@@ -55,6 +58,15 @@ void InputKeyboard::Update(InputKey const& input)
     if (input.state == InputKey::Down) keys[input.value] = InputKeyboard::Pressed;
     if (input.state == InputKey::Up)   keys[input.value] = InputKeyboard::Released;
     keysPressed.Append(input.value);
+}
+
+///////////////////////////////////////////////////////////
+
+bool InputKeyboard::IsKeyHeld(i32 ascii) const
+{
+    return 
+        keys[ascii] == KeyState::Held || 
+        keys[ascii] == KeyState::Pressed;    
 }
 
 ///////////////////////////////////////////////////////////

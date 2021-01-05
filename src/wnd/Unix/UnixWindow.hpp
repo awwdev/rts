@@ -3,7 +3,7 @@
 #include "com/Unix.hpp"
 #include "com/Types.hpp"
 #include "com/Print.hpp"
-#include "app/Inputs.hpp"
+#include "app/Input/Inputs.hpp"
 
 ///////////////////////////////////////////////////////////
 

@@ -25,7 +25,7 @@ RenderPass& renderPass)
     pipelineInfo.inputAssembly = InputAssembly(VK_PRIMITIVE_TOPOLOGY_LINE_LIST);
     pipelineInfo.viewportState = ViewportState(renderPass.width, renderPass.height);
     pipelineInfo.multisampling = Multisampling();
-    pipelineInfo.rasterization = Rasterization(VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, 4.f);
+    pipelineInfo.rasterization = Rasterization(VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, 2.f);
     pipelineInfo.depthStencil  = DepthStencil();
     pipelineInfo.blendState    = BlendStateInfo();
     pipelineInfo.layoutInfo    = PipelineLayout(

@@ -70,13 +70,4 @@ void Inputs::Update()
 
 ///////////////////////////////////////////////////////////
 
-inline bool IsKeyHeld(i32 ascii)
-{
-    return 
-        Inputs::keyboard.keys[ascii] == InputKeyboard::KeyState::Held || 
-        Inputs::keyboard.keys[ascii] == InputKeyboard::KeyState::Pressed;
-}
-
-///////////////////////////////////////////////////////////
-
 }//ns
