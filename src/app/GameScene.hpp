@@ -37,12 +37,12 @@ private:
 GameScene::GameScene()
 {
     //test
-    for(auto i = 0; i < 1'00; ++i)
+    for(auto i = 0; i < 1; ++i)
     {
         auto ID = ecs.AddEntity();
         auto& mainComponent = ecs.arrays.Add<ecs::MainComponent>(ID);
-        auto x = com::GetRandomNumber(0, 600);
-        auto y = com::GetRandomNumber(0, 400);
+        auto x = 128;//com::GetRandomNumber(0, 600);
+        auto y = 128;//com::GetRandomNumber(0, 400);
         //com::Print(x, y);
         mainComponent.transform.SetPosition({x, y});
         mainComponent.transform.size = { 64, 64 };
@@ -51,16 +51,19 @@ GameScene::GameScene()
         mainComponent.sprite.texIdx = 0;
         mainComponent.sprite.frameTime = (com::GetRandomNumber(0, 100)) / 100.f;
     }
+
+    //TODO swapresource for sprites to fight flickering
 }
 
 ///////////////////////////////////////////////////////////
 
 void GameScene::Update()
 {
+    app::Inputs::activeLayer = app::Inputs::ActiveLayer::Scene; //reset
     renderData.Clear();
+    UpdateUI(); //before gamescene input (might set active input layer)
     input.Update(ecs, camera, renderData);
     UpdateStep();
-    UpdateUI();
 }
 
 ///////////////////////////////////////////////////////////
@@ -85,16 +88,3 @@ void GameScene::UpdateUI()
 ///////////////////////////////////////////////////////////
 
 }//ns
-
-/*
-if (app::Inputs::mouse.IsPressed(app::InputMouse::Left))
-{
-    using namespace cmd;
-    auto cmd = Command::InitUnion<CmdMove>();
-    auto& cmdMove = cmd.cmdUnion.cmdMove;
-    for(ecs::ID id = 0; id < 10; ++id)
-        cmdMove.entities.Append(id);
-    cmdMove.pos = app::Inputs::mouse.pos - camera.pos; 
-    timeline.Store(cmd, timeline.stepIdx + 2);
-}
-*/

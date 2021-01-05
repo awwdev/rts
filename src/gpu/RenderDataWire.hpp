@@ -3,6 +3,7 @@
 #include "com/Vec.hpp"
 #include "com/Color.hpp"
 #include "com/Array.hpp"
+#include "com/Rect.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -25,16 +26,16 @@ struct RenderDataWire
     com::Array<VertexWire, VERTEX_COUNT_MAX_WIRE> vertices;
     void Clear();
 
-    void AddRect(auto pos1, auto pos2, com::Col4n col = com::Col4n{ 1.f, 1.f, 1.f, 1.f })
+    void AddRect(com::AbsRecti const& rect, com::Col4n col = com::Col4n{ 1.f, 1.f, 1.f, 1.f })
     {
-        vertices.Append((f32)pos1.x, (f32)pos1.y, col);
-        vertices.Append((f32)pos2.x, (f32)pos1.y, col);
-        vertices.Append((f32)pos2.x, (f32)pos1.y, col);
-        vertices.Append((f32)pos2.x, (f32)pos2.y, col);
-        vertices.Append((f32)pos2.x, (f32)pos2.y, col);
-        vertices.Append((f32)pos1.x, (f32)pos2.y, col);
-        vertices.Append((f32)pos1.x, (f32)pos2.y, col);
-        vertices.Append((f32)pos1.x, (f32)pos1.y, col);
+        vertices.Append((f32)rect.v1.x, (f32)rect.v1.y, col);
+        vertices.Append((f32)rect.v2.x, (f32)rect.v1.y, col);
+        vertices.Append((f32)rect.v2.x, (f32)rect.v1.y, col);
+        vertices.Append((f32)rect.v2.x, (f32)rect.v2.y, col);
+        vertices.Append((f32)rect.v2.x, (f32)rect.v2.y, col);
+        vertices.Append((f32)rect.v1.x, (f32)rect.v2.y, col);
+        vertices.Append((f32)rect.v1.x, (f32)rect.v2.y, col);
+        vertices.Append((f32)rect.v1.x, (f32)rect.v1.y, col);
     }
 };
 

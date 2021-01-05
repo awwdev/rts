@@ -5,6 +5,7 @@
 #include "com/Color.hpp"
 #include "gpu/RenderData.hpp"
 #include "com/String.hpp"
+#include "app/Input/Inputs.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -59,9 +60,14 @@ void WidgetWindow::Update(gpu::RenderData& rd)
     bool onBtnMin  = btnMin.IsPointInside (Inputs::mouse.pos);
     bool onWndBar  = wndBar.IsPointInside (Inputs::mouse.pos) && !onBtnMin;
     bool onBtnSize = btnSize.IsPointInside(Inputs::mouse.pos);
+    bool onWnd     = wndBack.IsPointInside(Inputs::mouse.pos) || wndBar.IsPointInside(Inputs::mouse.pos);
+    bool onDrag    = onWnd && !onBtnMin && !onBtnSize;
+
+    if (onWnd)
+        app::Inputs::activeLayer = app::Inputs::ActiveLayer::UI;
 
     UpdateMinMax(onBtnMin);
-    UpdateDrag(onWndBar);
+    UpdateDrag(onDrag);
     UpdateSize(onBtnSize);
 
     auto& rdui   = rd.ui;
@@ -80,10 +86,10 @@ void WidgetWindow::Update(gpu::RenderData& rd)
 
 ///////////////////////////////////////////////////////////
 
-void WidgetWindow::UpdateDrag(bool onWndBar)
+void WidgetWindow::UpdateDrag(bool onWndDrag)
 {
     using namespace app;
-    if (onWndBar && Inputs::mouse.IsPressed(InputMouse::Left))
+    if (onWndDrag && Inputs::mouse.IsPressed(InputMouse::Left))
     {
         isDragged = true;
         dragOffset = Inputs::mouse.pos;

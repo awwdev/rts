@@ -36,6 +36,9 @@ struct Inputs
     inline static InputKeyboard keyboard;
     inline static InputMouse    mouse;
 
+    enum class ActiveLayer { Scene, UI };
+    inline static ActiveLayer activeLayer;
+
     static void Update();
 };  
 

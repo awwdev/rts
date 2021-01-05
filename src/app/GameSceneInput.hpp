@@ -4,6 +4,8 @@
 #include "gpu/RenderData.hpp"
 #include "app/Camera.hpp"
 #include "cmd/Timeline.hpp"
+#include "com/Array.hpp"
+#include "com/Rect.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -18,10 +20,14 @@ struct GameSceneInput
         None, 
         Selecting 
     } 
-    inputMode = InputMode::None;
-    com::Vec2i selectionBegin;
 
+    inputMode = InputMode::None;
+    com::AbsRecti selectionRect;
     void Update(ecs::ECS&, Camera&, gpu::RenderData&);
+    com::Array<ecs::ID, 100> selection;
+
+private:
+    void Select(ecs::ECS&);
 };
 
 ///////////////////////////////////////////////////////////
@@ -29,27 +35,49 @@ struct GameSceneInput
 void GameSceneInput::Update(ecs::ECS& ecs, Camera& camera, gpu::RenderData& renderData)
 {
     camera.Update(renderData);
+    if (app::Inputs::keyboard.keys[27]) //quick exit ESC
+        app::Inputs::window.shouldClose = true;  
 
-    //input state mode determine
+    //?SCENE LAYER
+    if (Inputs::activeLayer != Inputs::ActiveLayer::Scene)
+        return;
+
+    //STATE
     if (Inputs::mouse.IsPressed(InputMouse::Left))
     {
         inputMode = InputMode::Selecting;    
-        selectionBegin = Inputs::mouse.pos;
+        selectionRect.v1 = Inputs::mouse.pos;
     }
     if (Inputs::mouse.IsReleased(InputMouse::Left))
-    {
+    { 
         inputMode = InputMode::None;  
     }
 
-    //input state mode process
+    //PROCESS STATE
     if (inputMode == InputMode::Selecting)
     {
-        renderData.wire.AddRect(selectionBegin, Inputs::mouse.pos);
+        selectionRect.v2 = Inputs::mouse.pos;
+        renderData.wire.AddRect(selectionRect);
+        Select(ecs);
     }
+}
 
-    //quick exit app
-    if (app::Inputs::keyboard.keys[27])
-        app::Inputs::window.shouldClose = true;  
+///////////////////////////////////////////////////////////
+
+void GameSceneInput::Select(ecs::ECS& ecs)
+{
+    selection.count = 0;
+    FOR_ARRAY(ecs.arrays.mainComponents.dense, denseID)
+    {
+        auto& mainComponent = ecs.arrays.mainComponents.dense[denseID];
+        auto& position = mainComponent.transform.pos;
+        if (selectionRect.IsPointInside(position))
+        {
+            auto entity = ecs.arrays.mainComponents.GetEntity(denseID);
+            selection.Append(entity);
+            com::Print(entity);
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////
