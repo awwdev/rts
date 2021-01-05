@@ -4,7 +4,7 @@
 #include "gpu/vuk/States/UI/UIRenderPass.hpp"
 #include "gpu/vuk/States/UI/UIUniforms.hpp"
 
-#include "gpu/RenderDataUI.hpp"
+#include "gpu/RenderData.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -21,8 +21,8 @@ struct StateUI
 
     void Create(Context&, Commands&, res::Resources&);
     void Destroy();
-    void Update(RenderDataUI&);
-    void Record(VkCommandBuffer, uint32_t);
+    void Update(RenderData&, u32);
+    void Record(VkCommandBuffer, u32);
 };
 
 ///////////////////////////////////////////////////////////
@@ -47,14 +47,14 @@ void StateUI::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void StateUI::Update(RenderDataUI& rd)
+void StateUI::Update(RenderData& rd, u32 imageIndex)
 {
-    uniforms.Update(rd);
+    uniforms.Update(rd.ui);
 }
 
 ///////////////////////////////////////////////////////////
 
-void StateUI::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
+void StateUI::Record(VkCommandBuffer cmdBuffer, u32 imageIndex)
 {
     vkCmdBeginRenderPass    (cmdBuffer, &renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);

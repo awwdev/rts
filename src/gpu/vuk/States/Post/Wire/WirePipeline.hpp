@@ -1,8 +1,8 @@
 #pragma once
 
 #include "gpu/vuk/Wrappers/Pipeline.hpp"
-#include "gpu/vuk/States/General/Wire/WireVertices.hpp"
-#include "gpu/vuk/States/General/Sprites/SpritesUniforms.hpp"
+#include "gpu/vuk/States/Post/Wire/WireVertices.hpp"
+#include "gpu/vuk/States/Post/PostUniforms.hpp"
 
 ///////////////////////////////////////////////////////////
 
@@ -14,7 +14,7 @@ inline void CreatePipelineWire(
 Pipeline& pipeline, 
 FragVertShader& shader, 
 VerticesWire& vertices,
-UniformsSprites& uniforms,
+UniformsPost& uniforms,
 RenderPass& renderPass)
 {
     PipelineInfo pipelineInfo;

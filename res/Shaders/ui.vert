@@ -2,8 +2,8 @@
 
 layout(push_constant) uniform PushConstants
 {
-    uint windowWidth;
-    uint windowHeight;
+    int windowWidth;
+    int windowHeight;
 } 
 meta;
 

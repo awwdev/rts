@@ -11,6 +11,15 @@ layout(location = 1) out flat int outBlur;
 
 ///////////////////////////////////////////////////////////   
 
+layout(push_constant) uniform Context
+{
+    int windowWidth;
+    int windowHeight;
+} 
+context;
+
+///////////////////////////////////////////////////////////   
+
 void main() 
 {
     gl_Position = vec4(inPos.x, inPos.y, 0, 1);

@@ -1,3 +1,4 @@
+move wire into post
 complete swapresource 
 
 beautify vector/sort usage on resource iteration

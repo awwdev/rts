@@ -28,7 +28,7 @@ struct UniformsPost
 {
     using RD = RenderDataPost;
     UniformInfo infos [enum_cast(PostUniformEnum::ENUM_END)];
-    PushConstants<RD::PushConstants, VK_SHADER_STAGE_VERTEX_BIT> pushConstants;
+    PushConstants<RD::PushConstants, VK_SHADER_STAGE_VERTEX_BIT> ctx;
     VkSampler sampler; 
     Descriptors descriptors;
 
@@ -71,7 +71,8 @@ void UniformsPost::Create(VkCommandPool cmdPool, res::Resources& resources, Imag
 
 void UniformsPost::Update(RenderDataPost& rd)
 {
-   
+    ctx.data.windowWidth  = app::Inputs::window.width;
+    ctx.data.windowHeight = app::Inputs::window.height;
 }
 
 ///////////////////////////////////////////////////////////

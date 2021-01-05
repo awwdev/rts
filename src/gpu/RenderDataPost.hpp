@@ -23,6 +23,8 @@ struct RenderDataPost
 
     struct PushConstants
     {
+        i32 windowWidth;
+        i32 windowHeight;
         i32 resolutionScale = 1;
     };
 

@@ -57,8 +57,8 @@ void States::Destroy()
 void States::Update(RenderData& rd, u32 imageIndex)
 {
     general.Update(rd, imageIndex);
-    post.Update(rd.post);
-    ui.Update(rd.ui);
+    post.Update(rd, imageIndex);
+    ui.Update(rd, imageIndex);
 }
 
 ///////////////////////////////////////////////////////////

@@ -2,8 +2,8 @@
 
 layout(push_constant) uniform Context
 {
-    uint windowWidth;
-    uint windowHeight;
+    int windowWidth;
+    int windowHeight;
 } 
 context;
 
