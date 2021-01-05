@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gpu/vuk/Wrappers/SwapResource.hpp"
-#include "gpu/vuk/Renderer/Context.hpp"
+#include "gpu/vuk/Context/Context.hpp"
 #include "com/Array.hpp"
 
 ///////////////////////////////////////////////////////////

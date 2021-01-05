@@ -8,7 +8,7 @@
 #include "gpu/vuk/States/Post/Wire/WireUniforms.hpp"
 #include "gpu/vuk/States/Post/Wire/WireVertices.hpp"
 
-#include "gpu/vuk/Renderer/Commands.hpp"
+#include "gpu/vuk/Commands/Commands.hpp"
 #include "gpu/vuk/States/StateGeneral.hpp"
 #include "gpu/RenderData.hpp"
 #include "res/Resources.hpp"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gpu/vuk/Renderer/Commands.hpp"
+#include "gpu/vuk/Commands/Commands.hpp"
 
 #include "gpu/vuk/States/StateGeneral.hpp"
 #include "gpu/vuk/States/StatePost.hpp"

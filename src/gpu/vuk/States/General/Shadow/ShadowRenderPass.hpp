@@ -2,7 +2,7 @@
 
 #include "gpu/vuk/Wrappers/RenderPass.hpp"
 #include "gpu/vuk/Context/Swapchain.hpp"
-#include "gpu/vuk/Renderer/Commands.hpp"
+#include "gpu/vuk/Commands/Commands.hpp"
 
 ///////////////////////////////////////////////////////////
 

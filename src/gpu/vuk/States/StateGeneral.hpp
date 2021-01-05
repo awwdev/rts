@@ -5,7 +5,7 @@
 #include "gpu/vuk/States/General/Sprites/SpritesUniforms.hpp"
 #include "gpu/vuk/States/General/Shadow/ShadowRenderPass.hpp"
 
-#include "gpu/vuk/Renderer/Commands.hpp"
+#include "gpu/vuk/Commands/Commands.hpp"
 #include "gpu/RenderData.hpp"
 #include "res/Resources.hpp"
 

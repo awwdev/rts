@@ -1,10 +1,10 @@
 #pragma once
 
-#include "gpu/vuk/Renderer/Context.hpp"
+#include "gpu/vuk/Context/Context.hpp"
 #include "gpu/vuk/Context/PhysicalExt.hpp"
-#include "gpu/vuk/Renderer/States.hpp"
-#include "gpu/vuk/Renderer/Commands.hpp"
-#include "gpu/vuk/Renderer/Sync.hpp"
+#include "gpu/vuk/States/States.hpp"
+#include "gpu/vuk/Commands/Commands.hpp"
+#include "gpu/vuk/Sync.hpp"
 
 #include "gpu/RenderData.hpp"
 #include "res/Resources.hpp"

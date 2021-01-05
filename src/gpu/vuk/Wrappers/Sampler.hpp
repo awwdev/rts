@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gpu/vuk/Renderer/Context.hpp"
+#include "gpu/vuk/Context/Context.hpp"
 
 ///////////////////////////////////////////////////////////
 
