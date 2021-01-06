@@ -23,7 +23,7 @@ struct GameSceneInput
 
     inputMode = InputMode::None;
     com::AbsRecti selectionRect;
-    void Update(ecs::ECS&, Camera&, gpu::RenderData&);
+    void Update(ecs::ECS&, cmd::Timeline&, Camera&, gpu::RenderData&);
     com::Array<ecs::ID, 100> selection;
 
 private:
@@ -32,7 +32,7 @@ private:
 
 ///////////////////////////////////////////////////////////
 
-void GameSceneInput::Update(ecs::ECS& ecs, Camera& camera, gpu::RenderData& renderData)
+void GameSceneInput::Update(ecs::ECS& ecs, cmd::Timeline& timeline, Camera& camera, gpu::RenderData& renderData)
 {
     camera.Update(renderData);
     if (app::Inputs::keyboard.keys[27]) //quick exit ESC
@@ -43,10 +43,10 @@ void GameSceneInput::Update(ecs::ECS& ecs, Camera& camera, gpu::RenderData& rend
         return;
 
     //STATE
-    if (Inputs::mouse.IsPressed(InputMouse::Left))
+    if (Inputs::mouse.IsHeld(InputMouse::Left))
     {
-        inputMode = InputMode::Selecting;    
         selectionRect.v1 = Inputs::mouse.pos;
+        inputMode = InputMode::Selecting;    
     }
     if (Inputs::mouse.IsReleased(InputMouse::Left))
     { 
@@ -60,6 +60,18 @@ void GameSceneInput::Update(ecs::ECS& ecs, Camera& camera, gpu::RenderData& rend
         renderData.wire.AddRect(selectionRect);
         Select(ecs);
     }
+    if (inputMode == InputMode::None)
+    {
+        if (Inputs::mouse.IsPressed(InputMouse::Left))
+        {
+            using namespace cmd;
+            auto cmd = Command::InitUnion<CmdMove>();
+            auto& cmdMove = cmd.cmdUnion.cmdMove;
+            cmdMove.entities.AppendArray(selection);
+            cmdMove.pos = app::Inputs::mouse.pos - camera.pos; 
+            timeline.Store(cmd, timeline.stepIdx + 2);
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////
@@ -71,6 +83,7 @@ void GameSceneInput::Select(ecs::ECS& ecs)
     {
         auto& mainComponent = ecs.arrays.mainComponents.dense[denseID];
         auto& position = mainComponent.transform.pos;
+        //TODO camera pos offset
         if (selectionRect.IsPointInside(position))
         {
             auto entity = ecs.arrays.mainComponents.GetEntity(denseID);
@@ -83,16 +96,3 @@ void GameSceneInput::Select(ecs::ECS& ecs)
 ///////////////////////////////////////////////////////////
 
 }//ns
-
-/*
-if (app::Inputs::mouse.IsPressed(app::InputMouse::Left))
-{
-    using namespace cmd;
-    auto cmd = Command::InitUnion<CmdMove>();
-    auto& cmdMove = cmd.cmdUnion.cmdMove;
-    for(ecs::ID id = 0; id < 10; ++id)
-        cmdMove.entities.Append(id);
-    cmdMove.pos = app::Inputs::mouse.pos - camera.pos; 
-    timeline.Store(cmd, timeline.stepIdx + 2);
-}
-*/

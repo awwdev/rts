@@ -1,3 +1,6 @@
+swap resource struct instead of array alias, and then static count variable that is set by swapchain
+create and destroy member methods
+rename imageIndex to swapIdx
 complete swapresource 
 
 beautify vector/sort usage on resource iteration

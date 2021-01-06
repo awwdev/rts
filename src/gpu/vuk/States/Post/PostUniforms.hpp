@@ -32,14 +32,14 @@ struct UniformsPost
     VkSampler sampler; 
     Descriptors descriptors;
 
-    void Create(VkCommandPool, res::Resources&, Image&);
+    void Create(VkCommandPool, res::Resources&, SwapResource<Image>&);
     void Destroy();
-    void Update(RenderDataPost&);
+    void Update(RenderDataPost&, u32);
 };
 
 ///////////////////////////////////////////////////////////
 
-void UniformsPost::Create(VkCommandPool cmdPool, res::Resources& resources, Image& spritesOffscreen)
+void UniformsPost::Create(VkCommandPool cmdPool, res::Resources& resources, SwapResource<Image>& spritesOffscreen)
 {
     CreateSamplerNearest(sampler);
 
@@ -59,8 +59,8 @@ void UniformsPost::Create(VkCommandPool cmdPool, res::Resources& resources, Imag
     {
         infos[enum_cast(PostUniformEnum::OffscreenSampler)].imageInfos.Append(
             sampler,
-            spritesOffscreen.view,
-            spritesOffscreen.layout
+            spritesOffscreen[i].view,
+            spritesOffscreen[i].layout
         );
     }
 
@@ -69,7 +69,7 @@ void UniformsPost::Create(VkCommandPool cmdPool, res::Resources& resources, Imag
 
 ///////////////////////////////////////////////////////////
 
-void UniformsPost::Update(RenderDataPost& rd)
+void UniformsPost::Update(RenderDataPost& rd, u32)
 {
     ctx.data.windowWidth  = app::Inputs::window.width;
     ctx.data.windowHeight = app::Inputs::window.height;

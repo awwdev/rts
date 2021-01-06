@@ -54,23 +54,23 @@ void States::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void States::Update(RenderData& rd, u32 imageIndex)
+void States::Update(RenderData& rd, u32 swapIdx)
 {
-    general.Update(rd, imageIndex);
-    post.Update(rd, imageIndex);
-    ui.Update(rd, imageIndex);
+    general.Update(rd, swapIdx);
+    post.Update(rd, swapIdx);
+    ui.Update(rd, swapIdx);
 }
 
 ///////////////////////////////////////////////////////////
 
-void States::Record(Commands& commands, uint32_t imageIndex)
+void States::Record(Commands& commands, uint32_t swapidx)
 {
-    auto cmdBuffer = commands.buffers[imageIndex];
+    auto cmdBuffer = commands.buffers[swapidx];
     auto beginInfo = CreateCmdBeginInfo();
     VkCheck(vkBeginCommandBuffer(cmdBuffer, &beginInfo));
-    general.Record(cmdBuffer, imageIndex);
-    post.Record(cmdBuffer, imageIndex);
-    ui.Record(cmdBuffer, imageIndex);
+    general.Record(cmdBuffer, swapidx);
+    post.Record(cmdBuffer, swapidx);
+    ui.Record(cmdBuffer, swapidx);
     VkCheck(vkEndCommandBuffer(cmdBuffer));
 }
 

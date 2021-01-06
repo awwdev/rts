@@ -35,6 +35,7 @@ struct InputMouse
     void Update(InputMouse const&);
 
     //helper
+    bool IsHeld(Button);
     bool IsPressedOrHeld(Button);
     bool IsPressed(Button);
     bool IsReleased(Button);
@@ -86,6 +87,13 @@ bool InputMouse::IsPressed(Button btn)
 bool InputMouse::IsReleased(Button btn)
 {
     return buttons[btn] == Released;
+}
+
+///////////////////////////////////////////////////////////
+
+bool InputMouse::IsHeld(Button btn)
+{
+    return buttons[btn] == Held;
 }
 
 ///////////////////////////////////////////////////////////

@@ -65,32 +65,32 @@ void StateGeneral::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void StateGeneral::Update(RenderData& rd, u32 imageIndex)
+void StateGeneral::Update(RenderData& rd, u32 swapIdx)
 {
-    uniformsSprites.Update(rd.sprites, imageIndex);
+    uniformsSprites.Update(rd.sprites, swapIdx);
 }
 
 ///////////////////////////////////////////////////////////
 
-void StateGeneral::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
+void StateGeneral::Record(VkCommandBuffer cmdBuffer, uint32_t swapIdx)
 {
-    vkCmdBeginRenderPass    (cmdBuffer, &renderPassShadow.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdBeginRenderPass    (cmdBuffer, &renderPassShadow.beginInfos[swapIdx], VK_SUBPASS_CONTENTS_INLINE);
     ///////////////////////////////////////////////////////////
     vkCmdPushConstants      (cmdBuffer, pipelineSprites.layout, VK_SHADER_STAGE_VERTEX_BIT, 0, 
                              uniformsSprites.ctx.SIZE, &uniformsSprites.ctx.data);
     vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineSprites.layout, 0, 
-                             1, &uniformsSprites.descriptors.sets[imageIndex], 0, nullptr);
+                             1, &uniformsSprites.descriptors.sets[swapIdx], 0, nullptr);
     //sprite shadows
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineSpritesShadows.pipeline);
-    vkCmdDraw               (cmdBuffer, uniformsSprites.quads[imageIndex].COUNT_MAX * 6, 1, 0, 0);
+    vkCmdDraw               (cmdBuffer, uniformsSprites.quads[swapIdx].COUNT_MAX * 6, 1, 0, 0);
     vkCmdEndRenderPass      (cmdBuffer);
     //shadows
-    vkCmdBeginRenderPass    (cmdBuffer, &renderPassGeneral.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdBeginRenderPass    (cmdBuffer, &renderPassGeneral.beginInfos[swapIdx], VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineShadows.pipeline);
     vkCmdDraw               (cmdBuffer, 3, 1, 0, 0);
     //sprites
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineSprites.pipeline);
-    vkCmdDraw               (cmdBuffer, uniformsSprites.quads[imageIndex].COUNT_MAX * 6, 1, 0, 0);
+    vkCmdDraw               (cmdBuffer, uniformsSprites.quads[swapIdx].COUNT_MAX * 6, 1, 0, 0);
     ///////////////////////////////////////////////////////////
     vkCmdEndRenderPass      (cmdBuffer);
 }

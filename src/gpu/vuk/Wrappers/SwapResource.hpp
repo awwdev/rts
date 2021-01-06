@@ -36,6 +36,8 @@ void DestroySwapResource(SwapResource<T>& swapResource)
 
         if constexpr (requires { typename std::decay_t<decltype(element)>::BUFFER_TYPEID; })
             element.Destroy();
+        if constexpr (requires { typename std::decay_t<decltype(element)>::IMAGE_TYPEID; })
+            element.Destroy();
     };
 
     FOR_ARRAY(swapResource, i)

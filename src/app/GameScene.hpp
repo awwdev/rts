@@ -62,7 +62,7 @@ void GameScene::Update()
     app::Inputs::activeLayer = app::Inputs::ActiveLayer::Scene; //reset
     renderData.Clear();
     UpdateUI(); //before gamescene input (might set active input layer)
-    input.Update(ecs, camera, renderData);
+    input.Update(ecs, timeline, camera, renderData);
     UpdateStep();
 }
 

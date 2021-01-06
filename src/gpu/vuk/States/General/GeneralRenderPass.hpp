@@ -12,7 +12,7 @@ namespace rts::gpu::vuk {
 
 struct RenderPassGeneral : RenderPass
 {
-    Image offscreen;
+    SwapResource<Image> offscreen;
     VkClearValue clear;
     void Create(VkCommandPool, Swapchain&);
     void Destroy();
@@ -26,19 +26,23 @@ void RenderPassGeneral::Create(VkCommandPool cmdPool, Swapchain& swapchain)
     width  = swapchain.width;
     height = swapchain.height;
 
-    offscreen.Create(cmdPool, swapchain.format, 
-        VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
-        VK_IMAGE_VIEW_TYPE_2D,
-        width, height, 1
-    );
-
     auto colorDesc = AttachmentDescription(
         swapchain.format, 
         VK_ATTACHMENT_LOAD_OP_CLEAR, 
         VK_IMAGE_LAYOUT_UNDEFINED,
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
     );
-    offscreen.layout = colorDesc.finalLayout;
+
+    offscreen.count = g_contextPtr->swapchain.Count();
+    FOR_ARRAY(offscreen, i)
+    {
+        offscreen[i].Create(cmdPool, swapchain.format, 
+            VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
+            VK_IMAGE_VIEW_TYPE_2D,
+            width, height, 1
+        );
+        offscreen[i].layout = colorDesc.finalLayout;
+    }
 
     auto colorRef = ColorAttachmentReference();
     auto subpass  = SubpassDescription(colorRef);
@@ -69,7 +73,7 @@ void RenderPassGeneral::Create(VkCommandPool cmdPool, Swapchain& swapchain)
         .pAttachments    = &colorDesc,
         .subpassCount    = 1,
         .pSubpasses      = &subpass,
-        .dependencyCount = 0,//2,
+        .dependencyCount = 2, //! FIXED FLICKERING
         .pDependencies   = dependencies,
     };
     VkCheck(vkCreateRenderPass(g_devicePtr, &renderPassInfo, GetVkAlloc(), &renderPass));
@@ -87,7 +91,7 @@ void RenderPassGeneral::Create(VkCommandPool cmdPool, Swapchain& swapchain)
             .flags           = 0,
             .renderPass      = renderPass,
             .attachmentCount = 1,
-            .pAttachments    = &offscreen.view,
+            .pAttachments    = &offscreen[i].view,
             .width           = width,
             .height          = height,
             .layers          = 1
@@ -115,7 +119,7 @@ void RenderPassGeneral::Create(VkCommandPool cmdPool, Swapchain& swapchain)
 void RenderPassGeneral::Destroy()
 {
     RenderPass::Destroy();
-    offscreen.Destroy();
+    DestroySwapResource(offscreen);
 }
 
 ///////////////////////////////////////////////////////////

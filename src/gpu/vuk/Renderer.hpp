@@ -84,14 +84,14 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
     if (vkWaitForFences(g_devicePtr, 1, &sync.fences[currentFrame], VK_FALSE, 0) != VK_SUCCESS)
         return;
 
-    uint32_t imageIndex = 0;
+    uint32_t swapIdx = 0;
     auto res = vkAcquireNextImageKHR(
         context.device.device, 
         context.swapchain.swapchain, 
         UINT64_MAX, 
         sync.imageAcquired[currentFrame], 
         VK_NULL_HANDLE, 
-        &imageIndex
+        &swapIdx
     );
     if (res != VK_SUCCESS)
     {
@@ -99,13 +99,13 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
         return;
     }
 
-    if (sync.inFlight[imageIndex] != VK_NULL_HANDLE) 
-        vkWaitForFences(g_devicePtr, 1, &sync.inFlight[imageIndex], VK_FALSE, UINT64_MAX);
-    sync.inFlight[imageIndex] = sync.fences[currentFrame];
+    if (sync.inFlight[swapIdx] != VK_NULL_HANDLE) 
+        vkWaitForFences(g_devicePtr, 1, &sync.inFlight[swapIdx], VK_FALSE, UINT64_MAX);
+    sync.inFlight[swapIdx] = sync.fences[currentFrame];
     VkCheck(vkResetFences(g_devicePtr, 1, &sync.fences[currentFrame]));
 
     ///////////////////////////////////////////////////////////
-    states.Update(renderData, imageIndex);
+    states.Update(renderData, swapIdx);
     ///////////////////////////////////////////////////////////
 
     VkPipelineStageFlags waitStages = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
@@ -117,7 +117,7 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
         .pWaitSemaphores        = &sync.imageAcquired[currentFrame],
         .pWaitDstStageMask      = &waitStages,
         .commandBufferCount     = 1,
-        .pCommandBuffers        = &commands.buffers[imageIndex],
+        .pCommandBuffers        = &commands.buffers[swapIdx],
         .signalSemaphoreCount   = 1,
         .pSignalSemaphores      = &sync.imageFinished[currentFrame],
     };
@@ -131,7 +131,7 @@ void Renderer::Update(RenderData& renderData, res::Resources& resources)
         .pWaitSemaphores        = &sync.imageFinished[currentFrame],
         .swapchainCount         = 1,
         .pSwapchains            = &context.swapchain.swapchain,
-        .pImageIndices          = &imageIndex,
+        .pImageIndices          = &swapIdx,
         .pResults               = nullptr
     };
     auto res2 = vkQueuePresentKHR(context.device.queue, &presentInfo);

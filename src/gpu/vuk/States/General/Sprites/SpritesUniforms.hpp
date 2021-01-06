@@ -44,7 +44,7 @@ struct UniformsSprites
     Image spriteArray;
     SwapResource<StorageBuffer<RD::UniformQuad, ecs::ENTITY_COUNT_MAX>> quads;
     SwapResource<UniformBuffer<RD::UniformMeta, 1>> meta;
-    UniformBuffer<RD::UniformSun, 1> sun;
+    SwapResource<UniformBuffer<RD::UniformSun, 1>> sun;
     VkSampler shadowOffscreenSampler;
     
     void Create(VkCommandPool, res::Resources&, RenderPassShadow&);
@@ -82,7 +82,9 @@ void UniformsSprites::Create(VkCommandPool cmdPool, res::Resources& resources, R
     }
 
     //? SHADOW
-    sun.Create();
+    sun.count = g_contextPtr->swapchain.Count();
+    FOR_ARRAY(sun, i)
+        sun[i].Create();
     infos[enum_cast(UniformEnumSprites::Sun)] =
     {
         .type = UniformInfo::Buffer,
@@ -98,14 +100,14 @@ void UniformsSprites::Create(VkCommandPool cmdPool, res::Resources& resources, R
     for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
     {
         infos[enum_cast(UniformEnumSprites::Sun)].bufferInfos.Append(
-            sun.activeBuffer->buffer,
+            sun[i].activeBuffer->buffer,
             0u,
             VK_WHOLE_SIZE
         );
     }
 
     //? META
-    meta.count = 4;
+    meta.count = g_contextPtr->swapchain.Count();
     for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
         meta[i].Create();
     infos[enum_cast(UniformEnumSprites::Meta)] =
@@ -192,16 +194,16 @@ void UniformsSprites::Create(VkCommandPool cmdPool, res::Resources& resources, R
 
 ///////////////////////////////////////////////////////////
 
-void UniformsSprites::Update(RenderDataSprites& rd, u32 imageIndex)
+void UniformsSprites::Update(RenderDataSprites& rd, u32 swapIdx)
 {
     ctx.data.windowWidth  = app::Inputs::window.width;
     ctx.data.windowHeight = app::Inputs::window.height;
-    meta[imageIndex].Clear();
-    meta[imageIndex].Append(RD::UniformMeta {rd.meta.cameraPos});
-    sun.Clear();
-    sun.Append(rd.sun);
-    quads[imageIndex].Clear();
-    quads[imageIndex].Append(rd.quads.data, rd.quads.count);
+    meta[swapIdx].Clear();
+    meta[swapIdx].Append(RD::UniformMeta {rd.meta.cameraPos});
+    sun[swapIdx].Clear();
+    sun[swapIdx].Append(rd.sun);
+    quads[swapIdx].Clear();
+    quads[swapIdx].Append(rd.quads.data, rd.quads.count);
 }
 
 ///////////////////////////////////////////////////////////
@@ -214,7 +216,7 @@ void UniformsSprites::Destroy()
     vkDestroySampler(g_devicePtr, shadowOffscreenSampler, GetVkAlloc());
     DestroySwapResource(quads);
     DestroySwapResource(meta);
-    sun.Destroy();
+    DestroySwapResource(sun);
 }
 
 ///////////////////////////////////////////////////////////

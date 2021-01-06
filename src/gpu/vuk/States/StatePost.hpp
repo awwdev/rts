@@ -70,36 +70,36 @@ void StatePost::Destroy()
 
 ///////////////////////////////////////////////////////////
 
-void StatePost::Update(RenderData& rd, u32 imageIndex)
+void StatePost::Update(RenderData& rd, u32 swapidx)
 {
-    uniforms.Update(rd.post);
-    vertices.Update(rd.post);
-    uniformsWire.Update(rd.wire, imageIndex);
-    verticesWire.Update(rd.wire, imageIndex);
+    uniforms.Update(rd.post, swapidx);
+    vertices.Update(rd.post, swapidx);
+    uniformsWire.Update(rd.wire, swapidx);
+    verticesWire.Update(rd.wire, swapidx);
 }
 
 ///////////////////////////////////////////////////////////
 
-void StatePost::Record(VkCommandBuffer cmdBuffer, uint32_t imageIndex)
+void StatePost::Record(VkCommandBuffer cmdBuffer, uint32_t swapIdx)
 {
-    vkCmdBeginRenderPass    (cmdBuffer, &renderPass.beginInfos[imageIndex], VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdBeginRenderPass    (cmdBuffer, &renderPass.beginInfos[swapIdx], VK_SUBPASS_CONTENTS_INLINE);
     ///////////////////////////////////////////////////////////
     //fullscreen triangle and blurred quads
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.pipeline);
-    vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, &vertices.vbo.activeBuffer->buffer, &vertices.offsets);
+    vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, &vertices.vbo[swapIdx].activeBuffer->buffer, &vertices.offsets);
     vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 
-                             1, &uniforms.descriptors.sets[imageIndex], 0, nullptr);
-    vkCmdDraw               (cmdBuffer, vertices.vbo.COUNT_MAX, 1, 0, 0);
+                             1, &uniforms.descriptors.sets[swapIdx], 0, nullptr);
+    vkCmdDraw               (cmdBuffer, vertices.vbo[swapIdx].COUNT_MAX, 1, 0, 0);
     //wire
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineWire.pipeline);
-    vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, &verticesWire.vbo[imageIndex].activeBuffer->buffer, &verticesWire.offsets);
-    vkCmdDraw               (cmdBuffer, verticesWire.vbo[imageIndex].COUNT_MAX, 1, 0, 0);
+    vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, &verticesWire.vbo[swapIdx].activeBuffer->buffer, &verticesWire.offsets);
+    vkCmdDraw               (cmdBuffer, verticesWire.vbo[swapIdx].COUNT_MAX, 1, 0, 0);
     ///////////////////////////////////////////////////////////
     vkCmdEndRenderPass      (cmdBuffer);
 }
 
 ///////////////////////////////////////////////////////////
 
-//TODO use another baked vbo for the fullscreen triangle and seperate draw call?
+//TODO use another baked vbo for the fullscreen triangle and seperate draw call? (don't need to be swap resource also)
 
 }//ns

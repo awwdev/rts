@@ -74,10 +74,10 @@ VerticesWire::attributes [2] =
 
 ///////////////////////////////////////////////////////////
 
-void VerticesWire::Update(RD& rd, u32 imageIndex)
+void VerticesWire::Update(RD& rd, u32 swapIdx)
 {
-    vbo[imageIndex].Clear();
-    vbo[imageIndex].Append(rd.vertices.data, rd.vertices.count);
+    vbo[swapIdx].Clear();
+    vbo[swapIdx].Append(rd.vertices.data, rd.vertices.count);
 }
 
 ///////////////////////////////////////////////////////////

@@ -34,11 +34,11 @@ struct UniformsUI
     PushConstants<RD::PushMeta, VK_SHADER_STAGE_VERTEX_BIT> metaData;
     VkSampler fontArraySampler; 
     Image fontArray;
-    StorageBuffer<RD::UniformQuadData, RD::QUAD_COUNT_MAX> quadData;
+    SwapResource<StorageBuffer<RD::UniformQuadData, RD::QUAD_COUNT_MAX>> quadData;
 
     void Create(VkCommandPool, res::Resources&);
     void Destroy();
-    void Update(RenderDataUI&);
+    void Update(RenderDataUI&, u32);
 };
 
 ///////////////////////////////////////////////////////////
@@ -46,7 +46,9 @@ struct UniformsUI
 void UniformsUI::Create(VkCommandPool cmdPool, res::Resources& resources)
 {
     //? uniform
-    quadData.Create();
+    quadData.count = g_contextPtr->swapchain.Count();
+    FOR_ARRAY(quadData, i)
+        quadData[i].Create();
     infos[enum_cast(UIUniformsEnum::QuadData)] =
     {
         .type = UniformInfo::Buffer,
@@ -62,7 +64,7 @@ void UniformsUI::Create(VkCommandPool cmdPool, res::Resources& resources)
     for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
     {
         infos[enum_cast(UIUniformsEnum::QuadData)].bufferInfos.Append(
-            quadData.activeBuffer->buffer,
+            quadData[i].activeBuffer->buffer,
             0u,
             VK_WHOLE_SIZE
         );
@@ -108,13 +110,13 @@ void UniformsUI::Create(VkCommandPool cmdPool, res::Resources& resources)
 
 ///////////////////////////////////////////////////////////
 
-void UniformsUI::Update(RenderDataUI& rd)
+void UniformsUI::Update(RenderDataUI& rd, u32 swapIdx)
 {
     metaData.data.windowWidth  = app::Inputs::window.width;
     metaData.data.windowHeight = app::Inputs::window.height;
 
-    quadData.Clear();
-    quadData.Append(rd.quadData.data, rd.quadData.count);
+    quadData[swapIdx].Clear();
+    quadData[swapIdx].Append(rd.quadData.data, rd.quadData.count);
 }
 
 ///////////////////////////////////////////////////////////
@@ -124,7 +126,7 @@ void UniformsUI::Destroy()
     descriptors.Destroy();
     fontArray.Destroy();
     vkDestroySampler(g_devicePtr, fontArraySampler, GetVkAlloc());
-    quadData.Destroy();
+    DestroySwapResource(quadData);
 }
 
 ///////////////////////////////////////////////////////////

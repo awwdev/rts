@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gpu/vuk/Wrappers/BufferExt.hpp"
+#include "gpu/vuk/Wrappers/SwapResource.hpp"
 #include "gpu/RenderDataPost.hpp"
 
 ///////////////////////////////////////////////////////////
@@ -12,16 +13,25 @@ namespace rts::gpu::vuk {
 struct VerticesPost
 {
     using RD = RenderDataPost;
-    VertexBuffer<RD::Vertex, RD::VERTEX_MAX> vbo;
+    SwapResource<VertexBuffer<RD::Vertex, RD::VERTEX_MAX>> vbo;
     VkDeviceSize offsets = 0;
 
     static VkVertexInputBindingDescription   bindings   [1];
     static VkVertexInputAttributeDescription attributes [3];
 
-    void Create(VkCommandPool pool) { vbo.Create(); }
-    void Destroy()                  { vbo.Destroy(); }
-    void Update(RD&);
+    void Create(VkCommandPool);
+    void Destroy() { DestroySwapResource(vbo); }
+    void Update(RD&, u32);
 };
+
+///////////////////////////////////////////////////////////
+
+void VerticesPost::Create(VkCommandPool pool)
+{
+    vbo.count = g_contextPtr->swapchain.Count();
+    FOR_ARRAY(vbo, i)
+        vbo[i].Create();
+}
 
 ///////////////////////////////////////////////////////////
 
@@ -62,10 +72,10 @@ VerticesPost::attributes [3] =
 
 ///////////////////////////////////////////////////////////
 
-void VerticesPost::Update(RD& rd)
+void VerticesPost::Update(RD& rd, u32 swapIdx)
 {
-    vbo.Clear();
-    vbo.Append(rd.vertices.data, rd.vertices.count);
+    vbo[swapIdx].Clear();
+    vbo[swapIdx].Append(rd.vertices.data, rd.vertices.count);
 }
 
 ///////////////////////////////////////////////////////////
