@@ -1,7 +1,7 @@
-swap resource struct instead of array alias, and then static count variable that is set by swapchain
-create and destroy member methods
-rename imageIndex to swapIdx
-complete swapresource 
+
+universal push constant for window size!
+
+
 
 beautify vector/sort usage on resource iteration
 basic networking linux too

@@ -5,7 +5,6 @@
 #include "gpu/vuk/States/Post/PostVertices.hpp"
 #include "gpu/vuk/States/Post/PostUniforms.hpp"
 #include "gpu/vuk/States/Post/Wire/WirePipeline.hpp"
-#include "gpu/vuk/States/Post/Wire/WireUniforms.hpp"
 #include "gpu/vuk/States/Post/Wire/WireVertices.hpp"
 
 #include "gpu/vuk/Commands/Commands.hpp"
@@ -29,7 +28,6 @@ struct StatePost
 
     Pipeline pipelineWire;
     FragVertShader shaderWire;
-    UniformsWire uniformsWire;
     VerticesWire verticesWire;
 
     void Create(Context&, Commands&, res::Resources&, StateGeneral&);
@@ -44,7 +42,6 @@ void StatePost::Create(Context& context, Commands& commands, res::Resources& res
 {
     uniforms.Create(commands.pool, resources, stateSprites.renderPassGeneral.offscreen);
     vertices.Create(commands.pool);
-    uniformsWire.Create(commands.pool);
     verticesWire.Create(commands.pool);
     renderPass.Create(context.swapchain);
     shader.Create("res/Shaders/spv/post.vert.spv", "res/Shaders/spv/post.frag.spv");
@@ -59,7 +56,6 @@ void StatePost::Destroy()
 {
     uniforms.Destroy();
     vertices.Destroy();
-    uniformsWire.Destroy();
     verticesWire.Destroy();
     pipeline.Destroy();
     pipelineWire.Destroy();
@@ -74,7 +70,6 @@ void StatePost::Update(RenderData& rd, u32 swapidx)
 {
     uniforms.Update(rd.post, swapidx);
     vertices.Update(rd.post, swapidx);
-    uniformsWire.Update(rd.wire, swapidx);
     verticesWire.Update(rd.wire, swapidx);
 }
 
@@ -89,7 +84,8 @@ void StatePost::Record(VkCommandBuffer cmdBuffer, uint32_t swapIdx)
     vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, &vertices.vbo[swapIdx].activeBuffer->buffer, &vertices.offsets);
     vkCmdBindDescriptorSets (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.layout, 0, 
                              1, &uniforms.descriptors.sets[swapIdx], 0, nullptr);
-    vkCmdDraw               (cmdBuffer, vertices.vbo[swapIdx].COUNT_MAX, 1, 0, 0);
+    vkCmdDraw               (cmdBuffer, 3, 1, 0, 0); //fullscreen triangle
+    vkCmdDraw               (cmdBuffer, vertices.vbo[swapIdx].COUNT_MAX, 1, 3, 0);
     //wire
     vkCmdBindPipeline       (cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineWire.pipeline);
     vkCmdBindVertexBuffers  (cmdBuffer, 0, 1, &verticesWire.vbo[swapIdx].activeBuffer->buffer, &verticesWire.offsets);
@@ -99,7 +95,5 @@ void StatePost::Record(VkCommandBuffer cmdBuffer, uint32_t swapIdx)
 }
 
 ///////////////////////////////////////////////////////////
-
-//TODO use another baked vbo for the fullscreen triangle and seperate draw call? (don't need to be swap resource also)
 
 }//ns

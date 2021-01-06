@@ -15,62 +15,68 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-enum class UIUniformsEnum : u32
-{
-    QuadData,
-    FontArray,
-    ENUM_END
-};
-
-///////////////////////////////////////////////////////////
-
 struct UniformsUI
 {
     using RD = RenderDataUI;
-
-    UniformInfo infos [enum_cast(UIUniformsEnum::ENUM_END)];
+    enum : u32
+    {
+        BindingQuads,
+        BindingFont,
+        ENUM_END
+    };
+    UniformInfo infos [ENUM_END];
     Descriptors descriptors;
 
     PushConstants<RD::PushMeta, VK_SHADER_STAGE_VERTEX_BIT> metaData;
+    SwapResource<StorageBuffer<RD::UniformQuadData, RD::QUAD_COUNT_MAX>> quadData;
     VkSampler fontArraySampler; 
     Image fontArray;
-    SwapResource<StorageBuffer<RD::UniformQuadData, RD::QUAD_COUNT_MAX>> quadData;
 
     void Create(VkCommandPool, res::Resources&);
-    void Destroy();
     void Update(RenderDataUI&, u32);
+    void Destroy();
+
+    void CreateQuads(VkCommandPool, res::Resources&);
+    void CreateTexture(VkCommandPool, res::Resources&);
 };
 
 ///////////////////////////////////////////////////////////
 
 void UniformsUI::Create(VkCommandPool cmdPool, res::Resources& resources)
 {
-    //? uniform
+    CreateQuads(cmdPool, resources);
+    CreateTexture(cmdPool, resources);
+    descriptors.Create(infos);
+}
+
+///////////////////////////////////////////////////////////
+
+void UniformsUI::CreateQuads(VkCommandPool cmdPool, res::Resources& resources)
+{
+    auto& info = infos[BindingQuads];
+    info.type = UniformInfo::Buffer;
+    info.binding.binding = BindingQuads;
+    info.binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    info.binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
     quadData.count = g_contextPtr->swapchain.Count();
     FOR_ARRAY(quadData, i)
+    {
         quadData[i].Create();
-    infos[enum_cast(UIUniformsEnum::QuadData)] =
-    {
-        .type = UniformInfo::Buffer,
-        .binding 
-        {
-            .binding            = enum_cast(UIUniformsEnum::QuadData),
-            .descriptorType     = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-            .descriptorCount    = 1,
-            .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
-            .pImmutableSamplers = nullptr,
-        },
-    };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
-    {
-        infos[enum_cast(UIUniformsEnum::QuadData)].bufferInfos.Append(
-            quadData[i].activeBuffer->buffer,
-            0u,
-            VK_WHOLE_SIZE
-        );
+        info.bufferInfos.Append(quadData[i].activeBuffer->buffer, 0u, VK_WHOLE_SIZE);
     }
+}
 
-    //? font array
+///////////////////////////////////////////////////////////
+
+void UniformsUI::CreateTexture(VkCommandPool cmdPool, res::Resources& resources)
+{
+    auto& info = infos[BindingFont];
+    info.type = UniformInfo::Image;
+    info.binding.binding = BindingFont;
+    info.binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    info.binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
     auto& textureArray = resources.textures.font;
     auto& texture = textureArray[0];
 
@@ -83,29 +89,8 @@ void UniformsUI::Create(VkCommandPool cmdPool, res::Resources& resources)
     fontArray.Bake(cmdPool);
     CreateSamplerNearest(fontArraySampler);
 
-    infos[enum_cast(UIUniformsEnum::FontArray)] =
-    {
-        .type = UniformInfo::Image,
-        .binding 
-        {
-            .binding            = enum_cast(UIUniformsEnum::FontArray),
-            .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-            .descriptorCount    = 1,
-            .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
-            .pImmutableSamplers = nullptr,
-        },
-    };
     for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
-    {
-        infos[enum_cast(UIUniformsEnum::FontArray)].imageInfos.Append(
-            fontArraySampler,
-            fontArray.view,
-            fontArray.layout
-        );
-    }
-
-    //? write
-    descriptors.Create(infos);
+        info.imageInfos.Append(fontArraySampler, fontArray.view, fontArray.layout);
 }
 
 ///////////////////////////////////////////////////////////

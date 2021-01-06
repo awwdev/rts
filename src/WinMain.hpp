@@ -21,7 +21,6 @@ namespace rts::app {
 inline void AppThread(gpu::vuk::WindowHandle wndHandle, app::CmdArgs const& cmdArgs)
 {  
     mem::Allocate();
-    mem::PrintAlloc();
     {
         auto ptrResources = mem::ClaimBlock<res::Resources>();
         auto ptrScene     = mem::ClaimBlock<app::GameScene>();

@@ -26,7 +26,7 @@ struct BlockArrayInfo
 constexpr auto SIZE_NETWORK    = 2'000;
 constexpr auto SIZE_RENDERER   = 6'000;
 constexpr auto SIZE_RESOURCES  = 80'000;
-constexpr auto SIZE_GAME_SCENE = 1'500'000'000;
+constexpr auto SIZE_GAME_SCENE = 100'000'000;
 
 constexpr BlockArrayInfo BLOCK_ARRAY_INFOS [] 
 {

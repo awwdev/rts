@@ -56,6 +56,18 @@ struct UniformsSprites
 
 ///////////////////////////////////////////////////////////
 
+void UniformsSprites::Create(VkCommandPool cmdPool, res::Resources& resources, RenderPassShadow& shadowPass)
+{
+    CreateQuads         (cmdPool, resources, shadowPass);
+    CreateSun           (cmdPool, resources, shadowPass);
+    CreateMeta          (cmdPool, resources, shadowPass);
+    CreateShadowTexture (cmdPool, resources, shadowPass);
+    CreateSpritesTexture(cmdPool, resources, shadowPass);
+    descriptors.Create(infos);
+}
+
+///////////////////////////////////////////////////////////
+
 void UniformsSprites::CreateQuads(VkCommandPool cmdPool, res::Resources& resources, RenderPassShadow& shadowPass)
 {
     auto& info = infos[BindingQuads];
@@ -66,9 +78,10 @@ void UniformsSprites::CreateQuads(VkCommandPool cmdPool, res::Resources& resourc
 
     quads.count = g_contextPtr->swapchain.Count();
     FOR_ARRAY(quads, i)
+    {
         quads[i].Create();
-    FOR_ARRAY(quads, i)
         info.bufferInfos.Append(quads[i].activeBuffer->buffer, 0u, VK_WHOLE_SIZE);   
+    }
 }
 
 ///////////////////////////////////////////////////////////
@@ -83,9 +96,10 @@ void UniformsSprites::CreateSun(VkCommandPool cmdPool, res::Resources& resources
 
     sun.count = g_contextPtr->swapchain.Count();
     FOR_ARRAY(sun, i)
+    {
         sun[i].Create();
-    FOR_ARRAY(quads, i)
         info.bufferInfos.Append(sun[i].activeBuffer->buffer, 0u, VK_WHOLE_SIZE);   
+    }
 }
 
 ///////////////////////////////////////////////////////////
@@ -100,9 +114,10 @@ void UniformsSprites::CreateMeta(VkCommandPool cmdPool, res::Resources& resource
 
     meta.count = g_contextPtr->swapchain.Count();
     FOR_ARRAY(meta, i)
+    {
         meta[i].Create();
-    FOR_ARRAY(quads, i)
         info.bufferInfos.Append(meta[i].activeBuffer->buffer, 0u, VK_WHOLE_SIZE);  
+    }        
 }
 
 ///////////////////////////////////////////////////////////
@@ -142,18 +157,6 @@ void UniformsSprites::CreateSpritesTexture(VkCommandPool cmdPool, res::Resources
     CreateSamplerNearest(spriteArraySampler);
     FOR_ARRAY(quads, i)
         info.imageInfos.Append(spriteArraySampler, spriteArray.view, spriteArray.layout);  
-}
-
-///////////////////////////////////////////////////////////
-
-void UniformsSprites::Create(VkCommandPool cmdPool, res::Resources& resources, RenderPassShadow& shadowPass)
-{
-    CreateQuads         (cmdPool, resources, shadowPass);
-    CreateSun           (cmdPool, resources, shadowPass);
-    CreateMeta          (cmdPool, resources, shadowPass);
-    CreateShadowTexture (cmdPool, resources, shadowPass);
-    CreateSpritesTexture(cmdPool, resources, shadowPass);
-    descriptors.Create(infos);
 }
 
 ///////////////////////////////////////////////////////////

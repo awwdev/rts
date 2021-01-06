@@ -36,7 +36,7 @@ static auto ClaimBlock(auto... args)
     auto aligned = AlignNext<T>(blockPtr);
     auto objPtr = new(aligned) T { args... };
 
-#if 1
+#if 0
     com::PrintColored(com::ConsoleColor::Cyan
         , "\nClaimBlock" 
         , "\nblockArrayIdx", blockArrayIdx
@@ -60,7 +60,7 @@ static auto ClaimBlock(auto... args)
 static void FreeBlock(idx_t blockIdx)
 {
     blocksUsed.Set(blockIdx, false);
-    com::Print("FreeBlock");
+    //com::Print("FreeBlock");
 }
 
 ///////////////////////////////////////////////////////////
