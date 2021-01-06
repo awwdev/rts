@@ -20,141 +20,115 @@ namespace rts::gpu::vuk {
 
 ///////////////////////////////////////////////////////////
 
-enum class UniformEnumSprites : u32
-{
-    Quads, 
-    Meta,
-    Sun,
-    Sprites,
-    ShadowOffscreen,
-    ENUM_END
-};
-
-///////////////////////////////////////////////////////////
-
 struct UniformsSprites
 {
     using RD = RenderDataSprites;
-
-    UniformInfo infos [enum_cast(UniformEnumSprites::ENUM_END)];
+    enum : u32
+    {
+        BindingQuads, 
+        BindingMeta,
+        BindingSun,
+        BindingSprites,
+        BindingShadowOffscreen,
+        ENUM_END
+    };
+    UniformInfo infos [ENUM_END];
     Descriptors descriptors;
 
     PushConstants<RD::PushContext, VK_SHADER_STAGE_VERTEX_BIT> ctx;
+    SwapResource<StorageBuffer<RD::UniformQuad, ecs::ENTITY_COUNT_MAX>> quads;
+    SwapResource<UniformBuffer<RD::UniformSun, 1>> sun;
+    SwapResource<UniformBuffer<RD::UniformMeta, 1>> meta;
+    VkSampler shadowOffscreenSampler;
     VkSampler spriteArraySampler; 
     Image spriteArray;
-    SwapResource<StorageBuffer<RD::UniformQuad, ecs::ENTITY_COUNT_MAX>> quads;
-    SwapResource<UniformBuffer<RD::UniformMeta, 1>> meta;
-    SwapResource<UniformBuffer<RD::UniformSun, 1>> sun;
-    VkSampler shadowOffscreenSampler;
+
+    void Create               (VkCommandPool, res::Resources&, RenderPassShadow&);
+    void CreateQuads          (VkCommandPool, res::Resources&, RenderPassShadow&);
+    void CreateSun            (VkCommandPool, res::Resources&, RenderPassShadow&);
+    void CreateMeta           (VkCommandPool, res::Resources&, RenderPassShadow&);
+    void CreateShadowTexture  (VkCommandPool, res::Resources&, RenderPassShadow&);
+    void CreateSpritesTexture (VkCommandPool, res::Resources&, RenderPassShadow&);
     
-    void Create(VkCommandPool, res::Resources&, RenderPassShadow&);
-    void Destroy();
     void Update(RenderDataSprites&, u32);
+    void Destroy();
 };
 
 ///////////////////////////////////////////////////////////
 
-void UniformsSprites::Create(VkCommandPool cmdPool, res::Resources& resources, RenderPassShadow& shadowPass)
+void UniformsSprites::CreateQuads(VkCommandPool cmdPool, res::Resources& resources, RenderPassShadow& shadowPass)
 {
-    //? QUADS
-    quads.count = 4;
-    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
-        quads[i].Create();
-    infos[enum_cast(UniformEnumSprites::Quads)] =
-    {
-        .type = UniformInfo::Buffer,
-        .binding 
-        {
-            .binding            = enum_cast(UniformEnumSprites::Quads),
-            .descriptorType     = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-            .descriptorCount    = 1,
-            .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
-            .pImmutableSamplers = nullptr,
-        },
-    };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
-    {
-        infos[enum_cast(UniformEnumSprites::Quads)].bufferInfos.Append(
-            quads[i].activeBuffer->buffer,
-            0u,
-            VK_WHOLE_SIZE
-        );
-    }
+    auto& info = infos[BindingQuads];
+    info.type = UniformInfo::Buffer;
+    info.binding.binding = BindingQuads;
+    info.binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    info.binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
-    //? SHADOW
+    quads.count = g_contextPtr->swapchain.Count();
+    FOR_ARRAY(quads, i)
+        quads[i].Create();
+    FOR_ARRAY(quads, i)
+        info.bufferInfos.Append(quads[i].activeBuffer->buffer, 0u, VK_WHOLE_SIZE);   
+}
+
+///////////////////////////////////////////////////////////
+
+void UniformsSprites::CreateSun(VkCommandPool cmdPool, res::Resources& resources, RenderPassShadow& shadowPass)
+{
+    auto& info = infos[BindingSun];
+    info.type = UniformInfo::Buffer;
+    info.binding.binding = BindingSun;
+    info.binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    info.binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
     sun.count = g_contextPtr->swapchain.Count();
     FOR_ARRAY(sun, i)
         sun[i].Create();
-    infos[enum_cast(UniformEnumSprites::Sun)] =
-    {
-        .type = UniformInfo::Buffer,
-        .binding 
-        {
-            .binding            = enum_cast(UniformEnumSprites::Sun),
-            .descriptorType     = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-            .descriptorCount    = 1,
-            .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
-            .pImmutableSamplers = nullptr,
-        },
-    };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
-    {
-        infos[enum_cast(UniformEnumSprites::Sun)].bufferInfos.Append(
-            sun[i].activeBuffer->buffer,
-            0u,
-            VK_WHOLE_SIZE
-        );
-    }
+    FOR_ARRAY(quads, i)
+        info.bufferInfos.Append(sun[i].activeBuffer->buffer, 0u, VK_WHOLE_SIZE);   
+}
 
-    //? META
+///////////////////////////////////////////////////////////
+
+void UniformsSprites::CreateMeta(VkCommandPool cmdPool, res::Resources& resources, RenderPassShadow& shadowPass)
+{
+    auto& info = infos[BindingMeta];
+    info.type = UniformInfo::Buffer;
+    info.binding.binding = BindingMeta;
+    info.binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    info.binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
     meta.count = g_contextPtr->swapchain.Count();
-    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
+    FOR_ARRAY(meta, i)
         meta[i].Create();
-    infos[enum_cast(UniformEnumSprites::Meta)] =
-    {
-        .type = UniformInfo::Buffer,
-        .binding 
-        {
-            .binding            = enum_cast(UniformEnumSprites::Meta),
-            .descriptorType     = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-            .descriptorCount    = 1,
-            .stageFlags         = VK_SHADER_STAGE_VERTEX_BIT,
-            .pImmutableSamplers = nullptr,
-        },
-    };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
-    {
-        infos[enum_cast(UniformEnumSprites::Meta)].bufferInfos.Append(
-            meta[i].activeBuffer->buffer,
-            0u,
-            VK_WHOLE_SIZE
-        );
-    }
+    FOR_ARRAY(quads, i)
+        info.bufferInfos.Append(meta[i].activeBuffer->buffer, 0u, VK_WHOLE_SIZE);  
+}
 
-    //? SAMPLER
+///////////////////////////////////////////////////////////
+
+void UniformsSprites::CreateShadowTexture(VkCommandPool cmdPool, res::Resources& resources, RenderPassShadow& shadowPass)
+{
+    auto& info = infos[BindingShadowOffscreen];
+    info.type = UniformInfo::Image;
+    info.binding.binding = BindingShadowOffscreen;
+    info.binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    info.binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
     CreateSamplerNearest(shadowOffscreenSampler);
-    infos[enum_cast(UniformEnumSprites::ShadowOffscreen)] =
-    {
-        .type = UniformInfo::Image,
-        .binding 
-        {
-            .binding            = enum_cast(UniformEnumSprites::ShadowOffscreen),
-            .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-            .descriptorCount    = 1,
-            .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
-            .pImmutableSamplers = nullptr,
-        },
-    };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
-    {
-        infos[enum_cast(UniformEnumSprites::ShadowOffscreen)].imageInfos.Append(
-            shadowOffscreenSampler,
-            shadowPass.image.view,
-            shadowPass.image.layout
-        );
-    }
+    FOR_ARRAY(quads, i)
+        info.imageInfos.Append(shadowOffscreenSampler, shadowPass.image.view, shadowPass.image.layout);  
+}
 
-    //?SPRITES
+///////////////////////////////////////////////////////////
+
+void UniformsSprites::CreateSpritesTexture(VkCommandPool cmdPool, res::Resources& resources, RenderPassShadow& shadowPass)
+{
+    auto& info = infos[BindingSprites];
+    info.type = UniformInfo::Image;
+    info.binding.binding = BindingSprites;
+    info.binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    info.binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
     auto& textureArray = resources.textures.sprites;
     auto& texture = textureArray[0];
 
@@ -162,33 +136,23 @@ void UniformsSprites::Create(VkCommandPool cmdPool, res::Resources& resources, R
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, 
         VK_IMAGE_VIEW_TYPE_2D_ARRAY,
         texture.WIDTH, texture.HEIGHT, textureArray.count, true); 
-
     spriteArray.Store(cmdPool, textureArray.data, texture.SIZE, textureArray.count); 
     spriteArray.Bake(cmdPool);
+
     CreateSamplerNearest(spriteArraySampler);
+    FOR_ARRAY(quads, i)
+        info.imageInfos.Append(spriteArraySampler, spriteArray.view, spriteArray.layout);  
+}
 
-    infos[enum_cast(UniformEnumSprites::Sprites)] =
-    {
-        .type = UniformInfo::Image,
-        .binding 
-        {
-            .binding            = enum_cast(UniformEnumSprites::Sprites),
-            .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-            .descriptorCount    = 1,
-            .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
-            .pImmutableSamplers = nullptr,
-        },
-    };
-    for(idx_t i = 0; i < g_contextPtr->swapchain.Count(); ++i)
-    {
-        infos[enum_cast(UniformEnumSprites::Sprites)].imageInfos.Append(
-            spriteArraySampler,
-            spriteArray.view,
-            spriteArray.layout
-        );
-    }
+///////////////////////////////////////////////////////////
 
-    //? write
+void UniformsSprites::Create(VkCommandPool cmdPool, res::Resources& resources, RenderPassShadow& shadowPass)
+{
+    CreateQuads         (cmdPool, resources, shadowPass);
+    CreateSun           (cmdPool, resources, shadowPass);
+    CreateMeta          (cmdPool, resources, shadowPass);
+    CreateShadowTexture (cmdPool, resources, shadowPass);
+    CreateSpritesTexture(cmdPool, resources, shadowPass);
     descriptors.Create(infos);
 }
 
@@ -210,6 +174,7 @@ void UniformsSprites::Update(RenderDataSprites& rd, u32 swapIdx)
 
 void UniformsSprites::Destroy()
 {
+    FOR_C_ARRAY(infos, i) infos[i].Destroy();
     descriptors.Destroy();
     spriteArray.Destroy();
     vkDestroySampler(g_devicePtr, spriteArraySampler, GetVkAlloc());

@@ -79,6 +79,7 @@ void UniformsPost::Update(RenderDataPost& rd, u32)
 
 void UniformsPost::Destroy()
 {
+    FOR_C_ARRAY(infos, i) infos[i].Destroy();
     descriptors.Destroy();
     vkDestroySampler(g_devicePtr, sampler, GetVkAlloc());
 }

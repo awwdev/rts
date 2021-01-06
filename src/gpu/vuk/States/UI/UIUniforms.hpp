@@ -123,6 +123,7 @@ void UniformsUI::Update(RenderDataUI& rd, u32 swapIdx)
 
 void UniformsUI::Destroy()
 {
+    FOR_C_ARRAY(infos, i) infos[i].Destroy();
     descriptors.Destroy();
     fontArray.Destroy();
     vkDestroySampler(g_devicePtr, fontArraySampler, GetVkAlloc());

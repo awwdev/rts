@@ -23,7 +23,7 @@ constexpr VkComponentMapping IMAGE_COMPONENT_MAPPING_DEFAULT =
 
 struct Image
 {
-    using IMAGE_TYPEID = Image; //for constexpr requires identification
+    using SWAP_DESTROY = Image; //for constexpr requires identification
     VkImage image = nullptr;
     VkDeviceMemory memory = nullptr;
     VkImageView view = nullptr;

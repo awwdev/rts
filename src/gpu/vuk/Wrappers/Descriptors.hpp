@@ -13,11 +13,21 @@ namespace rts::gpu::vuk {
 struct UniformInfo
 {
     enum Type { Buffer, Image } type;
-    VkDescriptorSetLayoutBinding binding;
-    
-    //union
+    VkDescriptorSetLayoutBinding binding
+    {
+        .binding            = 0,
+        .descriptorType     = VK_DESCRIPTOR_TYPE_MAX_ENUM,
+        .descriptorCount    = 1,
+        .stageFlags         = VK_SHADER_STAGE_FLAG_BITS_MAX_ENUM,
+        .pImmutableSamplers = nullptr,
+    };
     SwapResource<VkDescriptorBufferInfo> bufferInfos;
     SwapResource<VkDescriptorImageInfo>  imageInfos;
+
+    void Destroy()
+    {
+        *this = {};
+    }
 };
 
 ///////////////////////////////////////////////////////////

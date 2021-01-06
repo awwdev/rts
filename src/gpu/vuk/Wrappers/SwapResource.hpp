@@ -34,9 +34,7 @@ void DestroySwapResource(SwapResource<T>& swapResource)
         IF (VkDescriptorSetLayout) 
             vkDestroyDescriptorSetLayout(g_devicePtr, element, GetVkAlloc()); 
 
-        if constexpr (requires { typename std::decay_t<decltype(element)>::BUFFER_TYPEID; })
-            element.Destroy();
-        if constexpr (requires { typename std::decay_t<decltype(element)>::IMAGE_TYPEID; })
+        if constexpr (requires { typename std::decay_t<decltype(element)>::SWAP_DESTROY; })
             element.Destroy();
     };
 

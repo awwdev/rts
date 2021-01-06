@@ -17,7 +17,7 @@ namespace rts::gpu::vuk {
 
 TEMPLATE struct BufferExt
 {
-    using BUFFER_TYPEID = BufferExt; //for constexpr requires identification
+    using SWAP_DESTROY = BufferExt; //for constexpr requires identification
     static constexpr idx_t COUNT_MAX = N;
     static constexpr idx_t BYTE_SIZE = sizeof(T) * N;
     idx_t count = 0;
