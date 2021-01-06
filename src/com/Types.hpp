@@ -43,10 +43,6 @@ constexpr auto array_extent(auto const (&)[N])
 
 ///////////////////////////////////////////////////////////
 
-#define FOR_C_ARRAY(arr, i) for(idx_t i = 0; i < array_extent(arr); ++i)
-
-///////////////////////////////////////////////////////////
-
 template<typename T> requires std::is_enum_v<T>
 constexpr auto enum_cast(T e)
 {
@@ -56,3 +52,23 @@ constexpr auto enum_cast(T e)
 ///////////////////////////////////////////////////////////
 
 }//ns
+
+///////////////////////////////////////////////////////////
+
+#define USING_NAMESPACES \
+using namespace app; \
+using namespace cmd; \
+using namespace com; \
+using namespace ecs; \
+using namespace gpu; \
+using namespace mem; \
+using namespace gui; \
+using namespace net; \
+using namespace res; \
+using namespace wnd;
+
+///////////////////////////////////////////////////////////
+
+#define FOR_C_ARRAY(arr, i) for(idx_t i = 0; i < array_extent(arr); ++i)
+
+///////////////////////////////////////////////////////////

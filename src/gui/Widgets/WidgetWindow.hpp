@@ -48,12 +48,13 @@ private:
 
 void WidgetWindow::Update(gpu::RenderData& rd)
 {
+    using namespace com;
     rowCount = 0;
 
-    com::Recti wndBar  { rect.x, rect.y, rect.w, BAR_H };
-    com::Recti wndBack { rect.x, rect.y + BAR_H, rect.w, rect.h - BAR_H };
-    com::Recti btnSize { rect.x + rect.w - RESIZE_BTN, rect.y + rect.h - RESIZE_BTN, RESIZE_BTN, RESIZE_BTN };
-    com::Recti btnMin  { rect.x + rect.w - BAR_H, rect.y, BAR_H, BAR_H };
+    Recti wndBar  { rect.x, rect.y, rect.w, BAR_H };
+    Recti wndBack { rect.x, rect.y + BAR_H, rect.w, rect.h - BAR_H };
+    Recti btnSize { rect.x + rect.w - RESIZE_BTN, rect.y + rect.h - RESIZE_BTN, RESIZE_BTN, RESIZE_BTN };
+    Recti btnMin  { rect.x + rect.w - BAR_H, rect.y, BAR_H, BAR_H };
     title.Center(wndBar);
 
     using namespace app;

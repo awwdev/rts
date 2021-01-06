@@ -8,6 +8,7 @@
 
 int main(int argc, char** argv)
 {
-    rts::app::CmdArgs cmdArgs { argc, argv };
-    rts::app::AppMain(cmdArgs);
+    using namespace rts::app;
+    CmdArgs cmdArgs { argc, argv };
+    AppMain(cmdArgs);
 }

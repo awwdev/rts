@@ -18,33 +18,35 @@ namespace rts::app {
 
 ///////////////////////////////////////////////////////////
 
-inline void AppThread(gpu::vuk::WindowHandle wndHandle, app::CmdArgs const& cmdArgs)
+inline void AppThread(gpu::vuk::WindowHandle wndHandle, CmdArgs const& cmdArgs)
 {  
-    mem::Allocate();
+    USING_NAMESPACES
+    Allocate();
     {
-        auto ptrResources = mem::ClaimBlock<res::Resources>();
-        auto ptrScene     = mem::ClaimBlock<app::GameScene>();
-        auto ptrRenderer  = mem::ClaimBlock<gpu::vuk::Renderer>(wndHandle, *ptrResources, ptrScene->renderData);
-        auto ptrNetwork   = mem::ClaimBlock<net::Win32_Network>(cmdArgs);
+        auto ptrResources = ClaimBlock<Resources>();
+        auto ptrScene     = ClaimBlock<GameScene>();
+        auto ptrRenderer  = ClaimBlock<vuk::Renderer>(wndHandle, *ptrResources, ptrScene->renderData);
+        auto ptrNetwork   = ClaimBlock<Win32_Network>(cmdArgs);
 
         while(!app::Inputs::window.shouldClose)
         {
-            app::Time::Update();
-            app::Inputs::Update();
+            Time::Update();
+            Inputs::Update();
             ptrScene->Update();
             ptrRenderer->Update(ptrScene->renderData, *ptrResources);
         } 
     }
-    mem::Deallocate();
+    Deallocate();
 }
 
 ///////////////////////////////////////////////////////////
 
 static void AppMain(CmdArgs const& cmdArgs)
 {
-    wnd::Win32_Console console { cmdArgs };
-    wnd::Win32_Window window { GetModuleHandle(NULL), "mini window", cmdArgs };
-    std::thread appThread { AppThread, gpu::vuk::WindowHandle { window.hInstance, window.hWnd }, cmdArgs };
+    USING_NAMESPACES
+    Win32_Console console { cmdArgs };
+    Win32_Window window { GetModuleHandle(NULL), "mini window", cmdArgs };
+    std::thread appThread { AppThread, vuk::WindowHandle { window.hInstance, window.hWnd }, cmdArgs };
     window.BlockingPollEvents(); 
     appThread.join();
 }
