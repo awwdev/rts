@@ -53,8 +53,8 @@ struct Text
 
     void Center(com::Recti const& rect)
     {
-        x = rect.x + rect.w / 2 - ((font.width + font.spacing) * str.length) / 2;
-        y = rect.y + rect.h / 2 - (font.heigth) / 2;
+        x = rect.p1.x + rect.p2.x / 2 - ((font.width + font.spacing) * str.length) / 2;
+        y = rect.p1.y + rect.p2.y / 2 - (font.heigth) / 2;
     }
 };
 

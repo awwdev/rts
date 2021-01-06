@@ -26,16 +26,17 @@ struct RenderDataWire
     com::Array<VertexWire, VERTEX_COUNT_MAX_WIRE> vertices;
     void Clear();
 
-    void AddRect(com::AbsRecti const& rect, com::Col4n col = com::Col4n{ 1.f, 1.f, 1.f, 1.f })
+    void AddRect(com::Recti const& rect, com::Col4n col = com::Col4n{ 1.f, 1.f, 1.f, 1.f })
     {
-        vertices.Append((f32)rect.v1.x, (f32)rect.v1.y, col);
-        vertices.Append((f32)rect.v2.x, (f32)rect.v1.y, col);
-        vertices.Append((f32)rect.v2.x, (f32)rect.v1.y, col);
-        vertices.Append((f32)rect.v2.x, (f32)rect.v2.y, col);
-        vertices.Append((f32)rect.v2.x, (f32)rect.v2.y, col);
-        vertices.Append((f32)rect.v1.x, (f32)rect.v2.y, col);
-        vertices.Append((f32)rect.v1.x, (f32)rect.v2.y, col);
-        vertices.Append((f32)rect.v1.x, (f32)rect.v1.y, col);
+        auto r = (com::Rectf)rect;
+        vertices.Append(r.p1.x, r.p1.y, col);
+        vertices.Append(r.p2.x, r.p1.y, col);
+        vertices.Append(r.p2.x, r.p1.y, col);
+        vertices.Append(r.p2.x, r.p2.y, col);
+        vertices.Append(r.p2.x, r.p2.y, col);
+        vertices.Append(r.p1.x, r.p2.y, col);
+        vertices.Append(r.p1.x, r.p2.y, col);
+        vertices.Append(r.p1.x, r.p1.y, col);
     }
 };
 

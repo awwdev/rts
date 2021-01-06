@@ -51,20 +51,23 @@ void WidgetWindow::Update(gpu::RenderData& rd)
     using namespace com;
     rowCount = 0;
 
-    Recti wndBar  { rect.x, rect.y, rect.w, BAR_H };
-    Recti wndBack { rect.x, rect.y + BAR_H, rect.w, rect.h - BAR_H };
-    Recti btnSize { rect.x + rect.w - RESIZE_BTN, rect.y + rect.h - RESIZE_BTN, RESIZE_BTN, RESIZE_BTN };
-    Recti btnMin  { rect.x + rect.w - BAR_H, rect.y, BAR_H, BAR_H };
+    Recti wndBar  { rect.p1.x, rect.p1.y, rect.p2.x, BAR_H };
+    Recti wndBack { rect.p1.x, rect.p1.y + BAR_H, rect.p2.x, rect.p2.y - BAR_H };
+    Recti btnSize { rect.p1.x + rect.p2.x - RESIZE_BTN, rect.p1.y + rect.p2.y - RESIZE_BTN, RESIZE_BTN, RESIZE_BTN };
+    Recti btnMin  { rect.p1.x + rect.p2.x - BAR_H, rect.p1.y, BAR_H, BAR_H };
     title.Center(wndBar);
 
-    using namespace app;
-    bool onBtnMin  = btnMin.IsPointInside (Inputs::mouse.pos);
-    bool onWndBar  = wndBar.IsPointInside (Inputs::mouse.pos) && !onBtnMin;
-    bool onBtnSize = btnSize.IsPointInside(Inputs::mouse.pos);
-    bool onWnd     = wndBack.IsPointInside(Inputs::mouse.pos) || wndBar.IsPointInside(Inputs::mouse.pos);
-    bool onDrag    = onWnd && !onBtnMin && !onBtnSize;
+    //TODO: MAKE ALL RECT USAGE WITH ABS POINTS !
+    //TODO: SHADER REWRITE
 
-    if (onWnd)
+    using namespace app;
+    bool onBtnMin  = btnMin.IsPointInside  (Inputs::mouse.pos);
+    bool onWndBar  = wndBar.IsPointInside  (Inputs::mouse.pos) && !onBtnMin;
+    bool onBtnSize = btnSize.IsPointInside (Inputs::mouse.pos);
+    bool onWnd     = (wndBack.IsPointInside(Inputs::mouse.pos) || wndBar.IsPointInside(Inputs::mouse.pos));
+    bool onDrag    = onWnd && !onBtnMin && !onBtnSize && (!isMini || (onWndBar && !onBtnMin));
+
+    if (onWnd || isDragged || isSize)
         app::Inputs::activeLayer = app::Inputs::ActiveLayer::UI;
 
     UpdateMinMax(onBtnMin);
@@ -98,8 +101,8 @@ void WidgetWindow::UpdateDrag(bool onWndDrag)
     if (isDragged)
     {
         auto delta = Inputs::mouse.pos - dragOffset;
-        rect.x += delta.x;
-        rect.y += delta.y;
+        rect.p1.x += delta.x;
+        rect.p1.y += delta.y;
         dragOffset = Inputs::mouse.pos;
     }
     if (isDragged && Inputs::mouse.IsReleased(InputMouse::Left))
@@ -121,8 +124,8 @@ void WidgetWindow::UpdateSize(bool onBtnSize)
     if (isSize)
     {
         auto delta = Inputs::mouse.pos - sizeOffset;
-        rect.w += delta.x;
-        rect.h += delta.y;
+        rect.p2.x += delta.x;
+        rect.p2.y += delta.y;
         sizeOffset = Inputs::mouse.pos;
     }
     if (isSize && Inputs::mouse.IsReleased(InputMouse::Left))
@@ -147,8 +150,8 @@ void WidgetWindow::UpdateText(gpu::RenderDataUI& rd, Text& text)
     if (isMini) 
         return;
 
-    text.x = rect.x + ROW_PADDING;
-    text.y = rect.y + ROW_PADDING + BAR_H + rowCount * ROW_H;
+    text.x = rect.p1.x + ROW_PADDING;
+    text.y = rect.p1.y + ROW_PADDING + BAR_H + rowCount * ROW_H;
     rowCount++;
     rd.AddText(text);
 }

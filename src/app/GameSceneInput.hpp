@@ -22,9 +22,10 @@ struct GameSceneInput
     } 
 
     inputMode = InputMode::None;
-    com::AbsRecti selectionRect;
+    com::Recti selectionRect;
     void Update(ecs::ECS&, cmd::Timeline&, Camera&, gpu::RenderData&);
     com::Array<ecs::ID, 100> selection;
+    bool selectBegin;
 
 private:
     void Select(ecs::ECS&);
@@ -43,20 +44,26 @@ void GameSceneInput::Update(ecs::ECS& ecs, cmd::Timeline& timeline, Camera& came
         return;
 
     //STATE
+    if (Inputs::mouse.IsPressed(InputMouse::Left))
+    {
+        selectionRect.p1 = Inputs::mouse.pos;
+        selectBegin = true;
+    }
     if (Inputs::mouse.IsHeld(InputMouse::Left))
     {
-        selectionRect.v1 = Inputs::mouse.pos;
-        inputMode = InputMode::Selecting;    
+        if (selectBegin && selectionRect.p1 != Inputs::mouse.pos)
+            inputMode = InputMode::Selecting;  
     }
     if (Inputs::mouse.IsReleased(InputMouse::Left))
     { 
         inputMode = InputMode::None;  
+        selectBegin = false;
     }
 
     //PROCESS STATE
     if (inputMode == InputMode::Selecting)
     {
-        selectionRect.v2 = Inputs::mouse.pos;
+        selectionRect.p2 = Inputs::mouse.pos;
         renderData.wire.AddRect(selectionRect);
         Select(ecs);
     }

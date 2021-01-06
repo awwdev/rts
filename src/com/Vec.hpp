@@ -19,6 +19,9 @@ struct Vec2
 {
     T x, y;
     bool operator==(T const& val) { return x == val && y == val; }
+
+    template<typename V>
+    operator Vec2<V>() const { return Vec2<V> { static_cast<V>(x), static_cast<V>(y) }; }
 };
 
 ///////////////////////////////////////////////////////////

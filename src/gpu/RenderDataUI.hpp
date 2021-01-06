@@ -47,7 +47,11 @@ void RenderDataUI::AddText(gui::Text const& text)
     constexpr u32 ASCII_OFFSET = 31;
     FOR_STRING(text.str, i)
     {
-        com::Recti glyph { text.x + (i32)i * (text.font.width + text.font.spacing), text.y, text.font.width, text.font.heigth };
+        com::Recti glyph
+        { 
+            .p1 { text.x + (i32)i * (text.font.width + text.font.spacing), text.y },
+            .p2 { text.font.width, text.font.heigth }
+        };
         u32 texId = text.str[i] - ASCII_OFFSET;
         quadData.Append(glyph, text.color, texId);
     }

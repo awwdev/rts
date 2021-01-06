@@ -11,6 +11,8 @@ namespace rts::ecs {
 
 static void RenderSystem(ComponentArrays& arrays, gpu::RenderDataSprites& rd, f32 stepProgress)
 {
+    using namespace com;
+
     auto& mainComponents = arrays.mainComponents;
     auto& dense = mainComponents.dense;
 
@@ -45,10 +47,10 @@ static void RenderSystem(ComponentArrays& arrays, gpu::RenderDataSprites& rd, f3
         auto& trans  = mainComponent.transform;
         auto lerpPos = trans.posPrev + (trans.pos - trans.posPrev) * stepProgress;
         auto& sprite = mainComponent.sprite;
-        com::Rectf rect { lerpPos, trans.size }; 
-        com::Col4n COLOR { 1, 1, 1, 1 };
+        Rectf rect { lerpPos, (Vec2f) trans.size }; 
+        Col4n COLOR { 1, 1, 1, 1 };
         bool flipped = trans.delta.x < 0;
-        rd.quads.Append(rect, COLOR, com::Vec2f { 0.5, 0.5 }, sprite.texIdx, trans.rot, flipped);
+        rd.quads.Append(rect, COLOR, Vec2f { 0.5, 0.5 }, sprite.texIdx, trans.rot, flipped);
     }
 }
 

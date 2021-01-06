@@ -59,10 +59,10 @@ void RenderDataPost::AddBlurQuad(com::Recti const& rect)
 {
     using namespace com;
     
-    Vec2f uv0 { (f32) rect.x / app::Inputs::window.width, (f32) rect.y / app::Inputs::window.height };
-    Vec2f uv1 { (f32) rect.x / app::Inputs::window.width, (f32)(rect.y + rect.h) / app::Inputs::window.height };
-    Vec2f uv2 { (f32)(rect.x + rect.w) / app::Inputs::window.width, (f32)(rect.y + rect.h) / app::Inputs::window.height };
-    Vec2f uv3 { (f32)(rect.x + rect.w) / app::Inputs::window.width, (f32) rect.y / app::Inputs::window.height };
+    Vec2f uv0 { (f32) rect.p1.x / app::Inputs::window.width, (f32) rect.p1.y / app::Inputs::window.height };
+    Vec2f uv1 { (f32) rect.p1.x / app::Inputs::window.width, (f32)(rect.p1.y + rect.p2.y) / app::Inputs::window.height };
+    Vec2f uv2 { (f32)(rect.p1.x + rect.p2.x) / app::Inputs::window.width, (f32)(rect.p1.y + rect.p2.y) / app::Inputs::window.height };
+    Vec2f uv3 { (f32)(rect.p1.x + rect.p2.x) / app::Inputs::window.width, (f32) rect.p1.y / app::Inputs::window.height };
 
     Vec2f p0 { uv0.x * 2 - 1, uv0.y * 2 - 1 };
     Vec2f p1 { uv1.x * 2 - 1, uv1.y * 2 - 1 };
