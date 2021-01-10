@@ -12,15 +12,13 @@ namespace rts::com {
 template<typename T>
 struct Rect
 {
-    com::Vec2<T> p1;
-    com::Vec2<T> p2;
-    
-    bool IsPointInside(com::Vec2<T> const&);
-    auto Width()  const { p2.x - p1.x; }
-    auto Height() const { p2.y - p1.y; }
+    com::Vec2<T> pos;
+    com::Vec2<T> size;
 
+    auto GetPos2() const { return pos + size; }
+    bool IsPointInside(com::Vec2<T> const&);
     template<typename R>
-    operator Rect<R>() const { return Rect<R> { static_cast<com::Vec2<R>>(p1), static_cast<com::Vec2<R>>(p2) }; }
+    operator Rect<R>() const { return Rect<R> { (com::Vec2<R>)pos, (com::Vec2<R>)size }; }
 };
 
 ///////////////////////////////////////////////////////////
@@ -28,10 +26,10 @@ struct Rect
 template<typename T>
 bool Rect<T>::IsPointInside(com::Vec2<T> const& vec)
 {
-    auto l = com::Min(p1.x, p2.x);
-    auto r = com::Max(p1.x, p2.x);
-    auto t = com::Min(p1.y, p2.y);
-    auto b = com::Max(p1.y, p2.y);
+    auto l = com::Min(pos.x, pos.x + size.x);
+    auto r = com::Max(pos.x, pos.x + size.x);
+    auto t = com::Min(pos.y, pos.y + size.y);
+    auto b = com::Max(pos.y, pos.y + size.y);
 
     return 
     vec.x > l && vec.x < r &&

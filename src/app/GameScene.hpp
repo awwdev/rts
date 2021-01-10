@@ -51,8 +51,6 @@ GameScene::GameScene()
         mainComponent.sprite.texIdx = 0;
         mainComponent.sprite.frameTime = (com::GetRandomNumber(0, 100)) / 100.f;
     }
-
-    //TODO swapresource for sprites to fight flickering
 }
 
 ///////////////////////////////////////////////////////////

@@ -28,15 +28,16 @@ struct RenderDataWire
 
     void AddRect(com::Recti const& rect, com::Col4n col = com::Col4n{ 1.f, 1.f, 1.f, 1.f })
     {
-        auto r = (com::Rectf)rect;
-        vertices.Append(r.p1.x, r.p1.y, col);
-        vertices.Append(r.p2.x, r.p1.y, col);
-        vertices.Append(r.p2.x, r.p1.y, col);
-        vertices.Append(r.p2.x, r.p2.y, col);
-        vertices.Append(r.p2.x, r.p2.y, col);
-        vertices.Append(r.p1.x, r.p2.y, col);
-        vertices.Append(r.p1.x, r.p2.y, col);
-        vertices.Append(r.p1.x, r.p1.y, col);
+        auto p1 = (com::Vec2f) rect.pos;
+        auto p2 = (com::Vec2f) rect.GetPos2();
+        vertices.Append(p1.x, p1.y, col);
+        vertices.Append(p2.x, p1.y, col);
+        vertices.Append(p2.x, p1.y, col);
+        vertices.Append(p2.x, p2.y, col);
+        vertices.Append(p2.x, p2.y, col);
+        vertices.Append(p1.x, p2.y, col);
+        vertices.Append(p1.x, p2.y, col);
+        vertices.Append(p1.x, p1.y, col);
     }
 };
 

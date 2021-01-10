@@ -51,10 +51,10 @@ void WidgetWindow::Update(gpu::RenderData& rd)
     using namespace com;
     rowCount = 0;
 
-    Recti wndBar  { rect.p1.x, rect.p1.y, rect.p2.x, BAR_H };
-    Recti wndBack { rect.p1.x, rect.p1.y + BAR_H, rect.p2.x, rect.p2.y - BAR_H };
-    Recti btnSize { rect.p1.x + rect.p2.x - RESIZE_BTN, rect.p1.y + rect.p2.y - RESIZE_BTN, RESIZE_BTN, RESIZE_BTN };
-    Recti btnMin  { rect.p1.x + rect.p2.x - BAR_H, rect.p1.y, BAR_H, BAR_H };
+    Recti wndBar  { rect.pos.x, rect.pos.y, rect.size.x, BAR_H };
+    Recti wndBack { rect.pos.x, rect.pos.y + BAR_H, rect.size.x, rect.size.y - BAR_H };
+    Recti btnSize { rect.pos.x + rect.size.x - RESIZE_BTN, rect.pos.y + rect.size.y - RESIZE_BTN, RESIZE_BTN, RESIZE_BTN };
+    Recti btnMin  { rect.pos.x + rect.size.x - BAR_H, rect.pos.y, BAR_H, BAR_H };
     title.Center(wndBar);
 
     //TODO: MAKE ALL RECT USAGE WITH ABS POINTS !
@@ -101,8 +101,8 @@ void WidgetWindow::UpdateDrag(bool onWndDrag)
     if (isDragged)
     {
         auto delta = Inputs::mouse.pos - dragOffset;
-        rect.p1.x += delta.x;
-        rect.p1.y += delta.y;
+        rect.pos.x += delta.x;
+        rect.pos.y += delta.y;
         dragOffset = Inputs::mouse.pos;
     }
     if (isDragged && Inputs::mouse.IsReleased(InputMouse::Left))
@@ -124,8 +124,8 @@ void WidgetWindow::UpdateSize(bool onBtnSize)
     if (isSize)
     {
         auto delta = Inputs::mouse.pos - sizeOffset;
-        rect.p2.x += delta.x;
-        rect.p2.y += delta.y;
+        rect.size.x += delta.x;
+        rect.size.y += delta.y;
         sizeOffset = Inputs::mouse.pos;
     }
     if (isSize && Inputs::mouse.IsReleased(InputMouse::Left))
@@ -150,8 +150,8 @@ void WidgetWindow::UpdateText(gpu::RenderDataUI& rd, Text& text)
     if (isMini) 
         return;
 
-    text.x = rect.p1.x + ROW_PADDING;
-    text.y = rect.p1.y + ROW_PADDING + BAR_H + rowCount * ROW_H;
+    text.x = rect.pos.x + ROW_PADDING;
+    text.y = rect.pos.y + ROW_PADDING + BAR_H + rowCount * ROW_H;
     rowCount++;
     rd.AddText(text);
 }

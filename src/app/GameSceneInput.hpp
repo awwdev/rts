@@ -46,12 +46,12 @@ void GameSceneInput::Update(ecs::ECS& ecs, cmd::Timeline& timeline, Camera& came
     //STATE
     if (Inputs::mouse.IsPressed(InputMouse::Left))
     {
-        selectionRect.p1 = Inputs::mouse.pos;
+        selectionRect.pos = Inputs::mouse.pos;
         selectBegin = true;
     }
     if (Inputs::mouse.IsHeld(InputMouse::Left))
     {
-        if (selectBegin && selectionRect.p1 != Inputs::mouse.pos)
+        if (selectBegin && selectionRect.pos != Inputs::mouse.pos)
             inputMode = InputMode::Selecting;  
     }
     if (Inputs::mouse.IsReleased(InputMouse::Left))
@@ -63,7 +63,7 @@ void GameSceneInput::Update(ecs::ECS& ecs, cmd::Timeline& timeline, Camera& came
     //PROCESS STATE
     if (inputMode == InputMode::Selecting)
     {
-        selectionRect.p2 = Inputs::mouse.pos;
+        selectionRect.size = Inputs::mouse.pos - selectionRect.pos;
         renderData.wire.AddRect(selectionRect);
         Select(ecs);
     }
@@ -95,7 +95,7 @@ void GameSceneInput::Select(ecs::ECS& ecs)
         {
             auto entity = ecs.arrays.mainComponents.GetEntity(denseID);
             selection.Append(entity);
-            com::Print(entity);
+            //com::Print(entity);
         }
     }
 }

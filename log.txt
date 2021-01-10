@@ -23,6 +23,6 @@
 2020-12-22 sprite flip, primitive restart with ibo test, client setup, 
 2020-12-26 linux fixes
 2020-12-29 trying to fix flickering (could be renderpass dep and/or resource per swap img), fixed, per swap resource, better win unix split
-2020-12-03 wire pipeline, camera
-2020-12-04 swapresource, shuffling wire state around
-2020-12-05 selection, game scene input, event layer thing
+2020-01-03 wire pipeline, camera
+2020-01-04 swapresource, shuffling wire state around
+2020-01-05 selection, game scene input, event layer thing

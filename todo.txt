@@ -1,8 +1,4 @@
 
-universal push constant for window size!
-
-
-
 beautify vector/sort usage on resource iteration
 basic networking linux too
 font texture into one file
