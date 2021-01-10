@@ -11,22 +11,13 @@ context;
 
 struct Quad
 {
-    float x;
-    float y;
-    float w;
-    float h;
-
-    float r;
-    float g;
-    float b;
-    float a;
-
+    float x, y, w, h;
+    vec4  col;
     float xo;
     float yo;
-
-    uint texId;
+    uint  texId;
     float rot;
-    bool flipped;
+    bool  flipped;
 };
 
 ///////////////////////////////////////////////////////////  
@@ -97,7 +88,7 @@ void main()
     gl_Position = vec4(x_dc, y_dc, 0, 1);
 
     //other
-    outCol = vec4(quad.r, quad.g, quad.b, quad.a);
+    outCol = quad.col;
     if (quad.flipped) 
         outTex = vertsFlipped[gl_VertexIndex % 6];
     else

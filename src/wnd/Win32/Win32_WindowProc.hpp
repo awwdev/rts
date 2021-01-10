@@ -100,11 +100,29 @@ static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         ///////////////////////////////////////////////////////////
 
+        case WM_RBUTTONDOWN:
+        input.type = Input::Mouse;
+        input.mouse.pos.x = GET_X_LPARAM(lParam); 
+        input.mouse.pos.y = GET_Y_LPARAM(lParam); 
+        input.mouse.buttons[InputMouse::Right] = InputMouse::Pressed;
+        break;
+
+        ///////////////////////////////////////////////////////////
+
         case WM_LBUTTONUP:
         input.type = Input::Mouse;
         input.mouse.pos.x = GET_X_LPARAM(lParam); 
         input.mouse.pos.y = GET_Y_LPARAM(lParam); 
         input.mouse.buttons[InputMouse::Left] = InputMouse::Released;
+        break;
+
+        ///////////////////////////////////////////////////////////
+
+        case WM_RBUTTONUP:
+        input.type = Input::Mouse;
+        input.mouse.pos.x = GET_X_LPARAM(lParam); 
+        input.mouse.pos.y = GET_Y_LPARAM(lParam); 
+        input.mouse.buttons[InputMouse::Right] = InputMouse::Released;
         break;
 
         ///////////////////////////////////////////////////////////

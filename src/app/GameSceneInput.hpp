@@ -59,6 +59,8 @@ void GameSceneInput::Update(ecs::ECS& ecs, cmd::Timeline& timeline, Camera& came
         inputMode = InputMode::None;  
         selectBegin = false;
     }
+    if (Inputs::mouse.IsPressed(InputMouse::Right))
+        selection.count = 0;
 
     //PROCESS STATE
     if (inputMode == InputMode::Selecting)
